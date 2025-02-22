@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { IoIosSearch } from "react-icons/io";
 import { LuNotepadText } from "react-icons/lu";
+import PhoneInput from "react-phone-number-input";
+import "react-phone-number-input/style.css"; // Default styling for the phone input
 import { Inter } from "next/font/google";
 import { useState } from "react";
 
@@ -17,18 +19,7 @@ function LoginPage() {
   const [otp, setOtp] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [otpError, setOtpError] = useState("");
-
-  // Handle Phone Input
-  const handlePhoneChange = (e) => {
-    const value = e.target.value.replace(/\D/g, ""); // Allow only digits
-    setPhone(value);
-
-    if (value.length > 10) {
-      setPhoneError("Phone number cannot be more than 10 digits.");
-    } else {
-      setPhoneError("");
-    }
-  };
+  const [formError, setFormError] = useState("");
 
   // Handle OTP Input
   const handleOtpChange = (e) => {
@@ -41,9 +32,26 @@ function LoginPage() {
     }
   };
 
+  // Handle form submission
+  const handleSubmit = () => {
+    if (!phone) {
+      setPhoneError("Phone number is required.");
+    }
+    if (!otp) {
+      setOtpError("OTP is required.");
+    }
+    if (!phone || !otp) {
+      setFormError("Please fill in all required fields before proceeding.");
+      return;
+    }
+
+    // Proceed with login if everything is valid
+    alert("Login successful!");
+  };
+
   return (
     <div className={`min-h-screen flex ${interFont.variable}`}>
-      <div className="w-1/2 flex flex-col relative">
+      <div className="hidden md:flex w-1/2 flex-col relative">
         {/* Top Section with AMD Logo */}
         <div className="h-[35%] bg-[#EDECE8] flex items-center justify-center relative">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
@@ -80,6 +88,7 @@ function LoginPage() {
             height={600}
             className="object-contain z-20"
           />
+
           {/* Appointment Card */}
           <div className="absolute bottom-14 right-8 w-[355px] h-[78px] bg-black bg-opacity-50 backdrop-blur-[3px] rounded-xl flex items-center p-4 z-30 shadow-lg">
             <LuNotepadText className="text-white text-[50px] mr-2" />
@@ -92,12 +101,17 @@ function LoginPage() {
       </div>
 
       {/* Right Section with Form */}
-      <div className="w-1/2 bg-white flex items-center justify-center">
+      <div className="w-full md:w-1/2 bg-white flex flex-col items-center justify-center relative">
+        {/* Mobile Logo - Hidden on medium and larger screens */}
+        <div className="absolute top-6 left-5 md:hidden">
+          <Image src="/AMD_mobile_logo.png" alt="Mobile Logo" width={60} height={40} />
+        </div>
+
         <div className="w-full max-w-md p-8">
-          <h1 className="text-3xl font-extrabold text-center">Login</h1>
+          <h1 className="text-3xl md:text-[40px] font-extrabold text-center">Login</h1>
           <p className="text-center text-[#878787] mt-2">
             And{" "}
-            <Link href="/signup" className="text-[#EA2B2B] font-semibold">
+            <Link href="/register" className="text-[#EA2B2B] font-semibold underline">
               Sign up
             </Link>
           </p>
@@ -106,17 +120,17 @@ function LoginPage() {
           <div className="mt-8 space-y-8">
             <div>
               <label className="block text-sm font-medium">Phone Number</label>
-              <div className="flex items-center border rounded-lg overflow-hidden">
-                <span className="px-3 py-2">+91</span>
-                <input
-                  type="text"
-                  value={phone}
-                  onChange={handlePhoneChange}
-                  placeholder="9324248830"
-                  maxLength={10}
-                  className="w-full px-4 py-2 focus:outline-none"
-                />
-              </div>
+              <PhoneInput
+                international
+                defaultCountry="SA"
+                value={phone}
+                onChange={(value) => {
+                  setPhone(value);
+                  setPhoneError("");
+                  setFormError("");
+                }}
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-black"
+              />
               {phoneError && <p className="text-red-500 text-xs mt-1">{phoneError}</p>}
             </div>
 
@@ -128,14 +142,19 @@ function LoginPage() {
                 onChange={handleOtpChange}
                 placeholder="Enter OTP"
                 maxLength={4}
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none"
+                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-black"
               />
               {otpError && <p className="text-red-500 text-xs mt-1">{otpError}</p>}
             </div>
 
+            {formError && <p className="text-red-500 text-sm">{formError}</p>}
+
             <button
-              className="w-full bg-black text-white py-3 rounded-lg hover:bg-gray-800 transition"
-              disabled={phone.length !== 10 || otp.length !== 4}
+              className={`w-full py-3 rounded-lg transition ${
+                phone && otp.length === 4 ? "bg-black text-white hover:bg-gray-800" : "bg-gray-300 text-gray-600 cursor-not-allowed"
+              }`}
+              onClick={handleSubmit}
+              disabled={!phone || otp.length !== 4}
             >
               Proceed
             </button>
