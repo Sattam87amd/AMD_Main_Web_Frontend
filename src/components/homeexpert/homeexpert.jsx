@@ -67,7 +67,7 @@ const Homeexpert = () => {
         <div>
           <h1 className="text-4xl font-bold"> HOME</h1>
           {!isMobile && (
-            <p className="text-gray-500">Transform Your Space with Expert Interior Design Insights </p>
+            <p className="text-gray-500 ml-28">Transform Your Space with Expert Interior Design Insights </p>
           )}
         </div>
         <div className="flex flex-col sm:flex-row items-start sm:items-center">
