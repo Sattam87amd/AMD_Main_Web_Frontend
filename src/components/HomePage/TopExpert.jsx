@@ -35,7 +35,7 @@ const expertData = [
   {
     name: "Ralph Edwards",
     price: "$ 450",
-    image: "/ralphedward.png",
+    image: "/ralphedwards.png",
     description:
       "Founder of Drybar (Sold for $255M). Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, Macy’s.",
   },
@@ -45,9 +45,9 @@ const ExpertsCards = () => {
   return (
     <div className="bg-white p-6">
       {/* Heading Section */}
-      <div className="flex flex-col md:flex-row md:h-40 items-center mb-6">
-        <h1 className="text-[60px] font-bold text-black">Top Experts</h1>
-        <p className="text-[#9C9C9C] text-sm md:text-xl md:ml-10 md:mt-5">
+      <div className="flex flex-col md:flex-row md:h-40  items-center mb-6">
+        <h1 className="text-3xl md:text-[60px] font-bold text-black">Top Experts</h1>
+        <p className="text-[#9C9C9C] text-sm text-center md:text-xl md:ml-10 md:mt-5">
           Access to the best has never been easier.
         </p>
       </div>

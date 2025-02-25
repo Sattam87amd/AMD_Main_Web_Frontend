@@ -10,6 +10,9 @@ import FashionBeautyHomeCards from '@/components/HomePage/FashionBeautyHomeCards
 import CareerBusinessHomeCards from '@/components/HomePage/CareerBusinessHomeCards'
 import HomeCards from '@/components/HomePage/HomeCards'
 import AchieveTheLook from '@/components/HomePage/AchieveTheLook'
+import ConnectWithExpertCard from '@/components/HomePage/ConnectWithExpertCard'
+import OurPartners from '@/components/HomePage/OurPartners'
+import Footer from '@/components/Layout/Footer'
 
 const page = () => {
   return (
@@ -25,6 +28,9 @@ const page = () => {
         <CareerBusinessHomeCards/>
         <HomeCards/>
         <AchieveTheLook/>
+        <ConnectWithExpertCard/>
+        <OurPartners/>
+        <Footer/>
     </div>
   )
 }
