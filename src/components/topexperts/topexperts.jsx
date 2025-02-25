@@ -67,7 +67,7 @@ const TopExperts = () => {
         <div>
           <h1 className="text-4xl font-bold">Top Experts</h1>
           {!isMobile && (
-            <p className="text-gray-500">Access to the best has never been easier</p>
+            <p className="text-gray-500 ml-52 mb-10">Access to the best has never been easier</p>
           )}
         </div>
         <div className="flex flex-col sm:flex-row items-start sm:items-center">
@@ -76,7 +76,7 @@ const TopExperts = () => {
           )}
           <button
             onClick={() => setShowAll(!showAll)}
-            className="text-black font-semibold hover:underline mt-2 sm:mt-0 sm:ml-4"
+            className="text-black font-semibold hover:underline "
           >
             {showAll ? "Show Less ←" : "See All →"}
           </button>

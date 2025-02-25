@@ -67,7 +67,7 @@ const Cab = () => {
         <div>
           <h1 className="text-4xl font-bold"> CAREER AND BUSINESS</h1>
           {!isMobile && (
-            <p className="text-gray-500">CConnect with CEOs, executives, coaches, and more </p>
+            <p className="text-gray-500 ml-96 ">Connect with CEOs, executives, coaches, and more </p>
           )}
         </div>
         <div className="flex flex-col sm:flex-row items-start sm:items-center">

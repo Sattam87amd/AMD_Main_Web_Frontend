@@ -67,7 +67,7 @@ const Wellnessexpert = () => {
         <div>
           <h1 className="text-4xl font-bold"> WELLNESS</h1>
           {!isMobile && (
-            <p className="text-gray-500">Connect with nutritionists, trainers, & more about living a healthier life </p>
+            <p className="text-gray-500 ml-52">Connect with nutritionists, trainers, & more about living a healthier life </p>
           )}
         </div>
         <div className="flex flex-col sm:flex-row items-start sm:items-center">

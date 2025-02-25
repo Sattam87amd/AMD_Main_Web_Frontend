@@ -67,7 +67,7 @@ const Fbexpert = () => {
         <div>
           <h1 className="text-4xl font-bold"> FASHION & BEAUTY. </h1>
           {!isMobile && (
-            <p className="text-gray-500"> Access to the best experts has never been easier</p>
+            <p className="text-gray-500 ml-96"> Access to the best experts has never been easier</p>
           )}
         </div>
         <div className="flex flex-col sm:flex-row items-start sm:items-center">
