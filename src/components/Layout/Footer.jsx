@@ -81,7 +81,7 @@ const Footer = () => {
         {/* Bottom Section */}
         <div className="flex flex-col sm:flex-row justify-between items-center">
           <span className="text-sm text-gray-500 text-center">
-            © INTRO 2024. ALL RIGHTS RESERVED • POLICY • TERMS
+            © AMD 2025. ALL RIGHTS RESERVED • POLICY • TERMS
           </span>
         </div>
       </div>
