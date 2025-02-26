@@ -38,6 +38,21 @@ function Navbar() {
           ))}
         </div>
 
+        {/* Right-side Icons (Visible only on Desktop) */}
+        <div className="hidden md:flex items-center space-x-4">
+          <Link href="/gift-session">
+            <button className="flex items-center bg-black text-white font-medium rounded-lg text-[16px] px-4 py-2">
+              Gift a Session
+              <Gift className="ml-2 h-5 w-5" />
+            </button>
+          </Link>
+
+          {/* Profile Icon Only (No Background or Text) */}
+          <Link href="/profile">
+            <User className="text-black h-6 w-6 cursor-pointer hover:opacity-80" />
+          </Link>
+        </div>
+
         {/* Mobile Menu Button */}
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -50,7 +65,7 @@ function Navbar() {
       {/* Mobile Menu Dropdown */}
       {isOpen && (
         <div
-          className="absolute top-full left-0 w-full bg-[#F8F7F3] p-4 space-y-4 shadow-md"
+          className="absolute top-full left-0 w-full bg-[#F8F7F3] p-4 space-y-4 shadow-md md:hidden"
           onClick={closeMenu}
         >
           {/* Navigation Links */}
@@ -59,11 +74,7 @@ function Navbar() {
             { name: "Become an Expert", path: "/experts" },
             { name: "About Us", path: "/aboutus" },
           ].map((item) => (
-            <Link
-              key={item.name}
-              href={item.path}
-              className="block text-black"
-            >
+            <Link key={item.name} href={item.path} className="block text-black">
               {item.name}
             </Link>
           ))}
