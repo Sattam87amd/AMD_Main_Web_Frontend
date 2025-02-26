@@ -2,7 +2,7 @@
 import Footer from "@/components/Layout/Footer";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";
-import TopExpert from "@/components/topexpert/topexpert";
+import TopExpert from "@/components/Experts/Topeexperts/topexperts";
 
 
 const Page = () => {

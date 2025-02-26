@@ -2,30 +2,32 @@
 
 import React, { useState } from "react";
 import { FaSearch, FaGift, FaUser, FaFilter, FaArrowLeft } from "react-icons/fa";
+import { useRouter } from "next/navigation"; // Import useRouter for navigation
 
 const MobileNavSearch = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [activeBrand, setActiveBrand] = useState(null);
   const [activeFeature, setActiveFeature] = useState(null);
+  const router = useRouter();
 
   // Filter Data
   const brands = ["Name", "Name", "Name", "Name", "Name", "Name", "Name", "Name"];
   const features = ["Name", "Name", "Name", "Name", "Name", "Name", "Name", "Name"];
 
-  // Category Data
+  // Category Data with Links
   const categories = [
-    { title: "Top Experts", image: "/topexperts.png" },
-    { title: "Home", image: "/home.png" },
-    { title: "Career & Business", image: "/career&buisness.png" },
-    { title: "Style & Beauty", image: "/style&beauty.png" },
-    { title: "Wellness", image: "/wellness.png" },
+    { title: "Top Experts", image: "/topexperts.png", link: "/Topexperts" },
+    { title: "Home", image: "/home.png", link: "/Homeexperts" },
+    { title: "Career & Business", image: "/career-business.png", link: "/Career&BuisnessExperts" },
+    { title: "Style & Beauty", image: "/style-beauty.png", link: "/Style&BeautyExperts" },
+    { title: "Wellness", image: "/wellness.png", link: "/WellnessExperts" },
   ];
 
   // Toggle Filter
   const toggleFilter = () => setShowFilter(!showFilter);
 
   return (
-    <div className="bg-[#F8F7F3]  p-4">
+    <div className="bg-[#F8F7F3] p-4">
       {/* Navbar */}
       <nav className="flex items-center justify-between mb-4">
         {/* Left - Brand Name */}
@@ -35,9 +37,7 @@ const MobileNavSearch = () => {
         <div className="flex items-center space-x-4 relative">
           <FaSearch className="text-xl text-gray-600 cursor-pointer" />
           <FaFilter
-            className={`text-xl cursor-pointer ${
-              showFilter ? "text-black" : "text-gray-600"
-            }`}
+            className={`text-xl cursor-pointer ${showFilter ? "text-black" : "text-gray-600"}`}
             onClick={toggleFilter}
           />
           <FaGift className="text-xl text-gray-600 cursor-pointer" />
@@ -48,17 +48,11 @@ const MobileNavSearch = () => {
             <div className="absolute right-0 mt-2 w-80 bg-white shadow-xl rounded-xl p-4 z-50 mt-72">
               {/* Header - Back & Save */}
               <div className="flex items-center justify-between mb-4">
-                <button
-                  className="flex items-center space-x-2"
-                  onClick={toggleFilter}
-                >
+                <button className="flex items-center space-x-2" onClick={toggleFilter}>
                   <FaArrowLeft />
                   <span>Filter</span>
                 </button>
-                <button
-                  className="bg-black text-white px-4 py-2 rounded-lg"
-                  onClick={toggleFilter}
-                >
+                <button className="bg-black text-white px-4 py-2 rounded-lg" onClick={toggleFilter}>
                   Save
                 </button>
               </div>
@@ -71,9 +65,7 @@ const MobileNavSearch = () => {
                     <button
                       key={index}
                       className={`px-3 py-1 rounded-full ${
-                        activeBrand === index
-                          ? "bg-black text-white"
-                          : "bg-gray-300 text-black"
+                        activeBrand === index ? "bg-black text-white" : "bg-gray-300 text-black"
                       }`}
                       onClick={() => setActiveBrand(index)}
                     >
@@ -91,9 +83,7 @@ const MobileNavSearch = () => {
                     <button
                       key={index}
                       className={`px-3 py-1 rounded-full ${
-                        activeFeature === index
-                          ? "bg-black text-white"
-                          : "bg-gray-300 text-black"
+                        activeFeature === index ? "bg-black text-white" : "bg-gray-300 text-black"
                       }`}
                       onClick={() => setActiveFeature(index)}
                     >
@@ -118,6 +108,7 @@ const MobileNavSearch = () => {
           <div
             key={index}
             className="relative w-36 h-24 flex-shrink-0 rounded-xl overflow-hidden shadow-md cursor-pointer"
+            onClick={() => router.push(category.link)}
           >
             <img
               src={category.image}

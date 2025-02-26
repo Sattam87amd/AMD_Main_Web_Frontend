@@ -47,7 +47,7 @@ const experts = [
   },
 ];
 
-const TopExperts = () => {
+const TopExpert = () => {
   const [showAll, setShowAll] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -165,4 +165,4 @@ const TopExperts = () => {
   );
 };
 
-export default TopExperts;
+export default TopExpert;
