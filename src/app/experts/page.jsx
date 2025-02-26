@@ -1,18 +1,19 @@
 "use client";
 
-import Cab from "@/components/cab/cab";
-import Fbexpert from "@/components/fbexpert/fbexpert";
+import Cab from "@/components/Experts/CAB/cab";
+import Fbexpert from "@/components/Experts/Fashion&Beauty-expert/fbexpert";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";
 import RegisterPage from "@/components/RegisterLogin/Register";
-import TopExperts from "@/components/topexperts/topexperts";
-import Wellnessexpert from "@/components/wellnessexperts/wellnessexperts";
-import Wellness from "@/components/wellnessexperts/wellnessexperts";
+import TopExperts from "@/components/Experts/Topexpert/topexpert";
+import Wellnessexpert from "@/components/Experts/Wellness/wellnessexperts";
+import Wellness from "@/components/Experts/Wellness/wellnessexperts";
 import React from "react";
 import Home from "../page";
-import Homeexpert from "@/components/homeexpert/homeexpert";
-import ThreePara from "@/components/threepara/threepara";
+
+import ThreePara from "@/components/Experts/Threepara/threepara";
 import Footer from "@/components/Layout/Footer";
+import Homeexpert from "@/components/Experts/Homeexpert/homeexpert";
 
 const Page = () => {
   return (
@@ -25,7 +26,7 @@ const Page = () => {
         <Wellnessexpert/>
         <Fbexpert/>
         <Cab/>
-        <Homeexpert/>
+ <Homeexpert/>
         <ThreePara/>
         <Footer/>
       
