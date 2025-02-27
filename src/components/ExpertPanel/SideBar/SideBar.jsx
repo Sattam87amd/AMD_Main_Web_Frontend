@@ -1,0 +1,137 @@
+'use client';
+
+import React from 'react';
+import Image from 'next/image';
+import { 
+  FiSearch, 
+  FiVideo, 
+  FiUser, 
+  FiCheck, 
+  FiDollarSign, 
+  FiLogOut, 
+  FiMessageSquare 
+} from 'react-icons/fi';
+
+function Sidebar({ isOpen }) {
+  // State to track the currently active menu item
+  const [activeItem, setActiveItem] = React.useState(null);
+
+  // Handler to toggle the active item
+  const handleClick = (item) => {
+    setActiveItem(item === activeItem ? null : item);
+  };
+
+  return (
+    <div className="hidden md:block md:w-1/6">
+      <div
+        className={`fixed top-0 left-0 h-full bg-white text-[#7E7E7E] transition-transform duration-300 ease-in-out ${
+          isOpen ? 'translate-x-0' : '-translate-x-full'
+        } md:translate-x-0 md:relative flex flex-col`}
+      >
+        {/* Logo Section */}
+        <div className="p-4 flex justify-center">
+          <Image src="/Frame.png.png" alt="Nexcore Logo" width={108.12} height={38} />
+        </div>
+
+        {/* Search Input (at the top, above navigation) */}
+        <div className="p-4 mb-4">
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Find Experts"
+              className="w-full p-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
+            />
+            <FiSearch className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+          </div>
+        </div>
+
+        {/* Sidebar Menu */}
+        <ul className="flex flex-col space-y-8 px-6 text-lg mt-0">
+          <li 
+            className={`p-2 rounded-lg ${activeItem === 'videoCall' ? 'bg-black text-white' : ''}`}
+            onClick={() => handleClick('videoCall')}
+          >
+            <div className="flex items-center space-x-3">
+              <FiVideo className={`text-lg ${activeItem === 'videoCall' ? 'text-white' : ''}`} />
+              <span className="text-md cursor-pointer">Video Call</span>
+            </div>
+          </li>
+          <li 
+            className={`p-2 rounded-lg ${activeItem === 'profile' ? 'bg-black text-white' : ''}`}
+            onClick={() => handleClick('profile')}
+          >
+            <div className="flex items-center space-x-3">
+              <FiUser className={`text-lg ${activeItem === 'profile' ? 'text-white' : ''}`} />
+              <span className="text-md cursor-pointer">Profile</span>
+            </div>
+          </li>
+          <li 
+            className={`p-2 rounded-lg ${activeItem === 'expert' ? 'bg-black text-white' : ''}`}
+            onClick={() => handleClick('expert')}
+          >
+            <div className="flex items-center space-x-3">
+              <FiCheck className={`text-lg ${activeItem === 'expert' ? 'text-white' : ''}`} />
+              <span className="text-md cursor-pointer">Expert</span>
+            </div>
+          </li>
+          <li 
+            className={`p-2 rounded-lg ${activeItem === 'dashboard' ? 'bg-black text-white' : ''}`}
+            onClick={() => handleClick('dashboard')}
+          >
+            <div className="flex items-center space-x-3">
+              <FiUser className={`text-lg ${activeItem === 'dashboard' ? 'text-white' : ''}`} />
+              <span className="text-md cursor-pointer">Dashboard</span>
+            </div>
+          </li>
+          <li 
+            className={`p-2 rounded-lg ${activeItem === 'payments' ? 'bg-black text-white' : ''}`}
+            onClick={() => handleClick('payments')}
+          >
+            <div className="flex items-center space-x-3">
+              <FiDollarSign className={`text-lg ${activeItem === 'payments' ? 'text-white' : ''}`} />
+              <span className="text-md cursor-pointer">Payments</span>
+            </div>
+          </li>
+          <li 
+            className={`p-2 rounded-lg ${activeItem === 'logout' ? 'bg-black text-white' : ''}`}
+            onClick={() => handleClick('logout')}
+          >
+            <div className="flex items-center space-x-3">
+              <FiLogOut className={`text-lg ${activeItem === 'logout' ? 'text-white' : ''}`} />
+              <span className="text-md cursor-pointer">Logout</span>
+            </div>
+          </li>
+          <li 
+            className={`p-2 rounded-lg ${activeItem === 'chat' ? 'bg-black text-white' : ''}`}
+            onClick={() => handleClick('chat')}
+          >
+            <div className="flex items-center space-x-3">
+              <FiMessageSquare className={`text-lg ${activeItem === 'chat' ? 'text-white' : ''}`} />
+              <span className="text-md cursor-pointer">Chat with Users</span>
+            </div>
+          </li>
+
+          {/* Profile and Call-to-Action (merged design with cursor-pointer on Go Pro area) */}
+          <li className="p-4">
+            <div className="relative">
+              <Image
+                src="/group1.png" // Replace with actual path to the profile image if needed
+                alt="Profile"
+                width={191} // Matches the size in the image
+                height={374} // Matches the size in the image
+                className=""
+              />
+              {/* Invisible overlay for the "Go Pro" area to add cursor-pointer */}
+              <div 
+                className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-40 h-10 bg-transparent cursor-pointer"
+                onClick={() => console.log('Go Pro clicked')} // Optional: Add click handler
+              ></div>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+export default Sidebar;
