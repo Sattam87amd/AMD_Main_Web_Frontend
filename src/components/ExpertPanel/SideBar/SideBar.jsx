@@ -4,13 +4,16 @@ import React from 'react';
 import Image from 'next/image';
 import { 
   FiSearch, 
-  FiVideo, 
-  FiUser, 
-  FiCheck, 
+  FiVideo,  
   FiDollarSign, 
   FiLogOut, 
-  FiMessageSquare 
+  
 } from 'react-icons/fi';
+import { CgProfile } from "react-icons/cg";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import { RxDashboard } from "react-icons/rx";
+import { IoChatbubbleOutline } from "react-icons/io5";
+
 
 function Sidebar({ isOpen }) {
   // State to track the currently active menu item
@@ -29,24 +32,26 @@ function Sidebar({ isOpen }) {
         } md:translate-x-0 md:relative flex flex-col`}
       >
         {/* Logo Section */}
-        <div className="p-4 flex justify-center">
-          <Image src="/Frame.png.png" alt="Nexcore Logo" width={108.12} height={38} />
+        <div className="p-4 mt-5 mb-20 flex justify-center">
+          <Image src="/Frame.png.png" alt="Nexcore Logo" width={100} height={30} />
         </div>
 
         {/* Search Input (at the top, above navigation) */}
-        <div className="p-4 mb-4">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Find Experts"
-              className="w-full p-2 pl-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-500"
-            />
-            <FiSearch className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-          </div>
-        </div>
+       
 
         {/* Sidebar Menu */}
+
         <ul className="flex flex-col space-y-8 px-6 text-lg mt-0">
+          <li 
+            className={`p-2 rounded-lg ${activeItem === 'search' ? 'bg-black text-white' : ''}`}
+            onClick={() => handleClick('search')}
+          >
+            <div className="flex items-center space-x-3">
+              <FiSearch className={`text-lg ${activeItem === 'search' ? 'text-white' : ''}`} />
+              <span className="text-md cursor-pointer">Find Experts</span>
+            </div>
+          </li>
+       
           <li 
             className={`p-2 rounded-lg ${activeItem === 'videoCall' ? 'bg-black text-white' : ''}`}
             onClick={() => handleClick('videoCall')}
@@ -61,7 +66,7 @@ function Sidebar({ isOpen }) {
             onClick={() => handleClick('profile')}
           >
             <div className="flex items-center space-x-3">
-              <FiUser className={`text-lg ${activeItem === 'profile' ? 'text-white' : ''}`} />
+              <CgProfile className={`text-lg ${activeItem === 'profile' ? 'text-white' : ''}`} />
               <span className="text-md cursor-pointer">Profile</span>
             </div>
           </li>
@@ -70,7 +75,7 @@ function Sidebar({ isOpen }) {
             onClick={() => handleClick('expert')}
           >
             <div className="flex items-center space-x-3">
-              <FiCheck className={`text-lg ${activeItem === 'expert' ? 'text-white' : ''}`} />
+              < IoMdCheckmarkCircleOutline className={`text-lg ${activeItem === 'expert' ? 'text-white' : ''}`} />
               <span className="text-md cursor-pointer">Expert</span>
             </div>
           </li>
@@ -79,7 +84,7 @@ function Sidebar({ isOpen }) {
             onClick={() => handleClick('dashboard')}
           >
             <div className="flex items-center space-x-3">
-              <FiUser className={`text-lg ${activeItem === 'dashboard' ? 'text-white' : ''}`} />
+              <RxDashboard className={`text-lg ${activeItem === 'dashboard' ? 'text-white' : ''}`} />
               <span className="text-md cursor-pointer">Dashboard</span>
             </div>
           </li>
@@ -105,8 +110,8 @@ function Sidebar({ isOpen }) {
             className={`p-2 rounded-lg ${activeItem === 'chat' ? 'bg-black text-white' : ''}`}
             onClick={() => handleClick('chat')}
           >
-            <div className="flex items-center space-x-3">
-              <FiMessageSquare className={`text-lg ${activeItem === 'chat' ? 'text-white' : ''}`} />
+            <div className="flex items-center space-x-1">
+              <IoChatbubbleOutline className={`text-lg ${activeItem === 'chat' ? 'text-white' : ''}`} />
               <span className="text-md cursor-pointer">Chat with Users</span>
             </div>
           </li>
@@ -117,9 +122,9 @@ function Sidebar({ isOpen }) {
               <Image
                 src="/group1.png" // Replace with actual path to the profile image if needed
                 alt="Profile"
-                width={191} // Matches the size in the image
+                width={195} // Matches the size in the image
                 height={374} // Matches the size in the image
-                className=""
+                className="-mt-16"
               />
               {/* Invisible overlay for the "Go Pro" area to add cursor-pointer */}
               <div 
