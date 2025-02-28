@@ -11,9 +11,9 @@ const Page = () => {
   return (
     
     <div className="md:flex min-h-screen relative">
-      <SideBar/>
+      {/* <SideBar/> */}
       {/* Desktop View - NavSearch */}
-      <div className="hidden md:w-5/6 md:block">
+      <div className="hidden  md:block">
         <NavSearch />
         <Homeexperts/>
         <Footer/>
