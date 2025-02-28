@@ -36,7 +36,7 @@ const BecomeExpert = () => {
     
    
     
-</div>
+</div> 
   );
 };
 
