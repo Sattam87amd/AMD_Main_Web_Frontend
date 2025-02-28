@@ -62,7 +62,7 @@ function Page() {
           </div>
 
           {/* Experts Card */}
-          <div className="absolute top-full left-4 w-[355px] h-[78px] bg-black bg-opacity-50 backdrop-blur-[3px] rounded-xl flex items-center p-4 z-30 shadow-lg">
+          <div className="absolute top-[calc(100%+0.3in)] left-4 w-[355px] h-[78px] bg-black bg-opacity-50 backdrop-blur-[3px] rounded-xl flex items-center p-4 z-30 shadow-lg">
             <IoIosSearch className="text-white text-[50px] mr-2" />
             <div>
               <h2 className="text-white font-light text-2xl">Professional Experts</h2>
@@ -74,7 +74,7 @@ function Page() {
         </div>
 
         {/* Bottom Section with Arab Woman Image */}
-        <div className="h-[65%] bg-[#F8F7F3] flex items-end justify-center relative">
+        <div className="h-[calc(65%+1in)] bg-[#F8F7F3] flex items-end justify-center relative">
           <div className="absolute top-0 left-0 w-full">
             <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -87,13 +87,13 @@ function Page() {
           <Image
             src="/ArabWomanLogin.svg"
             alt="Arab Woman"
-            width={490}
+            width={580}
             height={600}
             className="object-contain z-20"
           />
 
           {/* Appointment Card */}
-          <div className="absolute bottom-14 right-8 w-[355px] h-[78px] bg-black bg-opacity-50 backdrop-blur-[3px] rounded-xl flex items-center p-4 z-30 shadow-lg">
+          <div className="absolute bottom-[calc(14px+0.8in)] right-[calc(8px+1.3in)] w-[355px] h-[80px] bg-black bg-opacity-50 backdrop-blur-[3px] rounded-xl flex items-center p-4 z-30 shadow-lg">
             <LuNotepadText className="text-white text-[50px] mr-2" />
             <div>
               <h2 className="text-white font-medium text-xl">Book an appointment</h2>
@@ -104,63 +104,63 @@ function Page() {
       </div>
 
       {/* Right Section with Form */}
-      <div className="w-full md:w-1/2 bg-white flex flex-col items-center justify-center relative">
+      <div className="w-full md:w-2/3 bg-white flex flex-col items-center justify-center relative ">
         {/* Mobile Logo - Hidden on medium and larger screens */}
         <div className="absolute top-6 left-5 md:hidden">
           <Image src="/AMD_mobile_logo.png" alt="Mobile Logo" width={60} height={40} />
         </div>
 
-        <div className="w-[93%] py-8">
-          <h1 className="text-3xl md:text-[35px] font-extrabold mb-10  text-center">Please Enter Your Info</h1>
+        <div className="w-[93%] py-8 mt-10 md:mt-0">
+          <h1 className="text-3xl md:text-[45px] font-bold mb-10 md:my-14 text-center">Please Enter Your Info</h1>
 
           <form>
             <div className="grid gap-6 gap-x-10 mb-6 md:grid-cols-2">
               <div>
-                <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label htmlFor="first_name" className="block mb-2 text-sm font-medium text-gray-500 dark:text-white">
                   First name
                 </label>
                 <input
                   type="text"
                   id="first_name"
-                  className="border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="placeholder:text-black placeholder:font-semibold border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="John"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="last_name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label htmlFor="last_name" className="placeholder:text-black placeholder:font-semibold block mb-2 text-sm font-medium text-gray-500 dark:text-white">
                   Last name
                 </label>
                 <input
                   type="text"
                   id="last_name"
-                  className="border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="placeholder:text-black placeholder:font-semibold border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Doe"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="phone" className="block mb-2 text-sm text-gray-900 dark:text-white">
+                <label htmlFor="phone" className="block mb-2 text-sm text-gray-500 dark:text-gray">
                   Mobile number
                 </label>
                 <input
                   type="tel"
                   id="phone"
-                  className="border border-gray-300 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="+966 5XX XXXXXX"
-                  pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
+                  className="placeholder:text-black placeholder:font-semibold border border-gray-300 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="+966 5XX XXX"
+                  // pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}"
                   required
                 />
               </div>
               <div>
-                <label htmlFor="Email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <label htmlFor="Email" className="block mb-2 text-sm font-medium text-gray-500 dark:text-white">
                   Email
                 </label>
                 <input
                   type="url"
                   id="Email"
-                  className="border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white-700 dark:border-white-600 dark:placeholder-white-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="placeholder:text-black placeholder:font-semibold border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-white-700 dark:border-white-600 dark:placeholder-white-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="flowbite.com"
                   required
                 />
@@ -168,14 +168,14 @@ function Page() {
             </div>
 
             <div className="mb-6">
-              <label htmlFor="text" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              <label htmlFor="text" className="block mb-2 text-sm font-medium text-gray-500 dark:text-white">
                 Social Media Link
               </label>
               <div className="relative">
                 <input
                   type="text"
                   id="text"
-                  className="border-gray-300 text-gray-900 border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="border-gray-300 text-gray-900 border text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   required
                 />
                 <FaLink className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black" />
@@ -183,13 +183,13 @@ function Page() {
             </div>
 
             <div className="mb-6">
-              <label htmlFor="text" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              <label htmlFor="text" className="block mb-2 text-sm font-medium text-gray-500 dark:text-white">
                 Area of Expertise
               </label>
               <input
-                type="password"
+                type="text"
                 id="text"
-                className="placeholder:text-right border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="placeholder:text-right border  border-gray-300 text-gray-500 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="0/100"
                 required
               />
@@ -197,7 +197,7 @@ function Page() {
 
             {/* Professional Certifications Section */}
             <div className="mb-6">
-              <label htmlFor="professional-certifications" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              <label htmlFor="professional-certifications" className="block mb-2 text-sm font-medium text-gray-500 dark:text-white">
                 Professional Certifications
               </label>
               <div className="flex items-center gap-0">
@@ -213,14 +213,14 @@ function Page() {
                 <input
                   type="text"
                   id="file-display"
-                  className="border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className="border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="No file chosen"
                   readOnly
                 />
                 <button
                   type="button"
                   onClick={() => fileInputRef.current.click()}
-                  className="text-white bg-black hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-r-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                  className="text-white bg-black hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-r-lg text-sm px-2.5 py-3 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
                 >
                   Upload
                 </button>
@@ -228,13 +228,13 @@ function Page() {
             </div>
 
             <div className="mb-6">
-              <label htmlFor="text" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              <label htmlFor="text" className="block mb-2 text-sm font-medium text-gray-500 dark:text-white">
                 Experience
               </label>
               <input
-                type="password"
+                type="text"
                 id="text"
-                className="placeholder:text-right border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="placeholder:text-right border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="0/100"
                 required
               />
@@ -243,7 +243,7 @@ function Page() {
             <div className="flex justify-center items-center">
               <button
                 type="submit"
-                className="h-12 text-md text-white bg-black hover:bg-black-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-2xl text-sm w-full sm:w-auto px-16 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                className="h-12 text-md text-white bg-black hover:bg-black-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-full text-sm w-full sm:w-auto px-16 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
               >
                 Submit
               </button>
