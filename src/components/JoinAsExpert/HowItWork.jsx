@@ -4,12 +4,12 @@ import Image from "next/image";
 
 const HowItWork = () => {
   return (
-    <div className="flex flex-col md:flex-row gap-8 md:gap-24 p-6 bg-gray-100 justify-center">
+    <div className="flex flex-col lg:flex-row gap-8 md:gap-24 p-6 bg-[#EDECE8] justify-center items-center">
       {/* Left Side Cards */}
       <div className="space-y-8 md:space-y-12">
         {/* How It Works Card (Empty Section) */}
         <div className="p-4 md:p-8 w-full md:w-[600px] md:min-h-[360px] overflow-hidden">
-        <h2 className="text-3xl md:text-4xl font-bold text-black">How It Works</h2>
+        <h2 className="text-xl md:text-5xl font-semibold md:tracking-wide md:font-bold text-black md:mt-20">How It Works</h2>
       <p className="text-lg md:text-xl font-medium text-gray-800 mt-2">
         Easily Set Up Your Profile, Customize Your Schedule, Share Your Booking Link, 
         And Start Hosting Expert Video Consultations—All In Just A Few Steps!
@@ -26,7 +26,7 @@ const HowItWork = () => {
         </div>
 
         {/* Share Your Booking Link Card */}
-        <div className="bg-white p-4 md:p-8 shadow-md w-full md:w-[600px] md:min-h-[360px] overflow-hidden">
+        <div className="bg-white p-4 md:p-8 shadow-md w-full md:w-[600px] md:min-h-[360px] overflow-hidden ">
           <Image src="/phone.png" alt="100% Secure Payments" width={100} height={80} className="mb-6" />
           <h3 className="text-xl md:text-3xl font-bold">Share Your Booking Link</h3>
           <p className="text-sm md:text-lg text-gray-600 mt-4 leading-relaxed">
