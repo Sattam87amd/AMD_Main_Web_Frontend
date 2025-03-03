@@ -15,11 +15,11 @@ const NavSearch = () => {
 
   // Category Data with Links
   const categories = [
-    { title: "Top Experts", image: "/topexperts.png", link: "/Topexperts" },
-    { title: "Home", image: "/home.png", link: "/Homeexperts" },
-    { title: "Career & Business", image: "/career-business.png", link: "/Career&BuisnessExperts" },
-    { title: "Style & Beauty", image: "/style-beauty.png", link: "/Style&BeautyExperts" },
-    { title: "Wellness", image: "/wellness.png", link: "/WellnessExperts" },
+    { title: "Top Experts", image: "/topexperts.png", link: "/topexperts" },
+    { title: "Home", image: "/home.png", link: "/home-experts" },
+    { title: "Career & Business", image: "/career-business.png", link: "/career&businessexperts" },
+    { title: "Style & Beauty", image: "/style-beauty.png", link: "/style&beautyexperts" },
+    { title: "Wellness", image: "/wellness.png", link: "/wellnessexperts" },
   ];
 
   // Toggle Filter
@@ -31,7 +31,7 @@ const NavSearch = () => {
   };
 
   return (
-    <div className="bg-[#F8F7F3] px-4 py-4">
+    <div className="bg-[#F8F7F3] px-4 py-4 relative">
       {/* Navbar with Animation */}
       <motion.nav
         initial={{ opacity: 0, y: -20 }}
@@ -60,23 +60,13 @@ const NavSearch = () => {
         </motion.div>
 
         {/* Right - Icons */}
-        <div className="flex items-center space-x-4 relative">
+        <div className="flex items-center space-x-4">
           <motion.div whileHover={{ scale: 1.2 }} transition={{ type: "spring", stiffness: 300 }}>
             <FaGift className="text-xl text-gray-600 cursor-pointer" />
           </motion.div>
 
           <motion.div whileHover={{ scale: 1.2 }} transition={{ type: "spring", stiffness: 300 }}>
             <FaUser className="text-xl text-gray-600 cursor-pointer" />
-          </motion.div>
-
-          {/* Filter Icon */}
-          <motion.div whileHover={{ scale: 1.2 }} transition={{ type: "spring", stiffness: 300 }}>
-            <button
-              className="flex items-center justify-center w-10 h-10 bg-gray-200 hover:bg-gray-300 rounded-md transition-all"
-              onClick={toggleFilter}
-            >
-              <FaFilter className="text-gray-600" />
-            </button>
           </motion.div>
         </div>
       </motion.nav>
@@ -91,12 +81,12 @@ const NavSearch = () => {
         Find The Right Expert In Seconds!
       </motion.h1>
 
-      {/* Categories Section with Hover Animation */}
+      {/* Categories Section with Increased Spacing */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="flex items-center justify-between gap-4"
+        className="flex items-center gap-20" // Increased gap from `gap-4` to `gap-6`
       >
         {categories.map((category, index) => (
           <motion.div
@@ -105,19 +95,32 @@ const NavSearch = () => {
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 300 }}
             onClick={() => handleCategoryClick(category.link)}
-            className="relative w-56 h-32 rounded-xl overflow-hidden shadow-lg cursor-pointer"
+            className={`relative w-[140px] h-[80px] rounded-lg overflow-hidden shadow-md cursor-pointer $
+            }`}
           >
             <img
               src={category.image}
               alt={category.title}
               className="absolute inset-0 w-full h-full object-cover opacity-80"
             />
-            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 rounded-xl">
-              <p className="text-white font-semibold">{category.title}</p>
+            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 rounded-lg">
+              <p className="text-white font-semibold text-sm">{category.title}</p>
             </div>
           </motion.div>
         ))}
       </motion.div>
+
+      {/* Filter Button */}
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        transition={{ type: "spring", stiffness: 300 }}
+        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black text-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2"
+        onClick={toggleFilter}
+      >
+        <FaFilter />
+        <span className="text-sm font-medium">FILTER</span>
+      </motion.button>
 
       {/* Filter Dropdown Animation */}
       <AnimatePresence>
@@ -127,7 +130,7 @@ const NavSearch = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.5 }}
-            className="absolute right-0 mt-4 w-80 bg-white shadow-xl rounded-xl p-4 z-50"
+            className="absolute right-4 mt-4 w-80 bg-white shadow-xl rounded-xl p-4 z-50"
           >
             {/* Header - Back & Save */}
             <div className="flex items-center justify-between mb-4">

@@ -16,11 +16,11 @@ const MobileNavSearch = () => {
 
   // Category Data with Links
   const categories = [
-    { title: "Top Experts", image: "/topexperts.png", link: "/Topexperts" },
-    { title: "Home", image: "/home.png", link: "/Homeexperts" },
-    { title: "Career & Business", image: "/career-business.png", link: "/Career&BuisnessExperts" },
-    { title: "Style & Beauty", image: "/style-beauty.png", link: "/Style&BeautyExperts" },
-    { title: "Wellness", image: "/wellness.png", link: "/WellnessExperts" },
+    { title: "Top Experts", image: "/topexperts.png", link: "/topexperts" },
+    { title: "Home", image: "/home.png", link: "/home-experts" },
+    { title: "Career & Business", image: "/career-business.png", link: "/career&businessexperts" },
+    { title: "Style & Beauty", image: "/style-beauty.png", link: "/style&beautyexperts" },
+    { title: "Wellness", image: "/wellness.png", link: "/wellnessexperts" },
   ];
 
   // Toggle Filter
