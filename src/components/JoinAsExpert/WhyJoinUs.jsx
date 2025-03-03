@@ -2,7 +2,7 @@ import React from "react";
 
 const WhyJoinUs = () => {
   return (
-    <section className="bg-white rounded-3xl border border-gray-300 mx-auto max-w-screen-lg w-full p-6 md:p-12 shadow-lg transform -translate-y-16">
+    <section className="bg-white rounded-3xl border border-gray-300 mx-auto max-w-screen-lg md:w-[90%] p-6 md:p-12 shadow-lg transform -translate-y-16 md:mt-10 -mt-10">
       {/* Upper Left Section */}
       <div className="max-w-2xl">
         <h2 className="text-2xl md:text-3xl font-bold text-[#5A3E1B]">Why Join Us?</h2>
@@ -14,7 +14,7 @@ const WhyJoinUs = () => {
       </div>
 
       {/* Bottom Four Sections */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
         {/* Earn on Your Terms */}
         <div className="flex flex-col items-center text-center">
           <img src="/money.png" alt="Earn" className="w-12 h-12" />

@@ -2,41 +2,42 @@ import React from "react";
 
 const BecomeExpert = () => {
   return (
-    <div className="relative min-h-screen md:pt-24 mt-24 overflow-hidden h-screen lg:h-[120vh]">
-    {/* Background Layout - Custom Split */}
-    <div className="absolute inset-0 grid grid-cols-[52%_48%] min-h-screen h-full">
-      <div className="bg-[#F8F7F3] h-full">
-      <h1 className=" font-medium text-black  text-5xl ml-20">
-          
-        Become an Expert & <br/>Share Your Knowledge
-        </h1>
-        <img
-          src="/image1.png"
-          alt="Historic Architecture"
-          className="rounded-lg mt-20 w-[95%] h-[55%] mx-10"
-        />
+    <div className="relative  mt-24  h-[600px] md:h-[120vh] ">
+      {/* left side section*/}
+      <div className="absolute inset-0 grid grid-cols-[52%_48%] min-h-screen max-w-full  w-full h-full  ">
+        <div className="bg-[#F8F7F3] md:h-full">
+          <h1 className=" font-medium text-black text-sm md:text-5xl md:ml-20 tracking-wide uppercase md:mt-10 mt-20 ml-3">
+            Become an Expert & <br />
+            Share Your Knowledge
+          </h1>
+          <img
+            src="/image1.png"
+            alt="Historic Architecture"
+            className="rounded-lg mt-10 md:mt-20 md:w-[95%] md:h-[55%] md:mx-10 h-[170px] w-[190px] ml-2"
+          />
         </div>
-     
-      <div className="bg-[#EDECE8] h-full">
-      <div className="mt-10 mx-72 font-semibold text-lg w-40 ">
-       <p className="font-bold font-xl w-[313]">
-        Offer 1-on-1 virtual  <br/>consultations, help others,<br/>and earn on your terms.
-        </p> 
-        </div>
-        <button className="mx-60 rounded-full bg-black text-white w-[50%] h-[63]">Join as an Expert</button>
+   {/* Right side section */}
+        <div className="bg-[#EDECE8] md:h-full h-[60rem] ">
+          <div className="mx-52 font-semibold text-lg w-40 md:mt-20">
+            <p className="font-normal text-[11px] md:font-3xl md:text-[23px]  md:font-semibold leading-tight  md:w-[313] w-32 mt-9 -ml-[11rem] md:-ml-14 lg:-ml-3 text-black md:tracking-wider  ">
+              Offer 1-on-1 virtual <br />
+              consultations, help others,
+              <br />
+              and earn on your terms.
+            </p>
+          </div>
+          <button className=" md:tracking-widest  md:mx-44 mt-6 font-light text-xs rounded-full bg-black text-white md:font-medium md:w-[45%] md:h-[60] h-[35px] w-[150px]   mx-5">
+            Join as an Expert
+          </button>
 
-        <img
-          src="/image2.png"
-          alt="Historic Architecture"
-          className="rounded-lg  mx-56 mt-10"
-        />
+          <img
+            src="/image2.png"
+            alt="Historic Architecture"
+            className="rounded-lg md:mx-40 md:mt-14 mt-16 md:h-[60%] md:w-[55%] h-[14rem] w-[10rem] mx-3"
+          />
+        </div>
       </div>
     </div>
-
-    
-   
-    
-</div> 
   );
 };
 

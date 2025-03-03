@@ -1,6 +1,39 @@
 import Image from "next/image";
 import React from "react";
 
+const partners = [
+  {
+    name: "Alexis Ohanian",
+    title: "Founder, Reddit",
+    image: "/aboutUs/OM5.jpeg",
+  },
+  {
+    name: "Alexis Ohanian",
+    title: "Founder, Reddit",
+    image: "/aboutUs/OM6.jpeg",
+  },
+  {
+    name: "Alexis Ohanian",
+    title: "Founder, Reddit",
+    image: "/aboutUs/OM7.jpg",
+  },
+  {
+    name: "Alexis Ohanian",
+    title: "Founder, Reddit",
+    image: "/aboutUs/OM8.jpeg",
+  },
+  {
+    name: "Alexis Ohanian",
+    title: "Founder, Reddit",
+    image: "/aboutUs/OM9.jpeg",
+  },
+  {
+    name: "Alexis Ohanian",
+    title: "Founder, Reddit",
+    image: "/aboutUs/OM10.jpeg",
+  },
+];
+
 const OurMission = () => {
   return (
     <>
@@ -68,46 +101,102 @@ const OurMission = () => {
       </div>
 
       {/* Our Story & Our Mission Section */}
-      <div className="mt-8 px-6 md:px-20 mb-8 flex flex-col md:flex-row items-center justify-center gap-0 relative">
+      <div className="mt-24 px-6 md:px-20 mb-14 flex flex-col md:flex-row items-center justify-center gap-0 relative">
+        {/* Horizontal Line */}
+        <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-full md:w-[calc(100%-10rem)] h-[78px] bg-[#EDECE8] rounded-xl hidden md:block  "></div>
 
-  {/* Horizontal Line */}
-  <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-full md:w-[calc(100%-10rem)] h-8 bg-[#EDECE8] rounded-xl hidden md:block  "></div>
+        {/* Our Story */}
+        <div className="w-full md:w-[45%] bg-[#EDECE8] p-8 rounded-xl  -rounded-tr-[12rem] text-center md:text-left relative z-10">
+          <h2 className="text-xl md:text-2xl font-bold uppercase text-center ">
+            Our Story
+          </h2>
+          <p className="mt-4 text-sm md:text-base text-gray-800">
+            Our journey began with a simple yet profound realization: the most
+            impactful learning experiences often come from direct interactions
+            with those who have walked the path before us. This insight led us
+            to create a platform that bridges the gap between aspiring
+            individuals and seasoned experts across various fields.
+          </p>
+        </div>
 
-  {/* Our Story */}
-  <div className="w-full md:w-[45%] bg-[#EDECE8] p-8 rounded-xl rounded-tr- text-center md:text-left relative z-10">
-    <h2 className="text-xl md:text-2xl font-bold uppercase">Our Story</h2>
-    <p className="mt-4 text-sm md:text-base text-gray-800">
-      Our journey began with a simple yet profound realization: the most
-      impactful learning experiences often come from direct interactions
-      with those who have walked the path before us. This insight led us
-      to create a platform that bridges the gap between aspiring
-      individuals and seasoned experts across various fields.
-    </p>
+        {/* Center Image */}
+        <div className=" bg-white w-[100%] md:w-[15%] flex justify-center my-6 md:-my-8 md:mx-0 md:mr-4 relative z-9 mt-4 md:mt-8 rounded-t-0 md:rounded-t-2xl overflow-hidden ">
+          <Image
+            src="/aboutUs/habibi.png"
+            width={105}
+            height={100}
+            alt="Story Image"
+            className="object-cover w-[90%] h-[11rem] pt-0 md:pt-2 px-1 my-2 rounded-t-0 "
+          />
+        </div>
+
+        {/* Our Mission */}
+        <div className="w-full md:w-[45%] bg-[#EDECE8] p-8 rounded-xl text-center md:text-left relative z-10 -ml-4">
+          <h2 className="text-xl md:text-2xl font-bold uppercase text-center ">
+            Our Mission
+          </h2>
+          <p className="mt-4 text-sm md:text-base text-gray-800">
+            We aim to provide universal access to industry leaders, fostering a
+            community where knowledge is shared, opportunities are created, and
+            potential is unlocked. By facilitating one-on-one virtual
+            consultations, we empower users to gain personalized insights and
+            guidance from experts they admire.
+          </p>
+        </div>
+      </div>
+
+      {/* our partners section */}
+      <div className="bg-[#F8F7F3] py-16 px-6 md:px-20">
+  {/* Title */}
+  <h2 className="text-center text-2xl md:text-4xl font-bold text-black mb-12">
+    OUR PARTNERS
+  </h2>
+
+  {/* Desktop View - Staggered Layout */}
+  <div className="hidden md:flex flex-wrap justify-center gap-x-12 gap-y-6">
+    {partners.map((partner, index) => (
+      <div
+        key={index}
+        className={`flex flex-col items-center text-center w-[150px] ${
+          index % 2 === 0 ? "translate-y-6" : "-translate-y-6"
+        }`}
+      >
+        {/* Circular Image */}
+        <div className="w-32 h-32 md:w-36 md:h-36 rounded-full overflow-hidden border-2 border-gray-300">
+          <img src={partner.image} alt={partner.name} className="w-full h-full object-cover" />
+        </div>
+
+        {/* Name & Title */}
+        <h3 className="mt-4 text-lg font-bold">{partner.name}</h3>
+        <p className="text-sm text-gray-600">{partner.title}</p>
+      </div>
+    ))}
   </div>
 
-  {/* Center Image */}
-  <div className="w-full md:w-[12%] flex justify-center my-6 md:my-1 relative z-9 mt-8 rounded-t-2xl overflow-hidden">
-    <Image
-      src="/aboutUs/habibi.png"
-      width={105}
-      height={100}
-      alt="Story Image"
-      className="object-cover w-[105%] h-[15rem] pt-5 rounded-t-2xl"
-    />
-  </div>
+  {/* Mobile View - Horizontal Scroll with Correct Alignment */}
+  <div className="md:hidden overflow-x-auto scrollbar-hide px-6 mt-8">
+    <div className="flex gap-6 pb-4">
+      {partners.map((partner, index) => (
+        <div
+          key={index}
+          className={`flex flex-col items-center text-center w-[140px] flex-shrink-0 ${
+            index % 2 === 0 ? "translate-y-2" : "-translate-y-2"
+          }`}
+        >
+          {/* Circular Image */}
+          <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-2 border-gray-300">
+            <img src={partner.image} alt={partner.name} className="w-full h-full object-cover" />
+          </div>
 
-  {/* Our Mission */}
-  <div className="w-full md:w-[45%] bg-[#EDECE8] p-8 rounded-xl text-center md:text-left relative z-10">
-    <h2 className="text-xl md:text-2xl font-bold uppercase">Our Mission</h2>
-    <p className="mt-4 text-sm md:text-base text-gray-800">
-      We aim to provide universal access to industry leaders, fostering a
-      community where knowledge is shared, opportunities are created, and
-      potential is unlocked. By facilitating one-on-one virtual
-      consultations, we empower users to gain personalized insights and
-      guidance from experts they admire.
-    </p>
+          {/* Name & Title */}
+          <h3 className="mt-3 text-xs md:text-lg font-bold">{partner.name}</h3>
+          <p className="text-xs text-gray-600">{partner.title}</p>
+        </div>
+      ))}
+    </div>
   </div>
 </div>
+
     </>
   );
 };

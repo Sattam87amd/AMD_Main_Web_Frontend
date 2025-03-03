@@ -13,7 +13,7 @@ const page = () => {
   return (
     <div>
       <Navbar />
-      <BecomeExpert />
+      <BecomeExpert className="w-full"/>
       <WhyJoinUs />
 
       <OurClientsSay />
