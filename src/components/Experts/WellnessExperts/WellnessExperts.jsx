@@ -5,89 +5,6 @@ import { motion } from "framer-motion";
 
 // 15 Experts (5 experts repeated 3 times)
 const experts = [
-  // First Set of 5 Experts
-  {
-    name: "Aaliya Abadi",
-    role: "Founder Of Drybar (Sold For $255M)",
-    description:
-      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
-    price: "$450",
-    image: "/aaliaabadi.png",
-  },
-  {
-    name: "Aisha Aziz",
-    role: "Founder Of Drybar (Sold For $255M)",
-    description:
-      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
-    price: "$600",
-    image: "/aishaaziz.png",
-  },
-  {
-    name: "Jenny Wilson",
-    role: "Founder Of Drybar (Sold For $255M)",
-    description:
-      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
-    price: "$250",
-    image: "/jennywilson.png",
-  },
-  {
-    name: "Guy Hawkins",
-    role: "Founder Of Drybar (Sold For $255M)",
-    description:
-      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
-    price: "$1500",
-    image: "/guyhawkins.png",
-  },
-  {
-    name: "Ralph Edwards",
-    role: "Founder Of Drybar (Sold For $255M)",
-    description:
-      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
-    price: "$450",
-    image: "/ralphedwards.png",
-  },
-  // Second Set of 5 Experts (Duplicate)
-  {
-    name: "Aaliya Abadi",
-    role: "Founder Of Drybar (Sold For $255M)",
-    description:
-      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
-    price: "$450",
-    image: "/aaliaabadi.png",
-  },
-  {
-    name: "Aisha Aziz",
-    role: "Founder Of Drybar (Sold For $255M)",
-    description:
-      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
-    price: "$600",
-    image: "/aishaaziz.png",
-  },
-  {
-    name: "Jenny Wilson",
-    role: "Founder Of Drybar (Sold For $255M)",
-    description:
-      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
-    price: "$250",
-    image: "/jennywilson.png",
-  },
-  {
-    name: "Guy Hawkins",
-    role: "Founder Of Drybar (Sold For $255M)",
-    description:
-      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
-    price: "$1500",
-    image: "/guyhawkins.png",
-  },
-  {
-    name: "Ralph Edwards",
-    role: "Founder Of Drybar (Sold For $255M)",
-    description:
-      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
-    price: "$450",
-    image: "/ralphedwards.png",
-  },
-  // Third Set of 5 Experts (Duplicate)
   {
     name: "Aaliya Abadi",
     role: "Founder Of Drybar (Sold For $255M)",
@@ -130,26 +47,47 @@ const experts = [
   },
 ];
 
+// Repeat experts 3 times to match the original list
+const repeatedExperts = [...experts, ...experts, ...experts];
+
 const WellnessExperts = () => {
   return (
     <div className="bg-white py-10 px-4">
       {/* Header Section */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8"
+      >
         <div>
-          <h1 className="text-4xl font-bold"> Wellness Experts </h1>
-          <p className="text-gray-500 ml-52 mb-10"> Connect with nutritionists, trainers, & more about living a healthier life  </p>
+          <h1 className="text-4xl font-bold">Wellness Experts</h1>
+          <p className="text-gray-500 sm:ml-52 mb-10 text-sm sm:text-base">
+            Connect with nutritionists, trainers, & more about living a healthier life
+          </p>
         </div>
-      </div>
+      </motion.div>
 
       {/* Experts Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-        {experts.map((expert, index) => (
+      <motion.div
+        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={{
+          hidden: { opacity: 0 },
+          visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
+        }}
+      >
+        {repeatedExperts.map((expert, index) => (
           <motion.div
             key={index}
             className="relative overflow-hidden shadow-lg rounded-xl"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
+            variants={{
+              hidden: { opacity: 0, y: 30 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+            }}
             whileHover={{ scale: 1.05 }}
           >
             {/* Image Section */}
@@ -168,7 +106,8 @@ const WellnessExperts = () => {
               <motion.div
                 className="absolute bottom-0 left-0 w-60 h-40 ml-6 mb-2 bg-white/30 backdrop-blur-lg p-4 rounded-xl text-black"
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: index * 0.1 }}
               >
                 <h2 className="text-xl font-bold">
@@ -180,7 +119,7 @@ const WellnessExperts = () => {
             </div>
           </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 };
