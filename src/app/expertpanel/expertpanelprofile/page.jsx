@@ -1,16 +1,20 @@
-import ProfileSection from '@/components/ExpertPanel/ExpertPanelProfile/ProfileSection'
-import ProfileSidebar from '@/components/ExpertPanel/ProfileSidebar/ProfileSidebar'
-import Sidebar from '@/components/ExpertPanel/SideBar/SideBar'
-import React from 'react'
+'use client';
 
-const page = () => {
+import React, { useState } from 'react';
+import ProfileSection from '@/components/ExpertPanel/ExpertPanelProfile/ProfileSection';
+import Sidebar from '@/components/ExpertPanel/SideBar/SideBar';
+
+const Page = () => {
+  const [selectedSection, setSelectedSection] = useState("Find Experts"); // Default to "Find Experts"
+
   return (
-    <div>
-        <Sidebar/>
-        <ProfileSidebar/>
-        <ProfileSection/>
+    <div className="flex">
+      <Sidebar isOpen={true} setSelectedSection={setSelectedSection} />
+      
+        <ProfileSection />
+      
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default Page;
