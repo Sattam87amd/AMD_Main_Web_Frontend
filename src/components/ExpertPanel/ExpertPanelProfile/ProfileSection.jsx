@@ -40,7 +40,7 @@ const ProfileSection = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col md:flex-row border rounded-xl overflow-hidden bg-white m-4 md:m-8">
+    <div className="flex flex-col md:flex-row border rounded-xl overflow-hidden bg-white m-4 md:m-8">
       
       {/* Sidebar - Hidden on Small Screens, Visible on Medium+ */}
       <aside className="hidden md:block w-64 bg-white p-6 border-r h-[800px]">
@@ -63,7 +63,9 @@ const ProfileSection = () => {
                 selectedSection === item.name ? 'bg-black text-white' : 'hover:bg-gray-200 text-[#7E7E7E]'
               }`}
             >
-              <item.icon className={selectedSection === item.name ? "text-white" : "text-[#7E7E7E]"} />
+              <item.icon
+                className={selectedSection === item.name ? "text-white" : "text-[#7E7E7E]"}
+              />
               {item.name}
             </button>
           ))}
@@ -88,7 +90,8 @@ const ProfileSection = () => {
               </div>
               <button 
                 className="border border-[#434966] px-4 md:px-5 py-2 text-[#434966] font-semibold rounded-lg flex items-center gap-2" 
-                onClick={handleEditClick}>
+                onClick={handleEditClick}
+              >
                 Edit <LuPencilLine className="text-black h-5 w-5" />
               </button>
             </div>
@@ -163,7 +166,9 @@ const ProfileSection = () => {
 
               {/* Save Button */}
               <div className="col-span-1 md:col-span-2 flex justify-center mt-6">
-                <button type="submit" disabled={!isEditing} 
+                <button
+                  type="submit"
+                  disabled={!isEditing}
                   className={`text-white font-medium rounded-2xl text-sm px-6 md:px-16 py-2.5 text-center ${
                     isEditing ? "bg-black hover:bg-gray-900 focus:ring-gray-300" : "bg-gray-400 cursor-not-allowed"
                   }`}
@@ -182,7 +187,7 @@ const ProfileSection = () => {
 
         {selectedSection === "Gift Card" && <GiftCard onContinue={() => setSelectedSection("BuyGiftCard")} />}
 
-        {selectedSection === "BuyGiftCard" && < BuyGiftCard/>}   
+        {selectedSection === "BuyGiftCard" && <BuyGiftCard/>}   
 
         {selectedSection === "Contact Us" && <ExpertContactUs/>}       
       </div>
