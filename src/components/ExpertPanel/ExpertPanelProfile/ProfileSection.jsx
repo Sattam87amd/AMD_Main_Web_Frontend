@@ -8,6 +8,8 @@ import { MdOutlineFeedback } from 'react-icons/md';
 import PaymentMethods from './PaymentMethod';
 import DiscountCode from './DiscountCode';
 import GiftCard from './GiftCard';
+import BuyGiftCard from './BuyGiftCard';
+import ExpertContactUs from './ExpertContactUs';
 
 const ProfileSection = () => {
   const [selectedSection, setSelectedSection] = useState("Profile");
@@ -41,7 +43,7 @@ const ProfileSection = () => {
     <div className="w-full h-full flex flex-col md:flex-row border rounded-xl overflow-hidden bg-white m-4 md:m-8">
       
       {/* Sidebar - Hidden on Small Screens, Visible on Medium+ */}
-      <aside className="hidden md:block w-64 bg-white p-6 border-r h-full">
+      <aside className="hidden md:block w-64 bg-white p-6 border-r h-[800px]">
         <h2 className="text-lg font-semibold pb-4 border-b mb-3">Settings</h2>
         <nav className="space-y-6">
           {[
@@ -178,7 +180,11 @@ const ProfileSection = () => {
 
         {selectedSection === "Do you have code?" && <DiscountCode/>}
 
-        {selectedSection === "Gift Card" && <GiftCard/>}        
+        {selectedSection === "Gift Card" && <GiftCard onContinue={() => setSelectedSection("BuyGiftCard")} />}
+
+        {selectedSection === "BuyGiftCard" && < BuyGiftCard/>}   
+
+        {selectedSection === "Contact Us" && <ExpertContactUs/>}       
       </div>
     </div>
   );
