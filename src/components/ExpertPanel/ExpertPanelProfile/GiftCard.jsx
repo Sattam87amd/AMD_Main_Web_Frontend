@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Gift } from "lucide-react";
 
-function GiftCard() {
+function GiftCard({ onContinue }) {
   const amounts = [200, 500, 750, 1000];
   const [selectedAmount, setSelectedAmount] = useState(null);
   const [customAmount, setCustomAmount] = useState("");
@@ -28,9 +28,7 @@ function GiftCard() {
               <button
                 key={amount}
                 className={`p-3 text-center font-semibold transition-all ${
-                  selectedAmount === amount
-                    ? "bg-black text-white"
-                    : "bg-[#D9D9D9] text-black"
+                  selectedAmount === amount ? "bg-black text-white" : "bg-[#D9D9D9] text-black"
                 }`}
                 onClick={() => {
                   setSelectedAmount(amount);
@@ -60,6 +58,7 @@ function GiftCard() {
           <button
             className="w-56 bg-black text-white py-3 rounded-2xl font-normal disabled:opacity-50"
             disabled={!selectedAmount && !customAmount}
+            onClick={onContinue} // Switches to BuyGiftCard
           >
             Continue
           </button>
