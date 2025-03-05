@@ -1,21 +1,33 @@
-import EditExpertProfile from '@/components/ExpertPanel/Expert/EditExpertProfile'
-import ExpertProfile from '@/components/ExpertPanel/Expert/ExpertProfile'
-import Sidebar from '@/components/ExpertPanel/SideBar/SideBar'
-import React from 'react'
+"use client";
 
-const page = () => {
+import { useState } from "react";
+import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
+import ExpertProfile from "@/components/ExpertPanel/Expert/ExpertProfile";
+import EditExpertProfile from "@/components/ExpertPanel/Expert/EditExpertProfile";
+
+const Page = () => {
+  // Lift expertData state up so both components share it
+  const [expertData, setExpertData] = useState({
+    firstName: "Basim",
+    lastName: "Thakur",
+    expertise: "Software Development",
+    country: "India",
+  });
+
   return (
     <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <Sidebar/>
+      {/* Universal Sidebar (this remains unchanged) */}
+      <Sidebar />
 
-      {/* Right Side Content (Always Profile Section) */}
+      {/* Right Side Content */}
       <div className="flex-1 p-4">
-        <ExpertProfile />
-        <EditExpertProfile/>
+        {/* Display Component shows current expert data */}
+        <ExpertProfile expertData={expertData} />
+        {/* Edit Component updates expertData */}
+        <EditExpertProfile expertData={expertData} setExpertData={setExpertData} />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default Page;
