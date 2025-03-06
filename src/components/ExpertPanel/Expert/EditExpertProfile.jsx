@@ -4,14 +4,18 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { LuPencilLine } from "react-icons/lu";
 import { FiAtSign } from "react-icons/fi";
+import { FiChevronRight } from "react-icons/fi";
 
 // Importing the EnableCharity and WhatToExpect components for dynamic rendering
 import EnableCharity from "./EnableCharity";
 import WhatToExpect from "./WhatToExpect";
 import EditExampleQuestions from "./EditExampleQuestions";
 import ConnectMyCalendar from "./ConnectMyCalendar";
+import PreferredAvailability from "./PreferedAvailiblity";
+import GroupSession from "./GroupSession";
+import AvailableSessionLength from "./AvailableSessionLength";
 
-const EditExpertProfile = ({ expertData, setExpertData }) => {
+const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
   // -------------------------------------------------------------------
   // 1) Detect screen size to toggle mobile vs. desktop layout
   // -------------------------------------------------------------------
@@ -111,6 +115,7 @@ const EditExpertProfile = ({ expertData, setExpertData }) => {
     setSelectedSection(itemName);
     if (isMobile) {
       setShowContent(true);
+      setShowProfile(false); // Hide ExpertProfile on mobile when editing
     }
   };
 
@@ -142,7 +147,7 @@ const EditExpertProfile = ({ expertData, setExpertData }) => {
               }`}
             >
               <span className="flex items-center gap-3">{item.name}</span>
-              <span className="md:hidden">&gt;</span>
+              <FiChevronRight className="md:hidden text-gray-500" />
             </button>
           )
         )}
@@ -156,7 +161,10 @@ const EditExpertProfile = ({ expertData, setExpertData }) => {
   const renderMobileHeader = () => (
     <div className="flex items-center justify-between p-4 bg-gray-100">
       <button
-        onClick={() => setShowContent(false)}
+        onClick={() => {
+          setShowContent(false);
+          setShowProfile(true); // Show ExpertProfile when going back
+        }}
         className="text-sm font-semibold text-blue-600"
       >
         &larr; Back
@@ -468,7 +476,10 @@ const EditExpertProfile = ({ expertData, setExpertData }) => {
       {selectedSection === "Enable Charity" && <EnableCharity />}
       {selectedSection === "Edit what to Expect" && <WhatToExpect />}
       {selectedSection === "Edit example questions" && <EditExampleQuestions />}
-      {selectedSection === "Connect my calendar" && <ConnectMyCalendar/>}
+      {selectedSection === "Connect my calendar" && <ConnectMyCalendar />}
+      {selectedSection === "Set my preferred availability" && <PreferredAvailability />}
+      {selectedSection === "Group Sessions" && <GroupSession/>}
+      {selectedSection === "Available session lengths" && <AvailableSessionLength/>}
     </div>
   );
 

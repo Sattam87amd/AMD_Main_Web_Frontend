@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const ConnectMyCalendar = () => {
   return (
-    <div className="flex flex-col items-start justify-start min-h-screen p-4">
+    <div className="flex flex-col items-start justify-start min-h-screen p-1">
       {/* Header Section */}
       <div className="text-start mb-6 w-full">
         <h2 className="text-xl md:text-2xl font-semibold">Connect my calendar</h2>
