@@ -14,6 +14,7 @@ import ConnectMyCalendar from "./ConnectMyCalendar";
 import PreferredAvailability from "./PreferedAvailiblity";
 import GroupSession from "./GroupSession";
 import AvailableSessionLength from "./AvailableSessionLength";
+import VideoSessionPrices from "./VideoSessionPrices";
 
 const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
   // -------------------------------------------------------------------
@@ -480,6 +481,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
       {selectedSection === "Set my preferred availability" && <PreferredAvailability />}
       {selectedSection === "Group Sessions" && <GroupSession/>}
       {selectedSection === "Available session lengths" && <AvailableSessionLength/>}
+      {selectedSection === "1:1 Video session prices" && <VideoSessionPrices/>}
     </div>
   );
 
