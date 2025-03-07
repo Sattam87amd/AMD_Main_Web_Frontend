@@ -18,7 +18,7 @@ const Sidebar = () => {
     { label: 'Video Call', icon: <FiVideo />, route: '/expertpanel/expertpanelprofile/videocall' },
     { label: 'Profile', icon: <CgProfile />, route: '/expertpanel/expertpanelprofile' },
     { label: 'Expert', icon: <LucideBadgeCheck />, route: '/expertpanel/expert' },
-    { label: 'Dashboard', icon: <PiCirclesFour />, route: '/expertpanel/expertpanelprofile/dashboard' },
+    { label: 'Dashboard', icon: <PiCirclesFour />, route: '/expertpanel/dashboard' },
     { label: 'Payments', icon: <LucideDollarSign />, route: '/expertpanel/expertpanelprofile/payments' },
     { label: 'Logout', icon: <FiLogOut />, route: '/expertpanel/expertpanelprofile/logout' },
     { label: 'Chat with Users', icon: <IoChatbubbleEllipsesOutline />, route: '/expertpanel/expertpanelprofile/chat' },
