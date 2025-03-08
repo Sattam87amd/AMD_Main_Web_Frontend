@@ -29,7 +29,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="hidden md:block w-64 bg-white shadow-lg h-full ">
+    <div className="hidden md:block w-full bg-white shadow-md h-[99.5%] ">
       {/* Logo Section */}
       <div className="p-4 mt-5 flex justify-center">
         <Image src="/Frame.png.png" alt="Nexcore Logo" width={100} height={30} />
