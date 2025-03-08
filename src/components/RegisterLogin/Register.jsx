@@ -1,13 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
 import { IoIosSearch } from "react-icons/io";
 import { LuNotepadText } from "react-icons/lu";
-import PhoneInput from "react-phone-number-input";
-import "react-phone-number-input/style.css"; // Default styling for the phone input
 import { Inter } from "next/font/google";
 import { useState } from "react";
+import { useRouter } from "next/navigation"; // Import useRouter for navigation
 
 const interFont = Inter({
   subsets: ["latin"],
@@ -15,6 +13,7 @@ const interFont = Inter({
 });
 
 function RegisterPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -24,20 +23,32 @@ function RegisterPage() {
   const handleValidation = () => {
     let tempErrors = {};
 
-    if (!email) tempErrors.email = "Email address is required.";
-    if (!firstName) tempErrors.firstName = "First name is required.";
-    if (!lastName) tempErrors.lastName = "Last name is required.";
+    if (!email) {
+      tempErrors.email = "Email address is required.";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      tempErrors.email = "Invalid email format.";
+    }
+
+    if (!firstName) {
+      tempErrors.firstName = "First name is required.";
+    } else if (!/^[A-Za-z]+$/.test(firstName)) {
+      tempErrors.firstName = "First name can only contain letters.";
+    }
+
+    if (!lastName) {
+      tempErrors.lastName = "Last name is required.";
+    } else if (!/^[A-Za-z]+$/.test(lastName)) {
+      tempErrors.lastName = "Last name can only contain letters.";
+    }
 
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   };
 
-  // Handle form submission
+  // Handle form submission - Now routes to /expertpanel/registerform
   const handleSubmit = () => {
     if (handleValidation()) {
-      alert("Form submitted successfully!");
-    } else {
-      alert("Please fill in all required fields.");
+      router.push("/expertpanel/registerform"); // Navigate to the register form
     }
   };
 
@@ -99,10 +110,10 @@ function RegisterPage() {
           <Image src="/AMD_mobile_logo.png" alt="Mobile Logo" width={60} height={40} />
         </div>
 
-        <div className="w-full max-w-md p-8">
-          <h1 className="text-3xl md:text-[35px] font-extrabold text-center">Please Enter Your Info</h1>
+        <div className="w-full max-w-md p-8 -mt-20 md:-mt-0">
+          <h1 className="text-[29px] md:text-[35px] font-extrabold text-center">Please Enter Your Info</h1>
 
-          {/* Login Form */}
+          {/* Registration Form */}
           <div className="mt-8 space-y-8">
             <div>
               <label className="block text-sm font-medium">Email address</label>
@@ -114,7 +125,7 @@ function RegisterPage() {
                   setErrors({ ...errors, email: "" });
                 }}
                 placeholder="Enter your email address"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-black"
+                className="w-full px-4 py-3 border rounded-lg focus:outline-8 focus:border-black"
               />
               {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
             </div>
@@ -125,11 +136,12 @@ function RegisterPage() {
                 type="text"
                 value={firstName}
                 onChange={(e) => {
-                  setFirstName(e.target.value);
+                  const value = e.target.value.replace(/[^A-Za-z]/g, ""); // Remove numbers and special characters
+                  setFirstName(value);
                   setErrors({ ...errors, firstName: "" });
                 }}
                 placeholder="Enter your first name"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-black"
+                className="w-full px-4 py-3 border rounded-lg focus:outline-8 focus:border-black"
               />
               {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
             </div>
@@ -140,11 +152,12 @@ function RegisterPage() {
                 type="text"
                 value={lastName}
                 onChange={(e) => {
-                  setLastName(e.target.value);
+                  const value = e.target.value.replace(/[^A-Za-z]/g, ""); // Remove numbers and special characters
+                  setLastName(value);
                   setErrors({ ...errors, lastName: "" });
                 }}
                 placeholder="Enter your last name"
-                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:border-black"
+                className="w-full px-4 py-3 border rounded-lg focus:outline-8 focus:border-black"
               />
               {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
             </div>
