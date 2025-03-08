@@ -12,7 +12,7 @@ const initialReviews = [
   { id: 7, name: "Jessica Taylor", role: "Product Manager at UXWorld", review: "One of the best experiences. Will definitely return!", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&crop=faces&fit=crop&w=100&h=100&q=80" },
 ];
 
-function AboutMeReviews() {
+function AboutMeReviewsExpertPanel() {
   const [reviews] = useState(initialReviews);
   const [selectedReview, setSelectedReview] = useState(null);
   const charLimit = 100;
@@ -112,4 +112,4 @@ const ReviewCard = ({ review, onReadMore, charLimit }) => {
   );
 };
 
-export default AboutMeReviews;
+export default AboutMeReviewsExpertPanel;
