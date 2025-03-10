@@ -1,9 +1,12 @@
 "use client";
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import CountUp from "react-countup";
 import CouponUserCount from "./CouponUserCount";
 
 const Dashboard = () => {
+  const router = useRouter();
+
   // Date filters
   const [activeFilter, setActiveFilter] = useState("All");
   const filterItems = ["All", "Today", "This Week", "1M", "1Y"];
@@ -35,6 +38,30 @@ const Dashboard = () => {
 
   return (
     <div className="w-full py-6 flex flex-col items-start">
+      {/* Mobile Back Icon */}
+      <div className="block md:hidden mb-4">
+        <button
+          onClick={() => router.back()}
+          className="flex items-center text-blue-600 hover:text-blue-800"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+          <span className="ml-2"></span>
+        </button>
+      </div>
+
       {/* Heading */}
       <h1 className="text-2xl md:text-3xl font-bold">Dashboard</h1>
       <p className="text-black text-lg mt-1 py-10">
