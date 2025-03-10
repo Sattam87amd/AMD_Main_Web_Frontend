@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from "react";
 import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
@@ -28,12 +28,14 @@ const Page = () => {
 
   return (
     <div className="flex min-h-screen">
-      <Sidebar />
-      <div className="flex-1 p-4">
-        {/* On desktop, always show the profile; on mobile, show it based on state */}
+      {/* Sidebar with 20% width */}
+      <div className="md:w-[20%]">
+        <Sidebar />
+      </div>
+
+      {/* Right Side Content with 80% width */}
+      <div className="md:w-[80%] p-4">
         {(!isMobile || showProfile) && <ExpertProfile expertData={expertData} />}
-        
-        {/* Pass the setter here to control visibility */}
         <EditExpertProfile
           expertData={expertData}
           setExpertData={setExpertData}
