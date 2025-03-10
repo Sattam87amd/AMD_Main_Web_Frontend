@@ -4,7 +4,6 @@ import React from "react";
 import Link from "next/link";
 
 const ExpertCategories = () => {
-  // Category Data with Proper Image Paths and Links
   const categories = [
     { title: "Top Experts", image: "/topexperts.png", link: "/topexpert" },
     { title: "Home", image: "/home.png", link: "/homeexpert" },
@@ -30,15 +29,18 @@ const ExpertCategories = () => {
 
       {/* Categories Section */}
       <div className="overflow-x-auto md:overflow-visible md:ml-28 md:pr-80">
-        <div className="flex gap-5 md:grid md:grid-cols-5">
+        <div className="flex md:grid md:grid-cols-5 gap-5 flex-nowrap">
           {categories.map((category, index) => (
             <Link href={category.link} key={index} passHref>
-              <div className="relative min-w-[150px] md:w-[210px] h-20 md:h-24 my-5 rounded-xl overflow-hidden shadow-md cursor-pointer">
-                <img
-                  src={category.image}
-                  alt={category.title}
-                  className="absolute inset-0 w-full h-full object-cover opacity-80"
-                />
+              <div className="relative flex-shrink-0 min-w-[150px] md:w-[170px] h-20 md:h-24 my-5 rounded-xl overflow-hidden shadow-md cursor-pointer">
+                <div className="relative w-full h-full">
+                  <img
+                    src={category.image}
+                    alt={category.title}
+                    className="absolute inset-0 w-full h-full object-cover opacity-100 mix-blend-multiply"
+                  />
+                </div>
+
                 <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 rounded-xl">
                   <p className="text-white font-semibold">{category.title}</p>
                 </div>
