@@ -7,11 +7,13 @@ import Sidebar from '@/components/ExpertPanel/SideBar/SideBar';
 const Page = () => {
   return (
     <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <Sidebar/>
+      {/* Sidebar with 1/3 width */}
+      <div className="md:w-[20%]">
+        <Sidebar />
+      </div>
 
-      {/* Right Side Content (Always Profile Section) */}
-      <div className="flex-1 p-4">
+      {/* Right Side Content with 2/3 width */}
+      <div className="md:w-[80%] p-4">
         <ProfileSection />
       </div>
     </div>
