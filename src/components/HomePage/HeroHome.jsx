@@ -47,9 +47,9 @@ function HeroHome() {
       </section>
 
       {/* Supported By Section */}
-      <section className="bg-white py-10">
+      <section className="bg-white py-10 md:py-20">
         <div className="text-center">
-          <h2 className="text-xl md:text-3xl font-semibold uppercase">
+          <h2 className="text-xl md:text-3xl font-semibold md:font-bold uppercase">
             Supported by
           </h2>
         </div>
