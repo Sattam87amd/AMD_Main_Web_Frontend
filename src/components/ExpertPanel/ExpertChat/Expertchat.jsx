@@ -5,25 +5,25 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { FaRegPaperPlane } from "react-icons/fa";
 
-const users = [
-  { name: "Brooklyn Simmons", image: "/ralphedwards.png" },
-  { name: "Dianne Russell", image: "/ralphedwards.png" },
-  { name: "Theresa Webb", image: "/ralphedwards.png" },
-  { name: "Arlene McCoy", image: "/ralphedwards.png" },
-  { name: "Devon Lane", image: "/ralphedwards.png" },
-  { name: "Floyd Miles", image: "/ralphedwards.png" },
+const experts = [
+  { name: "Alice Johnson", image: "/ralphedwards.png" },
+  { name: "James Brown", image: "/ralphedwards.png" },
+  { name: "Sophia Martinez", image: "/ralphedwards.png" },
+  { name: "Michael Lee", image: "/ralphedwards.png" },
+  { name: "Olivia Davis", image: "/ralphedwards.png" },
+  { name: "Emma Wilson", image: "/ralphedwards.png" },
 ];
 
 const randomReplies = [
-  "Sounds interesting!",
-  "Can you tell me more?",
-  "That's cool, let's discuss further.",
-  "I'll look into it and get back to you.",
-  "Interesting point!",
+  "That's a great question!",
+  "Let me explain that in more detail.",
+  "We can explore that further if you'd like.",
+  "I'll provide a detailed answer shortly.",
+  "That's an interesting perspective!",
 ];
 
-const ChatComponent = () => {
-  const [selectedUser, setSelectedUser] = useState(users[0]);
+const ExpertChat = () => {
+  const [selectedExpert, setSelectedExpert] = useState(experts[0]);
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -41,15 +41,15 @@ const ChatComponent = () => {
       setMessages((prev) => [...prev, newMessage]);
       setInputMessage("");
 
-      // Simulate typing and bot response
+      // Simulate typing and expert response
       setIsTyping(true);
       setTimeout(() => {
-        const botMessage = {
-          sender: selectedUser.name,
+        const expertMessage = {
+          sender: selectedExpert.name,
           text: randomReplies[Math.floor(Math.random() * randomReplies.length)],
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
         };
-        setMessages((prev) => [...prev, botMessage]);
+        setMessages((prev) => [...prev, expertMessage]);
         setIsTyping(false);
       }, 1000);
     }
@@ -67,30 +67,30 @@ const ChatComponent = () => {
         
         {/* Buttons Section */}
         <div className="flex space-x-2">
-          <button className="px-4 py-2 bg-black text-white rounded-lg">
+          <button
+            onClick={() => router.push("/expertpanel/chat")}
+            className="px-4 py-2 bg-white border rounded-lg hover:bg-gray-200 transition"
+          >
             Chat with Users
           </button>
-          <button 
-            className="px-4 py-2 bg-white border rounded-lg hover:bg-gray-200 transition"
-            onClick={() => router.push("/expertpanel/expertchat")}
-          >
+          <button className="px-4 py-2 bg-black text-white rounded-lg">
             Chat with Experts
           </button>
         </div>
 
-        {/* User List Section */}
+        {/* Expert List Section */}
         <div className="p-4 overflow-y-auto bg-white shadow-lg rounded-lg h-[400px]">
-          {users.map((user, index) => (
+          {experts.map((expert, index) => (
             <motion.div
               key={index}
               whileHover={{ scale: 1.05 }}
-              onClick={() => setSelectedUser(user)}
+              onClick={() => setSelectedExpert(expert)}
               className={`flex items-center gap-3 p-3 mb-2 rounded-lg cursor-pointer ${
-                selectedUser.name === user.name ? "border-2 border-blue-500 bg-gray-200" : "bg-gray-100"
+                selectedExpert.name === expert.name ? "border-2 border-blue-500 bg-gray-200" : "bg-gray-100"
               }`}
             >
-              <img src={user.image} alt={user.name} className="w-10 h-10 rounded-full" />
-              <span className="text-sm font-semibold">{user.name}</span>
+              <img src={expert.image} alt={expert.name} className="w-10 h-10 rounded-full" />
+              <span className="text-sm font-semibold">{expert.name}</span>
             </motion.div>
           ))}
         </div>
@@ -118,7 +118,7 @@ const ChatComponent = () => {
             ))}
             {isTyping && (
               <div className="text-sm italic text-gray-400">
-                {selectedUser.name} is typing...
+                {selectedExpert.name} is typing...
               </div>
             )}
             <div ref={messagesEndRef} />
@@ -149,4 +149,4 @@ const ChatComponent = () => {
   );
 };
 
-export default ChatComponent;
+export default ExpertChat;
