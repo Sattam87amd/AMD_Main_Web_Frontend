@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { FaGift } from "react-icons/fa";
 import { Gift } from "lucide-react";
 import { ShoppingBag } from "lucide-react";
 
@@ -101,10 +100,10 @@ function BuyGiftCard() {
 
         {/* Buy Button */}
         <div className="flex justify-center items-center">
-        <button className="w-52 bg-black text-white py-3 rounded-2xl flex justify-center items-center space-x-2">
-          <span>Buy</span>
-          <ShoppingBag size={18} />
-        </button>
+          <button className="w-52 bg-black text-white py-3 rounded-2xl flex justify-center items-center space-x-2">
+            <span>Buy</span>
+            <ShoppingBag size={18} />
+          </button>
         </div>
       </form>
     </div>

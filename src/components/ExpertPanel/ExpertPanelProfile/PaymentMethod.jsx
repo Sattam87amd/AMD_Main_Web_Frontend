@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Image from 'next/image';
+import { useState } from "react";
+import Image from "next/image";
 
 const PaymentMethods = () => {
   const [selectedMethod, setSelectedMethod] = useState("wallet");
@@ -17,7 +17,13 @@ const PaymentMethods = () => {
       {/* Wallet Section - Only show amount when "Wallet" is selected */}
       <div className="w-full md:w-[460px] border border-[#7E7E7E] rounded-xl p-6 mt-4 flex flex-col md:flex-row items-center justify-between bg-white shadow-md">
         <div>
-          <Image src="/paymentimg.png" alt="Wallet" width={80} height={60} className="mx-auto md:mx-0"/>
+          <Image
+            src="/paymentimg.png"
+            alt="Wallet"
+            width={80}
+            height={60}
+            className="mx-auto md:mx-0"
+          />
         </div>
         <div className="mt-4 md:mt-0 md:mr-16 text-center">
           <p className="text-lg font-normal">Your Wallet Balance is-</p>
@@ -37,7 +43,12 @@ const PaymentMethods = () => {
             checked={selectedMethod === "wallet"}
             onChange={() => handleSelection("wallet")}
           />
-          <span className="text-sm md:text-lg font-medium">Pay through your Wallet. <a href="#" className="text-blue-500">Add Money to your Wallet</a></span>
+          <span className="text-sm md:text-lg font-medium">
+            Pay through your Wallet.{" "}
+            <a href="#" className="text-blue-500">
+              Add Money to your Wallet
+            </a>
+          </span>
         </label>
 
         {/* PayPal */}
@@ -61,7 +72,9 @@ const PaymentMethods = () => {
               checked={selectedMethod === "card"}
               onChange={() => handleSelection("card")}
             />
-            <span className="text-sm md:text-lg font-medium">Credit or Debit Card</span>
+            <span className="text-sm md:text-lg font-medium">
+              Credit or Debit Card
+            </span>
           </div>
           <Image src="/bankcards.png" alt="Bank Cards" width={550} height={5} />
         </label>

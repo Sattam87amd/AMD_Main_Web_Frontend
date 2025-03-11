@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 
 const DiscountCode = () => {
   const [code, setCode] = useState("");
@@ -17,7 +17,10 @@ const DiscountCode = () => {
       <p className="text-gray-600 py-6">Gift card or discount coupon</p>
 
       {/* Form Section */}
-      <form onSubmit={handleSubmit} className="mt-4 flex flex-col space-y-6 w-full max-w-md">
+      <form
+        onSubmit={handleSubmit}
+        className="mt-4 flex flex-col space-y-6 w-full max-w-md"
+      >
         <input
           type="text"
           placeholder="Enter your code"

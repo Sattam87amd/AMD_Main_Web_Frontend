@@ -1,15 +1,21 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { FaUser, FaGift, FaComments, FaTrashAlt, FaCheckCircle } from 'react-icons/fa';
-import { LuPencilLine } from 'react-icons/lu';
-import { FiLogOut, FiDollarSign } from 'react-icons/fi';
-import { MdOutlineFeedback } from 'react-icons/md';
-import PaymentMethods from './PaymentMethod';
-import DiscountCode from './DiscountCode';
-import GiftCard from './GiftCard';
-import BuyGiftCard from './BuyGiftCard';
-import ExpertContactUs from './ExpertContactUs';
+import { useState } from "react";
+import {
+  FaUser,
+  FaGift,
+  FaComments,
+  FaTrashAlt,
+  FaCheckCircle,
+} from "react-icons/fa";
+import { LuPencilLine } from "react-icons/lu";
+import { FiLogOut, FiDollarSign } from "react-icons/fi";
+import { MdOutlineFeedback } from "react-icons/md";
+import PaymentMethods from "./PaymentMethod";
+import DiscountCode from "./DiscountCode";
+import GiftCard from "./GiftCard";
+import BuyGiftCard from "./BuyGiftCard";
+import ExpertContactUs from "./ExpertContactUs";
 
 const ProfileSection = () => {
   const [selectedSection, setSelectedSection] = useState("Profile");
@@ -20,7 +26,7 @@ const ProfileSection = () => {
     firstName: "Basim",
     lastName: "Thakur",
     mobileNumber: "+919876543210",
-    email: "thakur@gmail.com"
+    email: "thakur@gmail.com",
   });
 
   const handleInputChange = (e) => {
@@ -41,7 +47,6 @@ const ProfileSection = () => {
 
   return (
     <div className="flex flex-col md:flex-row border rounded-xl overflow-hidden bg-white m-4 md:m-8">
-      
       {/* Sidebar - Hidden on Small Screens, Visible on Medium+ */}
       <aside className="hidden md:block w-64 bg-white p-6 border-r h-[800px]">
         <h2 className="text-lg font-semibold pb-4 border-b mb-3">Settings</h2>
@@ -59,11 +64,17 @@ const ProfileSection = () => {
               key={item.name}
               onClick={() => setSelectedSection(item.name)}
               className={`flex items-center gap-3 w-full text-left p-2 rounded-lg transition ${
-                selectedSection === item.name ? 'bg-black text-white' : 'hover:bg-gray-200 text-[#7E7E7E]'
+                selectedSection === item.name
+                  ? "bg-black text-white"
+                  : "hover:bg-gray-200 text-[#7E7E7E]"
               }`}
             >
               <item.icon
-                className={selectedSection === item.name ? "text-white" : "text-[#7E7E7E]"}
+                className={
+                  selectedSection === item.name
+                    ? "text-white"
+                    : "text-[#7E7E7E]"
+                }
               />
               {item.name}
             </button>
@@ -73,13 +84,16 @@ const ProfileSection = () => {
 
       {/* Profile Content */}
       <div className="flex-1 p-4 md:p-8">
-        
         {/* Show Profile Form ONLY when "Profile" is selected */}
         {selectedSection === "Profile" && (
           <div className="mt-6">
             <div className="flex flex-col md:flex-row items-center md:justify-between space-y-4 md:space-y-0">
               <div className="flex items-center space-x-4 md:space-x-6">
-                <img src="/guyhawkins.png" alt="profile" className="w-16 h-16 rounded-full" />
+                <img
+                  src="/guyhawkins.png"
+                  alt="profile"
+                  className="w-16 h-16 rounded-full"
+                />
                 <div className="text-center md:text-left">
                   <h3 className="text-lg font-semibold text-[#434966]">
                     {profileData.firstName} {profileData.lastName}
@@ -87,8 +101,8 @@ const ProfileSection = () => {
                   <p className="text-gray-500">India</p>
                 </div>
               </div>
-              <button 
-                className="border border-[#434966] px-4 md:px-5 py-2 text-[#434966] font-semibold rounded-lg flex items-center gap-2" 
+              <button
+                className="border border-[#434966] px-4 md:px-5 py-2 text-[#434966] font-semibold rounded-lg flex items-center gap-2"
                 onClick={handleEditClick}
               >
                 Edit <LuPencilLine className="text-black h-5 w-5" />
@@ -103,63 +117,71 @@ const ProfileSection = () => {
             )}
 
             {/* Profile Form */}
-            <form 
-              className="w-full mt-6 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6" 
+            <form
+              className="w-full mt-6 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6"
               onSubmit={handleSaveClick}
             >
               <div>
-                <label className="block mb-2 text-sm font-medium text-[#7E7E7E]">First Name</label>
-                <input 
-                  type="text" 
-                  name="firstName" 
-                  value={profileData.firstName} 
-                  onChange={handleInputChange} 
+                <label className="block mb-2 text-sm font-medium text-[#7E7E7E]">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  name="firstName"
+                  value={profileData.firstName}
+                  onChange={handleInputChange}
                   disabled={!isEditing}
                   className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${
                     !isEditing ? "bg-gray-100 cursor-not-allowed" : ""
-                  }`} 
+                  }`}
                 />
               </div>
 
               <div>
-                <label className="block mb-2 text-sm font-medium text-[#7E7E7E]">Last Name</label>
-                <input 
-                  type="text" 
-                  name="lastName" 
-                  value={profileData.lastName} 
-                  onChange={handleInputChange} 
+                <label className="block mb-2 text-sm font-medium text-[#7E7E7E]">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  name="lastName"
+                  value={profileData.lastName}
+                  onChange={handleInputChange}
                   disabled={!isEditing}
                   className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${
                     !isEditing ? "bg-gray-100 cursor-not-allowed" : ""
-                  }`} 
+                  }`}
                 />
               </div>
 
               <div>
-                <label className="block mb-2 text-sm font-medium text-[#7E7E7E]">Mobile Number</label>
-                <input 
-                  type="text" 
-                  name="mobileNumber" 
-                  value={profileData.mobileNumber} 
-                  onChange={handleInputChange} 
+                <label className="block mb-2 text-sm font-medium text-[#7E7E7E]">
+                  Mobile Number
+                </label>
+                <input
+                  type="text"
+                  name="mobileNumber"
+                  value={profileData.mobileNumber}
+                  onChange={handleInputChange}
                   disabled={!isEditing}
                   className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${
                     !isEditing ? "bg-gray-100 cursor-not-allowed" : ""
-                  }`} 
+                  }`}
                 />
               </div>
 
               <div>
-                <label className="block mb-2 text-sm font-medium text-[#7E7E7E]">Email</label>
-                <input 
-                  type="email" 
-                  name="email" 
-                  value={profileData.email} 
-                  onChange={handleInputChange} 
+                <label className="block mb-2 text-sm font-medium text-[#7E7E7E]">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={profileData.email}
+                  onChange={handleInputChange}
                   disabled={!isEditing}
                   className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${
                     !isEditing ? "bg-gray-100 cursor-not-allowed" : ""
-                  }`} 
+                  }`}
                 />
               </div>
 
@@ -169,7 +191,9 @@ const ProfileSection = () => {
                   type="submit"
                   disabled={!isEditing}
                   className={`text-white font-medium rounded-2xl text-sm px-6 md:px-16 py-2.5 text-center ${
-                    isEditing ? "bg-black hover:bg-gray-900 focus:ring-gray-300" : "bg-gray-400 cursor-not-allowed"
+                    isEditing
+                      ? "bg-black hover:bg-gray-900 focus:ring-gray-300"
+                      : "bg-gray-400 cursor-not-allowed"
                   }`}
                 >
                   Save
@@ -182,13 +206,15 @@ const ProfileSection = () => {
         {/* Render Payment Methods */}
         {selectedSection === "Payment Methods" && <PaymentMethods />}
 
-        {selectedSection === "Do you have code?" && <DiscountCode/>}
+        {selectedSection === "Do you have code?" && <DiscountCode />}
 
-        {selectedSection === "Gift Card" && <GiftCard onContinue={() => setSelectedSection("BuyGiftCard")} />}
+        {selectedSection === "Gift Card" && (
+          <GiftCard onContinue={() => setSelectedSection("BuyGiftCard")} />
+        )}
 
-        {selectedSection === "BuyGiftCard" && <BuyGiftCard/>}   
+        {selectedSection === "BuyGiftCard" && <BuyGiftCard />}
 
-        {selectedSection === "Contact Us" && <ExpertContactUs/>}       
+        {selectedSection === "Contact Us" && <ExpertContactUs />}
       </div>
     </div>
   );

@@ -11,7 +11,10 @@ function GiftCard({ onContinue }) {
       <div className="w-full bg-white p-6 rounded-xl border">
         {/* Icon and Heading */}
         <div className="flex flex-col items-center space-y-2 mb-12">
-          <Gift strokeWidth={0.9} className="w-10 h-10 md:w-14 md:h-14 text-black" />
+          <Gift
+            strokeWidth={0.9}
+            className="w-10 h-10 md:w-14 md:h-14 text-black"
+          />
           <h2 className="text-lg font-semibold">Send a gift card</h2>
           <p className="text-[#3B9AB8] cursor-pointer text-sm md:text-xl">
             Gift a session to a friend, family, or coworker
@@ -21,14 +24,18 @@ function GiftCard({ onContinue }) {
         {/* Amount Selection */}
         <div className="mt-5">
           <h3 className="text-lg md:text-xl font-semibold">Buy a giftcard</h3>
-          <p className="text-black text-sm md:text-lg mb-6">Please select an amount</p>
+          <p className="text-black text-sm md:text-lg mb-6">
+            Please select an amount
+          </p>
 
           <div className="grid grid-cols-3 gap-3 md:grid-cols-5 mt-4 mb-9">
             {amounts.map((amount) => (
               <button
                 key={amount}
                 className={`p-3 text-center font-semibold transition-all ${
-                  selectedAmount === amount ? "bg-black text-white" : "bg-[#D9D9D9] text-black"
+                  selectedAmount === amount
+                    ? "bg-black text-white"
+                    : "bg-[#D9D9D9] text-black"
                 }`}
                 onClick={() => {
                   setSelectedAmount(amount);
