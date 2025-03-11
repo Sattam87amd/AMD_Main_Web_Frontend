@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
 import ExpertProfile from "@/components/ExpertPanel/Expert/ExpertProfile";
 import EditExpertProfile from "@/components/ExpertPanel/Expert/EditExpertProfile";
+import Footer from "@/components/Layout/Footer";
 
 const Page = () => {
   const [expertData, setExpertData] = useState({
@@ -27,6 +28,7 @@ const Page = () => {
   }, []);
 
   return (
+    <>
     <div className="flex min-h-screen">
       {/* Sidebar with 20% width */}
       <div className="md:w-[20%]">
@@ -43,6 +45,10 @@ const Page = () => {
         />
       </div>
     </div>
+    <div className="md:mt-2">
+    <Footer/>
+    </div>
+    </>
   );
 };
 

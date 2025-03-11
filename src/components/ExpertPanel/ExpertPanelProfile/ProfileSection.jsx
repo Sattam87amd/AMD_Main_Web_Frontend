@@ -53,7 +53,6 @@ const ProfileSection = () => {
             { name: "Gift Card", icon: FaGift },
             { name: "Contact Us", icon: FaComments },
             { name: "Give us Feedback", icon: MdOutlineFeedback },
-            { name: "Sign Out", icon: FiLogOut },
             { name: "Deactivate account", icon: FaTrashAlt },
           ].map((item) => (
             <button

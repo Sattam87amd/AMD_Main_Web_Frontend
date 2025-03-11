@@ -3,9 +3,11 @@
 import React from 'react';
 import ProfileSection from '@/components/ExpertPanel/ExpertPanelProfile/ProfileSection';
 import Sidebar from '@/components/ExpertPanel/SideBar/SideBar';
+import Footer from '@/components/Layout/Footer';
 
 const Page = () => {
   return (
+    <>
     <div className="flex min-h-screen">
       {/* Sidebar with 1/3 width */}
       <div className="md:w-[20%]">
@@ -17,6 +19,10 @@ const Page = () => {
         <ProfileSection />
       </div>
     </div>
+    <div className="md:mt-3.5">
+    <Footer/>
+    </div>
+    </>
   );
 };
 
