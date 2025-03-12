@@ -94,7 +94,7 @@ function BuyGiftCard() {
             htmlFor="anonymous"
             className="text-sm font-medium text-gray-900"
           >
-            Send <br /> Anonymously
+            Send Anonymously
           </label>
         </div>
 
