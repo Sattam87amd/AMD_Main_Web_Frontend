@@ -44,7 +44,7 @@ const Footer = () => {
               <h2 className="mb-4 text-sm font-semibold text-black">Support</h2>
               <ul className="text-gray-700">
                 <li className="mb-2">
-                  <a href="#" className="hover:underline">Contact</a>
+                  <a href="contactus" className="hover:underline">Contact</a>
                 </li>
                 <li className="mb-2">
                   <a href="#" className="hover:underline">Give us feedback & earn</a>
