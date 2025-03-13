@@ -5,7 +5,7 @@ import { IoIosSearch } from "react-icons/io";
 import { LuNotepadText } from "react-icons/lu";
 import { Inter } from "next/font/google";
 import { useState, useRef } from "react";
-import { FaLink } from "react-icons/fa";
+import { FiLink } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 
 const interFont = Inter({
@@ -234,7 +234,7 @@ function RegisterForm() {
                   placeholder="https://your-social-link"
                 />
                 <span className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <FaLink className="text-black" />
+                  <FiLink className="text-black" />
                 </span>
               </div>
             </div>
@@ -275,7 +275,7 @@ function RegisterForm() {
                   type="text"
                   id="file-display"
                   className="bg-white border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
-                  placeholder="No file chosen"
+                  placeholder=""
                   readOnly
                 />
                 <button

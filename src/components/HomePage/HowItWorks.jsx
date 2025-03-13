@@ -33,8 +33,17 @@ const HowItWorks = () => {
         <div className="bg-black text-white p-4 md:p-8 shadow-md w-full md:w-[600px] md:min-h-[360px] overflow-hidden">
           <Image src="/instantaccess.png" alt="Instant Access" width={100} height={80} className="mb-6" />
           <h3 className="text-xl md:text-3xl font-light">Instant Access to Insights</h3>
-          <p className="text-sm md:text-base font-light mt-4 leading-relaxed">
-            Instant Access to Insights ensures users get valuable knowledge in real-time, enabling quick decision-making. This boosts efficiency, enhances learning, and keeps them ahead of the competition.
+          <p className="hidden md:block text-sm md:text-base font-thin mt-4 leading-relaxed">
+            Instant Access to Insights ensures users get valuable knowledge <br /> 
+            in real-time, enabling quick decision-making. This boosts <br /> 
+            efficiency, enhances learning, and keeps them ahead of the <br /> 
+            competition.
+          </p>
+          <p className="text-xs md:text-base font-thin mt-4 leading-relaxed md:hidden">
+            Instant Access to Insights ensures users get valuable knowledge 
+            in real-time, enabling quick decision-making. This boosts 
+            efficiency, enhances learning, and keeps them ahead of the 
+            competition.
           </p>
         </div>
 
@@ -42,7 +51,7 @@ const HowItWorks = () => {
         <div className="bg-[#F8F7F3] p-4 md:p-8 shadow-md w-full md:w-[600px] md:min-h-[360px] overflow-hidden">
           <Image src="/secure.png" alt="100% Secure Payments" width={100} height={80} className="mb-6" />
           <h3 className="text-xl md:text-3xl font-light">100% Secure Payments</h3>
-          <p className="text-sm md:text-lg text-black mt-4 leading-relaxed">
+          <p className="text-sm md:text-ltext-sm md:text-base font-thin mt-4 leading-relaxed">
             100% Secure Payments ensure safe transactions, protecting customer data and preventing fraud. This builds trust, enhances credibility, and provides a worry-free payment experience.
           </p>
         </div>
@@ -54,7 +63,7 @@ const HowItWorks = () => {
         <div className="p-4 md:p-8 w-full md:w-[600px] md:min-h-[360px] overflow-hidden">
           <Image src="/top.png" alt="Top Industry Experts" width={100} height={80} className="mb-6" />
           <h3 className="text-xl md:text-3xl font-light">Top Industry Experts</h3>
-          <p className="text-sm md:text-lg text-black mt-4 leading-relaxed">
+          <p className="text-sm md:text-text-sm md:text-base font-thin mt-4 leading-relaxed">
             Featuring Top Industry Experts builds trust, credibility, and authority, providing high-quality insights and innovative ideas. This sets you apart from competitors, drives engagement, and fosters valuable connections.
           </p>
         </div>
@@ -63,7 +72,7 @@ const HowItWorks = () => {
         <div className="bg-[#F8F7F3] p-4 md:p-8 shadow-md w-full md:w-[600px] md:min-h-[360px] overflow-hidden">
           <Image src="/schedule.png" alt="Flexible Scheduling" width={100} height={80} className="mb-6" />
           <h3 className="text-xl md:text-3xl font-light">Flexible Scheduling</h3>
-          <p className="text-sm md:text-lg text-black mt-4 leading-relaxed">
+          <p className="text-sm md:text-sm font-thin mt-4 leading-relaxed">
             Flexible Scheduling offers convenience and accessibility, allowing users to book services at their preferred time. This enhances customer satisfaction, boosts engagement, and accommodates diverse needs effortlessly.
           </p>
         </div>

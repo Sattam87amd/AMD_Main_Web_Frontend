@@ -28,11 +28,11 @@ const ExpertCategories = () => {
       </h1>
 
       {/* Categories Section */}
-      <div className="overflow-x-auto md:overflow-visible md:ml-28 md:pr-80">
-        <div className="flex md:grid md:grid-cols-5 gap-5 flex-nowrap">
+      <div className="overflow-x-auto md:overflow-x-auto md:ml-16">
+        <div className="flex gap-4 md:gap-x-24 md:px-4 md:pb-2 scrollbar-hide">
           {categories.map((category, index) => (
             <Link href={category.link} key={index} passHref>
-              <div className="relative flex-shrink-0 min-w-[150px] md:w-[170px] h-20 md:h-24 my-5 rounded-xl overflow-hidden shadow-md cursor-pointer">
+              <div className="relative flex-shrink-0 min-w-[170px] md:min-w-[240px] h-24 md:h-36 rounded-xl overflow-hidden shadow-md cursor-pointer">
                 <div className="relative w-full h-full">
                   <img
                     src={category.image}
@@ -42,7 +42,9 @@ const ExpertCategories = () => {
                 </div>
 
                 <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 rounded-xl">
-                  <p className="text-white font-semibold">{category.title}</p>
+                  <p className="text-white font-semibold md:text-lg">
+                    {category.title}
+                  </p>
                 </div>
               </div>
             </Link>
