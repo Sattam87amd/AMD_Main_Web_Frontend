@@ -51,7 +51,7 @@ const HowItWorks = () => {
         <div className="bg-[#F8F7F3] p-4 md:p-8 shadow-md w-full md:w-[600px] md:min-h-[360px] overflow-hidden">
           <Image src="/secure.png" alt="100% Secure Payments" width={100} height={80} className="mb-6" />
           <h3 className="text-xl md:text-3xl font-light">100% Secure Payments</h3>
-          <p className="text-sm md:text-ltext-sm md:text-base font-thin mt-4 leading-relaxed">
+          <p className="text-sm md:text-base font-thin mt-4 leading-relaxed">
             100% Secure Payments ensure safe transactions, protecting customer data and preventing fraud. This builds trust, enhances credibility, and provides a worry-free payment experience.
           </p>
         </div>
@@ -60,10 +60,10 @@ const HowItWorks = () => {
       {/* Right Side Cards */}
       <div className="space-y-8 md:space-y-12 md:mt-32">
         {/* Top Industry Experts Card */}
-        <div className="p-4 md:p-8 w-full md:w-[600px] md:min-h-[360px] overflow-hidden">
+        <div className="bg-[#F8F7F3] p-4 md:p-8 shadow-md w-full md:w-[600px] md:min-h-[360px] overflow-hidden">
           <Image src="/top.png" alt="Top Industry Experts" width={100} height={80} className="mb-6" />
           <h3 className="text-xl md:text-3xl font-light">Top Industry Experts</h3>
-          <p className="text-sm md:text-text-sm md:text-base font-thin mt-4 leading-relaxed">
+          <p className="text-sm md:text-base font-thin mt-4 leading-relaxed">
             Featuring Top Industry Experts builds trust, credibility, and authority, providing high-quality insights and innovative ideas. This sets you apart from competitors, drives engagement, and fosters valuable connections.
           </p>
         </div>

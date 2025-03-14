@@ -9,8 +9,9 @@ import {
   FaCheckCircle,
 } from "react-icons/fa";
 import { LuPencilLine } from "react-icons/lu";
-import { FiLogOut, FiDollarSign } from "react-icons/fi";
+import { FiDollarSign } from "react-icons/fi";
 import { MdOutlineFeedback } from "react-icons/md";
+import { CiSettings } from "react-icons/ci"; // <-- NEW IMPORT
 import PaymentMethods from "./PaymentMethod";
 import DiscountCode from "./DiscountCode";
 import GiftCard from "./GiftCard";
@@ -49,7 +50,12 @@ const ProfileSection = () => {
     <div className="flex flex-col md:flex-row border rounded-xl overflow-hidden bg-white m-4 md:m-8">
       {/* Sidebar - Hidden on Small Screens, Visible on Medium+ */}
       <aside className="hidden md:block w-64 bg-white p-6 border-r h-[800px]">
-        <h2 className="text-lg font-semibold pb-4 border-b mb-3">Settings</h2>
+        {/* Updated Settings Heading with Icon */}
+        <h2 className="flex items-center justify-between text-lg font-semibold pb-4 border-b mb-3">
+          <span>Settings</span>
+          <CiSettings className="text-3xl text-[#7E7E7E]" />
+        </h2>
+
         <nav className="space-y-6">
           {[
             { name: "Profile", icon: FaUser },
@@ -82,9 +88,9 @@ const ProfileSection = () => {
         </nav>
       </aside>
 
-      {/* Profile Content */}
+      {/* Main Content */}
       <div className="flex-1 p-4 md:p-8">
-        {/* Show Profile Form ONLY when "Profile" is selected */}
+        {/* Profile Section */}
         {selectedSection === "Profile" && (
           <div className="mt-6">
             <div className="flex flex-col md:flex-row items-center md:justify-between space-y-4 md:space-y-0">
@@ -203,17 +209,21 @@ const ProfileSection = () => {
           </div>
         )}
 
-        {/* Render Payment Methods */}
+        {/* Payment Methods */}
         {selectedSection === "Payment Methods" && <PaymentMethods />}
 
+        {/* Discount Code */}
         {selectedSection === "Do you have code?" && <DiscountCode />}
 
+        {/* Gift Card */}
         {selectedSection === "Gift Card" && (
           <GiftCard onContinue={() => setSelectedSection("BuyGiftCard")} />
         )}
 
+        {/* Buy Gift Card */}
         {selectedSection === "BuyGiftCard" && <BuyGiftCard />}
 
+        {/* Contact Us */}
         {selectedSection === "Contact Us" && <ExpertContactUs />}
       </div>
     </div>

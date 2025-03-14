@@ -51,15 +51,13 @@ const WhatToExpect = () => {
 
   return (
     <div className="bg-white md:px-28 px-8 md:py-10">
-      {/* Heading */}
-
       {/* Session Selection Buttons */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6 md:mx-20">
         {sessions.map((session) => (
           <button
             key={session.time}
             onClick={() => setSelectedSession(session.time)}
-            className={`py-3 px-4 text-sm md:text-base font-semibold transition ${
+            className={`py-2 px-2 md:py-3 md:px-4 w-full md:w-52 text-xs md:text-base transition ${
               selectedSession === session.time
                 ? "bg-black text-white"
                 : "bg-[#F8F7F3] text-black"
@@ -73,6 +71,7 @@ const WhatToExpect = () => {
       <h2 className="text-2xl md:text-[44px] font-bold text-black py-10 mb-6">
         What To Expect
       </h2>
+
       {/* Session Information Card */}
       <div className="bg-[#F8F7F3] rounded-2xl p-6 md:px-16 flex flex-col md:flex-row items-start md:items-center md:justify-center gap-6">
         <div className="flex-1">

@@ -1,27 +1,22 @@
 "use client";
+
 import React, { useState } from "react";
-import { FaChevronLeft, FaChevronRight, FaStar, FaPen } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight, FaStar } from "react-icons/fa";
+import { SlNote } from "react-icons/sl";
+import { format, addDays } from "date-fns";
 
 const ScheduleQuickCalls = () => {
-  const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-  const datesData = [
-    { date: 12, month: "Feb" },
-    { date: 13, month: "Feb" },
-    { date: 14, month: "Feb" },
-    { date: 15, month: "Feb" },
-    { date: 16, month: "Feb" },
-    { date: 17, month: "Feb" },
-    { date: 18, month: "Feb" },
-    { date: 19, month: "Feb" },
-    { date: 20, month: "Feb" },
-    { date: 21, month: "Feb" },
-    { date: 22, month: "Feb" },
-    { date: 23, month: "Feb" },
-    { date: 24, month: "Feb" },
-    { date: 25, month: "Feb" },
-    { date: 26, month: "Feb" },
-    { date: 27, month: "Feb" },
-  ];
+  const today = new Date();
+  const days = Array.from({ length: 7 }, (_, i) =>
+    format(addDays(today, i), "EEE")
+  );
+  const datesData = Array.from({ length: 16 }, (_, i) => {
+    const dateObj = addDays(today, i);
+    return {
+      date: format(dateObj, "d"),
+      month: format(dateObj, "MMM"),
+    };
+  });
 
   const timeSlots = [
     { time: "07:00 AM", available: false },
@@ -63,17 +58,17 @@ const ScheduleQuickCalls = () => {
   };
 
   return (
-    <div className="bg-[#F8F7F3] rounded-2xl p-6 w-full md:w-[80%] mx-auto flex flex-col items-center">
+    <div className="bg-[#F8F7F3] rounded-2xl p-4 md:p-6 w-full md:w-[80%] mx-auto flex flex-col items-center">
       {/* Heading */}
-      <h2 className="text-lg md:text-3xl font-bold py-4 md:py-6 text-black mb-4 text-center">
+      <h2 className="text-base md:text-3xl font-normal py-4 md:py-6 text-black mb-6 md:mb-8 text-center">
         What time works best for a quick call?
       </h2>
 
       {/* Schedule Selector */}
-      <div className="flex items-center gap-2 md:gap-3 w-full max-w-4xl">
+      <div className="flex items-center gap-2 md:gap-6 w-full max-w-4xl">
         <button
           onClick={scrollLeft}
-          className="p-3 md:p-5 rounded-xl bg-white text-black hover:bg-gray-200 transition"
+          className="p-2 md:p-5 rounded-xl bg-white text-black hover:bg-gray-200 transition"
           disabled={startIndex === 0}
         >
           <FaChevronLeft />
@@ -81,9 +76,9 @@ const ScheduleQuickCalls = () => {
 
         <div className="w-full rounded-2xl bg-white">
           {/* Days Row */}
-          <div className="grid grid-cols-7 bg-[#EDECE8] px-2 md:px-4 py-2 md:py-3 rounded-t-2xl text-center font-semibold">
+          <div className="grid grid-cols-7 bg-[#EDECE8] px-2 md:px-4 py-2 md:py-3 rounded-t-2xl text-center">
             {days.map((day, idx) => (
-              <div key={idx} className="text-sm md:text-lg">
+              <div key={idx} className="text-xs md:text-lg">
                 {day}
               </div>
             ))}
@@ -91,27 +86,35 @@ const ScheduleQuickCalls = () => {
 
           {/* Dates Row */}
           <div className="grid grid-cols-7 px-2 md:px-4 py-2 md:py-4 rounded-b-2xl text-center">
-            {datesData.slice(startIndex, startIndex + visibleRange).map((item, idx) => {
-              const isSelected = idx === selectedIndex;
-              return (
-                <div
-                  key={idx}
-                  onClick={() => setSelectedIndex(idx)}
-                  className={`flex flex-col items-center cursor-pointer transition-all duration-300 rounded-md p-2
-                    ${isSelected ? "bg-black text-white" : "bg-white text-black"}
+            {datesData
+              .slice(startIndex, startIndex + visibleRange)
+              .map((item, idx) => {
+                const isSelected = idx === selectedIndex;
+                return (
+                  <div
+                    key={idx}
+                    onClick={() => setSelectedIndex(idx)}
+                    className={`flex flex-col items-center cursor-pointer transition-all duration-300 rounded-md p-2
+                    ${
+                      isSelected ? "bg-black text-white" : "bg-white text-black"
+                    }
                   `}
-                >
-                  <span className="text-2xl md:text-[40px] font-thin">{item.date}</span>
-                  <span className="text-xs md:text-base font-normal">{item.month}</span>
-                </div>
-              );
-            })}
+                  >
+                    <span className="text-lg md:text-3xl font-light">
+                      {item.date}
+                    </span>
+                    <span className="text-xs md:text-sm font-light">
+                      {item.month}
+                    </span>
+                  </div>
+                );
+              })}
           </div>
         </div>
 
         <button
           onClick={scrollRight}
-          className="p-3 md:p-5 rounded-xl bg-white text-black hover:bg-gray-200 transition"
+          className="p-2 md:p-5 rounded-xl bg-white text-black hover:bg-gray-200 transition"
           disabled={startIndex + visibleRange >= datesData.length}
         >
           <FaChevronRight />
@@ -119,16 +122,16 @@ const ScheduleQuickCalls = () => {
       </div>
 
       {/* Time Slot Selection */}
-      <h3 className="text-lg md:text-2xl font-bold mt-6 md:mt-8 text-black text-center">
+      <h3 className="text-base md:text-2xl font-bold mt-6 md:mt-8 text-black text-center">
         Select Time Slot
       </h3>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-x-6 gap-y-6 md:gap-x-10 md:gap-y-8 mt-4">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-x-10 md:gap-y-8 mt-4">
         {timeSlots.map((slot, idx) => (
           <button
             key={idx}
             onClick={() => slot.available && handleSelectTime(slot.time)}
-            className={`px-6 md:px-14 py-2 md:py-3 w-full text-sm md:text-lg rounded-lg border-2 font-semibold 
+            className={`px-4 md:px-14 py-2 md:py-3 w-full text-xs md:text-lg rounded-lg border-2 
               ${
                 slot.available
                   ? selectedSlots.includes(slot.time)
@@ -145,29 +148,33 @@ const ScheduleQuickCalls = () => {
 
       {/* Bottom Note */}
       <div className="bg-white rounded-2xl p-4 md:p-5 mt-6 md:mt-8 shadow-md w-full md:w-[50%] mx-auto">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
+        <div className="flex flex-row justify-between items-center">
           <div>
-            <h2 className="text-lg md:text-xl font-semibold text-black mt-1">
-              $2000 <span className="text-sm md:text-lg font-normal">. session</span>
+            <h2 className="text-base md:text-2xl text-black mt-1">
+              $2000{" "}
+              <span className="text-sm md:text-2xl font-normal">. session</span>
             </h2>
             <div className="flex items-center gap-1">
               {[...Array(5)].map((_, i) => (
                 <FaStar key={i} className="text-[#FFA629]" />
               ))}
-              <span className="text-[#FFA629] font-medium text-sm">5.0</span>
+              <span className="text-[#FFA629] font-medium text-xs md:text-sm">
+                5.0
+              </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-6 md:gap-8 mt-2 md:mt-0">
-            <button className="bg-black text-white py-2 px-10 md:py-3 md:px-16 rounded-2xl text-sm md:text-lg font-medium">
+          <div className="flex items-center gap-4">
+            <button className="bg-black text-white py-2 px-6 md:py-3 md:px-16 rounded-2xl text-xs md:text-lg font-medium">
               Next
             </button>
-            <FaPen className="text-black text-sm md:text-lg cursor-pointer hover:opacity-80" />
+            <SlNote className="w-6 h-6 md:w-10 md:h-10 text-black cursor-pointer hover:opacity-80" />
           </div>
         </div>
 
-        <p className="text-[#FE3232] text-xs md:text-sm text-start mt-2 w-full">
-          Note - Can add up to 5 sessions at different time slots. Any 1 time slot might get selected.
+        <p className="text-[#FE3232] text-xs md:text-base text-start mt-2 w-full">
+          Note - Can add up to 5 sessions at different time slots. Any 1 time
+          slot might get selected.
         </p>
       </div>
     </div>

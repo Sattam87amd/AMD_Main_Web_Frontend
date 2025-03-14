@@ -18,7 +18,7 @@ const Sidebar = () => {
     {
       label: "Video Call",
       icon: <FiVideo />,
-      route: "/expertpanel/expertpanelprofile/videocall",
+      route: "/expertpanel/videocall",
     },
     {
       label: "Profile",
@@ -36,7 +36,7 @@ const Sidebar = () => {
       route: "/expertpanel/dashboard",
     },
     {
-      label: "Payments",
+      label: "Payments/Reviews",
       icon: <LucideDollarSign />,
       route: "/expertpanel/payments",
     },
