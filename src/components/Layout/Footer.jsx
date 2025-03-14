@@ -6,8 +6,8 @@ import { FaInstagram, FaTwitter, FaFacebook } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="p-4 md:p-6 bg-[#EDECE8]">
-      <div className="max-w-screen-xl mx-auto">
+    <footer className="p-4 md:p-10 md:py-6 bg-[#EDECE8] w-full">
+      <div className="w-full">
         <div className="md:flex md:justify-between md:items-start">
           {/* Left Section - AMD and Tagline */}
           <div className="mb-6 md:mb-0">
@@ -94,7 +94,7 @@ const Footer = () => {
             <h2 className="mb-4 text-sm md:text-lg font-semibold text-black">
               Follow us for peaks
             </h2>
-            <div className="flex justify-center items-center space-x-4">
+            <div className="flex justify-start md:justify-center items-center space-x-4">
               <Link href="https://www.instagram.com" target="_blank" className="text-[#A6A6A6] hover:text-black">
                 <FaInstagram size={28} />
               </Link>
@@ -112,8 +112,8 @@ const Footer = () => {
 
         {/* Bottom Section */}
         <div className="flex flex-col sm:flex-row justify-between items-center">
-          <span className="text-sm  text-gray-500 text-center">
-            © AMD 2025. ALL RIGHTS RESERVED • 
+          <span className="text-sm text-gray-500 text-center">
+            © AMD 2025. ALL RIGHTS RESERVED •
             <Link href="/policy" className="hover:underline ml-1">
               Policy
             </Link>
