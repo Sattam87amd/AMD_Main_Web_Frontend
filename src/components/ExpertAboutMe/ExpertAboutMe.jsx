@@ -49,7 +49,7 @@ const ExpertAboutMe = () => {
             className="w-[400px] h-[450px] object-cover rounded-2xl shadow-md"
           />
           <div className="text-start mt-4">
-            <h2 className="text-3xl font-bold text-gray-900">{profile.name}</h2>
+            <h2 className="text-3xl text-gray-900">{profile.name}</h2>
             <p className="text-[#9C9C9C] text-base mt-1">{profile.designation}</p>
             <div className="flex items-center justify-start mt-2">
               {[...Array(5)].map((_, i) => (
@@ -63,14 +63,14 @@ const ExpertAboutMe = () => {
         {/* Right: About Me Section */}
         <div className="flex-1">
           <div className="flex justify-between items-center">
-            <h3 className="text-2xl md:text-[44px] font-semibold pb-4 pl-0 md:pl-64 text-gray-900">
+            <h3 className="text-2xl md:text-[44px] pb-4 pl-0 md:pl-64 text-gray-900">
               About Me
             </h3>
             <FaInstagram className="text-gray-500 text-xl md:text-[40px] cursor-pointer hover:text-gray-700" />
           </div>
 
           {/* Render About Text with Proper Spacing */}
-          <p className="text-black text-sm md:text-base md:font-semibold pl-0 md:pl-64 leading-relaxed mt-4 whitespace-pre-line">
+          <p className="text-black text-sm md:text-base  pl-0 md:pl-64 leading-relaxed mt-4 whitespace-pre-line">
             {profile.about}
           </p>
 
