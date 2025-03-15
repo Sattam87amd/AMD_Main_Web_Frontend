@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { FiSearch, FiVideo, FiLogOut } from "react-icons/fi";
 import { CgProfile } from "react-icons/cg";
@@ -15,11 +14,7 @@ const Sidebar = () => {
 
   const menuItems = [
     { label: "Find Experts", icon: <FiSearch />, route: "/experts" },
-    {
-      label: "Video Call",
-      icon: <FiVideo />,
-      route: "/expertpanel/videocall",
-    },
+    { label: "Video Call", icon: <FiVideo />, route: "/expertpanel/videocall" },
     {
       label: "Profile",
       icon: <CgProfile />,
@@ -53,7 +48,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="hidden md:block w-full bg-white shadow-md h-[99.5%] ">
+    <div className="hidden md:block w-full bg-white shadow-md h-[99.5%]">
       {/* Logo Section */}
       <div className="p-4 mt-5 flex justify-center">
         <Image
@@ -85,7 +80,6 @@ const Sidebar = () => {
 
       {/* Profile Image Section */}
       <div className="p-4 flex flex-col items-center relative">
-        {/* Profile Image */}
         <div className="relative flex justify-center">
           <Image
             src="/group1.png"
@@ -95,8 +89,6 @@ const Sidebar = () => {
             className="w-52 h-auto"
           />
         </div>
-
-        {/* Get Help Button (Positioned as needed) */}
         <button
           onClick={() => router.push("/gethelp")}
           className="absolute bottom-[30px] px-14 py-3 bg-black text-white text-sm rounded-md hover:bg-gray-800"

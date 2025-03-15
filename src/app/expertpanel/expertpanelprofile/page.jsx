@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { usePathname } from 'next/navigation';
 import ProfileSection from '@/components/ExpertPanel/ExpertPanelProfile/ProfileSection';
 import Sidebar from '@/components/ExpertPanel/SideBar/SideBar';
 import Footer from '@/components/Layout/Footer';
@@ -8,27 +9,45 @@ import Navtop from '@/components/ExpertPanel/Navtop/navtop';
 import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
 
 const Page = () => {
+  const pathname = usePathname();
+
+  // Map the routes to their labels (should match the Sidebar menu items)
+  const menuItems = [
+    { label: "Find Experts", route: "/experts" },
+    { label: "Video Call", route: "/expertpanel/videocall" },
+    { label: "Profile", route: "/expertpanel/expertpanelprofile" },
+    { label: "Expert", route: "/expertpanel/expert" },
+    { label: "Dashboard", route: "/expertpanel/dashboard" },
+    { label: "Payments/Reviews", route: "/expertpanel/payments" },
+    { label: "Logout", route: "/" },
+    { label: "Chat with Users", route: "/expertpanel/chat" },
+  ];
+
+  const activeItem = menuItems.find(item => item.route === pathname);
+  const activeTab = activeItem ? activeItem.label : "Profile"; // Default value if no match
+
   return (
     <>
-    <div className="flex min-h-screen">
-      {/* Sidebar with 1/3 width */}
-      <div className="md:w-[20%]">
-        <Sidebar />
-      </div>
-
-      {/* Right Side Content with 2/3 width */}
-      <div className="md:w-[80%] p-4">
-        <Navtop/>
-        <ProfileSection />
-      </div>
-      <div className="fixed bottom-0 left-0 right-0 md:hidden">
-          <BottomNav/>
+      <div className="flex min-h-screen">
+        {/* Sidebar */}
+        <div className="md:w-[20%]">
+          <Sidebar />
         </div>
-    </div>
-    <div className="md:mt-3.5">
-    <Footer/>
 
-    </div>
+        {/* Main Content */}
+        <div className="md:w-[80%] p-4">
+          <Navtop activeTab={activeTab} />
+          <ProfileSection />
+        </div>
+
+        {/* Bottom Navigation for Mobile */}
+        <div className="fixed bottom-0 left-0 right-0 md:hidden">
+          <BottomNav />
+        </div>
+      </div>
+      <div className="md:mt-3.5">
+        <Footer />
+      </div>
     </>
   );
 };

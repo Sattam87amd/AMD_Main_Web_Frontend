@@ -6,21 +6,21 @@ function FAQItem({ question, answer }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="border-b border-gray-300 py-4">
+    <div className="py-4 md:py-6">
       {/* Question + Toggle Icon */}
       <button
         className="flex justify-between items-center w-full text-left focus:outline-none"
         onClick={() => setOpen(!open)}
       >
-        <span className="text-lg md:text-xl font-normal text-black">
+        <span className="text-lg md:text-3xl font-medium text-[#1A1A1A]">
           {question}
         </span>
-        {open ? <FaChevronUp /> : <FaChevronDown />}
+        {open ? <FaChevronUp className="text-base md:text-lg text-[#1A1A1A]" /> : <FaChevronDown className="text-base md:text-lg" />}
       </button>
 
       {/* Answer */}
       {open && (
-        <p className="mt-3 text-gray-600 text-base md:text-lg leading-relaxed">
+        <p className="mt-3 text-gray-600 text-base md:text-lg leading-relaxed md:leading-loose">
           {answer}
         </p>
       )}
@@ -73,14 +73,14 @@ function FrequentlyAskedQuestions() {
   ];
 
   return (
-    <section className="py-12 md:py-16">
+    <section className="py-16 md:py-24">
       {/* Centered Heading */}
-      <h2 className="text-3xl md:text-5xl font-bold text-center mb-10">
-        Frequently Asked Question
+      <h2 className="text-3xl md:text-6xl md:py-20 font-semibold text-center mb-12">
+        Frequently Asked Questions
       </h2>
 
       {/* FAQ Grid (2 Columns on MD and above) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mx-9">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mx-9">
         {/* Left Column (first half of FAQs) */}
         <div>
           {faqs.slice(0, 4).map((item, idx) => (

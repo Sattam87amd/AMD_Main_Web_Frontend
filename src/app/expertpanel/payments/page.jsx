@@ -1,13 +1,31 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Sidebar from '@/components/ExpertPanel/SideBar/SideBar';
-import Navtop from '@/components/ExpertPanel/Navtop/navtop';
-import ChatComponent from '@/components/ExpertPanel/ChatComponent/chatcomponent';
-import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
-import PaymentLogin from '@/components/ExpertPanel/ExpertloginPayment/paymentlogin';
+import React from "react";
+import { usePathname } from "next/navigation"; // Import usePathname for dynamic active tab
+import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
+import Navtop from "@/components/ExpertPanel/Navtop/navtop";
+import PaymentLogin from "@/components/ExpertPanel/ExpertloginPayment/paymentlogin";
+import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
 
+// Define Sidebar menu items with route mapping
+const menuItems = [
+  { label: "Find Experts", route: "/experts" },
+  { label: "Video Call", route: "/expertpanel/videocall" },
+  { label: "Profile", route: "/expertpanel/expertpanelprofile" },
+  { label: "Expert", route: "/expertpanel/expert" },
+  { label: "Dashboard", route: "/expertpanel/dashboard" },
+  { label: "Payments/Reviews", route: "/expertpanel/payments" },
+  { label: "Chat with Users", route: "/expertpanel/chat" },
+];
+
+// Function Component
 const Page = () => {
+  const pathname = usePathname(); // Get current route dynamically
+
+  // Find active menu item based on current pathname
+  const activeMenu = menuItems.find((item) => item.route === pathname);
+  const activeTab = activeMenu ? activeMenu.label : "Dashboard"; // Default to Dashboard
+
   return (
     <div className="flex min-h-screen">
       {/* Sidebar with 1/3 width - Hidden on mobile */}
@@ -17,7 +35,7 @@ const Page = () => {
 
       {/* Right Side Content with 2/3 width */}
       <div className="w-full md:w-[80%] p-4">
-        <Navtop />
+        <Navtop activeTab={activeTab} /> {/* Pass active tab dynamically */}
         <PaymentLogin />
 
         {/* Bottom Navigation - Visible only on mobile */}

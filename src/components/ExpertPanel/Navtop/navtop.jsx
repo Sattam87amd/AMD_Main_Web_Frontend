@@ -3,13 +3,19 @@
 import React from "react";
 import { FaBell, FaChevronDown } from "react-icons/fa";
 
-const Navtop = () => {
+// Dummy User Data (Replace this with backend data)
+const userData = {
+  name: "Basim Thakur",
+  profilePic: "/ralphedwards.png", // Replace with dynamic image URL if needed
+};
+
+const Navtop = ({ activeTab }) => {
   return (
     <div className="flex justify-between items-center bg-white py-4 px-6 shadow-sm">
       {/* Left Section */}
       <div>
-        <p className="text-gray-500 text-sm">Hi, Ayaan Raje</p>
-        <h1 className="text-2xl font-bold">Payments</h1>
+        <p className="text-gray-500 text-sm">Hi, {userData.name}</p>
+        <h1 className="text-2xl font-bold">{activeTab}</h1>
       </div>
 
       {/* Right Section */}
@@ -29,11 +35,11 @@ const Navtop = () => {
         {/* Profile Section */}
         <div className="flex items-center space-x-2 cursor-pointer">
           <img
-            src="/ralphedwards.png"
+            src={userData.profilePic}
             alt="Profile"
             className="w-8 h-8 rounded-full object-cover border border-gray-300"
           />
-          <p className="text-sm font-semibold">Ayaan Raje</p>
+          <p className="text-sm font-semibold">{userData.name}</p>
         </div>
       </div>
     </div>

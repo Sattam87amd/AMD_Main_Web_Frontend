@@ -8,6 +8,7 @@ import SimilarExpertsExpertPanel from "@/components/ExpertPanel/ExpertPanelAbout
 import Footer from "@/components/Layout/Footer";
 import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
 import AboutMeReviewsExpertPanel from "@/components/ExpertPanel/ExpertPanelAboutMe/AboutMeReviewsExpertPanel";
+import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
 
 const Page = () => {
   return (
@@ -38,6 +39,7 @@ const Page = () => {
     </div>
     <div>
     <Footer/>
+    <BottomNav/>
     </div>
     </>
   );

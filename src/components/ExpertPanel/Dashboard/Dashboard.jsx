@@ -51,21 +51,15 @@ const Dashboard = () => {
             viewBox="0 0 24 24"
             stroke="currentColor"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
           <span className="ml-2"></span>
         </button>
       </div>
 
-      {/* Heading */}
-      <h1 className="text-2xl md:text-3xl font-bold">Dashboard</h1>
-      <p className="text-black text-lg mt-1 py-10">
-        Take a deeper look at your revenue &amp; more
+      
+      <p className="text-black text-lg md:text-2xl mt-1 pl-2 py-10">
+      Dashboard. Take a deeper look at your revenue & more
       </p>
 
       {/* Main Content Card */}
@@ -78,9 +72,7 @@ const Dashboard = () => {
                 key={item}
                 onClick={() => setActiveFilter(item)}
                 className={`px-6 py-1 rounded-full transition-colors ${
-                  activeFilter === item
-                    ? "bg-[#EDECE8] text-black"
-                    : "bg-transparent text-gray-500"
+                  activeFilter === item ? "bg-[#EDECE8] text-black" : "bg-transparent text-gray-500"
                 }`}
               >
                 {item}

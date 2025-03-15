@@ -12,11 +12,11 @@ function FaQ() {
       </div>
 
       {/* Centered Content */}
-      <div className="relative z-10 flex flex-col top-72 items-center justify-center h-full px-4 md:px-0">
-        <h1 className="text-3xl md:text-[55px] font-extrabold md:font-bold text-black text-center mb-6 md:mb-24">
+      <div className="relative z-10 flex flex-col top-80 items-center justify-center h-full px-4 md:px-0">
+        <h1 className="text-3xl md:text-[65px] font-extrabold md:font-bold text-black text-center mb-6 md:mb-24">
           FaQ
         </h1>
-        <p className="hidden md:block text-lg text-center max-w-5xl">
+        <p className="hidden md:block text-xl text-center max-w-6xl">
           Lorem ipsum dolor sit amet consectetur. Non commodo mi elit ut
           convallis. Tempor facilisi pellentesque sem <br /> praesent tortor venenatis.
           Diam volutpat interdum quis senectus. Quam eros nunc habitant
