@@ -55,9 +55,12 @@ const ChatComponent = () => {
     }
   };
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isTyping]);
+  // Remove or comment out the useEffect for auto-scroll
+  // useEffect(() => {
+  //   if (messages.length > 0 || isTyping) {
+  //     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  //   }
+  // }, [messages, isTyping]);
 
   return (
     <div className="flex flex-col md:flex-row h-auto bg-gray-200 p-4">
@@ -65,6 +68,13 @@ const ChatComponent = () => {
       {/* Left Section */}
       <div className="w-full md:w-1/4 space-y-4">
         
+        {/* Header Section */}
+        <div className="p-4 bg-white shadow-lg rounded-lg">
+          <p className="text-sm text-gray-600">
+            To be considered for verification, you need to do the following: Add your booking link to two or more of the following bios: Instagram, LinkedIn, Twitter, or TikTok.
+          </p>
+        </div>
+
         {/* Buttons Section */}
         <div className="flex space-x-2">
           <button className="px-4 py-2 bg-black text-white rounded-lg">
