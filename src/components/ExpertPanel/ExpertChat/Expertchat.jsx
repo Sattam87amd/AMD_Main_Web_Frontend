@@ -55,9 +55,10 @@ const ExpertChat = () => {
     }
   };
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isTyping]);
+  // Remove or comment out the useEffect for auto-scroll
+  // useEffect(() => {
+  //   messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  // }, [messages, isTyping]);
 
   return (
     <div className="flex flex-col md:flex-row h-auto bg-gray-200 p-4">
