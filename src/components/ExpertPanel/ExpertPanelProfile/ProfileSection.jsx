@@ -17,6 +17,7 @@ import DiscountCode from "./DiscountCode";
 import GiftCard from "./GiftCard";
 import BuyGiftCard from "./BuyGiftCard";
 import ExpertContactUs from "./ExpertContactUs";
+import PaymentHistory from "./PaymentHistory";
 
 const ProfileSection = () => {
   const [selectedSection, setSelectedSection] = useState("Profile");
@@ -63,6 +64,7 @@ const ProfileSection = () => {
             { name: "Do you have code?", icon: FaGift },
             { name: "Gift Card", icon: FaGift },
             { name: "Contact Us", icon: FaComments },
+            { name: "Payment History", icon: FiDollarSign }, // New Entry
             { name: "Give us Feedback", icon: MdOutlineFeedback },
             { name: "Deactivate account", icon: FaTrashAlt },
           ].map((item) => (
@@ -225,6 +227,25 @@ const ProfileSection = () => {
 
         {/* Contact Us */}
         {selectedSection === "Contact Us" && <ExpertContactUs />}
+
+        {/* Payment History */}
+        {selectedSection === "Payment History" && <PaymentHistory/>}
+
+        {/* Give us Feedback */}
+        {selectedSection === "Give us Feedback" && (
+          <div className="mt-6">
+            <h2 className="text-xl font-semibold">Give us Feedback</h2>
+            <p>Your feedback matters to us.</p>
+          </div>
+        )}
+
+        {/* Deactivate account */}
+        {selectedSection === "Deactivate account" && (
+          <div className="mt-6">
+            <h2 className="text-xl font-semibold">Deactivate Account</h2>
+            <p>Are you sure you want to deactivate your account?</p>
+          </div>
+        )}
       </div>
     </div>
   );
