@@ -16,7 +16,7 @@ const Footer = () => {
               Book the most in-demand experts <br />
               & get advice over a video call.
             </p>
-            <Link href="/become-expert">
+            <Link href="/experts">
               <button className="mt-4 px-6 py-2 md:px-16 md:py-3 md:text-xl bg-black text-white rounded-lg">
                 Become Expert
               </button>
@@ -32,7 +32,7 @@ const Footer = () => {
               </h2>
               <ul className="text-gray-700 text-sm md:text-lg">
                 <li className="mb-2">
-                  <Link href="/about" className="hover:underline">
+                  <Link href="/ourmission" className="hover:underline">
                     About
                   </Link>
                 </li>

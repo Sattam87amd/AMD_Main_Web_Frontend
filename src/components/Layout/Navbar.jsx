@@ -38,7 +38,7 @@ function Navbar() {
       {/* Navbar Content */}
       <div className="relative flex items-center justify-between h-full px-6">
         {/* Logo (routes to /) */}
-        <Link href="/home" className="text-3xl md:text-[40px] font-semibold text-black">
+        <Link href="/" className="text-3xl md:text-[40px] font-semibold text-black">
           AMD
         </Link>
 
@@ -68,7 +68,7 @@ function Navbar() {
             <User className="h-6 w-6 text-black cursor-pointer hover:opacity-80" />
           </Link>
 
-          <Link href="/signup">
+          <Link href="/login">
             <button className="bg-white text-black font-medium rounded-lg text-[16px] px-4 py-2">
               Sign Up
             </button>

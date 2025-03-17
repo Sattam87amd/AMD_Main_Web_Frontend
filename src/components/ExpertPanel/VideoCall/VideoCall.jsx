@@ -29,7 +29,7 @@ const VideoCall = () => {
   }, []);
 
   return (
-    <div className="w-full max-w-4xl mx-auto py-10 px-4 mt-20 ">
+    <div className="w-full md:max-w-6xl max-w-4xl mx-auto py-10 px-4 mt-20 md:mt-0 ">
       {/* Tabs */}
       <div className="flex space-x-2 mb-6">
         <button

@@ -1,23 +1,26 @@
-'use client';
+"use client";
 
 import React from 'react';
+import { usePathname } from "next/navigation"; // Import usePathname
 import Sidebar from '@/components/ExpertPanel/SideBar/SideBar';
 import Navtop from '@/components/ExpertPanel/Navtop/navtop';
-import ChatComponent from '@/components/ExpertPanel/ChatComponent/chatcomponent';
-import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
 import ExpertReview from '@/components/ExpertPanel/Expertreview/expertreview';
+import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
 
 const Page = () => {
+  const pathname = usePathname(); // Get current route
+  const activeTab = "Payments/Reviews";
+
   return (
     <div className="flex min-h-screen">
       {/* Sidebar with 1/3 width - Hidden on mobile */}
       <div className="hidden md:block md:w-[20%]">
-        <Sidebar />
+        <Sidebar activeRoute={pathname} />
       </div>
 
       {/* Right Side Content with 2/3 width */}
       <div className="w-full md:w-[80%] p-4">
-        <Navtop />
+        <Navtop activeTab={activeTab} />
         <ExpertReview />
 
         {/* Bottom Navigation - Visible only on mobile */}

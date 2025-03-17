@@ -7,7 +7,7 @@ const ExpertCategories = () => {
   const [selectedCategory, setSelectedCategory] = useState("Top Experts");
   const categories = [
     { title: "Top Experts", image: "/topexperts.png", link: "/topexpert" },
-    { title: "Home", image: "/home.png", link: "/homeexpert" },
+    { title: "Home", image: "/home.png", link: "/home-experts" },
     {
       title: "Career & Business",
       image: "/career&business.png",

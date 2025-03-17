@@ -25,9 +25,9 @@ function RegisterForm() {
   const [errors, setErrors] = useState({});
   const fileInputRef = useRef(null);
 
-  // Validate required fields
+  // Validate required fields before submission and alert missing fields
   const handleValidation = () => {
-    let tempErrors = {};
+    const tempErrors = {};
 
     if (!firstName) tempErrors.firstName = "First name is required.";
     if (!lastName) tempErrors.lastName = "Last name is required.";
@@ -35,7 +35,13 @@ function RegisterForm() {
     if (!email) tempErrors.email = "Email address is required.";
 
     setErrors(tempErrors);
-    return Object.keys(tempErrors).length === 0;
+    
+    if (Object.keys(tempErrors).length !== 0) {
+      // Combine all error messages and alert them
+      alert(Object.values(tempErrors).join("\n"));
+      return false;
+    }
+    return true;
   };
 
   // Handle file input change with 256 KB max limit
@@ -50,20 +56,19 @@ function RegisterForm() {
         }));
         document.getElementById("file-display").value = "";
       } else {
-        // Valid file
+        // Valid file selected
         document.getElementById("file-display").value = file.name;
         setErrors((prev) => ({ ...prev, file: "" }));
       }
     }
   };
 
-  // Handle form submission & route to /experts
+  // Handle form submission and navigate to /home if validation passes
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent actual page reload
+    e.preventDefault(); // Prevent page reload
     if (handleValidation()) {
-      router.push("/experts");
-    } else {
-      alert("Please fill in all required fields.");
+      console.log("Validation passed. Navigating to /home...");
+      router.push("/home");
     }
   };
 
@@ -250,7 +255,6 @@ function RegisterForm() {
                 value={areaOfExpertise}
                 onChange={(e) => setAreaOfExpertise(e.target.value)}
                 className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
-                
               />
               <span className="absolute right-2 top-10 text-xs text-gray-500">
                 {100 - areaOfExpertise.length}/100
@@ -302,7 +306,6 @@ function RegisterForm() {
                 value={experience}
                 onChange={(e) => setExperience(e.target.value)}
                 className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
-                
               />
               <span className="absolute right-2 top-10 text-xs text-gray-500">
                 {100 - experience.length}/100

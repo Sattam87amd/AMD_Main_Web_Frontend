@@ -93,7 +93,7 @@ const Sidebar = () => {
           onClick={() => router.push("/gethelp")}
           className="absolute bottom-[30px] px-14 py-3 bg-black text-white text-sm rounded-md hover:bg-gray-800"
         >
-          Get Help
+          Get Help 
         </button>
       </div>
     </div>
