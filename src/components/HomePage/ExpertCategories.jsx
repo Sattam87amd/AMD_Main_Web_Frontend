@@ -6,7 +6,7 @@ import Link from "next/link";
 const ExpertCategories = () => {
   const [selectedCategory, setSelectedCategory] = useState("Top Experts");
   const categories = [
-    { title: "Top Experts", image: "/topexperts.png", link: "/topexpert" },
+    { title: "Top Experts", image: "/topexperts.png", link: "/topexperts" },
     { title: "Home", image: "/home.png", link: "/home-experts" },
     {
       title: "Career & Business",

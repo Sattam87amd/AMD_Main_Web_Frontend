@@ -68,7 +68,7 @@ function RegisterForm() {
     e.preventDefault(); // Prevent page reload
     if (handleValidation()) {
       console.log("Validation passed. Navigating to /home...");
-      router.push("/home");
+      router.push("/expertpanel/expertpanelprofile");
     }
   };
 
