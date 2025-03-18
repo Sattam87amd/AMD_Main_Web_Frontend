@@ -68,19 +68,19 @@ const WhatToExpect = () => {
         ))}
       </div>
 
-      <h2 className="text-2xl md:text-[44px] font-bold text-black py-10 mb-6">
+      <h2 className="text-2xl md:text-[44px] font-bold text-black md:py-10 py-4 mb-6">
         What To Expect
       </h2>
 
       {/* Session Information Card */}
-      <div className="bg-[#F8F7F3] rounded-2xl p-6 md:px-16 flex flex-col md:flex-row items-start md:items-center md:justify-center gap-6">
+      <div className="bg-[#F8F7F3] rounded-3xl mb-3 p-6 md:px-16 flex flex-col md:flex-row items-start md:items-center md:justify-center gap-6">
         <div className="flex-1">
           <h3 className="text-lg md:text-3xl font-bold text-black">
             {activeSession.title}
           </h3>
           <ul className="mt-3 space-y-2 text-black md:text-lg">
             {activeSession.details.map((point, index) => (
-              <li key={index} className="flex items-start gap-2">
+              <li key={index} className="flex items-start text-xs gap-2">
                 <span className="text-black">•</span> {point}
               </li>
             ))}

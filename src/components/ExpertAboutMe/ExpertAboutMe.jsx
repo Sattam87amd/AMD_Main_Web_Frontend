@@ -37,7 +37,7 @@ const ExpertAboutMe = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col justify-center items-center px-6 py-12">
+    <div className="min-h-screen bg-white flex flex-col justify-center items-center md:px-6 py-12">
       {/* Profile Card */}
       <div className="bg-[#F8F7F3] rounded-3xl w-[90%] mt-20 md:mt-0 max-w-7xl p-6 md:p-10 flex flex-col md:flex-row gap-10">
         
