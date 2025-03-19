@@ -11,7 +11,7 @@ const userData = {
 
 const Navtop = ({ activeTab }) => {
   return (
-    <div className="flex justify-between items-center bg-white py-4 px-6 shadow-sm">
+    <div className="w-full flex justify-between items-center bg-white py-4 px-6 shadow-sm">
       {/* Left Section */}
       <div>
         <p className="text-gray-500 text-sm">Hi, {userData.name}</p>
