@@ -22,7 +22,7 @@ const Page = () => {
   return (
     <div className="flex min-h-screen">
       {/* Sidebar: visible on desktop */}
-      <div className="hidden md:block w-[20%]">
+      <div className="hidden md:block w-[20%]"> 
         <Sidebar />
       </div>
       {/* Main Content: full width on mobile, 80% on desktop */}
