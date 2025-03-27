@@ -1,28 +1,36 @@
-import FeatureHighlights from "@/components/ContactUs/FeatureHighlights";
-import OurClientsSay from "@/components/HomePage/OurClientsSay";
-import Footer from "@/components/Layout/Footer";
-import Navbar from "@/components/Layout/Navbar";
-import React from "react";
+import Footer from '@/components/UserPanel/Layout/Footer'
+import Navbar from '@/components/UserPanel/Layout/Navbar'
+import UserBecomeExpert from '@/components/UserPanel/JoinAsExpert/UserBecomeAnExpert'
+import UserFeatureHighights from '@/components/UserPanel/JoinAsExpert/UserFeatureHighlights'
+import UserGameChangers from '@/components/UserPanel/JoinAsExpert/UserGameChanger'
+import UserHowItWorks from '@/components/UserPanel/JoinAsExpert/UserHowITworkers'
+import UserOurClientsSay from '@/components/UserPanel/JoinAsExpert/UserOurClientsSay'
+import UserWhyJoinUs from '@/components/UserPanel/JoinAsExpert/UserWhyJoinUs'
 
-import WhyJoinUs from "@/components/JoinAsExpert/WhyJoinUs";
-import GameChanger from "@/components/JoinAsExpert/GameChanger";
-import HowItWork from "@/components/JoinAsExpert/HowItWork";
-import BecomeExpert from "@/components/JoinAsExpert/BecomeExpert";
+
+import React from 'react'
 
 const page = () => {
-  return (
-    <div>
-      <Navbar />
-      <BecomeExpert className="w-full"/>
-      <WhyJoinUs />
+    return (
+        <div>
+            <Navbar />
 
-      <OurClientsSay />
-      <FeatureHighlights />
-      <HowItWork />
-      <GameChanger />
-      <Footer />
-    </div>
-  );
-};
+            <UserBecomeExpert/>
+            <div className='md:-mt-28 sm:-mt-96 '>
 
-export default page;
+            <UserWhyJoinUs/>
+            </div>
+            <UserOurClientsSay/>
+            <UserFeatureHighights/>
+            <div className='mt-16'>
+
+            <UserHowItWorks/>
+            </div>
+            
+            <UserGameChangers />
+            <Footer />
+        </div>
+    )
+}
+
+export default page

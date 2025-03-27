@@ -1,9 +1,10 @@
 "use client";
 
-import Footer from "@/components/Layout/Footer";
-import Sidebar from "@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar";
+import Footer from "@/components/UserPanel/Layout/Footer";
+
 import Navtop from "@/components/UserPanel/Navtop/Navtop";
 import UserBooking from "@/components/UserPanel/UserBooking/UserBooking";
+import UseSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
 import { usePathname } from "next/navigation";
 
 const Page = () => {
@@ -22,8 +23,8 @@ const Page = () => {
     <>
     <div className="flex min-h-screen">
       {/* Sidebar: visible on desktop */}
-      <div className="hidden md:block w-[20%]">
-        <Sidebar />
+      <div className="hidden md:block w-[20%] -mt-5">
+        <UseSidebar/>
       </div>
       {/* Main Content: full width on mobile, 80% on desktop */}
       <div className="w-full md:w-[80%] p-4 pb-20">

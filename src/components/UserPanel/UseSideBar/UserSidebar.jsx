@@ -13,7 +13,7 @@ const UseSidebar = () => {
   const pathname = usePathname();
 
   const menuItems = [
-    { label: "Find Experts", icon: <FiSearch />, route: "/userpanel/login-findexperts" },
+    { label: "Find Experts", icon: <FiSearch />, route: "/userpanel/loginuserexpert" },
     { label: "Video Call", icon: <FiVideo />, route: "/userpanel/videocall" },
     {
       label: "Profile",
@@ -28,7 +28,7 @@ const UseSidebar = () => {
   };
 
   return (
-    <div className="hidden md:block w-full bg-white shadow-md h-[93%]">
+    <div className="hidden md:block w-full bg-white shadow-xl h-[98%]">
       {/* Logo Section */}
       <div className="p-4 mt-5 flex justify-center">
         <Image

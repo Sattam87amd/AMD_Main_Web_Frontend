@@ -61,7 +61,7 @@ const LoginUserTopExpert = () => {
   const visibleExperts = isMobile && !showAll ? experts.slice(0, 2) : experts;
 
   return (
-    <div className="bg-white py-10 px-4">
+    <div className="bg-white py-10 px-4 ">
       {/* Header Section with animation */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -92,7 +92,7 @@ const LoginUserTopExpert = () => {
 
       {/* Experts Grid with animations */}
       <motion.div
-        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"
+        className="flex w-full  gap-6"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
@@ -112,11 +112,11 @@ const LoginUserTopExpert = () => {
             whileHover={{ scale: 1.05 }}
           >
             {/* Image Section */}
-            <div className="relative w-full h-96">
+            <div className="relative w-full h-70">
               <img
                 src={expert.image}
                 alt={expert.name}
-                className="w-full h-full object-contain rounded-xl"
+                className="w-full h-72 object-contain rounded-xl"
               />
               {/* Price Badge */}
               <div className="absolute top-4 right-4 bg-white text-black font-bold py-1 px-3 rounded-full shadow-md">
@@ -125,17 +125,17 @@ const LoginUserTopExpert = () => {
 
               {/* Glass Effect Info Box */}
               <motion.div
-                className="absolute bottom-0 left-0 w-60 h-40 ml-6 mb-2 bg-white/30 backdrop-blur-lg p-4 rounded-xl text-black"
+                className="absolute bottom-0 -left-4 w-48 h-28 ml-6 mb-2 bg-white/30 backdrop-blur-lg p-4 rounded-xl text-black"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: index * 0.1 }}
               >
-                <h2 className="text-xl font-bold">
+                <h2 className="text-xs font-bold">
                   {expert.name} <span className="text-yellow-500">⭐</span>
                 </h2>
-                <p className="text-sm text-black mt-1">{expert.role}</p>
-                <p className="text-xs text-gray-800 mt-1">{expert.description}</p>
+                <p className="text-[12px] text-black mt-1">{expert.role}</p>
+                <p className="text-[8px] text-gray-800 mt-1">{expert.description}</p>
               </motion.div>
             </div>
           </motion.div>

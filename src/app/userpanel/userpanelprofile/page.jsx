@@ -10,6 +10,7 @@ import Footer from '@/components/Layout/Footer';
 import Sidebar from '@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar';
 import Navtop from '@/components/UserPanel/Navtop/Navtop';
 import BottomNav from '@/components/UserPanel/BottomNav/BottomNav';
+import UseSidebar from '@/components/UserPanel/UseSideBar/UserSidebar';
 
 
 const Page = () => {
@@ -35,11 +36,11 @@ const Page = () => {
       <div className="flex min-h-screen">
         {/* Sidebar */}
         <div className="md:w-[20%]">
-          <Sidebar />
+          <UseSidebar />
         </div>
 
         {/* Main Content */}
-        <div className="md:w-[80%] p-4">
+        <div className="md:w-[80%] p-4  ">
           <Navtop activeTab={activeTab} />
           <UserProfileSection />
         </div>

@@ -68,7 +68,7 @@ function Navbar() {
             <User className="h-6 w-6 text-black cursor-pointer hover:opacity-80" />
           </Link>
 
-          <Link href="/signup">
+          <Link href="userpanel/login">
             <button className="bg-white text-black font-medium rounded-lg text-[16px] px-4 py-2">
               Sign Up
             </button>

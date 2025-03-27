@@ -11,11 +11,7 @@ import {
 import { LuPencilLine } from "react-icons/lu";
 import { FiDollarSign } from "react-icons/fi";
 import { MdOutlineFeedback } from "react-icons/md";
-import { CiSettings } from "react-icons/ci"; // <-- NEW IMPORT
-// import PaymentMethods from "./PaymentMethod";
-// import DiscountCode from "./DiscountCode";
-// import GiftCard from "./GiftCard";
-// import BuyGiftCard from "./BuyGiftCard";
+import { CiSettings } from "react-icons/ci"; 
 import UserExpertContactUs from "./UserExpertContactUs";
 import UserBuyGiftCard from "./UserBuyGiftCard";
 import UserDiscountCode from "./UserDiscountCode";

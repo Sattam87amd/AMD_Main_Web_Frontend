@@ -48,7 +48,7 @@ function UserRegisterPage() {
   // Handle form submission - Now routes to /expertpanel/registerform
   const handleSubmit = () => {
     if (handleValidation()) {
-      router.push("/userpanel/login-findexpert"); // Navigate to the register form
+      router.push("/userpanel/loginuserexpert"); // Navigate to the register form
     }
   };
 

@@ -1,7 +1,7 @@
 "use client";
 
 import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
-import Footer from "@/components/Layout/Footer";
+import Footer from "@/components/userpanel/Layout/Footer";
 import LoginUserCab from "@/components/UserPanel/LoginUserExpert/LoginUserCad/LoginUserCad";
 import LoginUserFbexpert from "@/components/UserPanel/LoginUserExpert/LoginUserFashion&Beauty-Expert/LoginUserFbexpert";
 import LoginUserHomeexpert from "@/components/UserPanel/LoginUserExpert/LoginUserHomeexpert/LodinUserHomeexpert";
@@ -11,6 +11,7 @@ import LoginUserTopExpert from "@/components/UserPanel/LoginUserExpert/LoginUser
 import LoginUserWellnessExperts from "@/components/UserPanel/LoginUserExpert/LoginUserWellnessExperts/LoginUserWellnessExperts";
 import Sidebar from "@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar";
 import UserNavSearch from "@/components/UserPanel/UserNavSearch/UserNavSearch";
+import UseSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
 
 
 const Page = () => {
@@ -19,8 +20,8 @@ const Page = () => {
       {/* Main Content and Sidebar Container */}
       <div className="flex flex-1">
         {/* Sidebar (Left Section - 20% Width) */}
-        <aside className="w-[20%] hidden md:block bg-gray-100 overflow-y-auto">
-          <Sidebar />
+        <aside className="w-[20%] hidden md:block bg-gray-100 overflow-y-auto -mt-5">
+          <UseSidebar />
         </aside>
 
         {/* Main Content (Right Section - 80% Width) */}
@@ -55,7 +56,7 @@ const Page = () => {
 
       {/* Footer (Full Width) */}
       <div className="w-full">
-        <Footer />
+        <Footer/>
       </div>
     </div>
   );

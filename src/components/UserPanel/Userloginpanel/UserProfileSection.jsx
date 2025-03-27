@@ -64,8 +64,8 @@ const UserProfileSection = () => {
             { name: "Do you have code?", icon: FaGift },
             { name: "Gift Card", icon: FaGift },
             { name: "Contact Us", icon: FaComments },
-            { name: "Give us Feedback", icon: MdOutlineFeedback },
-            { name: "Deactivate account", icon: FaTrashAlt },
+            // { name: "Give us Feedback", icon: MdOutlineFeedback },
+            // { name: "Deactivate account", icon: FaTrashAlt },
           ].map((item) => (
             <button
               key={item.name}
@@ -91,6 +91,7 @@ const UserProfileSection = () => {
 
       {/* Main Content */}
       <div className="flex-1 p-4 md:p-8">
+       
         {/* Profile Section */}
         {selectedSection === "Profile" && (
           <div className="mt-6">

@@ -143,15 +143,11 @@ function UserLoginPage() {
                 </div>
 
                 <div className="w-full max-w-md p-8 -mt-20 md:-mt-0">
-                    <h1 className="text-3xl md:text-[40px] font-extrabold text-center">
-                        Login
+                    <h1 className="text-2xl md:text-[35px] font-bold text-center">
+                        Create an Account
                     </h1>
-                    <p className="text-center text-[#878787] mt-1 md:mt-2">
-                        or{" "}
-                        <span className="text-[#EA2B2B] font-semibold underline">
-                            Sign up
-                        </span>
-                    </p>
+                    
+                   
 
                     <div className="mt-8 space-y-8">
                         <div>

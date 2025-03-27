@@ -4,7 +4,8 @@ import Navtop from '@/components/ExpertPanel/Navtop/navtop';
 // import Navtop from '@/components/ExpertPanel/Navtop/navtop';
 // import Sidebar from '@/components/ExpertPanel/SideBar/SideBar';
 import Footer from '@/components/Layout/Footer';
-import Sidebar from '@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar';
+
+import UseSidebar from '@/components/UserPanel/UseSideBar/UserSidebar';
 import UserVideoCall from '@/components/UserPanel/VideoCall/UserVideoCall';
 import { usePathname } from "next/navigation";
 
@@ -20,14 +21,14 @@ const page = () => {
   const pathname = usePathname()
   
   const activeMenu = menuItems.find((item) => item.route === pathname)
-  const activeTab = activeMenu ? activeMenu.label : "Video Call";
+  const activeTab = activeMenu ? activeMenu.label : "Booking";
   
     return (
       <>
       <div className="flex min-h-screen">
         {/* Sidebar with 1/3 width - Hidden on mobile */}
-        <div className="hidden md:block md:w-[20%]">
-          <Sidebar/>
+        <div className="hidden md:block md:w-[20%] h-[20%]">
+          <UseSidebar/>
         </div>
   
         {/* Right Side Content with 2/3 width */}

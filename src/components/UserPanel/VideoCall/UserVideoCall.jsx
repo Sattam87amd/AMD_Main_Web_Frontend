@@ -76,7 +76,8 @@ const UserVideoCall = () => {
                 >
                   {booking.status}
                 </span>
-                <button className="px-4 py-1 border rounded text-sm">💬 Chat</button>
+                <button className={`px-4 py-1 border rounded text-sm ${
+                    booking.status === "Not Confirmed" ?  "hidden" : "text-green-500" }`}>💬 Chat</button>
               </div>
             </div>
           ))}

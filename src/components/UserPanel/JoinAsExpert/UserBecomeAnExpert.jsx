@@ -9,7 +9,7 @@ const UserBecomeExpert = () => {
     const router = useRouter(); // Initialize router
     
       const handleJoinClick = () => {
-        router.push("/userpanel/joinasexpert"); // Redirect to /signup or any desired route
+        router.push("/login"); // Redirect to /signup or any desired route
       };
     return (
         <div className="relative md:h-[68rem] min-h-screen md:pt-24 mt-24">

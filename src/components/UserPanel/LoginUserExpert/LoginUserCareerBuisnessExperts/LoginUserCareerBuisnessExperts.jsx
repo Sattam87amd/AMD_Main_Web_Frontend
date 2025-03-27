@@ -91,7 +91,7 @@ const UserCareerBuisnessExperts = () => {
             whileHover={{ scale: 1.05 }}
           >
             {/* Image Section */}
-            <div className="relative w-full h-96">
+            <div className="relative w-full h-70">
               <img
                 src={expert.image}
                 alt={expert.name}
@@ -104,17 +104,17 @@ const UserCareerBuisnessExperts = () => {
 
               {/* Glass Effect Info Box */}
               <motion.div
-                className="absolute bottom-0 left-0 w-60 h-40 ml-6 mb-2 bg-white/30 backdrop-blur-lg p-4 rounded-xl text-black"
+                className="absolute bottom-0 -left-4 w-52 h-28 ml-6 mb-2 bg-white/30 backdrop-blur-lg p-4 rounded-xl text-black"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: index * 0.1 }}
               >
-                <h2 className="text-xl font-bold">
+                <h2 className="text-xs font-bold">
                   {expert.name} <span className="text-yellow-500">⭐</span>
                 </h2>
-                <p className="text-sm text-black mt-1">{expert.role}</p>
-                <p className="text-xs text-gray-800 mt-1">{expert.description}</p>
+                <p className="text-[12px] text-black mt-1">{expert.role}</p>
+                <p className="text-[9px] text-gray-800 mt-1">{expert.description}</p>
               </motion.div>
             </div>
           </motion.div>
