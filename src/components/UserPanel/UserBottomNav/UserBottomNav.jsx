@@ -6,16 +6,14 @@ import { usePathname } from "next/navigation";
 import { PiCirclesFourLight } from "react-icons/pi";
 import { Video, User, Search, BadgeCheck } from "lucide-react";
 
-const BottomNav = () => {
+const UserBottomNav = () => {
   const pathname = usePathname(); // Get the current route
   const [active, setActive] = useState(pathname || "profile"); // Default active based on current route
 
   const navItems = [
     { label: "Search", icon: <Search />, id: "search", path: "/experts" },
-    { label: "Video", icon: <Video />, id: "video", path: "/expertpanel/videocall" },
-    { label: "Profile", icon: <User />, id: "profile", path: "/expertpanel/expertpanelprofile" },
-    { label: "Expert", icon: <BadgeCheck />, id: "expert", path: "/expertpanel/expert" },
-    { label: "Dashboard", icon: <PiCirclesFourLight />, id: "dashboard", path: "/expertpanel/dashboard" },
+    { label: "Video", icon: <Video />, id: "video", path: "/userpanel/videocall" },
+    { label: "Profile", icon: <User />, id: "profile", path: "/userpanel/userloginprofile" },
   ];
 
   return (
@@ -37,4 +35,4 @@ const BottomNav = () => {
   );
 };
 
-export default BottomNav;
+export default UserBottomNav;

@@ -11,7 +11,7 @@ const experts = [
     description:
       "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
     price: "$450",
-    image: "/aaliaabadi.png",
+    image: "/aaliyaabadi.png",
   },
   {
     name: "Aisha Aziz",
@@ -47,7 +47,7 @@ const experts = [
   },
 ];
 
-const UserTopExpert = () => {
+const LoginUserTopExpert = () => {
   const [showAll, setShowAll] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -189,4 +189,4 @@ const UserTopExpert = () => {
   );
 };
 
-export default UserTopExpert;
+export default LoginUserTopExpert;
