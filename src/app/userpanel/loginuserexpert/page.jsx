@@ -20,7 +20,7 @@ const Page = () => {
       {/* Main Content and Sidebar Container */}
       <div className="flex flex-1">
         {/* Sidebar (Left Section - 20% Width) */}
-        <aside className="w-[20%] hidden md:block bg-gray-100 overflow-y-auto -mt-5">
+        <aside className="w-[20%] h-[80%] hidden md:block bg-gray-100 overflow-y-auto -mt-5">
           <UseSidebar />
         </aside>
 
@@ -55,7 +55,7 @@ const Page = () => {
       </div>
 
       {/* Footer (Full Width) */}
-      <div className="w-full">
+      <div className="w-full ">
         <Footer/>
       </div>
     </div>

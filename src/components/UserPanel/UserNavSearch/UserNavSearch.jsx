@@ -15,7 +15,7 @@ const UserNavSearch = () => {
 
   // Category Data with Links
   const categories = [
-    { title: "Top Experts", image: "/topexperts.png", link: "/topexperts" },
+    { title: "Top Experts", image: "/topexperts.png", link: "/userpanel/topexperts" },
     { title: "Home", image: "/home.png", link: "/home-experts" },
     { title: "Career & Business", image: "/career-business.png", link: "/career&businessexperts" },
     { title: "Style & Beauty", image: "/style-beauty.png", link: "/style&beautyexperts" },

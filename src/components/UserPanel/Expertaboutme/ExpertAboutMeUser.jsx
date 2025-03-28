@@ -2,7 +2,7 @@
 
 import React from "react";
 import { FaStar } from "react-icons/fa";
-import { FaInstagram } from "react-icons/fa"; // Instagram Icon
+import { FaInstagram } from "react-icons/fa";
 
 const ExpertAboutMeUser = () => {
   const profile = {
@@ -10,89 +10,109 @@ const ExpertAboutMeUser = () => {
     designation: "Tech Entrepreneur + Investor",
     image: "/aaliaabadi.png",
     rating: 5.0,
-    about: `Co-Founder of Reddit. First Batch of Y Combinator (Summer 
-    2005) and led the company to a sale to Conde Nast in 2006, 
-    Returned as Executive Chair in 2014 to help lead the turnaround, then left in 2018 to do venture capital full-time.
+    about: `Co-Founder of Reddit. First Batch Of Y Combinator (Summer 2005) And Led The Company To A Sale To Condé Nast In 2006, Returned As Exec Chair In 2014 To Help Lead The Turnaround, Then Left In 2018 To Do Venture Capital Fulltime.
 
-    I'm an investor in startups—almost always at the earliest 
-    possible stage—first as an angel investor, then co-founder 
-    of Initialized, before splitting the firm in half to found Seven 
-    Seven Six.
+I'm An Investor In Startups—Almost Always At The Earliest Possible Stage—First As An Angel Investor, Then Co-Founder Of Initialized, Before Splitting The Firm In Half To Found Seven Seven Six.`,
+  };
 
-    I'm an investor in startups—almost always at the earliest 
-    possible stage—first as an angel investor, then co-founder 
-    of Initialized, before splitting the firm in half to found Seven 
-    Seven Six.`,
-
-    strengths: [
-      "Startups",
-      "Investing",
-      "Company Culture",
-      "Early Stage Marketing",
-      "Growth Tactics",
-      "Operations",
-      "Fundraising",
-      "Hiring & Managing",
-    ],
+  const timeSlots = {
+    today: ["07:00 AM", "08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "02:00 AM", "03:00 AM", "04:00 AM"],
+    tomorrow: ["07:00 AM", "08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "01:00 AM", "03:00 AM", "04:00 AM"],
+    wednesday: ["07:00 AM", "08:00 AM", "09:00 AM", "10:00 AM", "11:00 AM", "01:00 AM", "02:00 AM", "03:00 AM", "04:00 AM"],
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col justify-center items-center px-6 py-12">
-      {/* Profile Card */}
-      <div className="bg-[#F8F7F3] rounded-3xl w-[90%] mt-20 md:mt-0 max-w-7xl p-6 md:p-10 flex flex-col md:flex-row gap-10">
-        
-        {/* Left: Profile Image & Info */}
-        <div className="md:w-[35%] flex flex-col items-start">
+    <div className="min-h-screen w-full bg-white py-10 px-4 md:px-10">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+        {/* Left Side: Profile & About */}
+        <div className="bg-[#F8F7F3] rounded-3xl p-6 shadow">
           <img
             src={profile.image}
             alt={profile.name}
-            className="w-[400px] h-[450px] object-cover rounded-2xl shadow-md"
+            className="w-full h-[450px] object-cover rounded-xl"
           />
-          <div className="text-start mt-4">
-            <h2 className="text-3xl text-gray-900">{profile.name}</h2>
-            <p className="text-[#9C9C9C] text-base mt-1">{profile.designation}</p>
-            <div className="flex items-center justify-start mt-2">
+          <div className="mt-6">
+            <h2 className="text-2xl font-bold text-gray-900">{profile.name}</h2>
+            <p className="text-[#9C9C9C] mt-1">{profile.designation}</p>
+            <div className="flex items-center mt-2 text-[#FFA629]">
               {[...Array(5)].map((_, i) => (
-                <FaStar key={i} className="text-[#FFA629]" />
+                <FaStar key={i} />
               ))}
-              <span className="ml-2 text-[#FFA629] font-semibold text-sm">{profile.rating}</span>
+              <span className="ml-2 font-semibold text-sm">{profile.rating}</span>
             </div>
           </div>
+
+          <div className="mt-6">
+            <h3 className="text-lg font-semibold flex items-center justify-between">
+              About Me
+              <FaInstagram className="text-gray-600 text-2xl cursor-pointer hover:text-gray-800" />
+            </h3>
+            <p className="text-sm text-black mt-3 whitespace-pre-line">{profile.about}</p>
+            <button className="mt-6 bg-black text-white px-6 py-2 rounded-md hover:bg-gray-900 transition">
+              See More
+            </button>
+          </div>
         </div>
 
-        {/* Right: About Me Section */}
-        <div className="flex-1">
-          <div className="flex justify-between items-center">
-            <h3 className="text-2xl md:text-[44px] pb-4 pl-0 md:pl-64 text-gray-900">
-              About Me
-            </h3>
-            <FaInstagram className="text-gray-500 text-xl md:text-[40px] cursor-pointer hover:text-gray-700" />
-          </div>
-
-          {/* Render About Text with Proper Spacing */}
-          <p className="text-black text-sm md:text-base  pl-0 md:pl-64 leading-relaxed mt-4 whitespace-pre-line">
-            {profile.about}
+        {/* Right Side: Book Video Call with Border */}
+        <div className="w-full border-l border-black pl-8">
+          <h2 className="text-2xl font-bold mb-4">Book a video call</h2>
+          <p className="text-sm text-gray-700 mb-2">
+            Select one of the available time slots below:
           </p>
 
-          {/* Strengths Section */}
-          <h4 className="text-md font-semibold mt-4 pl-0 md:pl-64 flex items-center">
-            <span className="text-yellow-500 text-lg mr-2">💡</span> Strengths:
-          </h4>
-          <ul className="list-none mt-2 space-y-1 pl-0 md:pl-64">
-            {profile.strengths.map((strength, index) => (
-              <li key={index} className="text-gray-700 flex items-center text-sm">
-                <span className="text-yellow-500 mr-2">✔</span> {strength}
-              </li>
+          {/* Time Options Tabs */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {["Quick – 15min", "Regular – 30min", "Extra – 45min", "All Access – 60min"].map((label, index) => (
+              <button
+                key={index}
+                className="border border-gray-300 px-4 py-2 rounded-full text-sm hover:bg-black hover:text-white transition"
+              >
+                {label}
+              </button>
             ))}
-          </ul>
-        </div>
-      </div>
+          </div>
 
-      {/* Book a Video Call Button Aligned Left */}
-      <div className="w-[90%] flex justify-start mt-10 pl-0 md:pl-10">
-        <button className="bg-[#EDECE8] text-black font-semibold py-4 px-14 rounded-lg hover:bg-gray-300 transition">
-          Book a Video Call
-        </button>
+          {/* Slot Lists */}
+          {Object.entries(timeSlots).map(([day, slots], idx) => (
+            <div key={idx} className="mb-5">
+              <h4 className="text-sm font-semibold text-gray-800 mb-2 capitalize">
+                {day === "wednesday" ? "Wednesday 3/26" : day}
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {slots.map((slot, i) => (
+                  <button
+                    key={i}
+                    className={`px-4 py-2 text-sm border rounded-full ${
+                      i % 5 === 0
+                        ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                        : "border-gray-300 hover:bg-black hover:text-white transition"
+                    }`}
+                    disabled={i % 5 === 0}
+                  >
+                    {slot}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          {/* Price + Request Button */}
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mt-6 border-t pt-6">
+            <div>
+              <p className="text-lg font-semibold text-black">$550 • Session</p>
+              <div className="flex items-center text-[#FFA629] mt-1">
+                {[...Array(5)].map((_, i) => (
+                  <FaStar key={i} size={16} />
+                ))}
+                <span className="ml-2 font-medium text-sm">5.0</span>
+              </div>
+            </div>
+            <button className="mt-4 sm:mt-0 bg-black text-white px-6 py-3 rounded-md hover:bg-gray-900 transition w-full sm:w-auto">
+              Request
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ import { PiCirclesFour } from "react-icons/pi";
 import { LucideDollarSign, LucideBadgeCheck } from "lucide-react";
 import Image from "next/image";
 
-const UseSidebar = () => {
+const UserSidebar = () => {
   const router = useRouter();
   const pathname = usePathname();
 
@@ -28,7 +28,7 @@ const UseSidebar = () => {
   };
 
   return (
-    <div className="hidden md:block w-full bg-white shadow-xl h-[98%]">
+    <div className="hidden md:block w-full bg-white shadow-xl h-full overflow-hidden  ">
       {/* Logo Section */}
       <div className="p-4 mt-5 flex justify-center">
         <Image
@@ -80,4 +80,4 @@ const UseSidebar = () => {
   );
 };
 
-export default UseSidebar;
+export default UserSidebar;

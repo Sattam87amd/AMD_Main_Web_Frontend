@@ -1,5 +1,5 @@
 import Footer from '@/components/UserPanel/Layout/Footer'
-import Navbar from '@/components/UserPanel/Layout/Navbar'
+// import Navbar from '@/components/UserPanel/Layout/Navbar'
 import AboutMeReviewsUser from '@/components/UserPanel/Expertaboutme/AboutMeReviewsUser'
 import ExpertAboutMeUser from '@/components/UserPanel/Expertaboutme/ExpertAboutMeUser'
 import ScheduleQuickCallsUser from '@/components/UserPanel/Expertaboutme/ScheduleQuickCallsUser'
@@ -7,12 +7,23 @@ import SimilarExpertsUser from '@/components/UserPanel/Expertaboutme/SimilarExpe
 import WhatToExpectUser from '@/components/UserPanel/Expertaboutme/WhatToExpectUser'
 import React from 'react'
 import UserFeatureHighights from '@/components/UserPanel/JoinAsExpert/UserFeatureHighlights'
+import Sidebar from '@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar'
+// import UserNavSearch from '@/components/UserPanel/UserNavSearch/UserNavSearch'
+import NavSearch from '@/components/UserPanel/NavSearch/NavSearch'
 
 
 const page = () => {
   return (
-    <div className="md:mt-20">
-        <Navbar/>
+    <>
+    <div className='flex min-h-screen flex-col '>
+      <div className="flex flex-1">
+        {/* Sidebar (Left Section - 20% Width) */}
+        <aside className="w-[15%] h-[85%] hidden md:block bg-gray-100 overflow-y-auto -mt-5">
+          <Sidebar />
+        </aside>
+
+    <div className="w-full md:w-[85%] flex flex-col ">
+        <NavSearch />
        <ExpertAboutMeUser/>
        <WhatToExpectUser/>
        <ScheduleQuickCallsUser/>
@@ -20,15 +31,17 @@ const page = () => {
       <div className=' lg:h-[300px]'>
 
        <UserFeatureHighights/>
+       
       </div>
-       
-       
-  
-       <SimilarExpertsUser/>
-        <Footer/>
+      <SimilarExpertsUser/>
 
 
     </div>
+    </div>
+    </div>
+    <Footer/>
+    </>
+    
   )
 }
 

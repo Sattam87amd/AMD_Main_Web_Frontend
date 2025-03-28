@@ -15,7 +15,7 @@ const NavSearch = () => {
 
   // Category Data with Links
   const categories = [
-    { title: "Top Experts", image: "/topexperts.png", link: "/userpanel/topexperts" },
+    { title: "Top Experts", image: "/topexperts.png", link: "/topexperts" },
     { title: "Home", image: "/home.png", link: "/home-experts" },
     { title: "Career & Business", image: "/career-business.png", link: "/career&businessexperts" },
     { title: "Style & Beauty", image: "/style-beauty.png", link: "/style&beautyexperts" },
@@ -31,7 +31,7 @@ const NavSearch = () => {
   };
 
   return (
-    <div className="bg-[#F8F7F3] px-4 py-4 relative">
+    <div className="bg-[#F8F7F3] px-4 py-4 relative w-full">
       {/* Navbar with Animation */}
       <motion.nav
         initial={{ opacity: 0, y: -20 }}
@@ -72,17 +72,17 @@ const NavSearch = () => {
       </motion.nav>
 
       {/* Headline */}
-      <motion.h1
+      {/* <motion.h1
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
         className="text-2xl font-bold text-black mb-4"
       >
         Find The Right Expert In Seconds!
-      </motion.h1>
+      </motion.h1> */}
 
       {/* Categories Section with Increased Spacing */}
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
@@ -97,8 +97,8 @@ const NavSearch = () => {
             onClick={() => handleCategoryClick(category.link)}
             className={`relative w-[140px] h-[80px] rounded-lg overflow-hidden shadow-md cursor-pointer $
             }`}
-          >
-            <img
+          > */}
+            {/* <img
               src={category.image}
               alt={category.title}
               className="absolute inset-0 w-full h-full object-cover opacity-80"
@@ -107,11 +107,11 @@ const NavSearch = () => {
               <p className="text-white font-semibold text-sm">{category.title}</p>
             </div>
           </motion.div>
-        ))}
-      </motion.div>
+        ))} */}
+      {/* </motion.div> */}
 
       {/* Filter Button */}
-      <motion.button
+      {/* <motion.button
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         transition={{ type: "spring", stiffness: 300 }}
@@ -120,7 +120,7 @@ const NavSearch = () => {
       >
         <FaFilter />
         <span className="text-sm font-medium">FILTER</span>
-      </motion.button>
+      </motion.button> */}
 
       {/* Filter Dropdown Animation */}
       <AnimatePresence>
