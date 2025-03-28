@@ -66,7 +66,7 @@ const UseSidebar = () => {
             alt="Profile"
             width={120}
             height={120}
-            className="w-52 h-auto"
+            className="w-52 mt-12 h-auto"
           />
         </div>
         <button

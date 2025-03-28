@@ -29,9 +29,9 @@ const UserVideoCall = () => {
   }, []);
 
   return (
-    <div className="w-full max-w-4xl mx-auto py-10 px-4 mt-20 ">
+    <div className="w-full max-w-4xl mx-left py-10 px-4 mt-20 ">
       {/* Tabs */}
-      <div className="flex space-x-2 mb-6">
+      {/* <div className="flex space-x-2 mb-6">
         <button
           className={`px-4 py-2 text-sm font-medium rounded ${
             activeTab === "bookings" ? "bg-black text-white" : "bg-gray-200"
@@ -48,7 +48,7 @@ const UserVideoCall = () => {
         >
           My Sessions
         </button>
-      </div>
+      </div> */}
 
       {/* Bookings Tab */}
       {activeTab === "bookings" && (
