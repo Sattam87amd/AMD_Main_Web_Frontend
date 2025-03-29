@@ -4,9 +4,10 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { StarIcon, ArrowLeft, ShoppingBag, UserPlusIcon } from "lucide-react";
+// import { useRouter } from 'next/navigation'
 
 const UserProfile = () => {
-  const router = useRouter();
+
 
   const [userData, setUserData] = useState({
     firstName: "",
@@ -67,7 +68,7 @@ const UserProfile = () => {
   const handleBuy = () => {
     alert(`You selected ${selectedMethod} for payment.`);
   };
-
+  const router = useRouter()
   return (
     <div className="w-full mx-8 mt-2 px-6 md:px-10 py-[3rem]">
       <div className="flex flex-col md:flex-row gap-10">
@@ -226,9 +227,10 @@ const UserProfile = () => {
             {/* Pay Button */}
             <div className="flex justify-center items-center pt-14">
               <button
-                type="button"
+                
                 className="w-40 bg-black text-white py-3 rounded-3xl flex justify-center items-center space-x-2"
-                onClick={handleBuy}
+                
+                type="button" onClick={() => router.push('/userpanel/videocall')}
               >
                 <span className="text-center text-lg">Pay</span>
               </button>

@@ -19,7 +19,7 @@ const Page = () => {
   // Map the routes to their labels (should match the Sidebar menu items)
   const menuItems = [
     { label: "Find Experts", route: "/experts" },
-    { label: "Video Call", route: "/expertpanel/videocall" },
+    { label: "Video Call", route: "/userpanel/videocall" },
     { label: "Profile", route: "/expertpanel/expertpanelprofile" },
     { label: "Expert", route: "/expertpanel/expert" },
     { label: "Dashboard", route: "/expertpanel/dashboard" },
@@ -35,7 +35,7 @@ const Page = () => {
     <>
       <div className="flex min-h-screen">
         {/* Sidebar */}
-        <div className="md:w-[20%]">
+        <div className="md:w-[20%] ">
           <UseSidebar />
         </div>
 

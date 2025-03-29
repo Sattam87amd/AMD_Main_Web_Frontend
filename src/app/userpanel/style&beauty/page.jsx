@@ -1,9 +1,11 @@
 "use client";
 
 import TopExperts from "@/components/Experts/Topeexperts/topexperts";
+import UserStyleBeautyExperts from "@/components/UserPanel/Experts/UserStyleBeautyExperts/UserStyleBeautyExperts";
 import UserTopExpert from "@/components/UserPanel/Experts/UserTopeexpert/UserTopeexpert";
 import Footer from "@/components/userpanel/Layout/Footer";
 import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
+import LoginUserStyleBeautyExperts from "@/components/UserPanel/LoginUserExpert/LoginUserStyleBeautyExperts/LoginUserStyleBeautyExperts";
 import UserNavSearch from "@/components/UserPanel/UserNavSearch/UserNavSearch";
 import UseSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
 
@@ -24,7 +26,7 @@ const Page = () => {
           <div className="hidden md:block">
             <UserNavSearch />
             <div className="space-y-8 px-4 md:px-8">
-              <UserTopExpert /> 
+              < LoginUserStyleBeautyExperts/> 
              
             </div>
           </div>
@@ -33,7 +35,7 @@ const Page = () => {
           <div className="block md:hidden">
             <LoginUserMobileNavSearch />
             <div className="space-y-8 px-4">
-              <TopExperts />
+              <LoginUserStyleBeautyExperts />
             </div>
           </div>
         </div>

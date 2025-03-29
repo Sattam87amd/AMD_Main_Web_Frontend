@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const UserNavSearch = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [activeBrand, setActiveBrand] = useState(null);
-  const [activeFeature, setActiveFeature] = useState(null);
+  const [activeFeature, setActiveFeature] = useState(null); 
 
   // Filter Data
   const brands = ["Name", "Name", "Name", "Name", "Name", "Name", "Name", "Name"];
@@ -16,10 +16,10 @@ const UserNavSearch = () => {
   // Category Data with Links
   const categories = [
     { title: "Top Experts", image: "/topexperts.png", link: "/userpanel/topexperts" },
-    { title: "Home", image: "/home.png", link: "/home-experts" },
-    { title: "Career & Business", image: "/career-business.png", link: "/career&businessexperts" },
-    { title: "Style & Beauty", image: "/style-beauty.png", link: "/style&beautyexperts" },
-    { title: "Wellness", image: "/wellness.png", link: "/wellnessexperts" },
+    { title: "Home", image: "/home.png", link: "/userpanel/home-experts" },
+    { title: "Career & Business", image: "/career-business.png", link: "/userpanel/career&business" },
+    { title: "Style & Beauty", image: "/style-beauty.png", link: "/userpanel/style&beauty" },
+    { title: "Wellness", image: "/wellness.png", link: "/userpanel/wellnessexperts" },
   ];
 
   // Toggle Filter
@@ -115,7 +115,7 @@ const UserNavSearch = () => {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
         transition={{ type: "spring", stiffness: 300 }}
-        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black text-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2"
+        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black text-white px-4 py-2 rounded-lg shadow-lg flex items-center space-x-2 transition-all"
         onClick={toggleFilter}
       >
         <FaFilter />

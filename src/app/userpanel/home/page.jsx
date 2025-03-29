@@ -1,15 +1,4 @@
-import AchieveTheLook from '@/components/HomePage/AchieveTheLook';
-import CareerBusinessHomeCards from '@/components/HomePage/CareerBusinessHomeCards';
-import ConnectWithExpertCard from '@/components/HomePage/ConnectWithExpertCard';
-import ExpertCategories from '@/components/HomePage/ExpertCategories';
-import FashionBeautyHomeCards from '@/components/HomePage/FashionBeautyHomeCards';
-import HeroHome from '@/components/HomePage/HeroHome';
-import HomeCards from '@/components/HomePage/HomeCards';
-import HowItWorks from '@/components/HomePage/HowItWorks';
-import OurClientsSay from '@/components/HomePage/OurClientsSay';
-// import OurPartners from '@/components/HomePage/OurPartners';
-import ExpertsCards from '@/components/HomePage/TopExpert';
-import WellnessHomeCards from '@/components/HomePage/WellnessHomeCards';
+
 import Footer from '@/components/Layout/Footer';
 import Navbar from '@/components/Layout/Navbar';
 import UserAchieveTheLook from '@/components/UserPanel/Home/UserAchieveTheLook';

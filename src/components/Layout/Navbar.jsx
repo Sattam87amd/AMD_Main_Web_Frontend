@@ -40,7 +40,7 @@ function Navbar() {
 
           {/* Center Links */}
           <div className="hidden md:flex justify-center flex-grow items-center space-x-12 text-[19px]">
-            <Link href="/joinasexpert" className="text-black">
+            <Link href="/userpanel/joinasexpert" className="text-black">
               Become an Expert
             </Link>
             <Link href="/ourmission" className="text-black">
@@ -60,9 +60,9 @@ function Navbar() {
               </button>
             </Link>
 
-            <Link href="/profile">
+            {/* <Link href="/profile">
               <User className="h-6 w-6 text-black cursor-pointer hover:opacity-80" />
-            </Link>
+            </Link> */}
 
             <Link href="/login">
               <button className="bg-white text-black font-medium rounded-lg text-[16px] px-4 py-2">

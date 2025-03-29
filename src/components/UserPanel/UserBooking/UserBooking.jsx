@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { StarIcon, UserPlusIcon } from "lucide-react";
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 const UserBooking = () => {
   const [userData, setUserData] = useState({
@@ -54,7 +56,7 @@ const UserBooking = () => {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-
+  const router = useRouter()
   return (
     <div className="w-full mx-8 mt-8 px-6 md:px-10 py-[6rem]">
       <div className="flex flex-col  md:flex-row gap-10">
@@ -240,7 +242,8 @@ const UserBooking = () => {
 
           {/* Book Button */}
           <div className="flex justify-center">
-            <button className="w-32 bg-black text-white rounded-full px-8 py-3  text-sm font-medium">
+            <button type="button" onClick={() => router.push('/userpanel/userprofile')}
+            className="w-32 bg-black text-white rounded-full px-8 py-3  text-sm font-medium">
               Book
             </button>
           </div>

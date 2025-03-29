@@ -18,7 +18,7 @@ const UserSidebar = () => {
     {
       label: "Profile",
       icon: <CgProfile />,
-      route: "/userpanel/login/userloginpanel",
+      route: "/userpanel/userpanelprofile",
     },
    
   ];

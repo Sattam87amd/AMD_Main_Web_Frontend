@@ -46,7 +46,7 @@ const UserCareerBusinessHomeCards = () => {
     <div className="bg-white p-6">
       {/* Heading Section */}
       <div className="flex flex-col md:flex-row md:h-40 items-center mb-6">
-        <h1 className="text-3xl md:text-[60px] font-bold text-black">
+        <h1 className="text-5xl md:text-[60px] font-bold text-black">
         CAREER AND BUSINESS.
         </h1>
         <p className="text-[#9C9C9C] md:pt-5 pl-5 md:text-2xl">
