@@ -4,7 +4,7 @@ import Image from "next/image";
 import { IoIosSearch } from "react-icons/io";
 import { LuNotepadText } from "react-icons/lu";
 import { Inter } from "next/font/google";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { FiLink } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 
@@ -15,17 +15,34 @@ const interFont = Inter({
 
 function RegisterForm() {
   const router = useRouter();
+
+  // States for storing form data
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [gender, setGender] = useState(""); // Added for gender
   const [mobile, setMobile] = useState("");
   const [socialLink, setSocialLink] = useState("");
   const [areaOfExpertise, setAreaOfExpertise] = useState("");
+  const [specificArea, setSpecificArea] = useState(""); // For 'Others' in area of expertise
   const [experience, setExperience] = useState("");
   const [errors, setErrors] = useState({});
-  const fileInputRef = useRef(null);
+  const [certificationFileName, setCertificationFileName] = useState('');
+  const [photoFileName, setPhotoFileName] = useState('');
 
-  // Validate required fields before submission and alert missing fields
+  const fileInputRefCertifications = useRef(null);
+  const fileInputRefPhotos = useRef(null);
+
+  // Fetch data from localStorage
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("registerData")) || {};
+    setFirstName(userData.firstName || "");
+    setLastName(userData.lastName || "");
+    setEmail(userData.email || "");
+    setGender(userData.gender || "");
+  }, []);
+
+  // Validate required fields before submission
   const handleValidation = () => {
     const tempErrors = {};
 
@@ -35,7 +52,7 @@ function RegisterForm() {
     if (!email) tempErrors.email = "Email address is required.";
 
     setErrors(tempErrors);
-    
+
     if (Object.keys(tempErrors).length !== 0) {
       // Combine all error messages and alert them
       alert(Object.values(tempErrors).join("\n"));
@@ -44,24 +61,52 @@ function RegisterForm() {
     return true;
   };
 
-  // Handle file input change with 256 KB max limit
-  const handleFileChange = (event) => {
+  const handleFileChangeCertifications = (event) => {
     const file = event.target.files[0];
     if (file) {
-      if (file.size > 256 * 1024) {
-        // File too large
+      const fileExtension = file.name.split('.').pop().toLowerCase();
+      if (file.size > 10 * 1024 * 1024) {
         setErrors((prev) => ({
           ...prev,
-          file: "Max 256 kb files can be uploaded",
+          file: "Max 10 MB files can be uploaded",
         }));
-        document.getElementById("file-display").value = "";
-      } else {
-        // Valid file selected
-        document.getElementById("file-display").value = file.name;
+        document.getElementById("file-display-certifications").value = "";
+      } else if (['pdf', 'jpg', 'jpeg', 'png'].includes(fileExtension)) {
+        setCertificationFileName(file.name);
         setErrors((prev) => ({ ...prev, file: "" }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          file: "Only PDF, JPG, JPEG, PNG files are allowed",
+        }));
+        document.getElementById("file-display-certifications").value = "";
       }
     }
   };
+  
+  const handleFileChangePhotos = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const fileExtension = file.name.split('.').pop().toLowerCase();
+      if (file.size > 10 * 1024 * 1024) {
+        setErrors((prev) => ({
+          ...prev,
+          file: "Max 10 MB files can be uploaded",
+        }));
+        document.getElementById("file-display-photos").value = "";
+      } else if (['pdf', 'jpg', 'jpeg', 'png'].includes(fileExtension)) {
+        setPhotoFileName(file.name);
+        setErrors((prev) => ({ ...prev, file: "" }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          file: "Only PDF, JPG, JPEG, PNG files are allowed",
+        }));
+        document.getElementById("file-display-photos").value = "";
+      }
+    }
+  };
+  
 
   // Handle form submission and navigate to /home if validation passes
   const handleSubmit = (e) => {
@@ -111,7 +156,7 @@ function RegisterForm() {
             alt="Arab Woman"
             width={490}
             height={600}
-            className="object-contain z-20"
+            className="object-contain z-20 absolute "
           />
           {/* Appointment Card */}
           <div className="absolute bottom-14 right-8 w-[355px] h-[78px] bg-black bg-opacity-50 backdrop-blur-[3px] rounded-xl flex items-center p-4 z-30 shadow-lg">
@@ -136,7 +181,7 @@ function RegisterForm() {
           </h1>
 
           <form onSubmit={handleSubmit}>
-            {/* Row 1: First/Last Name */}
+            {/* First Name */}
             <div className="grid gap-6 mb-6 md:grid-cols-2">
               <div>
                 <label className="block mb-2 text-sm font-medium text-gray-500">
@@ -160,6 +205,7 @@ function RegisterForm() {
                 )}
               </div>
 
+              {/* Last Name */}
               <div>
                 <label className="block mb-2 text-sm font-medium text-gray-500">
                   Last Name
@@ -181,7 +227,7 @@ function RegisterForm() {
               </div>
             </div>
 
-            {/* Row 2: Mobile/Email */}
+            {/* Mobile Number and Email */}
             <div className="grid gap-6 mb-6 md:grid-cols-2">
               <div>
                 <label className="block mb-2 text-sm font-medium text-gray-500">
@@ -191,12 +237,12 @@ function RegisterForm() {
                   type="text"
                   value={mobile}
                   onChange={(e) => {
-                    const numericValue = e.target.value.replace(/[^0-9]/g, "");
+                    const numericValue = e.target.value.replace(/[^0-9+]/g, "");
                     setMobile(numericValue);
                     setErrors({ ...errors, mobile: "" });
                   }}
                   className="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                  placeholder="+91 892 345 6789"
+                  placeholder="+918923456789"
                   required
                 />
                 {errors.mobile && (
@@ -225,6 +271,27 @@ function RegisterForm() {
               </div>
             </div>
 
+            {/* Gender Dropdown */}
+            <div className="mb-6">
+              <label className="block mb-2 text-sm font-medium text-gray-500">
+                Gender
+              </label>
+              <select
+                value={gender}
+                onChange={(e) => {
+                  setGender(e.target.value);
+                  setErrors({ ...errors, gender: "" });
+                }}
+                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="I prefer not to">Prefer not to say</option>
+              </select>
+              {errors.gender && <p className="text-red-500 text-xs mt-1">{errors.gender}</p>}
+            </div>
+
             {/* Social Media Link */}
             <div className="mb-6">
               <label className="block mb-2 text-sm font-medium text-gray-500">
@@ -244,24 +311,6 @@ function RegisterForm() {
               </div>
             </div>
 
-            {/* Area of Expertise (100-char limit with dynamic counter) */}
-            <div className="mb-6 relative">
-              <label className="block mb-2 text-sm font-medium text-gray-500">
-                Area of Expertise
-              </label>
-              <input
-                type="text"
-                maxLength={100}
-                value={areaOfExpertise}
-                onChange={(e) => setAreaOfExpertise(e.target.value)}
-                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
-              />
-              <span className="absolute right-2 top-10 text-xs text-gray-500">
-                {100 - areaOfExpertise.length}/100
-              </span>
-            </div>
-
-            {/* Professional Certifications (max 256 kb) */}
             <div className="mb-6">
               <label className="block mb-2 text-sm font-medium text-gray-500">
                 Professional Certifications
@@ -269,33 +318,63 @@ function RegisterForm() {
               <div className="flex">
                 <input
                   type="file"
-                  ref={fileInputRef}
+                  ref={fileInputRefCertifications}
                   className="hidden"
-                  accept=".pdf"
-                  onChange={handleFileChange}
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  onChange={handleFileChangeCertifications}
                   required
                 />
                 <input
                   type="text"
-                  id="file-display"
+                  id="file-display-certifications"
                   className="bg-white border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
+                  value={certificationFileName}
                   placeholder=""
                   readOnly
                 />
                 <button
                   type="button"
-                  onClick={() => fileInputRef.current.click()}
+                  onClick={() => fileInputRefCertifications.current.click()}
                   className="text-white bg-black hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-r-lg text-sm px-4 py-2.5"
                 >
                   Upload
                 </button>
               </div>
-              {errors.file && (
-                <p className="text-[#CF1313] text-sm mt-1">{errors.file}</p>
-              )}
+              {errors.file && <p className="text-[#CF1313] text-sm mt-1">{errors.file}</p>}
             </div>
 
-            {/* Experience (100-char limit with dynamic counter) */}
+            <div className="mb-6">
+              <label className="block mb-2 text-sm font-medium text-gray-500">
+                Professional Photos
+              </label>
+              <div className="flex">
+                <input
+                  type="file"
+                  ref={fileInputRefPhotos}
+                  className="hidden"
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  onChange={handleFileChangePhotos}
+                  required
+                />
+                <input
+                  type="text"
+                  id="file-display-photos"
+                  className="bg-white border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
+                  value={photoFileName}
+                  placeholder=""
+                  readOnly
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRefPhotos.current.click()}
+                  className="text-white bg-black hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-r-lg text-sm px-4 py-2.5"
+                >
+                  Upload
+                </button>
+              </div>
+              {errors.file && <p className="text-[#CF1313] text-sm mt-1">{errors.file}</p>}
+            </div>
+            {/* Experience */}
             <div className="mb-6 relative">
               <label className="block mb-2 text-sm font-medium text-gray-500">
                 Experience
@@ -316,7 +395,7 @@ function RegisterForm() {
             <div className="flex justify-center items-center">
               <button
                 type="submit"
-                className="h-12 w-44 text-md text-white bg-black hover:bg-gray-800 font-medium rounded-xl md:rounded-2xl text-sm flex items-center justify-center"
+                className="h-12 w-[30rem] text-md text-white bg-black hover:bg-gray-800 font-medium rounded-xl md:rounded-3xl text-sm flex items-center justify-center"
               >
                 Submit
               </button>

@@ -17,6 +17,7 @@ function RegisterPage() {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [gender, setGender] = useState("");  // New state for gender
   const [errors, setErrors] = useState({});
 
   // Validation for required fields
@@ -41,6 +42,10 @@ function RegisterPage() {
       tempErrors.lastName = "Last name can only contain letters.";
     }
 
+    if (!gender) {
+      tempErrors.gender = "Gender is required.";
+    }
+
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   };
@@ -48,6 +53,8 @@ function RegisterPage() {
   // Handle form submission - Now routes to /expertpanel/registerform
   const handleSubmit = () => {
     if (handleValidation()) {
+      // Save data to localStorage
+      localStorage.setItem("registerData", JSON.stringify({ firstName, lastName, email, gender }));
       router.push("/expertpanel/registerform"); // Navigate to the register form
     }
   };
@@ -60,7 +67,6 @@ function RegisterPage() {
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
             <Image src="/AMD_logo.png" alt="AMD Logo" width={190} height={190} />
           </div>
-
           {/* Experts Card */}
           <div className="absolute top-full left-4 w-[355px] h-[78px] bg-black bg-opacity-50 backdrop-blur-[3px] rounded-xl flex items-center p-4 z-30 shadow-lg">
             <IoIosSearch className="text-white text-[50px] mr-2" />
@@ -74,7 +80,7 @@ function RegisterPage() {
         </div>
 
         {/* Bottom Section with Arab Woman Image */}
-        <div className="h-[65%] bg-[#F8F7F3] flex items-end justify-center relative">
+        <div className="h-[75%] bg-[#F8F7F3] flex items-end justify-center relative">
           <div className="absolute top-0 left-0 w-full">
             <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
               <path
@@ -89,9 +95,8 @@ function RegisterPage() {
             alt="Arab Woman"
             width={490}
             height={600}
-            className="object-contain z-20"
+            className="object-contain z-20 "
           />
-
           {/* Appointment Card */}
           <div className="absolute bottom-14 right-8 w-[355px] h-[78px] bg-black bg-opacity-50 backdrop-blur-[3px] rounded-xl flex items-center p-4 z-30 shadow-lg">
             <LuNotepadText className="text-white text-[50px] mr-2" />
@@ -105,11 +110,6 @@ function RegisterPage() {
 
       {/* Right Section with Form */}
       <div className="w-full md:w-1/2 bg-white flex flex-col items-center justify-center relative">
-        {/* Mobile Logo - Hidden on medium and larger screens */}
-        <div className="absolute top-6 left-5 md:hidden">
-          <Image src="/AMD_mobile_logo.png" alt="Mobile Logo" width={60} height={40} />
-        </div>
-
         <div className="w-full max-w-md p-8 -mt-20 md:-mt-0">
           <h1 className="text-[29px] md:text-[35px] font-extrabold text-center">Please Enter Your Info</h1>
 
@@ -162,14 +162,33 @@ function RegisterPage() {
               {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
             </div>
 
+            {/* Gender Dropdown */}
+            <div>
+              <label className="block text-sm font-medium">Gender</label>
+              <select
+                value={gender}
+                onChange={(e) => {
+                  setGender(e.target.value);
+                  setErrors({ ...errors, gender: "" });
+                }}
+                className="w-full px-4 py-3 border rounded-lg focus:outline-8 focus:border-black"
+              >
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+                <option value="I prefer not to">Prefer not to say</option>
+              </select>
+              {errors.gender && <p className="text-red-500 text-xs mt-1">{errors.gender}</p>}
+            </div>
+
             <button
               className={`w-full py-3 rounded-lg transition ${
-                email && firstName && lastName
+                email && firstName && lastName && gender
                   ? "bg-black text-white hover:bg-gray-800"
                   : "bg-gray-300 text-gray-600 cursor-not-allowed"
               }`}
               onClick={handleSubmit}
-              disabled={!email || !firstName || !lastName}
+              disabled={!email || !firstName || !lastName || !gender}
             >
               Continue
             </button>
