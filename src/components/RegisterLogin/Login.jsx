@@ -23,57 +23,76 @@ function LoginPage() {
     const [formError, setFormError] = useState("");
 
     const handlePhoneChange = (value) => {
-        if (!value) {
-            setPhone(value);
-            setPhoneError("Phone number is required.");
-        } else if (!isValidPhoneNumber(value)) {
-            setPhone(value);
-            setPhoneError("Invalid phone number.");
-        } else {
-            setPhone(value);
-            setPhoneError("");
-        }
+        setPhone(value);
+        setPhoneError("");
         setFormError("");
     };
 
     const handleOtpChange = (e) => {
         const value = e.target.value.replace(/\D/g, "");
-        if (value.length <= 4) {
-            setOtp(value);
-            setOtpError("");
-        } else {
-            setOtpError("OTP cannot be more than 4 digits.");
-        }
-    };
-
-    const generateOtp = () => {
-        if (!phone || !isValidPhoneNumber(phone)) {
-            setPhoneError("Please enter a valid phone number first.");
-            return;
-        }
-        const randomOtp = Math.floor(1000 + Math.random() * 9000).toString();
-        setOtp(randomOtp);
+        setOtp(value);
         setOtpError("");
     };
 
-    const handleSubmit = () => {
-        if (!phone) {
-            setPhoneError("Phone number is required.");
-        } else if (!isValidPhoneNumber(phone)) {
-            setPhoneError("Invalid phone number.");
-            return;
-        }
-
-        if (!otp) {
-            setOtpError("OTP is required.");
-        }
-
-        if (!phone || !otp || !isValidPhoneNumber(phone)) {
+    
+// Handle OTP generation and sending
+const generateOtp = async () => {
+    if (!phone || !isValidPhoneNumber(phone)) {
+      setPhoneError("Please enter a valid phone number first.");
+      return;
+    }
+  
+    try {
+      // Check if the phone number exists in the database (use full backend URL)
+      const response = await fetch("http://localhost:5000/api/auth/request-otp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ phone }),
+      });
+  
+      const data = await response.json();
+  
+      if (data.message === "Please sign up first") {
+        setFormError(data.message); // Show the "Please sign up first" message
+      } else {
+        // OTP sent, allow user to enter it
+        setOtp(data.otp); // Store the OTP (response from backend)
+      }
+    } catch (error) {
+      setFormError("Failed to generate OTP. Please try again.");
+      console.error("Error:", error);
+    }
+  };
+  
+    const handleSubmit = async () => {
+        if (!phone || !otp) {
             setFormError("Please fill in all required fields before proceeding.");
             return;
         }
 
-        router.push("/register");
+        try {
+            const response = await fetch("/api/auth/verify-otp", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ phone, otp }),
+            });
+
+            const data = await response.json();
+
+            if (data.message === "OTP verified successfully") {
+                // Proceed to the experts page
+                router.push("/expertpanel/expertpanelprofile");
+            } else {
+                setFormError(data.message); // Invalid or expired OTP message
+            }
+        } catch (error) {
+            setFormError("Failed to verify OTP. Please try again.");
+            console.error("Error:", error);
+        }
     };
 
     return (
@@ -148,7 +167,10 @@ function LoginPage() {
                     </h1>
                     <p className="text-center text-[#878787] mt-1 md:mt-2">
                         or{" "}
-                        <span className="text-[#EA2B2B] font-semibold underline">
+                        <span
+                            className="text-[#EA2B2B] font-semibold underline"
+                            onClick={() => router.push("/register")}
+                        >
                             Sign up
                         </span>
                     </p>
@@ -164,7 +186,6 @@ function LoginPage() {
                                     onChange={handlePhoneChange}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-8 focus:border-black pl-4"
                                 />
-                               
                             </div>
                             {phoneError && (
                                 <p className="text-red-500 text-xs mt-1">{phoneError}</p>
@@ -203,7 +224,7 @@ function LoginPage() {
                             className={`w-full py-3 rounded-lg transition ${phone && otp.length === 4 && isValidPhoneNumber(phone)
                                 ? "bg-black text-white hover:bg-gray-800"
                                 : "bg-black text-white cursor-not-allowed"
-                                }`}
+                            }`}
                             onClick={handleSubmit}
                             disabled={
                                 !phone || otp.length !== 4 || !isValidPhoneNumber(phone)
