@@ -2,18 +2,10 @@
 
 // import Navtop from "@/components/ExpertPanel/Navtop/navtop";
 import Footer from "@/components/Layout/Footer";
-<<<<<<< HEAD
-import Sidebar from "@/components/UserPanel/LoginUserExpert/SideBar/SideBar";
-import Navtop from "@/components/UserPanel/NavTop/NavTop";
-// import Sidebar from "@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar";
-// import Navtop from "@/components/UserPanel/Navtop/Navtop";
-import UserProfile from "@/components/UserPanel/UserProfile/UserProfile";
-=======
 import Sidebar from "@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar";
 import Navtop from "@/components/UserPanel/Navtop/Navtop";
 import UserProfile from "@/components/UserPanel/UserProfile/UserProfile";
 import UseSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
->>>>>>> ee9e21b29f3d7a1a114ad1e8ca7698f64fd09a32
 
 import { usePathname } from "next/navigation";
 
@@ -33,13 +25,8 @@ const Page = () => {
     <>
     <div className="flex min-h-screen">
       {/* Sidebar: visible on desktop */}
-<<<<<<< HEAD
-      <div className="hidden md:block w-[20%]">
-        <Sidebar/>
-=======
       <div className="hidden md:block w-[20%] ">
         <UseSidebar />
->>>>>>> ee9e21b29f3d7a1a114ad1e8ca7698f64fd09a32
       </div>
       {/* Main Content: full width on mobile, 80% on desktop */}
       <div className="w-full md:w-[80%] p-4 pb-20">

@@ -1,23 +1,10 @@
 "use client";
 
-<<<<<<< HEAD
-// import Navtop from "@/components/ExpertPanel/Navtop/navtop";
-import Footer from "@/components/Layout/Footer";
-// import Sidebar from "@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar";
-// import Navtop from "@/components/UserPanel/Navtop/Navtop";
-import UserProfile from "@/components/UserPanel/UserProfile/UserProfile";
-
-import { usePathname } from "next/navigation";
-import Sidebar from "../LoginUserExpert/SideBar/SideBar";
-import Navtop from "../NavTop/NavTop";
-// import Navtop from "@/components/ExpertPanel/Navtop/navtop";
-=======
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { PiCirclesFourLight } from "react-icons/pi";
 import { Video, User, Search, BadgeCheck } from "lucide-react";
->>>>>>> ee9e21b29f3d7a1a114ad1e8ca7698f64fd09a32
 
 const BottomNav = () => {
   const pathname = usePathname(); // Get the current route

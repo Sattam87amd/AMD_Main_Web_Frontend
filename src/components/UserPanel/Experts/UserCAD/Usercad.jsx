@@ -1,16 +1,5 @@
 "use client";
 
-<<<<<<< HEAD
-// import Navtop from "@/components/ExpertPanel/Navtop/navtop";
-import Footer from "@/components/Layout/Footer";
-// import Sidebar from "@/components/UserPanel/LoginUserExpert/sideBar/sideBar";
-// import Navtop from "@/components/UserPanel/Navtop/Navtop";
-import UserProfile from "@/components/UserPanel/UserProfile/UserProfile";
-
-import { usePathname } from "next/navigation";
-import Sidebar from "../../LoginUserExpert/SideBar/SideBar";
-import Navtop from "../../NavTop/NavTop";
-=======
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaTimes } from "react-icons/fa";
@@ -57,7 +46,6 @@ const experts = [
     image: "/ralphedwards.png",
   },
 ];
->>>>>>> ee9e21b29f3d7a1a114ad1e8ca7698f64fd09a32
 
 const UserCab = () => {
   const [showAll, setShowAll] = useState(false);
@@ -73,18 +61,6 @@ const UserCab = () => {
   const visibleExperts = isMobile && !showAll ? experts.slice(0, 2) : experts;
 
   return (
-<<<<<<< HEAD
-    <>
-    <div>
-      {/* Sidebar: visible on desktop */}
-     
-      {/* Main Content: full width on mobile, 80% on desktop */}
-      
-      
-    </div>
-{/* <Footer/> */}
-    </>
-=======
     <div className="bg-white py-10 px-4">
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
@@ -186,7 +162,6 @@ const UserCab = () => {
         </div>
       )}
     </div>
->>>>>>> ee9e21b29f3d7a1a114ad1e8ca7698f64fd09a32
   );
 };
 
