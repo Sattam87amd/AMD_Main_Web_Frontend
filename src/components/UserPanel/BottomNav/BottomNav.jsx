@@ -2,11 +2,14 @@
 
 // import Navtop from "@/components/ExpertPanel/Navtop/navtop";
 import Footer from "@/components/Layout/Footer";
-import Sidebar from "@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar";
-import Navtop from "@/components/UserPanel/Navtop/Navtop";
+// import Sidebar from "@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar";
+// import Navtop from "@/components/UserPanel/Navtop/Navtop";
 import UserProfile from "@/components/UserPanel/UserProfile/UserProfile";
 
 import { usePathname } from "next/navigation";
+import Sidebar from "../LoginUserExpert/SideBar/SideBar";
+import Navtop from "../NavTop/NavTop";
+// import Navtop from "@/components/ExpertPanel/Navtop/navtop";
 
 const Page = () => {
   const pathname = usePathname();

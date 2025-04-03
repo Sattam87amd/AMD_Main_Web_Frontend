@@ -2,13 +2,13 @@
 
 // import Navtop from "@/components/ExpertPanel/Navtop/navtop";
 import Footer from "@/components/Layout/Footer";
-// import Sidebar from "@/components/UserPanel/LoginUserExpert/sideBar/sideBar";
+import Sidebar from "@/components/UserPanel/LoginUserExpert/SideBar/SideBar";
+import Navtop from "@/components/UserPanel/NavTop/NavTop";
+// import Sidebar from "@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar";
 // import Navtop from "@/components/UserPanel/Navtop/Navtop";
 import UserProfile from "@/components/UserPanel/UserProfile/UserProfile";
 
 import { usePathname } from "next/navigation";
-import Sidebar from "../../LoginUserExpert/SideBar/SideBar";
-import Navtop from "../../NavTop/NavTop";
 
 const Page = () => {
   const pathname = usePathname();
@@ -24,14 +24,19 @@ const Page = () => {
 
   return (
     <>
-    <div>
+    <div className="flex min-h-screen">
       {/* Sidebar: visible on desktop */}
-     
+      <div className="hidden md:block w-[20%]">
+        <Sidebar/>
+      </div>
       {/* Main Content: full width on mobile, 80% on desktop */}
-      
+      <div className="w-full md:w-[80%] p-4 pb-20">
+        <Navtop activeTab={activeTab} />
+        <UserProfile/>
+      </div>
       
     </div>
-{/* <Footer/> */}
+<Footer/>
     </>
   );
 };
