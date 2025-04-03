@@ -4,7 +4,7 @@ import Cab from "@/components/Experts/CAB/cab";
 import Fbexpert from "@/components/Experts/Fashion&Beauty-expert/fbexpert";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";
-import TopExperts from "@/components/Experts/Topexpert/topexpert";
+import TopExperts from "@/components/Experts/Topexpert/TopExpert";
 import Wellnessexpert from "@/components/Experts/Wellness/wellnessexperts";
 import React from "react";
 

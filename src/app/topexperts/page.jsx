@@ -2,23 +2,28 @@
 import Footer from "@/components/Layout/Footer";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";
-import Homeexpert from "@/components/Experts/Homeexpert/homeexpert";
+import TopExpert from "@/components/Experts/Topexpert/TopExpert";
+
 
 const Page = () => {
   return (
+    
     <div>
       {/* Desktop View - NavSearch */}
       <div className="hidden md:block">
         <NavSearch />
-        <Homeexpert />
-        <Footer />
+        <TopExpert/>
+        <Footer/>
+
+      
       </div>
 
       {/* Mobile View - MobileNavSearch */}
       <div className="block md:hidden">
         <MobileNavSearch />
-        <Homeexpert />
-        <Footer />
+        <TopExpert/>
+        <Footer/>
+
       </div>
     </div>
   );

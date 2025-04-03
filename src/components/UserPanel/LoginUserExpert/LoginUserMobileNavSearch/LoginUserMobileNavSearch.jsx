@@ -45,7 +45,7 @@ const LoginUserMobileNavSearch = () => {
 
           {/* Filter Dropdown */}
           {showFilter && (
-            <div className="absolute right-0 mt-2 w-80 bg-white shadow-xl rounded-xl p-4 z-50 mt-72">
+            <div className="absolute right-0 w-80 bg-white shadow-xl rounded-xl p-4 z-50 mt-72">
               {/* Header - Back & Save */}
               <div className="flex items-center justify-between mb-4">
                 <button

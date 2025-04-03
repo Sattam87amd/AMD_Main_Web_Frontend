@@ -2,89 +2,122 @@
 
 import React from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { HiBadgeCheck } from "react-icons/hi";
 
-const expertData = [
+// Expert Data (5 experts repeated 3 times)
+const experts = [
   {
     name: "Aaliya Abadi",
-    price: "$ 450",
-    image: "/aaliyaabadi.png",
+    role: "Founder Of Drybar (Sold For $255M)",
     description:
-      "Founder of Drybar (Sold for $255M). Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, Macy’s.",
+      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
+    price: "$450",
+    image: "/aaliaabadi.png",
   },
   {
     name: "Aisha Aziz",
-    price: "$ 600",
-    image: "/aishaaziz.png",
+    role: "Founder Of Drybar (Sold For $255M)",
     description:
-      "Founder of Drybar (Sold for $255M). Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, Macy’s.",
+      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
+    price: "$600",
+    image: "/aishaaziz.png",
   },
   {
     name: "Jenny Wilson",
-    price: "$ 250",
-    image: "/jennywilson.png",
+    role: "Founder Of Drybar (Sold For $255M)",
     description:
-      "Founder of Drybar (Sold for $255M). Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, Macy’s.",
+      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
+    price: "$250",
+    image: "/jennywilson.png",
   },
   {
     name: "Guy Hawkins",
-    price: "$ 1500",
-    image: "/guyhawkins.png",
+    role: "Founder Of Drybar (Sold For $255M)",
     description:
-      "Founder of Drybar (Sold for $255M). Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, Macy’s.",
+      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
+    price: "$1500",
+    image: "/guyhawkins.png",
   },
   {
     name: "Ralph Edwards",
-    price: "$ 450",
-    image: "/ralphedwards.png",
+    role: "Founder Of Drybar (Sold For $255M)",
     description:
-      "Founder of Drybar (Sold for $255M). Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, Macy’s.",
+      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
+    price: "$450",
+    image: "/ralphedwards.png",
   },
 ];
 
+const repeatedExperts = [...experts, ...experts, ...experts];
+
 const Homeexpert = () => {
   return (
-    <div className="bg-white p-6">
-      {/* Heading Section */}
-      <div className="flex flex-col md:flex-row md:h-40 items-center mb-6">
+    <div className="bg-white py-10 px-4">
+      {/* Header Section */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+        className="flex flex-col md:flex-row md:h-40 items-center mb-6"
+      >
         <h1 className="text-3xl md:text-[60px] font-bold text-black">
-          HOME.
+          Home Experts
         </h1>
         <p className="text-[#9C9C9C] md:pt-5 pl-5 md:text-2xl">
-          Transform Your Space with Expert Interior Design Insights
+          Access to the best have never been easie
         </p>
-      </div>
+      </motion.div>
 
-      {/* Cards Section - Horizontal Scroll on Small Screens, Grid on Medium+ */}
+      {/* Cards Section */}
       <div className="overflow-x-auto md:overflow-visible">
-        <div className="flex md:grid md:grid-cols-5 gap-4 md:gap-80 px-4 md:px-0 overflow-x-scroll scrollbar-hide">
-          {expertData.map((expert, index) => (
+        <motion.div
+          className="flex md:grid md:grid-cols-5 gap-4 md:gap-8 px-4 md:px-0 overflow-x-scroll scrollbar-hide"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
+          }}
+        >
+          {repeatedExperts.map((expert, index) => (
             <Link key={index} href={`/expertaboutme`} passHref>
-              <div className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg rounded-lg cursor-pointer">
-                {/* Background Image */}
+              <motion.div
+                className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg rounded-lg cursor-pointer"
+                variants={{
+                  hidden: { opacity: 0, y: 30 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+                }}
+                whileHover={{ scale: 1.05 }}
+              >
+                {/* Expert Image */}
                 <img
                   src={expert.image}
                   alt={expert.name}
                   className="w-full h-full object-cover"
                 />
 
-                {/* Price Tag */}
+                {/* Price Badge */}
                 <div className="absolute top-4 right-4 bg-[#F8F7F3] text-black px-4 py-2 rounded-2xl shadow-xl font-semibold">
                   {expert.price}
                 </div>
 
-                {/* Transparent Blur Card */}
-                <div className="absolute bottom-1 left-1 right-1 bg-white/80 p-4 m-2 rounded-lg">
+                {/* Info Box */}
+                <div className="absolute bottom-1 left-1 right-1 bg-white/80 backdrop-blur-md p-4 m-2 rounded-lg shadow-lg">
                   <h2 className="text-lg font-semibold text-black flex items-center gap-1">
                     {expert.name}
-                    <HiBadgeCheck className="w-6 h-6 text-yellow-500" />
+                    <HiBadgeCheck className="w-5 h-5 text-yellow-500" />
                   </h2>
-                  <p className="text-xs text-black mt-1">{expert.description}</p>
+                  <p className="text-xs text-gray-800 mt-1">
+                    {expert.description}
+                  </p>
                 </div>
-              </div>
+              </motion.div>
             </Link>
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

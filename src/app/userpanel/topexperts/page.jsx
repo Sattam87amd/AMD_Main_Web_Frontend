@@ -1,6 +1,5 @@
 "use client";
 
-import TopExperts from "@/components/Experts/Topeexperts/topexperts";
 import UserTopExpert from "@/components/UserPanel/Experts/UserTopeexpert/UserTopeexpert";
 import Footer from "@/components/userpanel/Layout/Footer";
 import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
@@ -24,7 +23,7 @@ const Page = () => {
           <div className="hidden md:block">
             <UserNavSearch />
             <div className="space-y-8 px-4 md:px-8">
-              <UserTopExpert /> 
+              
              
             </div>
           </div>
