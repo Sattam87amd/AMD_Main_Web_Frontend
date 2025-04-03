@@ -1,9 +1,17 @@
 "use client";
 
 import React from "react";
+<<<<<<< HEAD
 import { motion } from "framer-motion";
 
 // 15 Experts (5 experts repeated 3 times)
+=======
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { HiBadgeCheck } from "react-icons/hi";
+
+// Expert Data (5 experts repeated 3 times)
+>>>>>>> ee9e21b29f3d7a1a114ad1e8ca7698f64fd09a32
 const experts = [
   {
     name: "Aaliya Abadi",
@@ -11,7 +19,11 @@ const experts = [
     description:
       "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
     price: "$450",
+<<<<<<< HEAD
     image: "/aaliyaabadi.png",
+=======
+    image: "/aaliaabadi.png",
+>>>>>>> ee9e21b29f3d7a1a114ad1e8ca7698f64fd09a32
   },
   {
     name: "Aisha Aziz",
@@ -37,6 +49,7 @@ const experts = [
     price: "$1500",
     image: "/guyhawkins.png",
   },
+<<<<<<< HEAD
   {
     name: "Ralph Edwards",
     role: "Founder Of Drybar (Sold For $255M)",
@@ -51,6 +64,21 @@ const experts = [
 const repeatedExperts = [...experts, ...experts, ...experts];
 
 const UserCareerBuisnessExperts = () => {
+=======
+  // {
+  //   name: "Ralph Edwards",
+  //   role: "Founder Of Drybar (Sold For $255M)",
+  //   description:
+  //     "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
+  //   price: "$450",
+  //   image: "/ralphedwards.png",
+  // },
+];
+
+const repeatedExperts = [...experts, ...experts, ...experts];
+
+const LoginUserCareerBusinessExperts = () => {
+>>>>>>> ee9e21b29f3d7a1a114ad1e8ca7698f64fd09a32
   return (
     <div className="bg-white py-10 px-4">
       {/* Header Section */}
@@ -59,6 +87,7 @@ const UserCareerBuisnessExperts = () => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
+<<<<<<< HEAD
         className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8"
       >
         <div>
@@ -125,3 +154,76 @@ const UserCareerBuisnessExperts = () => {
 };
 
 export default UserCareerBuisnessExperts;
+=======
+        className="flex flex-col md:flex-row md:h-40 items-center mb-6"
+      >
+        <h1 className="text-3xl md:text-[60px] font-bold text-black">
+          Career & Business Experts
+        </h1>
+        <p className="text-[#9C9C9C] md:pt-5 pl-5 md:text-2xl">
+          Connect with CEOs, executives, coaches, and more
+        </p>
+      </motion.div>
+
+      {/* Cards Section */}
+      <div className="overflow-x-auto md:overflow-visible">
+        <div className="flex md:grid md:grid-cols-5 gap-4 md:gap-80 px-4 md:px-0 overflow-x-scroll scrollbar-hide">
+                {/* Cards Section */}
+      
+        <motion.div
+          className="flex gap-6 md:gap-8 px-4 md:px-0 w-max"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
+          }}
+        >
+          {repeatedExperts.map((expert, index) => (
+            <Link key={index} href={`/expertaboutme`} passHref>
+              <motion.div
+                className="relative min-w-[280px] md:w-[300px] h-[400px] flex-shrink-0 overflow-hidden shadow-lg rounded-lg cursor-pointer"
+                variants={{
+                  hidden: { opacity: 0, y: 30 },
+                  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+                }}
+                whileHover={{ scale: 1.05 }}
+              >
+                {/* Expert Image */}
+                <img
+                  src={expert.image}
+                  alt={expert.name}
+                  className="w-full h-full object-cover"
+                />
+
+                {/* Price Badge */}
+                <div className="absolute top-4 right-4 bg-[#F8F7F3] text-black px-4 py-2 rounded-2xl shadow-xl font-semibold">
+                  {expert.price}
+                </div>
+
+                {/* Info Box */}
+                <div className="absolute bottom-1 left-1 right-1 bg-white/80 backdrop-blur-md p-4 m-2 rounded-lg shadow-lg">
+                  <h2 className="text-lg font-semibold text-black flex items-center gap-1">
+                    {expert.name}
+                    <HiBadgeCheck className="w-5 h-5 text-yellow-500" />
+                  </h2>
+                  <p className="text-xs text-gray-800 mt-1">
+                    {expert.description}
+                  </p>
+                </div>
+              </motion.div>
+            </Link>
+          ))}
+        </motion.div>
+      </div>
+          
+        </div>
+
+      </div>
+    
+  );
+};
+
+export default LoginUserCareerBusinessExperts;
+>>>>>>> ee9e21b29f3d7a1a114ad1e8ca7698f64fd09a32

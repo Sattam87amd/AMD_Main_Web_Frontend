@@ -7,11 +7,18 @@ import { usePathname } from 'next/navigation';
 import UserProfileSection from '@/components/UserPanel/UserPanelProfile/UserProfileSection';
 // import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
 import Footer from '@/components/Layout/Footer';
+<<<<<<< HEAD
 // import Sidebar from '@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar';
 // import Navtop from '@/components/UserPanel/Navtop/Navtop';
 import BottomNav from '@/components/UserPanel/BottomNav/BottomNav';
 import Sidebar from '@/components/UserPanel/LoginUserExpert/SideBar/SideBar';
 import Navtop from '@/components/UserPanel/NavTop/NavTop';
+=======
+import Sidebar from '@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar';
+import Navtop from '@/components/UserPanel/Navtop/Navtop';
+import BottomNav from '@/components/UserPanel/BottomNav/BottomNav';
+import UseSidebar from '@/components/UserPanel/UseSideBar/UserSidebar';
+>>>>>>> ee9e21b29f3d7a1a114ad1e8ca7698f64fd09a32
 
 
 const Page = () => {
@@ -20,7 +27,11 @@ const Page = () => {
   // Map the routes to their labels (should match the Sidebar menu items)
   const menuItems = [
     { label: "Find Experts", route: "/experts" },
+<<<<<<< HEAD
     { label: "Video Call", route: "/expertpanel/videocall" },
+=======
+    { label: "Video Call", route: "/userpanel/videocall" },
+>>>>>>> ee9e21b29f3d7a1a114ad1e8ca7698f64fd09a32
     { label: "Profile", route: "/expertpanel/expertpanelprofile" },
     { label: "Expert", route: "/expertpanel/expert" },
     { label: "Dashboard", route: "/expertpanel/dashboard" },
@@ -36,6 +47,7 @@ const Page = () => {
     <>
       <div className="flex min-h-screen">
         {/* Sidebar */}
+<<<<<<< HEAD
         <div className="md:w-[20%]">
           <Sidebar/>
         </div>
@@ -43,6 +55,15 @@ const Page = () => {
         {/* Main Content */}
         <div className="md:w-[80%] p-4">
           < Navtop activeTab={activeTab} />
+=======
+        <div className="md:w-[20%] ">
+          <UseSidebar />
+        </div>
+
+        {/* Main Content */}
+        <div className="md:w-[80%] p-4  ">
+          <Navtop activeTab={activeTab} />
+>>>>>>> ee9e21b29f3d7a1a114ad1e8ca7698f64fd09a32
           <UserProfileSection />
         </div>
 

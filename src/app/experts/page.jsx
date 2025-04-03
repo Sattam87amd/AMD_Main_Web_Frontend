@@ -1,45 +1,55 @@
-"use client";
 
-import Cab from "@/components/Experts/CAB/cab";
-import Fbexpert from "@/components/Experts/Fashion&Beauty-expert/fbexpert";
-import MobileNavSearch from "@/components/Layout/mobilenavsearch";
-import NavSearch from "@/components/Layout/navsearch";
-import TopExperts from "@/components/Experts/Topexpert/topexpert";
-import Wellnessexpert from "@/components/Experts/Wellness/wellnessexperts";
-import React from "react";
+import Footer from '@/components/Layout/Footer'
+import NavSearch from '@/components/Layout/navsearch'
+import UserCab from '@/components/UserPanel/Experts/UserCAD/Usercad'
+import UserFbexpert from '@/components/UserPanel/Experts/UserFashion&Beauty-Expert/UserFbexpert'
+import UserHomeexpert from '@/components/UserPanel/Experts/UserHomeexpert/UserHomeexpert'
+import UserMobileNavSearch from '@/components/UserPanel/Experts/UserMobileexpert/UserMobileNavSearch'
+import UserThreepara from '@/components/UserPanel/Experts/UserThreepara/UserThreepara'
+import UserTopExpert from '@/components/UserPanel/Experts/UserTopeexpert/UserTopeexpert'
+import UserWellnessExperts from '@/components/UserPanel/Experts/UserWellnessExperts/UserWellnessExperts'
+import React from 'react'
 
-import ThreePara from "@/components/Experts/Threepara/threepara";
-import Footer from "@/components/Layout/Footer";
-import Homeexpert from "@/components/Experts/Homeexpert/homeexpert";
-
-const Page = () => {
+ const page = () => {
   return (
-    <div>
-      {/* Desktop View - NavSearch */}
-      <div className="hidden md:block">
-        <NavSearch />
-        <TopExperts />
-        <Wellnessexpert />
-        <Fbexpert />
-        <Cab />
-        <Homeexpert />
-        <ThreePara />
-        <Footer />
-      </div>
 
-      {/* Mobile View - MobileNavSearch */}
-      <div className="block md:hidden">
-        <MobileNavSearch />
-        <TopExperts />
-        <Wellnessexpert />
-        <Fbexpert />
-        <Cab />
-        <Homeexpert />
-        <ThreePara />
-        <Footer />
-      </div>
+    //Desktop view navsearch
+    <div >
+      <div className='hidden md:block'>
+       <NavSearch/>
+       <UserTopExpert/>
+       <UserWellnessExperts/>
+       <UserFbexpert/>
+       <UserCab/>
+       <UserHomeexpert/>
+       <UserThreepara/>
+       <Footer/>
+       </div>
+       
+       {/* Mobile View - MobileNavSearch */}
+       <div className="block md:hidden">
+        <UserMobileNavSearch/>
+        <UserTopExpert/>
+        <UserWellnessExperts/>
+        <UserFbexpert/>
+        <UserCab/>
+        <UserHomeexpert/>
+        <UserThreepara/>
+        <Footer/>
+        
+
+       </div>
+
+
+
+
     </div>
+    
+
+
+   
   );
+
 };
 
-export default Page;
+export default page;

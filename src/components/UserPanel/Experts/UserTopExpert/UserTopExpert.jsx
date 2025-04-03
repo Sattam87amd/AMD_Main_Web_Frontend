@@ -1,9 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { FaTimes } from "react-icons/fa";
 
-// 15 Experts (5 experts repeated 3 times)
 const experts = [
   {
     name: "Aaliya Abadi",
@@ -11,7 +11,7 @@ const experts = [
     description:
       "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
     price: "$450",
-    image: "/aaliyaabadi.png",
+    image: "/aaliaabadi.png",
   },
   {
     name: "Aisha Aziz",
@@ -47,13 +47,22 @@ const experts = [
   },
 ];
 
-// Repeat experts 3 times to match the original list
-const repeatedExperts = [...experts, ...experts, ...experts];
-
 const UserTopExpert = () => {
+  const [showAll, setShowAll] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 640);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const visibleExperts = isMobile && !showAll ? experts.slice(0, 2) : experts;
+
   return (
     <div className="bg-white py-10 px-4">
-      {/* Header Section */}
+      {/* Header Section with animation */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -63,13 +72,25 @@ const UserTopExpert = () => {
       >
         <div>
           <h1 className="text-4xl font-bold">Top Experts</h1>
-          <p className="text-gray-500 sm:ml-52 mb-10 text-sm sm:text-base">
-            Access to the best has never been easier
-          </p>
+          {!isMobile && (
+            <p className="text-gray-500 ml-52 mb-10">Access to the best has never been easier</p>
+          )}
+        </div>
+        <div className="flex flex-col sm:flex-row items-start sm:items-center">
+          {isMobile && (
+            <p className="text-gray-500 mb-2 sm:mb-0">Access to the best has never been easier</p>
+          )}
+          <motion.button
+            onClick={() => setShowAll(!showAll)}
+            className="text-black font-semibold hover:underline transition-all duration-300"
+            whileHover={{ scale: 1.05 }}
+          >
+            {showAll ? "Show Less ←" : "See All →"}
+          </motion.button>
         </div>
       </motion.div>
 
-      {/* Experts Grid */}
+      {/* Experts Grid with animations */}
       <motion.div
         className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6"
         initial="hidden"
@@ -80,13 +101,13 @@ const UserTopExpert = () => {
           visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
         }}
       >
-        {repeatedExperts.map((expert, index) => (
+        {visibleExperts.map((expert, index) => (
           <motion.div
             key={index}
             className="relative overflow-hidden shadow-lg rounded-xl"
             variants={{
-              hidden: { opacity: 0, y: 30 },
-              visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+              hidden: { opacity: 0, scale: 0.9 },
+              visible: { opacity: 1, scale: 1, transition: { duration: 0.6 } },
             }}
             whileHover={{ scale: 1.05 }}
           >
@@ -120,6 +141,50 @@ const UserTopExpert = () => {
           </motion.div>
         ))}
       </motion.div>
+
+      {/* Mobile Popup for 'See all' with animation */}
+      {showAll && isMobile && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
+          <motion.div
+            className="bg-white p-6 rounded-lg shadow-lg max-w-4xl w-full h-[80vh] overflow-y-auto"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-2xl font-bold">All Top Experts</h2>
+              <button onClick={() => setShowAll(false)} className="text-red-500">
+                <FaTimes size={24} />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {experts.map((expert, index) => (
+                <div key={index} className="relative overflow-hidden rounded-xl shadow-lg">
+                  <div className="w-full h-80">
+                    <img
+                      src={expert.image}
+                      alt={expert.name}
+                      className="w-full h-full object-contain rounded-xl"
+                    />
+                  </div>
+                  <div className="absolute top-4 right-4 bg-white text-black font-bold py-1 px-3 rounded-full shadow-md">
+                    {expert.price}
+                  </div>
+
+                  <div className="absolute bottom-0 left-0 w-full bg-white/30 backdrop-blur-lg p-4 rounded-b-xl text-black">
+                    <h2 className="text-xl font-bold">
+                      {expert.name} <span className="text-yellow-500">⭐</span>
+                    </h2>
+                    <p className="text-sm text-black mt-1">{expert.role}</p>
+                    <p className="text-xs text-gray-800 mt-1">{expert.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };

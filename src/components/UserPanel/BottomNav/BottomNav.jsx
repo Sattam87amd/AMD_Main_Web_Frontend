@@ -1,5 +1,6 @@
 "use client";
 
+<<<<<<< HEAD
 // import Navtop from "@/components/ExpertPanel/Navtop/navtop";
 import Footer from "@/components/Layout/Footer";
 // import Sidebar from "@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar";
@@ -10,36 +11,43 @@ import { usePathname } from "next/navigation";
 import Sidebar from "../LoginUserExpert/SideBar/SideBar";
 import Navtop from "../NavTop/NavTop";
 // import Navtop from "@/components/ExpertPanel/Navtop/navtop";
+=======
+import React, { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { PiCirclesFourLight } from "react-icons/pi";
+import { Video, User, Search, BadgeCheck } from "lucide-react";
+>>>>>>> ee9e21b29f3d7a1a114ad1e8ca7698f64fd09a32
 
-const Page = () => {
-  const pathname = usePathname();
+const BottomNav = () => {
+  const pathname = usePathname(); // Get the current route
+  const [active, setActive] = useState(pathname || "profile"); // Default active based on current route
 
-  // Map sidebar routes to labels (must match Sidebar)
-  const menuItems = [
-    { label: "Expert", route: "/expertpanel/expert" },
-   
+  const navItems = [
+    { label: "Search", icon: <Search />, id: "search", path: "/experts" },
+    { label: "Video", icon: <Video />, id: "video", path: "/expertpanel/videocall" },
+    { label: "Profile", icon: <User />, id: "profile", path: "/expertpanel/expertpanelprofile" },
+    { label: "Expert", icon: <BadgeCheck />, id: "expert", path: "/expertpanel/expert" },
+    { label: "Dashboard", icon: <PiCirclesFourLight />, id: "dashboard", path: "/expertpanel/dashboard" },
   ];
 
-  const activeMenu = menuItems.find((item) => item.route === pathname);
-  const activeTab = activeMenu ? activeMenu.label : "Booking";
-
   return (
-    <>
-    <div className="flex min-h-screen">
-      {/* Sidebar: visible on desktop */}
-      <div className="hidden md:block w-[20%]">
-        <Sidebar />
-      </div>
-      {/* Main Content: full width on mobile, 80% on desktop */}
-      <div className="w-full md:w-[80%] p-4 pb-20">
-        <Navtop activeTab={activeTab} />
-        <UserProfile/>
-      </div>
-      
+    <div className=" w-full fixed bottom-0 left-0 right-0 bg-white shadow-lg p-2 flex justify-around items-center border-t sm:flex md:hidden">
+      {navItems.map((item) => (
+        <Link href={item.path} key={item.id} passHref>
+          <div
+            onClick={() => setActive(item.id)}
+            className={`flex flex-col items-center cursor-pointer transition-colors ${
+              active === item.id ? "text-red-500" : "text-gray-700"
+            }`}
+          >
+            <div className="text-xl sm:text-2xl">{item.icon}</div>
+            <span className="text-[10px] sm:text-xs font-medium leading-none mt-1">{item.label}</span>
+          </div>
+        </Link>
+      ))}
     </div>
-<Footer/>
-    </>
   );
 };
 
-export default Page;
+export default BottomNav;
