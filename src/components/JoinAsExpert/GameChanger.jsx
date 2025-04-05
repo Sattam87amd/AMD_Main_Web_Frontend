@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 
 const GameChanger = () => {
   return (
@@ -14,9 +15,11 @@ const GameChanger = () => {
         <h2 className="text-white text-[15px] font-medium  tracking-wider md:text-4xl  md:max-w-3xl md:tracking-normal ">
           “A Game-Changer For Professionals Looking To Connect And Share Knowledge Effortlessly.”
         </h2>
-        <button className="mt-20 bg-black text-white px-6 py-3 rounded-full  md:w-[25%] h-[60px] text-lg hover:bg-opacity-80 transition duration-300">
-          Join as an Expert
-        </button>
+        <Link href="/expertlogin">
+  <button className="mt-20 bg-black text-white px-8 py-3 rounded-full md:w-full h-[60px] text-lg hover:bg-opacity-80 transition duration-300">
+    Join as an Expert
+  </button>
+</Link>
       </div>
     </div>
   );

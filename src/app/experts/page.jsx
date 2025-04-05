@@ -1,6 +1,7 @@
 
 import Footer from '@/components/Layout/Footer'
 import NavSearch from '@/components/Layout/navsearch'
+import TopExpert from '@/components/HomePage/TopExpert'
 import UserCab from '@/components/UserPanel/Experts/UserCAD/Usercad'
 import UserFbexpert from '@/components/UserPanel/Experts/UserFashion&Beauty-Expert/UserFbexpert'
 import UserHomeexpert from '@/components/UserPanel/Experts/UserHomeexpert/UserHomeexpert'
@@ -9,36 +10,30 @@ import UserThreepara from '@/components/UserPanel/Experts/UserThreepara/UserThre
 import UserTopExpert from '@/components/UserPanel/Experts/UserTopeexpert/UserTopeexpert'
 import UserWellnessExperts from '@/components/UserPanel/Experts/UserWellnessExperts/UserWellnessExperts'
 import React from 'react'
+import WellnessHomeCards from '@/components/HomePage/WellnessHomeCards'
+import FashionBeautyHomeCards from '@/components/HomePage/FashionBeautyHomeCards'
+import CareerBusinessExperts from '@/components/Experts/Career&Buisness/Career&Buisness'
+import CareerBusinessHomeCards from '@/components/HomePage/CareerBusinessHomeCards'
+import HomeCards from '@/components/HomePage/HomeCards'
+import MobileNavSearch from '@/components/Layout/mobilenavsearch'
 
  const page = () => {
   return (
 
-    //Desktop view navsearch
+  
     <div >
-      <div className='hidden md:block'>
+      <div className=''>
+        <MobileNavSearch/>
        <NavSearch/>
-       <UserTopExpert/>
-       <UserWellnessExperts/>
-       <UserFbexpert/>
-       <UserCab/>
-       <UserHomeexpert/>
+       <TopExpert/>
+       <WellnessHomeCards/>
+       <FashionBeautyHomeCards/>
+       <CareerBusinessHomeCards/>
+       <HomeCards/>
        <UserThreepara/>
        <Footer/>
        </div>
-       
-       {/* Mobile View - MobileNavSearch */}
-       <div className="block md:hidden">
-        <UserMobileNavSearch/>
-        <UserTopExpert/>
-        <UserWellnessExperts/>
-        <UserFbexpert/>
-        <UserCab/>
-        <UserHomeexpert/>
-        <UserThreepara/>
-        <Footer/>
-        
-
-       </div>
+      
 
 
 

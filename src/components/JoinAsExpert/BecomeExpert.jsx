@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const BecomeExpert = () => {
@@ -26,9 +27,12 @@ const BecomeExpert = () => {
               and earn on your terms.
             </p>
           </div>
-          <button className=" md:tracking-widest  md:mx-44 mt-6 font-light text-xs rounded-full bg-black text-white md:font-medium md:w-[45%] md:h-[60] h-[35px] w-[150px]   mx-5">
-            Join as an Expert
-          </button>
+          
+          <Link href="/expertlogin">
+            <button className=" md:tracking-widest  md:mx-44 mt-6 font-light text-base rounded-full bg-black text-white md:font-medium md:w-[45%] md:h-[60] h-[35px] w-[150px]   mx-5">
+              Join as an Expert
+            </button>
+          </Link>
 
           <img
             src="/image2.png"

@@ -27,7 +27,7 @@ const MobileNavSearch = () => {
   const toggleFilter = () => setShowFilter(!showFilter);
 
   return (
-    <div className="bg-[#F8F7F3] p-4">
+    <div className="bg-[#F8F7F3] p-4 md:hidden">
       {/* Navbar */}
       <nav className="flex items-center justify-between mb-4">
         {/* Left - Brand Name */}

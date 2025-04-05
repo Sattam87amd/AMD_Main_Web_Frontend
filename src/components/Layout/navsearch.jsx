@@ -8,7 +8,7 @@ import ExpertCategory from "../ExpertCategory/ExpertCategory";
 
 const NavSearch = () => {
   return (
-    <div className="bg-[#F8F7F3] px-4 py-4 relative">
+    <div className="hidden md:block bg-[#F8F7F3] px-4 py-4 relative">
       <motion.nav
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -20,7 +20,7 @@ const NavSearch = () => {
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.5 }}
-          className="flex items-center bg-white rounded-full px-4 py-2 w-full max-w-2xl mx-4 shadow-lg"
+          className="flex items-center bg-white rounded-2xl px-4 py-2 w-full max-w-2xl mx-4 shadow-lg"
         >
           <input
             type="text"

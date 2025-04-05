@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 import { Gift, Menu, X, Search, User } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import SeacthExperts from "../SearchExperts/SearchExperts";
+import SeacthExperts from "../SearchExperts/SearchExperts";  // Import SearchExperts component
 
 function Navbar() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [showSearchPage, setShowSearchPage] = useState(false);
+  const [showSearchPage, setShowSearchPage] = useState(false); // State for search page
 
   // Toggle mobile menu
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -34,13 +34,13 @@ function Navbar() {
       <nav className="fixed w-full z-20 top-0 h-[96px] md:h-24 bg-white shadow-md">
         <div className="relative flex items-center justify-between h-full px-6">
           {/* Logo */}
-          <Link href="/" className="text-3xl md:text-[40px] font-semibold text-black">
+          <Link href="/home" className="text-3xl md:text-[40px] font-semibold text-black">
             AMD
           </Link>
 
           {/* Center Links */}
           <div className="hidden md:flex justify-center flex-grow items-center space-x-12 text-[19px]">
-            <Link href="/userpanel/joinasexpert" className="text-black">
+            <Link href="/joinasexpert" className="text-black">
               Become an Expert
             </Link>
             <Link href="/ourmission" className="text-black">
@@ -60,11 +60,11 @@ function Navbar() {
               </button>
             </Link>
 
-            {/* <Link href="/profile">
+            <Link href="/profile">
               <User className="h-6 w-6 text-black cursor-pointer hover:opacity-80" />
-            </Link> */}
+            </Link>
 
-            <Link href="/login">
+            <Link href="/userlogin">
               <button className="bg-white text-black font-medium rounded-lg text-[16px] px-4 py-2">
                 Sign Up
               </button>
@@ -101,7 +101,7 @@ function Navbar() {
 
             <div className="flex flex-col space-y-2 mt-4">
               <button
-                onClick={() => router.push("/giftsession")}
+                onClick={() => router.push("/userpanel/giftsession")}
                 className="flex items-center bg-black text-white font-medium rounded-lg text-[16px] px-4 py-2 w-full"
               >
                 Gift a Session

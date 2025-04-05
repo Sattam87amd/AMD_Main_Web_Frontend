@@ -5,7 +5,7 @@ const OurPartners = () => {
     { logo: "/thestagelogo.png", name: "Thestage" },
     { logo: "/clearhublogo.png", name: "ClearHub" },
     { logo: "/thmanyahlogo.png", name: "Thmanyah" },
-    { logo: "/imanlogo.png", name: "" },
+    { logo: "/imanlogo.png", name: "40-minute podcast" },
     { logo: "/atheerpod.png", name: "AtheerPod" },
   ];
 

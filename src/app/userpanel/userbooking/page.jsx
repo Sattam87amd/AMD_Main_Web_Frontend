@@ -1,17 +1,10 @@
 "use client";
-import Footer from "@/components/Layout/Footer";
-import Sidebar from "@/components/UserPanel/LoginUserExpert/SideBar/SideBar";
-import Navtop from "@/components/UserPanel/NavTop/NavTop";
-// import Sidebar from "@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar";
-// import Navtop from "@/components/UserPanel/Navtop/Navtop";
-import UserBooking from "@/components/UserPanel/UserBooking/UserBooking";
-
-import Footer from "@/components/UserPanel/Layout/Footer";
-
-import Navtop from "@/components/UserPanel/Navtop/Navtop";
-import UserBooking from "@/components/UserPanel/UserBooking/UserBooking";
 import UseSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
 import { usePathname } from "next/navigation";
+import Footer from "@/components/UserPanel/Layout/Footer";
+import Navtop from "@/components/UserPanel/NavTop/Navtop";
+import UserBottomNav from "@/components/UserPanel/UserBottomNav/UserBottomNav";
+import UserBooking from "@/components/UserPanel/UserBooking/UserBooking";
 
 const Page = () => {
   const pathname = usePathname();
@@ -29,9 +22,7 @@ const Page = () => {
     <>
     <div className="flex min-h-screen">
       {/* Sidebar: visible on desktop */}
-      <div className="hidden md:block w-[20%]">
-        <Sidebar />
-        </div>
+      
       <div className="hidden md:block w-[20%] -mt-5">
         <UseSidebar/>
       </div>
@@ -39,10 +30,11 @@ const Page = () => {
       <div className="w-full md:w-[80%] p-4 pb-20">
         <Navtop activeTab={activeTab} />
         <UserBooking/>
+        <UserBottomNav/>
       </div>
       
     </div>
-<Footer/>
+    <Footer/>
     </>
   );
 };
