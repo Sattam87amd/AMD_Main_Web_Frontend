@@ -1,29 +1,21 @@
-"use client";
-
-import React from "react";
+'use client';
+import React, { useState } from "react";
 import { FaStar } from "react-icons/fa";
-import { FaInstagram } from "react-icons/fa"; // Instagram Icon
+import { Gift } from 'lucide-react'; // Gift Icon from lucide-react
+import { useRouter } from 'next/navigation';
 
 const ExpertAboutMe = () => {
+  const [selectedConsultation, setSelectedConsultation] = useState("1:1");
+  const [price, setPrice] = useState(350); // Dynamic Price for 1:1 consultation
+
   const profile = {
     name: "Darrell Steward",
     designation: "Tech Entrepreneur + Investor",
     image: "/guyhawkins.png",
     rating: 5.0,
-    about: `Co-Founder of Reddit. First Batch of Y Combinator (Summer 
-    2005) and led the company to a sale to Conde Nast in 2006, 
-    Returned as Executive Chair in 2014 to help lead the turnaround, then left in 2018 to do venture capital full-time.
-
-    I'm an investor in startups—almost always at the earliest 
-    possible stage—first as an angel investor, then co-founder 
-    of Initialized, before splitting the firm in half to found Seven 
-    Seven Six.
-
-    I'm an investor in startups—almost always at the earliest 
-    possible stage—first as an angel investor, then co-founder 
-    of Initialized, before splitting the firm in half to found Seven 
-    Seven Six.`,
-
+    about: ` Co-founder of Reddit. First batch of Y Combinator (Summer 2005) and led the company to a sale to Condé Nast in 2006, returned as Exec Chair in 2014 to help lead the turnaround, then left in 2018 to do venture capital fullti
+     I’m an investor in startups —almost always at the earliest possible stage— first as an angel investor, then co-founder of Initialized, before splitting the firm in half to found Seven Seven Six.
+      I’m an investor in startups —almost always at the earliest possible stage— first as an angel investor, then co-founder of Initialized, before splitting the firm in half to found Seven Seven Six.`,
     strengths: [
       "Startups",
       "Investing",
@@ -36,63 +28,145 @@ const ExpertAboutMe = () => {
     ],
   };
 
+  const router = useRouter();
+
+  const handleConsultationChange = (type) => {
+    setSelectedConsultation(type);
+    if (type === "1:4") {
+      setPrice(150); // Update price dynamically for 1:4 consultation
+    } else {
+      setPrice(350); // Update price dynamically for 1:1 consultation
+    }
+  };
+
+  const navigateToTimeSelection = () => {
+    // Assuming the next page is for time selection, navigate accordingly
+    router.push('/time-selection');
+  };
+
   return (
-    <div className="min-h-screen bg-white flex flex-col justify-center items-center md:px-6 py-12">
-      {/* Profile Card */}
-      <div className="bg-[#F8F7F3] rounded-3xl w-[90%] mt-20 md:mt-0 max-w-7xl p-6 md:p-10 flex flex-col md:flex-row gap-10">
-        
-        {/* Left: Profile Image & Info */}
-        <div className="md:w-[35%] flex flex-col items-start">
+    <div className="min-h-screen bg-white py-10 px-4 md:px-10">
+      <div className="max-w-7xl mx-auto flex items-start gap-8">
+        {/* Left Side: Profile & About */}
+        <div className="bg-[#F8F7F3] rounded-3xl p-6 shadow flex-1">
           <img
             src={profile.image}
             alt={profile.name}
-            className="w-[400px] h-[450px] object-cover rounded-2xl shadow-md"
+            className="w-full h-[300px] object-cover rounded-xl"
           />
-          <div className="text-start mt-4">
-            <h2 className="text-3xl text-gray-900">{profile.name}</h2>
-            <p className="text-[#9C9C9C] text-base mt-1">{profile.designation}</p>
-            <div className="flex items-center justify-start mt-2">
+          <div className="mt-6">
+            <h2 className="text-2xl font-bold text-gray-900">{profile.name}</h2>
+            <p className="text-[#9C9C9C] mt-1">{profile.designation}</p>
+            <div className="flex items-center mt-2 text-[#FFA629]">
               {[...Array(5)].map((_, i) => (
-                <FaStar key={i} className="text-[#FFA629]" />
+                <FaStar key={i} />
               ))}
-              <span className="ml-2 text-[#FFA629] font-semibold text-sm">{profile.rating}</span>
+              <span className="ml-2 font-semibold text-sm">{profile.rating}</span>
             </div>
           </div>
+
+          <div className="mt-6">
+            <h3 className="text-lg md:text-3xl font-semibold">About Me</h3>
+            <p className="text-sm md:text-xl text-black mt-3">{profile.about}</p>
+            <button className="mt-6 bg-black text-white px-6 py-2 rounded-md hover:bg-gray-900 transition">
+              See More
+            </button>
+          </div>
         </div>
 
-        {/* Right: About Me Section */}
-        <div className="flex-1">
-          <div className="flex justify-between items-center">
-            <h3 className="text-2xl md:text-[44px] pb-4 pl-0 md:pl-64 text-gray-900">
-              About Me
-            </h3>
-            <FaInstagram className="text-gray-500 text-xl md:text-[40px] cursor-pointer hover:text-gray-700" />
+        {/* Vertical Line */}
+        <div className="hidden md:block border-l-2 border-gray-300 h-full"></div>
+
+        {/* Right Side: Consultancy Cards */}
+        <div className="rounded-3xl p-6 flex-1 space-y-8">
+          {/* 1:1 Video Consultation */}
+          <div className="bg-[#F8F7F3] p-6 rounded-xl ">
+            <div className="bg-black text-white p-2 rounded-t-xl w-max">
+              <h3 className="text-2xl font-semibold">Book A Video Call</h3>
+            </div>
+            <div className="text-2xl py-4">
+              <h2 className="font-semibold">1:1 Video Consultation</h2>
+            </div>
+            <p className="text-2xl font-semibold">Book a 1:1 Video consultation & get personalized advice</p>
+
+            <div className="mt-4">
+              <p className="text-xl font-semibold">Starting at ${price}</p>
+              <div className="flex items-center justify-start">
+                <p className="text-[#7E7E7E] text-base font-semibold">Next available - <span className="text-[#0D70E5]">4:30am on 3/25</span></p>
+                <div className="flex items-center">
+                  {[...Array(5)].map((_, i) => (
+                    <FaStar key={i} className="text-[#FFA629] ml-3" />
+                  ))}
+                  <span className="ml-2 text-[#FFA629] font-semibold text-sm ">{profile.rating}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center mt-4 gap-8">
+              <Gift className="h-8 w-8" />
+              <button className="bg-[#0D70E5] text-white py-3 px-24 rounded-md hover:bg-[#0A58C2]" onClick={navigateToTimeSelection}>
+                See Time
+              </button>
+            </div>
           </div>
 
-          {/* Render About Text with Proper Spacing */}
-          <p className="text-black text-sm md:text-base  pl-0 md:pl-64 leading-relaxed mt-4 whitespace-pre-line">
-            {profile.about}
-          </p>
+          {/* 1:4 Video Consultation */}
+          <div className="bg-[#F8F7F3] p-6 rounded-xl ">
+            <div className="bg-black text-white p-2 rounded-t-xl w-max">
+              <h3 className="text-2xl font-semibold">Book A Video Call</h3>
+            </div>
+            <div className="text-2xl py-4">
+              <h2 className="font-semibold">1:4 Video Consultation</h2>
+            </div>
+            <p className="text-2xl font-semibold">Book a 1:4 Video consultation & get personalized advice</p>
 
-          {/* Strengths Section */}
-          <h4 className="text-md font-semibold mt-4 pl-0 md:pl-64 flex items-center">
-            <span className="text-yellow-500 text-lg mr-2">💡</span> Strengths:
-          </h4>
-          <ul className="list-none mt-2 space-y-1 pl-0 md:pl-64">
-            {profile.strengths.map((strength, index) => (
-              <li key={index} className="text-gray-700 flex items-center text-sm">
-                <span className="text-yellow-500 mr-2">✔</span> {strength}
-              </li>
-            ))}
-          </ul>
+            <div className="mt-4">
+              <p className="text-xl font-semibold">Starting at ${price}</p>
+              <div className="flex items-center justify-start">
+                <p className="text-[#7E7E7E] text-base font-semibold">Next available - <span className="text-[#0D70E5]">5:00pm on 3/25</span></p>
+                <div className="flex items-center">
+                  {[...Array(5)].map((_, i) => (
+                    <FaStar key={i} className="text-[#FFA629] ml-3" />
+                  ))}
+                  <span className="ml-2 text-[#FFA629] font-semibold text-sm ">{profile.rating}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-center mt-4 gap-8">
+              <Gift className="h-8 w-8" />
+              <button className="bg-[#0D70E5] text-white py-3 px-24 rounded-md hover:bg-[#0A58C2]" onClick={navigateToTimeSelection}>
+                See Time
+              </button>
+            </div>
+          </div>
+
+          {/* Text for Selecting a Plan */}
+          <p className="text-[#A6A6A6] text-center">------or select a plan------</p>
+
+          {/* Plan Selection */}
+          <div className="bg-[#F8F7F3] p-6 rounded-xl ">
+            <div className="bg-black text-white p-4 rounded-t-xl max-w-max">
+              <h3 className="text-2xl font-semibold">Select Plan #1</h3>
+            </div>
+            <div className="text-2xl py-4">
+              <h2 className="font-medium">Growing a successful business - <br />
+              1:1 Mentoring (VIP Access)</h2>
+            </div>
+
+            <div>
+              <h3 className="text-xl font-semibold">What's included:</h3>
+            </div>
+            <ul className="list-disc pl-6">
+              <li>1:1 Chat (Unlimited)</li>
+              <li>1:1 Video Calls (120 min / month)</li>
+              <li>Real world advice on physical retail, managing multiple locations, franchising, and more</li>
+              <li>Lessons on branding, narrative, local marketing, delightful customer service, hiring, and more</li>
+              <li>How to launch and grow a successful product line</li>
+              <li>Invite to the Intro CEO Day in LA (must subscribe for 12 months or more)</li>
+            </ul>
+          </div>
         </div>
-      </div>
-
-      {/* Book a Video Call Button Aligned Left */}
-      <div className="w-[90%] flex justify-start mt-10 pl-0 md:pl-10">
-        <button className="bg-[#EDECE8] text-black font-semibold py-4 px-14 rounded-lg hover:bg-gray-300 transition">
-          Book a Video Call
-        </button>
       </div>
     </div>
   );
