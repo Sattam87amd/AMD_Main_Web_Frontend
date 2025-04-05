@@ -34,7 +34,7 @@ function Navbar() {
       <nav className="fixed w-full z-20 top-0 h-[96px] md:h-24 bg-white shadow-md">
         <div className="relative flex items-center justify-between h-full px-6">
           {/* Logo */}
-          <Link href="/home" className="text-3xl md:text-[40px] font-semibold text-black">
+          <Link href="/" className="text-3xl md:text-[40px] font-semibold text-black">
             AMD
           </Link>
 

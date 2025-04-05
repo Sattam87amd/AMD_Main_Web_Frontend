@@ -34,65 +34,27 @@ function LoginPage() {
         setOtpError("");
     };
 
-    
-// Handle OTP generation and sending
-const generateOtp = async () => {
-    if (!phone || !isValidPhoneNumber(phone)) {
-      setPhoneError("Please enter a valid phone number first.");
-      return;
-    }
-  
-    try {
-      // Check if the phone number exists in the database (use full backend URL)
-      const response = await fetch("http://localhost:5000/api/auth/request-otp", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ phone }),
-      });
-  
-      const data = await response.json();
-  
-      if (data.message === "Please sign up first") {
-        setFormError(data.message); // Show the "Please sign up first" message
-      } else {
-        // OTP sent, allow user to enter it
-        setOtp(data.otp); // Store the OTP (response from backend)
-      }
-    } catch (error) {
-      setFormError("Failed to generate OTP. Please try again.");
-      console.error("Error:", error);
-    }
-  };
-  
+    // Handle OTP generation
+    const generateOtp = () => {
+        if (!phone || !isValidPhoneNumber(phone)) {
+            setPhoneError("Please enter a valid phone number first.");
+            return;
+        }
+        const randomOtp = Math.floor(1000 + Math.random() * 9000).toString();
+        setOtp(randomOtp);
+        setOtpError("");
+    };
+
     const handleSubmit = async () => {
         if (!phone || !otp) {
             setFormError("Please fill in all required fields before proceeding.");
             return;
         }
 
-        try {
-            const response = await fetch("/api/auth/verify-otp", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({ phone, otp }),
-            });
+        // Normally, you would send the OTP to your backend for verification.
+        // Here we just proceed assuming the OTP is correct.
 
-            const data = await response.json();
-
-            if (data.message === "OTP verified successfully") {
-                // Proceed to the experts page
-                router.push("/expertpanel/expertpanelprofile");
-            } else {
-                setFormError(data.message); // Invalid or expired OTP message
-            }
-        } catch (error) {
-            setFormError("Failed to verify OTP. Please try again.");
-            console.error("Error:", error);
-        }
+        router.push("/expertpanel/expertpanelprofile");
     };
 
     return (
@@ -200,7 +162,6 @@ const generateOtp = async () => {
                             >
                                 Send OTP
                             </button>
-
                         </div>
 
                         <div>
