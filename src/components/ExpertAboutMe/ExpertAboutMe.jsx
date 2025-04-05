@@ -3,19 +3,24 @@ import React, { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { Gift } from 'lucide-react'; // Gift Icon from lucide-react
 import { useRouter } from 'next/navigation';
+import Link from "next/link";
 
 const ExpertAboutMe = () => {
   const [selectedConsultation, setSelectedConsultation] = useState("1:1");
   const [price, setPrice] = useState(350); // Dynamic Price for 1:1 consultation
+  const [isExpanded, setIsExpanded] = useState(false); // Track if "See More" is clicked
+  const [showTimeSelection, setShowTimeSelection] = useState(false); // Track if time selection should be shown
 
   const profile = {
     name: "Darrell Steward",
     designation: "Tech Entrepreneur + Investor",
     image: "/guyhawkins.png",
     rating: 5.0,
-    about: ` Co-founder of Reddit. First batch of Y Combinator (Summer 2005) and led the company to a sale to Condé Nast in 2006, returned as Exec Chair in 2014 to help lead the turnaround, then left in 2018 to do venture capital fullti
-     I’m an investor in startups —almost always at the earliest possible stage— first as an angel investor, then co-founder of Initialized, before splitting the firm in half to found Seven Seven Six.
-      I’m an investor in startups —almost always at the earliest possible stage— first as an angel investor, then co-founder of Initialized, before splitting the firm in half to found Seven Seven Six.`,
+    about: {
+      first: `Co-founder of Reddit. First batch of Y Combinator (Summer 2005) and led the company to a sale to Condé Nast in 2006. Returned as Exec Chair in 2014 to help lead the turnaround, then left in 2018 to do venture capital full-time.`,
+      second: `I’m an investor in startups —almost always at the earliest possible stage— first as an angel investor, then co-founder of Initialized, before splitting the firm in half to found Seven Seven Six.`,
+      third: `I’m an investor in startups —almost always at the earliest possible stage— first as an angel investor, then co-founder of Initialized, before splitting the firm in half to found Seven Seven Six.`,
+    },
     strengths: [
       "Startups",
       "Investing",
@@ -44,15 +49,23 @@ const ExpertAboutMe = () => {
     router.push('/time-selection');
   };
 
+  const handleSeeMore = () => {
+    setIsExpanded(!isExpanded); // Toggle between showing and hiding full content
+  };
+
+  const handleSeeTimeClick = () => {
+    setShowTimeSelection(true); // Show time slots form when the button is clicked
+  };
+
   return (
     <div className="min-h-screen bg-white py-10 px-4 md:px-10">
       <div className="max-w-7xl mx-auto flex items-start gap-8">
         {/* Left Side: Profile & About */}
-        <div className="bg-[#F8F7F3] rounded-3xl p-6 shadow flex-1">
+        <div className="bg-[#F8F7F3] rounded-3xl p-12 shadow flex-1">
           <img
             src={profile.image}
             alt={profile.name}
-            className="w-full h-[300px] object-cover rounded-xl"
+            className="w-[520px] h-[530px] rounded-xl"
           />
           <div className="mt-6">
             <h2 className="text-2xl font-bold text-gray-900">{profile.name}</h2>
@@ -67,105 +80,169 @@ const ExpertAboutMe = () => {
 
           <div className="mt-6">
             <h3 className="text-lg md:text-3xl font-semibold">About Me</h3>
-            <p className="text-sm md:text-xl text-black mt-3">{profile.about}</p>
-            <button className="mt-6 bg-black text-white px-6 py-2 rounded-md hover:bg-gray-900 transition">
-              See More
+            {/* Display the first paragraph initially */}
+            <p className="text-sm md:text-xl text-black mt-3">{profile.about.first}</p>
+
+            {/* Display second and third paragraphs only when expanded */}
+            {isExpanded && (
+              <>
+                <p className="text-sm md:text-xl text-black mt-3">{profile.about.second}</p>
+                <p className="text-sm md:text-xl text-black mt-3">{profile.about.third}</p>
+              </>
+            )}
+
+            {/* Toggle button */}
+            <button
+              className="mt-6 bg-black text-white px-6 py-2 rounded-md hover:bg-gray-900 transition"
+              onClick={handleSeeMore}
+            >
+              {isExpanded ? 'Show Less' : 'See More'}
             </button>
           </div>
         </div>
 
-        {/* Vertical Line */}
-        <div className="hidden md:block border-l-2 border-gray-300 h-full"></div>
+        {/* Vertical Line Divider */}
+        <div className="hidden md:block border-l-2 border-black h-[145vh] mx-8"></div>
 
-        {/* Right Side: Consultancy Cards */}
+        {/* Right Side: Time Slot or Consultancy Cards */}
         <div className="rounded-3xl p-6 flex-1 space-y-8">
-          {/* 1:1 Video Consultation */}
-          <div className="bg-[#F8F7F3] p-6 rounded-xl ">
-            <div className="bg-black text-white p-2 rounded-t-xl w-max">
-              <h3 className="text-2xl font-semibold">Book A Video Call</h3>
-            </div>
-            <div className="text-2xl py-4">
-              <h2 className="font-semibold">1:1 Video Consultation</h2>
-            </div>
-            <p className="text-2xl font-semibold">Book a 1:1 Video consultation & get personalized advice</p>
+          {showTimeSelection ? (
+            // Show time selection form when the button is clicked
+            <div className="bg-white p-6 rounded-xl">
+              <h3 className="text-4xl font-semibold mb-4">Book a video call</h3>
+              <p className="mb-4 font-semibold text-xl">Select one of the available time slots below:</p>
 
-            <div className="mt-4">
-              <p className="text-xl font-semibold">Starting at ${price}</p>
-              <div className="flex items-center justify-start">
-                <p className="text-[#7E7E7E] text-base font-semibold">Next available - <span className="text-[#0D70E5]">4:30am on 3/25</span></p>
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <FaStar key={i} className="text-[#FFA629] ml-3" />
-                  ))}
-                  <span className="ml-2 text-[#FFA629] font-semibold text-sm ">{profile.rating}</span>
+              {/* Time Slots */}
+              <div className="grid grid-cols-2 gap-4 mb-4 justify-center items-center">
+                <button className="py-2 px-4 bg-black text-white rounded-md shadow">Quick - 15min</button>
+                <button className="py-2 px-4 bg-[#F8F7F3] text-black rounded-md shadow">Regular - 30min</button>
+                <button className="py-2 px-4 bg-[#F8F7F3] text-black rounded-md shadow">Extra - 45min</button>
+                <button className="py-2 px-4 bg-[#F8F7F3] text-black rounded-md shadow">All Access - 60min</button>
+              </div>
+
+              <div>
+                <h4 className="font-semibold py-8">Today</h4>
+                <div className="grid grid-cols-3 gap-4">
+                  <button className="py-2 px-4 bg-white rounded-xl border">07:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">08:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">09:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">10:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">11:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">12:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">02:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">03:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">04:00 AM</button>
                 </div>
               </div>
-            </div>
 
-            <div className="flex items-center justify-center mt-4 gap-8">
-              <Gift className="h-8 w-8" />
-              <button className="bg-[#0D70E5] text-white py-3 px-24 rounded-md hover:bg-[#0A58C2]" onClick={navigateToTimeSelection}>
-                See Time
-              </button>
-            </div>
-          </div>
-
-          {/* 1:4 Video Consultation */}
-          <div className="bg-[#F8F7F3] p-6 rounded-xl ">
-            <div className="bg-black text-white p-2 rounded-t-xl w-max">
-              <h3 className="text-2xl font-semibold">Book A Video Call</h3>
-            </div>
-            <div className="text-2xl py-4">
-              <h2 className="font-semibold">1:4 Video Consultation</h2>
-            </div>
-            <p className="text-2xl font-semibold">Book a 1:4 Video consultation & get personalized advice</p>
-
-            <div className="mt-4">
-              <p className="text-xl font-semibold">Starting at ${price}</p>
-              <div className="flex items-center justify-start">
-                <p className="text-[#7E7E7E] text-base font-semibold">Next available - <span className="text-[#0D70E5]">5:00pm on 3/25</span></p>
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <FaStar key={i} className="text-[#FFA629] ml-3" />
-                  ))}
-                  <span className="ml-2 text-[#FFA629] font-semibold text-sm ">{profile.rating}</span>
+              <div>
+                <h4 className="font-semibold py-8">Tomorrow</h4>
+                <div className="grid grid-cols-3 gap-4">
+                  <button className="py-2 px-4 bg-white rounded-xl border">07:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">08:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">09:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">10:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">11:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">12:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">02:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">03:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">04:00 AM</button>
                 </div>
               </div>
+              <div>
+                <h4 className="font-semibold py-8">Wednesday 3/26</h4>
+                <div className="grid grid-cols-3 gap-4">
+                  <button className="py-2 px-4 bg-white rounded-xl border">07:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">08:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">09:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">10:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">11:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">12:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">02:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">03:00 AM</button>
+                  <button className="py-2 px-4 bg-white rounded-xl border">04:00 AM</button>
+                </div>
+              </div>
+              <div className= "flex gap-10">
+                <div className="gap-4">
+                  <p className="text-xl font-semibold mb-4 ">$550 • Session</p>
+                  <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
+                    {[...Array(5)].map((_, i) => (
+                      <FaStar key={i} />
+                    ))}
+                    <span className="ml-2 font-semibold text-sm">{profile.rating}</span>
+                  </div>
+                </div>
+                <Link href='/userlogin' >
+                  <button className="py-2 px-6 w-full bg-black text-white rounded-md">Request</button>
+                </Link>
+              </div>
             </div>
+          ) : (
+            // Show the regular consultancy cards when not in time selection mode
+            <>
+              <div className="bg-[#F8F7F3] p-6 rounded-xl">
+                <div className="bg-black text-white p-2 rounded-t-xl w-max">
+                  <h3 className="text-2xl font-semibold">Book A Video Call</h3>
+                </div>
+                <div className="text-2xl py-4">
+                  <h2 className="font-semibold">1:1 Video Consultation</h2>
+                </div>
+                <p className="text-2xl font-semibold">Book a 1:1 Video consultation & get personalized advice</p>
 
-            <div className="flex items-center justify-center mt-4 gap-8">
-              <Gift className="h-8 w-8" />
-              <button className="bg-[#0D70E5] text-white py-3 px-24 rounded-md hover:bg-[#0A58C2]" onClick={navigateToTimeSelection}>
-                See Time
-              </button>
-            </div>
-          </div>
+                <div className="mt-4">
+                  <p className="text-xl font-semibold">Starting at ${price}</p>
+                  <div className="flex items-center justify-start">
+                    <p className="text-[#7E7E7E] text-base font-semibold">Next available - <span className="text-[#0D70E5]">4:30am on 3/25</span></p>
+                    <div className="flex items-center">
+                      {[...Array(5)].map((_, i) => (
+                        <FaStar key={i} className="text-[#FFA629] ml-3" />
+                      ))}
+                      <span className="ml-2 text-[#FFA629] font-semibold text-sm ">{profile.rating}</span>
+                    </div>
+                  </div>
+                </div>
 
-          {/* Text for Selecting a Plan */}
-          <p className="text-[#A6A6A6] text-center">------or select a plan------</p>
+                <div className="flex items-center justify-center mt-4 gap-8">
+                  <Gift className="h-8 w-8" />
+                  <button className="bg-[#0D70E5] text-white py-3 px-24 rounded-md hover:bg-[#0A58C2]" onClick={handleSeeTimeClick}>
+                    See Time
+                  </button>
+                </div>
+              </div>
 
-          {/* Plan Selection */}
-          <div className="bg-[#F8F7F3] p-6 rounded-xl ">
-            <div className="bg-black text-white p-4 rounded-t-xl max-w-max">
-              <h3 className="text-2xl font-semibold">Select Plan #1</h3>
-            </div>
-            <div className="text-2xl py-4">
-              <h2 className="font-medium">Growing a successful business - <br />
-              1:1 Mentoring (VIP Access)</h2>
-            </div>
+              {/* 1:4 Video Consultation */}
+              <div className="bg-[#F8F7F3] p-6 rounded-xl">
+                <div className="bg-black text-white p-2 rounded-t-xl w-max">
+                  <h3 className="text-2xl font-semibold">Book A Video Call</h3>
+                </div>
+                <div className="text-2xl py-4">
+                  <h2 className="font-semibold">1:4 Video Consultation</h2>
+                </div>
+                <p className="text-2xl font-semibold">Book a 1:4 Video consultation & get personalized advice</p>
 
-            <div>
-              <h3 className="text-xl font-semibold">What's included:</h3>
-            </div>
-            <ul className="list-disc pl-6">
-              <li>1:1 Chat (Unlimited)</li>
-              <li>1:1 Video Calls (120 min / month)</li>
-              <li>Real world advice on physical retail, managing multiple locations, franchising, and more</li>
-              <li>Lessons on branding, narrative, local marketing, delightful customer service, hiring, and more</li>
-              <li>How to launch and grow a successful product line</li>
-              <li>Invite to the Intro CEO Day in LA (must subscribe for 12 months or more)</li>
-            </ul>
-          </div>
+                <div className="mt-4">
+                  <p className="text-xl font-semibold">Starting at ${price}</p>
+                  <div className="flex items-center justify-start">
+                    <p className="text-[#7E7E7E] text-base font-semibold">Next available - <span className="text-[#0D70E5]">5:00pm on 3/25</span></p>
+                    <div className="flex items-center">
+                      {[...Array(5)].map((_, i) => (
+                        <FaStar key={i} className="text-[#FFA629] ml-3" />
+                      ))}
+                      <span className="ml-2 text-[#FFA629] font-semibold text-sm ">{profile.rating}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-center mt-4 gap-8">
+                  <Gift className="h-8 w-8" />
+                  <button className="bg-[#0D70E5] text-white py-3 px-24 rounded-md hover:bg-[#0A58C2]" onClick={handleSeeTimeClick}>
+                    See Time
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
