@@ -4,7 +4,7 @@ import { IoPersonOutline } from "react-icons/io5"; // Updated profile icon
 import { Gift } from "lucide-react"; // Updated gift icon
 import { FaSearch } from "react-icons/fa"; // Search icon
 import { motion } from "framer-motion";
-import ExpertCategory from "../ExpertCategory/ExpertCategory";
+
 
 const NavSearch = () => {
   return (
@@ -41,7 +41,7 @@ const NavSearch = () => {
         </div>
       </motion.nav>
 
-      <ExpertCategory />
+      {/* <ExpertCategory /> */}
     </div>
   );
 };

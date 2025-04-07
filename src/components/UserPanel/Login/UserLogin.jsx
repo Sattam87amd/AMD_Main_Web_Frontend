@@ -6,7 +6,6 @@ import { LuNotepadText } from "react-icons/lu";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { Inter } from "next/font/google";
-import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -47,44 +46,36 @@ function UserLoginPage() {
         }
     };
 
-    const generateOtp = async() => {
+    const generateOtp = () => {
         if (!phone || !isValidPhoneNumber(phone)) {
             setPhoneError("Please enter a valid phone number first.");
             return;
         }
-        try {
-            const response = await axios.post("http://localhost:8000/api/userauth/request-otp", { phone });
-            alert("OTP sent successfully!");
-        } catch (error) {
-            setFormError("Failed to send OTP. Please try again.");
-        }
+        const randomOtp = Math.floor(1000 + Math.random() * 9000).toString();
+        setOtp(randomOtp);
+        setOtpError("");
     };
 
-    const handleSubmit = async () => {
-        if (!phone || !otp) {
-          setFormError("Please enter both phone and OTP.");
-          return;
+    const handleSubmit = () => {
+        if (!phone) {
+            setPhoneError("Phone number is required.");
+        } else if (!isValidPhoneNumber(phone)) {
+            setPhoneError("Invalid phone number.");
+            return;
         }
-      
-        try {
-          const response = await axios.post("http://localhost:8000/api/userauth/verify-otp", { phone, otp });
-          
-          // Correct response structure
-          if (response.data.data.isNewUser) {
-            // Pass phone to registration page
-            router.push(`/userpanel/register?phone=${encodeURIComponent(phone)}`);
-          } else {
-            // Save token and redirect
-            localStorage.setItem('token', response.data.data.token);
-            router.push("/userpanel/loginuserexpert");
-          }
-        } catch (error) {
-          console.error("Error verifying OTP:", error);
-          setFormError("OTP verification failed.");
+
+        if (!otp) {
+            setOtpError("OTP is required.");
         }
-      };
-    
-    
+
+        if (!phone || !otp || !isValidPhoneNumber(phone)) {
+            setFormError("Please fill in all required fields before proceeding.");
+            return;
+        }
+
+        router.push("/userpanel/register");
+    };
+
     return (
         <div className={`min-h-screen flex ${interFont.variable}`}>
             <div className="hidden md:flex w-1/2 flex-col relative">
@@ -182,7 +173,7 @@ function UserLoginPage() {
                                 onClick={generateOtp}
                                 disabled={!phone || !isValidPhoneNumber(phone)}
                             >
-                                Send OTP
+                                Set OTP
                             </button>
 
                         </div>
