@@ -9,6 +9,7 @@ import Footer from "@/components/Layout/Footer";
 import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
 import AboutMeReviewsExpertPanel from "@/components/ExpertPanel/ExpertPanelAboutMe/AboutMeReviewsExpertPanel";
 import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
+import ExpertAboutMe from "@/components/ExpertAboutMe/ExpertAboutMe";
 
 const Page = () => {
   return (
@@ -28,7 +29,8 @@ const Page = () => {
 
         {/* Content Container - Ensures Consistent Spacing */}
         <div className="space-y-8 px-4 md:px-8">
-          <AboutMeExpertPanel />
+          {/* <AboutMeExpertPanel /> */}
+          <ExpertAboutMe/>
           <WhatToExpectExpertPanel />
           <ScheduleQuickCallsExpertPanel />
           <AboutMeReviewsExpertPanel/>   
