@@ -7,9 +7,15 @@ import Link from "next/link";
 
 const ExpertAboutMe = () => {
   const [selectedConsultation, setSelectedConsultation] = useState("1:1");
+  const [selectedTime, setSelectedTime] = useState(null); // Track selected time slot
   const [price, setPrice] = useState(350); // Dynamic Price for 1:1 consultation
   const [isExpanded, setIsExpanded] = useState(false); // Track if "See More" is clicked
   const [showTimeSelection, setShowTimeSelection] = useState(false); // Track if time selection should be shown
+  const [selectedTimeSlots, setSelectedTimeSlots] = useState({
+    today: [],
+    tomorrow: [],
+    nextDate: []
+  }); // Track selected time slots for each day
 
   const profile = {
     name: "Darrell Steward",
@@ -56,6 +62,55 @@ const ExpertAboutMe = () => {
   const handleSeeTimeClick = () => {
     setShowTimeSelection(true); // Show time slots form when the button is clicked
   };
+
+  const handleBackClick = () => {
+    router.back(); // Navigate to the previous page
+  };
+
+   // Handle Time Slot Selection (only one slot can be selected)
+   const handleTime = (time) => {
+    // If the time slot is already selected, deselect it, else select the new slot
+    setSelectedTime(selectedTime === time ? null : time);
+  };
+  // Handle Time Slot Selection (only select up to 5 slots per day)
+  const handleTimeSelection = (day, time) => {
+    // Get the current selected slots for the day
+    const currentSelectedSlots = selectedTimeSlots[day];
+
+    // If the slot is already selected, deselect it
+    if (currentSelectedSlots.includes(time)) {
+      setSelectedTimeSlots({
+        ...selectedTimeSlots,
+        [day]: currentSelectedSlots.filter(selectedTime => selectedTime !== time)
+      });
+    } else {
+      // If less than 5 slots are selected, add this slot to the selection
+      if (currentSelectedSlots.length < 5) {
+        setSelectedTimeSlots({
+          ...selectedTimeSlots,
+          [day]: [...currentSelectedSlots, time]
+        });
+      }
+    }
+  };
+
+  // Helper function to format the current date, tomorrow, and upcoming dates
+  const getFormattedDate = (date) => {
+    const options = { weekday: 'long', day: 'numeric', month: 'short' };
+    return new Date(date).toLocaleDateString(undefined, options);
+  };
+
+  // Get today, tomorrow, and the next date
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+  const nextDate = new Date(today);
+  nextDate.setDate(today.getDate() + 2);
+
+  // Get the formatted strings for today, tomorrow, and the next date
+  const todayStr = getFormattedDate(today); // Today (e.g., "Sat, Apr 7")
+  const tomorrowStr = getFormattedDate(tomorrow); // Tomorrow (e.g., "Sun, Apr 8")
+  const nextDateStr = getFormattedDate(nextDate); // Next upcoming date (e.g., "Mon, Apr 9")
 
   return (
     <div className="min-h-screen bg-white py-10 px-4 md:px-10">
@@ -108,64 +163,99 @@ const ExpertAboutMe = () => {
         <div className="rounded-3xl p-6 flex-1 space-y-8">
           {showTimeSelection ? (
             // Show time selection form when the button is clicked
+            <>
+            <Link href="/expertaboutme">
+            <button
+              className="py-2 px-4 bg-black text-white rounded-md shadow"
+              onClick={handleBackClick}
+            >
+              Back
+            </button>
+            </Link>
             <div className="bg-white p-6 rounded-xl">
               <h3 className="text-4xl font-semibold mb-4">Book a video call</h3>
               <p className="mb-4 font-semibold text-xl">Select one of the available time slots below:</p>
 
+              {/* Time Slots for Today */}
               {/* Time Slots */}
               <div className="grid grid-cols-2 gap-4 mb-4 justify-center items-center">
-                <button className="py-2 px-4 bg-black text-white rounded-md shadow">Quick - 15min</button>
-                <button className="py-2 px-4 bg-[#F8F7F3] text-black rounded-md shadow">Regular - 30min</button>
-                <button className="py-2 px-4 bg-[#F8F7F3] text-black rounded-md shadow">Extra - 45min</button>
-                <button className="py-2 px-4 bg-[#F8F7F3] text-black rounded-md shadow">All Access - 60min</button>
-              </div>
+                  <button
+                    className={`py-2 px-4 ${selectedTime === "Quick - 15min" ? 'bg-black text-white' : 'bg-[#F8F7F3] text-black'} rounded-md shadow`}
+                    onClick={() => handleTime("Quick - 15min")}
+                  >
+                    Quick - 15min
+                  </button>
+                  <button
+                    className={`py-2 px-4 ${selectedTime === "Regular - 30min" ? 'bg-black text-white' : 'bg-[#F8F7F3] text-black'} rounded-md shadow`}
+                    onClick={() => handleTime("Regular - 30min")}
+                  >
+                    Regular - 30min
+                  </button>
+                  <button
+                    className={`py-2 px-4 ${selectedTime === "Extra - 45min" ? 'bg-black text-white' : 'bg-[#F8F7F3] text-black'} rounded-md shadow`}
+                    onClick={() => handleTime("Extra - 45min")}
+                  >
+                    Extra - 45min
+                  </button>
+                  <button
+                    className={`py-2 px-4 ${selectedTime === "All Access - 60min" ? 'bg-black text-white' : 'bg-[#F8F7F3] text-black'} rounded-md shadow`}
+                    onClick={() => handleTime("All Access - 60min")}
+                  >
+                    All Access - 60min
+                  </button>
+                </div>
 
               <div>
-                <h4 className="font-semibold py-8">Today</h4>
+                <h4 className="font-semibold py-8">{`Today (${todayStr})`}</h4>
                 <div className="grid grid-cols-3 gap-4">
-                  <button className="py-2 px-4 bg-white rounded-xl border">07:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">08:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">09:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">10:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">11:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">12:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">02:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">03:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">04:00 AM</button>
+                  {['07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'].map((time) => (
+                    <button
+                      key={time}
+                      className={`py-2 px-4 ${selectedTimeSlots.today.includes(time) ? 'bg-black text-white' : 'bg-white text-black'} rounded-xl border`}
+                      onClick={() => handleTimeSelection('today', time)}
+                    >
+                      {time}
+                    </button>
+                  ))}
                 </div>
               </div>
 
+              {/* Time Slots for Tomorrow */}
               <div>
-                <h4 className="font-semibold py-8">Tomorrow</h4>
+                <h4 className="font-semibold py-8">{`Tomorrow (${tomorrowStr})`}</h4>
                 <div className="grid grid-cols-3 gap-4">
-                  <button className="py-2 px-4 bg-white rounded-xl border">07:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">08:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">09:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">10:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">11:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">12:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">02:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">03:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">04:00 AM</button>
+                  {['07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'].map((time) => (
+                    <button
+                      key={time}
+                      className={`py-2 px-4 ${selectedTimeSlots.tomorrow.includes(time) ? 'bg-black text-white' : 'bg-white text-black'} rounded-xl border`}
+                      onClick={() => handleTimeSelection('tomorrow', time)}
+                    >
+                      {time}
+                    </button>
+                  ))}
                 </div>
               </div>
+
+              {/* Time Slots for Next Date */}
               <div>
-                <h4 className="font-semibold py-8">Wednesday 3/26</h4>
+                <h4 className="font-semibold py-8">{`Next Date (${nextDateStr})`}</h4>
                 <div className="grid grid-cols-3 gap-4">
-                  <button className="py-2 px-4 bg-white rounded-xl border">07:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">08:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">09:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">10:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">11:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">12:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">02:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">03:00 AM</button>
-                  <button className="py-2 px-4 bg-white rounded-xl border">04:00 AM</button>
+                  {['07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'].map((time) => (
+                    <button
+                      key={time}
+                      className={`py-2 px-4 ${selectedTimeSlots.nextDate.includes(time) ? 'bg-black text-white' : 'bg-white text-black'} rounded-xl border`}
+                      onClick={() => handleTimeSelection('nextDate', time)}
+                    >
+                      {time}
+                    </button>
+                  ))}
                 </div>
               </div>
-              <div className= "flex gap-10">
+
+              {/* Submit Section */}
+              <div className="flex gap-10 py-10">
                 <div className="gap-4">
-                  <p className="text-xl font-semibold mb-4 ">$550 • Session</p>
+                  <p className="text-xl font-semibold">$550 • Session</p>
                   <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
                     {[...Array(5)].map((_, i) => (
                       <FaStar key={i} />
@@ -173,11 +263,12 @@ const ExpertAboutMe = () => {
                     <span className="ml-2 font-semibold text-sm">{profile.rating}</span>
                   </div>
                 </div>
-                <Link href='/userlogin' >
+                <Link href='/userlogin'>
                   <button className="py-2 px-6 w-full bg-black text-white rounded-md">Request</button>
                 </Link>
               </div>
             </div>
+            </>
           ) : (
             // Show the regular consultancy cards when not in time selection mode
             <>
