@@ -7,6 +7,7 @@ import { Inter } from "next/font/google";
 import { useState, useRef, useEffect } from "react";
 import { FiLink } from "react-icons/fi";
 import { useRouter } from "next/navigation";
+import axios from "axios";  // Import axios for making HTTP requests
 
 const interFont = Inter({
   subsets: ["latin"],
@@ -20,14 +21,19 @@ function RegisterForm() {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [gender, setGender] = useState(""); // Added for gender
+  const [gender, setGender] = useState(""); 
   const [mobile, setMobile] = useState("");
   const [socialLink, setSocialLink] = useState("");
   const [areaOfExpertise, setAreaOfExpertise] = useState("");
-  const [specificArea, setSpecificArea] = useState(""); // For 'Others' in area of expertise
+  const [specificArea, setSpecificArea] = useState(""); 
   const [experience, setExperience] = useState("");
+  const [category, setCategory] = useState(""); // Category field
   const [errors, setErrors] = useState({});
-  const fileInputRef = useRef(null);
+  const [certificationFileName, setCertificationFileName] = useState('');
+  const [photoFileName, setPhotoFileName] = useState('');
+
+  const fileInputRefCertifications = useRef(null);
+  const fileInputRefPhotos = useRef(null);
 
   // Fetch data from localStorage
   useEffect(() => {
@@ -35,7 +41,7 @@ function RegisterForm() {
     setFirstName(userData.firstName || "");
     setLastName(userData.lastName || "");
     setEmail(userData.email || "");
-    setGender(userData.gender || "");
+    setGender(userData.gender || ""); // Ensure gender is set here
   }, []);
 
   // Validate required fields before submission
@@ -46,42 +52,110 @@ function RegisterForm() {
     if (!lastName) tempErrors.lastName = "Last name is required.";
     if (!mobile) tempErrors.mobile = "Mobile number is required.";
     if (!email) tempErrors.email = "Email address is required.";
+    // if (!category) tempErrors.category = "Category is required.";
 
     setErrors(tempErrors);
     
     if (Object.keys(tempErrors).length !== 0) {
-      // Combine all error messages and alert them
       alert(Object.values(tempErrors).join("\n"));
       return false;
     }
     return true;
   };
 
-  // Handle file input change with 256 KB max limit
-  const handleFileChange = (event) => {
+  const handleFileChangeCertifications = (event) => {
     const file = event.target.files[0];
     if (file) {
-      if (file.size > 256 * 1024) {
+      const fileExtension = file.name.split('.').pop().toLowerCase();
+      if (file.size > 10 * 1024 * 1024) {
         setErrors((prev) => ({
           ...prev,
-          file: "Max 256 kb files can be uploaded",
+          file: "Max 10 MB files can be uploaded",
         }));
-        document.getElementById("file-display").value = "";
-      } else {
-        document.getElementById("file-display").value = file.name;
+        document.getElementById("file-display-certifications").value = "";
+      } else if (['pdf', 'jpg', 'jpeg', 'png'].includes(fileExtension)) {
+        setCertificationFileName(file.name);
         setErrors((prev) => ({ ...prev, file: "" }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          file: "Only PDF, JPG, JPEG, PNG files are allowed",
+        }));
+        document.getElementById("file-display-certifications").value = "";
+      }
+    }
+  };
+  
+  const handleFileChangePhotos = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const fileExtension = file.name.split('.').pop().toLowerCase();
+      if (file.size > 10 * 1024 * 1024) {
+        setErrors((prev) => ({
+          ...prev,
+          file: "Max 10 MB files can be uploaded",
+        }));
+        document.getElementById("file-display-photos").value = "";
+      } else if (['pdf', 'jpg', 'jpeg', 'png'].includes(fileExtension)) {
+        setPhotoFileName(file.name);
+        setErrors((prev) => ({ ...prev, file: "" }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          file: "Only PDF, JPG, JPEG, PNG files are allowed",
+        }));
+        document.getElementById("file-display-photos").value = "";
       }
     }
   };
 
-  // Handle form submission and navigate to /home if validation passes
-  const handleSubmit = (e) => {
+  // Handle form submission and send data to backend
+  const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent page reload
+
     if (handleValidation()) {
-      console.log("Validation passed. Navigating to /home...");
-      router.push("/expertpanel/expertpanelprofile");
+      const formData = {
+        email,
+        firstName,
+        lastName,
+        gender,
+        phone: mobile,
+        socialLink,
+        areaOfExpertise,
+        specificArea,
+        experience,
+        category,
+      };
+
+      // Add file names to the formData object
+      if (fileInputRefCertifications.current.files[0]) {
+        formData.certificationFile = certificationFileName;
+      }
+      if (fileInputRefPhotos.current.files[0]) {
+        formData.photoFile = photoFileName;
+      }
+
+      try {
+        // Make the API call to register the expert
+        const response = await axios.post(
+          "http://localhost:8000/api/expertauth/register", 
+          formData, 
+          {
+            headers: {
+              "Content-Type": "application/json",  // Sending as JSON
+            },
+          }
+        );
+
+        console.log("Expert registered successfully:", response.data);
+        router.push("/expertpanel/expertpanelprofile");  // Redirect to expert profile page
+      } catch (error) {
+        console.error("Error during registration:", error);
+        alert("Error during registration. Please try again.");
+      }
     }
   };
+
 
   return (
     <div className={`min-h-screen flex overflow-hidden ${interFont.variable}`}>
@@ -129,7 +203,7 @@ function RegisterForm() {
             <LuNotepadText className="text-white text-[50px] mr-2" />
             <div>
               <h2 className="text-white font-medium text-xl">
-                Book an appointment
+              
               </h2>
               <p className="text-white text-lg font-extralight">
                 Call/text/video/inperson
@@ -316,68 +390,63 @@ function RegisterForm() {
               </div>
             )}
              <div className="mb-6">
-              <label className="block mb-2 text-sm font-medium text-gray-500">
-                Professional Certifications
-              </label>
+              <label className="block mb-2 text-sm font-medium text-gray-500">Professional Certifications</label>
               <div className="flex">
                 <input
                   type="file"
-                  ref={fileInputRef}
+                  ref={fileInputRefCertifications}
                   className="hidden"
-                  accept=".pdf"
-                  onChange={handleFileChange}
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  onChange={handleFileChangeCertifications}
                   required
                 />
                 <input
                   type="text"
-                  id="file-display"
+                  id="file-display-certifications"
                   className="bg-white border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
+                  value={certificationFileName}
                   placeholder=""
                   readOnly
                 />
                 <button
                   type="button"
-                  onClick={() => fileInputRef.current.click()}
+                  onClick={() => fileInputRefCertifications.current.click()}
                   className="text-white bg-black hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-r-lg text-sm px-4 py-2.5"
                 >
                   Upload
                 </button>
               </div>
-              {errors.file && (
-                <p className="text-[#CF1313] text-sm mt-1">{errors.file}</p>
-              )}
+              {errors.file && <p className="text-[#CF1313] text-sm mt-1">{errors.file}</p>}
             </div>
+
             <div className="mb-6">
-            <label className="block mb-2 text-sm font-medium text-gray-500">
-                Professional Photos
-              </label>
+              <label className="block mb-2 text-sm font-medium text-gray-500">Professional Photos</label>
               <div className="flex">
                 <input
                   type="file"
-                  ref={fileInputRef}
+                  ref={fileInputRefPhotos}
                   className="hidden"
-                  accept=".pdf"
-                  onChange={handleFileChange}
+                  accept=".pdf,.jpg,.jpeg,.png"
+                  onChange={handleFileChangePhotos}
                   required
                 />
                 <input
                   type="text"
-                  id="file-display"
+                  id="file-display-photos"
                   className="bg-white border border-gray-300 text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
+                  value={photoFileName}
                   placeholder=""
                   readOnly
                 />
                 <button
                   type="button"
-                  onClick={() => fileInputRef.current.click()}
+                  onClick={() => fileInputRefPhotos.current.click()}
                   className="text-white bg-black hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-r-lg text-sm px-4 py-2.5"
                 >
                   Upload
                 </button>
               </div>
-              {errors.file && (
-                <p className="text-[#CF1313] text-sm mt-1">{errors.file}</p>
-              )}
+              {errors.file && <p className="text-[#CF1313] text-sm mt-1">{errors.file}</p>}
             </div>
             
 
@@ -389,13 +458,13 @@ function RegisterForm() {
               </label>
               <input
                 type="text"
-                maxLength={100}
+                maxLength={500}
                 value={experience}
                 onChange={(e) => setExperience(e.target.value)}
                 className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
               />
               <span className="absolute right-2 top-10 text-xs text-gray-500">
-                {100 - experience.length}/100
+                {500 - experience.length}/500
               </span>
             </div>
 

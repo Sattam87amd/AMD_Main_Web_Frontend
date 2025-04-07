@@ -23,15 +23,27 @@ function LoginPage() {
     const [formError, setFormError] = useState("");
 
     const handlePhoneChange = (value) => {
-        setPhone(value);
-        setPhoneError("");
+        if (!value) {
+            setPhone(value);
+            setPhoneError("Phone number is required.");
+        } else if (!isValidPhoneNumber(value)) {
+            setPhone(value);
+            setPhoneError("Invalid phone number.");
+        } else {
+            setPhone(value);
+            setPhoneError("");
+        }
         setFormError("");
     };
 
     const handleOtpChange = (e) => {
         const value = e.target.value.replace(/\D/g, "");
-        setOtp(value);
-        setOtpError("");
+        if (value.length <= 4) {
+            setOtp(value);
+            setOtpError("");
+        } else {
+            setOtpError("OTP cannot be more than 4 digits.");
+        }
     };
 
     // Handle OTP generation
@@ -129,10 +141,7 @@ function LoginPage() {
                     </h1>
                     <p className="text-center text-[#878787] mt-1 md:mt-2">
                         or{" "}
-                        <span
-                            className="text-[#EA2B2B] font-semibold underline"
-                            onClick={() => router.push("/register")}
-                        >
+                        <span className="text-[#EA2B2B] font-semibold underline">
                             Sign up
                         </span>
                     </p>
@@ -148,6 +157,7 @@ function LoginPage() {
                                     onChange={handlePhoneChange}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-8 focus:border-black pl-4"
                                 />
+                               
                             </div>
                             {phoneError && (
                                 <p className="text-red-500 text-xs mt-1">{phoneError}</p>
@@ -160,8 +170,9 @@ function LoginPage() {
                                 onClick={generateOtp}
                                 disabled={!phone || !isValidPhoneNumber(phone)}
                             >
-                                Send OTP
+                                Set OTP
                             </button>
+
                         </div>
 
                         <div>
@@ -185,7 +196,7 @@ function LoginPage() {
                             className={`w-full py-3 rounded-lg transition ${phone && otp.length === 4 && isValidPhoneNumber(phone)
                                 ? "bg-black text-white hover:bg-gray-800"
                                 : "bg-black text-white cursor-not-allowed"
-                            }`}
+                                }`}
                             onClick={handleSubmit}
                             disabled={
                                 !phone || otp.length !== 4 || !isValidPhoneNumber(phone)

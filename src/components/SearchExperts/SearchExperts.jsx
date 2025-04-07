@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState } from "react";
 import Link from "next/link";
@@ -45,8 +45,22 @@ const expertData = [
   },
 ];
 
-const SeacthExperts = ({ closeSearchPage }) => {
-  const [search, setSearch] = useState("");
+const SearchExperts = ({ closeSearchPage }) => {
+  const [search, setSearch] = useState(""); // State for the search term
+  const [filteredExperts, setFilteredExperts] = useState(expertData); // State for filtered experts
+
+  const handleSearchChange = (e) => {
+    const searchTerm = e.target.value.toLowerCase(); // Convert search term to lowercase for case-insensitive search
+    setSearch(searchTerm);
+
+    // Filter the expert data based on the search term
+    const filtered = expertData.filter((expert) =>
+      expert.name.toLowerCase().includes(searchTerm) ||
+      expert.description.toLowerCase().includes(searchTerm)
+    );
+
+    setFilteredExperts(filtered); // Update filtered experts
+  };
 
   return (
     <div className="bg-white p-0 relative min-h-screen">
@@ -82,7 +96,7 @@ const SeacthExperts = ({ closeSearchPage }) => {
               type="text"
               placeholder="Search"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={handleSearchChange} // Call the search change handler
               className="flex-grow outline-none text-gray-700 placeholder:text-gray-400 bg-transparent text-lg"
             />
 
@@ -95,21 +109,19 @@ const SeacthExperts = ({ closeSearchPage }) => {
       </motion.nav>
 
       {/* REPEATED POPULAR EXPERTS SECTIONS */}
-      {[...Array(5)].map((_, sectionIndex) => (
-        <div key={sectionIndex} className="bg-white p-6 mt-6 rounded-lg ">
-          {/* Heading Section (Only for the first section) */}
-          {sectionIndex === 0 && (
-            <div className="flex flex-col md:flex-row md:h-40 items-center mb-6">
-              <h2 className="text-2xl md:text-[60px] font-bold text-black">
-                Popular Experts
-              </h2>
-            </div>
-          )}
+      {filteredExperts.length > 0 ? (
+        <div className="bg-white p-6 mt-6 rounded-lg ">
+          {/* Heading Section */}
+          <div className="flex flex-col md:flex-row md:h-40 items-center mb-6">
+            <h2 className="text-2xl md:text-[60px] font-bold text-black">
+              Popular Experts
+            </h2>
+          </div>
 
           {/* Cards Section */}
           <div className="overflow-x-auto md:overflow-visible">
             <div className="flex md:grid md:grid-cols-5 gap-4 md:gap-10 px-4 md:px-0 overflow-x-scroll scrollbar-hide">
-              {expertData.map((expert, i) => (
+              {filteredExperts.map((expert, i) => (
                 <Link key={i} href={`/expertaboutme`} passHref>
                   <div className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden rounded-lg cursor-pointer">
                     {/* Expert Image */}
@@ -140,10 +152,14 @@ const SeacthExperts = ({ closeSearchPage }) => {
             </div>
           </div>
         </div>
-      ))}
-      <Footer/>
+      ) : (
+        <div className="flex justify-center items-center p-6">
+          <p className="text-xl font-semibold">No experts found for "{search}"</p>
+        </div>
+      )}
+      <Footer />
     </div>
   );
 };
 
-export default SeacthExperts;
+export default SearchExperts;
