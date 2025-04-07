@@ -3,7 +3,7 @@
 import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
 import Footer from "@/components/userpanel/Layout/Footer";
 import LoginUserCab from "@/components/UserPanel/LoginUserExpert/LoginUserCad/LoginUserCad";
-import LoginUserFbexpert from "@/components/UserPanel/LoginUserExpert/LoginUserFashion&Beauty-Expert/LoginUserFbexpert";
+import LoginUserFbexpert from "@/components/UserPanel/LoginUserExpert/LoginUserFashionBeautyExpert/LoginUserfbexpert";
 import LoginUserHomeexpert from "@/components/UserPanel/LoginUserExpert/LoginUserHomeexpert/LodinUserHomeexpert";
 import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
 import LoginUserThreepara from "@/components/UserPanel/LoginUserExpert/LoginUserThreepara/Login UserThreepara";
