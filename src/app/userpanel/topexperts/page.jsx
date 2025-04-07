@@ -1,6 +1,9 @@
 "use client";
 
-import UserTopExpert from "@/components/UserPanel/Experts/UserTopeexpert/UserTopeexpert";
+import ExpertCategories from "@/components/HomePage/ExpertCategories";
+import NavSearch from "@/components/Layout/navsearch";
+import UserTopExpert from "@/components/UserPanel/Experts/UserTopExpert/UserTopExpert";
+// import UserTopExpert from "@/components/UserPanel/Experts/UserTopeexpert/UserTopeexpert";
 import Footer from "@/components/userpanel/Layout/Footer";
 import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
 import UserNavSearch from "@/components/UserPanel/UserNavSearch/UserNavSearch";
@@ -21,8 +24,10 @@ const Page = () => {
         <div className="w-full md:w-[85%] flex flex-col">
           {/* Desktop View - NavSearch */}
           <div className="hidden md:block">
-            <UserNavSearch />
+            <NavSearch />
+            {/* <ExpertCategories/> */}
             <div className="space-y-8 px-4 md:px-8">
+              <UserTopExpert/>
               
              
             </div>
@@ -32,7 +37,7 @@ const Page = () => {
           <div className="block md:hidden">
             <LoginUserMobileNavSearch />
             <div className="space-y-8 px-4">
-              <TopExperts />
+              <UserTopExpert />
             </div>
           </div>
         </div>

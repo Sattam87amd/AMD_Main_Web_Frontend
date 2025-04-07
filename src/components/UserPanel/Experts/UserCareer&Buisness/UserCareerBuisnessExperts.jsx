@@ -71,9 +71,9 @@ const UserCareerBusinessExperts = () => {
       </motion.div>
 
       {/* Cards Section */}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto md:overflow-visible">
         <motion.div
-          className="flex gap-6 md:gap-8 px-4 md:px-0 w-max"
+          className="flex md:grid md:grid-cols-5 gap-4 md:gap-8 px-4 md:px-0 overflow-x-scroll scrollbar-hide"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -85,7 +85,7 @@ const UserCareerBusinessExperts = () => {
           {repeatedExperts.map((expert, index) => (
             <Link key={index} href={`/expertaboutme`} passHref>
               <motion.div
-                className="relative min-w-[280px] md:w-[300px] h-[400px] flex-shrink-0 overflow-hidden shadow-lg rounded-lg cursor-pointer"
+                className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg rounded-lg cursor-pointer"
                 variants={{
                   hidden: { opacity: 0, y: 30 },
                   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },

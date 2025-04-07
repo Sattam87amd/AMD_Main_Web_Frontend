@@ -29,15 +29,9 @@ const UserVideoCall = () => {
   }, []);
 
   return (
-<<<<<<< HEAD
-    <div className="w-full max-w-4xl mx-auto py-10 px-4 mt-20 ">
-      {/* Tabs */}
-      <div className="flex space-x-2 mb-6">
-=======
     <div className="w-full max-w-4xl mx-left py-10 px-4 mt-20 ">
       {/* Tabs */}
       {/* <div className="flex space-x-2 mb-6">
->>>>>>> ee9e21b29f3d7a1a114ad1e8ca7698f64fd09a32
         <button
           className={`px-4 py-2 text-sm font-medium rounded ${
             activeTab === "bookings" ? "bg-black text-white" : "bg-gray-200"
@@ -54,11 +48,7 @@ const UserVideoCall = () => {
         >
           My Sessions
         </button>
-<<<<<<< HEAD
-      </div>
-=======
       </div> */}
->>>>>>> ee9e21b29f3d7a1a114ad1e8ca7698f64fd09a32
 
       {/* Bookings Tab */}
       {activeTab === "bookings" && (
@@ -86,12 +76,8 @@ const UserVideoCall = () => {
                 >
                   {booking.status}
                 </span>
-<<<<<<< HEAD
-                <button className="px-4 py-1 border rounded text-sm">💬 Chat</button>
-=======
                 <button className={`px-4 py-1 border rounded text-sm ${
                     booking.status === "Not Confirmed" ?  "hidden" : "text-green-500" }`}>💬 Chat</button>
->>>>>>> ee9e21b29f3d7a1a114ad1e8ca7698f64fd09a32
               </div>
             </div>
           ))}

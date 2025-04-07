@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from "react";
@@ -52,7 +51,7 @@ const experts = [
 
 const repeatedExperts = [...experts, ...experts, ...experts];
 
-const UserTopExpert = () => {
+const LoginTopExpert = () => {
   return (
     <div className="bg-white py-10 px-4">
       {/* Header Section */}
@@ -122,4 +121,4 @@ const UserTopExpert = () => {
   );
 };
 
-export default UserTopExpert;
+export default LoginTopExpert;

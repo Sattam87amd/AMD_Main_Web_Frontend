@@ -1,5 +1,6 @@
 "use client";
 
+import NavSearch from "@/components/Layout/navsearch";
 import UserCareerBusinessHomeCards from "@/components/UserPanel/Home/UserCareerBusinessHomeCards";
 import Footer from "@/components/userpanel/Layout/Footer";
 import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
@@ -22,7 +23,7 @@ const Page = () => {
         <div className="w-full md:w-[85%] flex flex-col">
           {/* Desktop View - NavSearch */}
           <div className="hidden md:block">
-            <UserNavSearch />
+            <NavSearch />
             <div className="space-y-8 px-4 md:px-8">
               <UserCareerBusinessHomeCards /> 
              

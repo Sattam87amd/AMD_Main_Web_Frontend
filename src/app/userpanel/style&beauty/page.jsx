@@ -1,8 +1,9 @@
 "use client";
 
-import TopExperts from "@/components/Experts/Topeexperts/topexperts";
-import UserStyleBeautyExperts from "@/components/UserPanel/Experts/UserStyleBeautyExperts/UserStyleBeautyExperts";
-import UserTopExpert from "@/components/UserPanel/Experts/UserTopeexpert/UserTopeexpert";
+import NavSearch from "@/components/Layout/navsearch";
+// import TopExperts from "@/components/Experts/Topeexperts/topexperts";
+// import UserStyleBeautyExperts from "@/components/UserPanel/Experts/UserStyleBeautyExperts/UserStyleBeautyExperts";
+// import UserTopExpert from "@/components/UserPanel/Experts/UserTopeexpert/UserTopeexpert";
 import Footer from "@/components/userpanel/Layout/Footer";
 import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
 import LoginUserStyleBeautyExperts from "@/components/UserPanel/LoginUserExpert/LoginUserStyleBeautyExperts/LoginUserStyleBeautyExperts";
@@ -24,7 +25,7 @@ const Page = () => {
         <div className="w-full md:w-[85%] flex flex-col">
           {/* Desktop View - NavSearch */}
           <div className="hidden md:block">
-            <UserNavSearch />
+            <NavSearch />
             <div className="space-y-8 px-4 md:px-8">
               < LoginUserStyleBeautyExperts/> 
              
