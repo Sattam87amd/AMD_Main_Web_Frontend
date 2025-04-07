@@ -94,7 +94,7 @@ const UserProfileSection = () => {
         {selectedSection === "Profile" && (
           <div className="mt-6">
             <div className="flex flex-col md:flex-row items-center md:justify-between space-y-4 md:space-y-0">
-              <div className="flex items-center space-x-4 md:space-x-6">
+              <div className="flex i  tems-center space-x-4 md:space-x-6">
                 <img
                   src="/guyhawkins.png"
                   alt="profile"

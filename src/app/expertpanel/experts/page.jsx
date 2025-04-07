@@ -1,20 +1,17 @@
 "use client";
 
 import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
-import NavSearch from "@/components/Layout/navsearch";
 import Footer from "@/components/userpanel/Layout/Footer";
 import LoginUserCab from "@/components/UserPanel/LoginUserExpert/LoginUserCad/LoginUserCad";
-import LoginUserFbexpert from "@/components/UserPanel/LoginUserExpert/LoginUserFashion&BeautyExpert/LoginUserfbexpert";
-// import LoginUserFbexpert from "@/components/UserPanel/LoginUserExpert/LoginUserFashion&BeautyExpert/LoginUserFbexpert";
+import LoginUserFbexpert from "@/components/UserPanel/LoginUserExpert/LoginUserFashionBeautyExpert/LoginUserfbexpert";
 import LoginUserHomeexpert from "@/components/UserPanel/LoginUserExpert/LoginUserHomeexpert/LodinUserHomeexpert";
 import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
 import LoginUserThreepara from "@/components/UserPanel/LoginUserExpert/LoginUserThreepara/Login UserThreepara";
 import LoginUserTopExpert from "@/components/UserPanel/LoginUserExpert/LoginUsertopExperts/LoginUsertopExpert";
 import LoginUserWellnessExperts from "@/components/UserPanel/LoginUserExpert/LoginUserWellnessExperts/LoginUserWellnessExperts";
 import Sidebar from "@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar";
-import UserNavSearch from "@/components/UserPanel/Layout/NavSearch";
+import UserNavSearch from "@/components/UserPanel/UserNavSearch/UserNavSearch";
 import UseSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
-import UserExpertCategory from "@/components/UserPanel/UserExpertCategory/UserExpertCategory";
 
 
 const Page = () => {
@@ -31,12 +28,11 @@ const Page = () => {
         <div className="w-full md:w-[80%] flex flex-col">
           {/* Desktop View - NavSearch */}
           <div className="hidden md:block">
-            <UserNavSearch/>
-            <UserExpertCategory/>
+            <UserNavSearch />
             <div className="space-y-8 px-4 md:px-8">
               <LoginUserTopExpert />
               <LoginUserWellnessExperts />
-              <LoginUserFbexpert/>
+              <LoginUserFbexpert />
               <LoginUserCab />
               <LoginUserHomeexpert />
               <LoginUserThreepara />
@@ -66,4 +62,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Page; 

@@ -1,11 +1,20 @@
 "use client"
 import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
+<<<<<<< HEAD
 import Navtop from '@/components/ExpertPanel/Navtop/navtop';
 // import Navtop from '@/components/ExpertPanel/Navtop/navtop';
 // import Sidebar from '@/components/ExpertPanel/SideBar/SideBar';
 import Footer from '@/components/Layout/Footer';
 
 import UseSidebar from '@/components/UserPanel/UseSideBar/UserSidebar';
+=======
+// import Navtop from '@/components/ExpertPanel/NavTop/NavTop';
+// import Navtop from '@/components/ExpertPanel/Navtop/navtop';
+// import Sidebar from '@/components/ExpertPanel/SideBar/SideBar';
+import Footer from '@/components/Layout/Footer';
+import Navtop from '@/components/UserPanel/NavTop/Navtop';
+import UserSidebar from '@/components/UserPanel/UseSideBar/UserSidebar';
+>>>>>>> 707882968ea53918dc61ca731e9059d4ce3cab35
 import UserVideoCall from '@/components/UserPanel/VideoCall/UserVideoCall';
 import { usePathname } from "next/navigation";
 
@@ -51,5 +60,3 @@ const page = () => {
   };
 
 export default page;
-
-

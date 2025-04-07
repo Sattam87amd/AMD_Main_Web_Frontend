@@ -1,8 +1,4 @@
 import Footer from '@/components/UserPanel/Layout/Footer'
-
-
-
-
 import React from 'react'
 import Navbar from '@/components/Layout/Navbar'
 import BecomeExpert from '@/components/JoinAsExpert/BecomeExpert'
