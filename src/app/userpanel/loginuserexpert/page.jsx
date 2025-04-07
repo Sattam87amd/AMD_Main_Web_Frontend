@@ -3,7 +3,7 @@
 import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
 import Footer from "@/components/userpanel/Layout/Footer";
 import LoginUserCab from "@/components/UserPanel/LoginUserExpert/LoginUserCad/LoginUserCad";
-import LoginUserFbexpert from "@/components/UserPanel/LoginUserExpert/LoginUserFashion&Beauty-Expert/LoginUserFbexpert";
+import LoginUserFbexpert from "@/components/UserPanel/LoginUserExpert/LoginUserFashion&BeautyExpert/LoginUserfbexpert";
 import LoginUserHomeexpert from "@/components/UserPanel/LoginUserExpert/LoginUserHomeexpert/LodinUserHomeexpert";
 import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
 import LoginUserThreepara from "@/components/UserPanel/LoginUserExpert/LoginUserThreepara/Login UserThreepara";
@@ -32,7 +32,7 @@ const Page = () => {
             <div className="space-y-8 px-4 md:px-8">
               <LoginUserTopExpert />
               <LoginUserWellnessExperts />
-              <LoginUserFbexpert />
+              <LoginUserFbexpert/>
               <LoginUserCab />
               <LoginUserHomeexpert />
               <LoginUserThreepara />
