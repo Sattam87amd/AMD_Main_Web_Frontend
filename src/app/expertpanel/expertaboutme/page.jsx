@@ -10,6 +10,7 @@ import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
 import AboutMeReviewsExpertPanel from "@/components/ExpertPanel/ExpertPanelAboutMe/AboutMeReviewsExpertPanel";
 import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
 import ExpertAboutMe from "@/components/ExpertAboutMe/ExpertAboutMe";
+import AboutMeReviews from "@/components/ExpertAboutMe/AboutMeReviews";
 
 const Page = () => {
   return (
@@ -32,8 +33,8 @@ const Page = () => {
           {/* <AboutMeExpertPanel /> */}
           <ExpertAboutMe/>
           <WhatToExpectExpertPanel />
-          <ScheduleQuickCallsExpertPanel />
-          <AboutMeReviewsExpertPanel/>   
+          {/* <ScheduleQuickCallsExpertPanel /> */}
+          <AboutMeReviews/> 
           <ExpertFeatureHighightsExpertPanel />
           <SimilarExpertsExpertPanel />
         </div>

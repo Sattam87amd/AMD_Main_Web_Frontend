@@ -32,7 +32,7 @@ const Page = () => {
             <div className="space-y-8 px-4 md:px-8">
               <LoginUserTopExpert />
               <LoginUserWellnessExperts />
-              <LoginUserFbexpert/>
+              <LoginUserFbexpert />
               <LoginUserCab />
               <LoginUserHomeexpert />
               <LoginUserThreepara />
@@ -62,4 +62,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default Page; 

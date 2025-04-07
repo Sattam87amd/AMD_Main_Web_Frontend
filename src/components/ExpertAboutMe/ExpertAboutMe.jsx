@@ -63,9 +63,9 @@ const ExpertAboutMe = () => {
     setShowTimeSelection(true); // Show time slots form when the button is clicked
   };
 
-  const handleBackClick = () => {
-    router.back(); // Navigate to the previous page
-  };
+  // const handleBackClick = () => {
+  //   router.back(); // Navigate to the previous page
+  // };
 
    // Handle Time Slot Selection (only one slot can be selected)
    const handleTime = (time) => {
@@ -167,7 +167,7 @@ const ExpertAboutMe = () => {
             <Link href="/expertaboutme">
             <button
               className="py-2 px-4 bg-black text-white rounded-md shadow"
-              onClick={handleBackClick}
+              // onClick={handleBackClick}
             >
               Back
             </button>

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import {
   FaUser,
   FaGift,
@@ -20,16 +21,62 @@ import ExpertContactUs from "./ExpertContactUs";
 import PaymentHistory from "./PaymentHistory";
 
 const ProfileSection = () => {
+
   const [selectedSection, setSelectedSection] = useState("Profile");
   const [isEditing, setIsEditing] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
   const [profileData, setProfileData] = useState({
-    firstName: "Basim",
-    lastName: "Thakur",
-    mobileNumber: "+919876543210",
-    email: "thakur@gmail.com",
+    firstName: "",
+    lastName: "",
+    phone: "", // Set default value to an empty string
+    email: "thakur@.com",
   });
+
+  const [expertId, setExpertId] = useState(""); // Will be set from expertToken
+
+  // Fetch expertId from localStorage
+  useEffect(() => {
+    const expertToken = localStorage.getItem("expertToken");
+
+    if (expertToken) {
+      try {
+        // Assuming the expertToken contains the _id directly (if it's JWT)
+        const decodedToken = JSON.parse(atob(expertToken.split(".")[1])); // Decode JWT token
+        const expertId = decodedToken._id;
+        setExpertId(expertId); // Set the expertId to state
+      } catch (error) {
+        console.error("Error parsing expertToken:", error);
+      }
+    } else {
+      alert("Expert token not found in localStorage");
+    }
+  }, []);
+
+  // Fetch expert details by ID on component mount
+  useEffect(() => {
+    if (expertId) {
+      const fetchExpertDetails = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:8000/api/expertauth/${expertId}`
+          );
+          const { firstName, lastName, phone = "", email } = response.data.data; // Default empty string for phone
+          setProfileData({
+            firstName,
+            lastName,
+            phone, // Assign phone with a default value if missing
+            email,
+          });
+        } catch (error) {
+          console.error("Error fetching expert details:", error);
+          alert("Error fetching expert details");
+        }
+      };
+
+      fetchExpertDetails();
+    }
+  }, [expertId]); // The effect runs when the expert ID changes
 
   const handleInputChange = (e) => {
     setProfileData({ ...profileData, [e.target.name]: e.target.value });
@@ -46,7 +93,7 @@ const ProfileSection = () => {
     setSuccessMessage("Changes Saved!");
     setTimeout(() => setSuccessMessage(""), 3000);
   };
-
+  
   return (
     <div className="flex flex-col md:flex-row border rounded-xl overflow-hidden bg-white m-4 md:m-8">
       {/* Sidebar - Hidden on Small Screens, Visible on Medium+ */}
@@ -168,7 +215,7 @@ const ProfileSection = () => {
                 <input
                   type="text"
                   name="mobileNumber"
-                  value={profileData.mobileNumber}
+                  value={profileData.phone}
                   onChange={handleInputChange}
                   disabled={!isEditing}
                   className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${

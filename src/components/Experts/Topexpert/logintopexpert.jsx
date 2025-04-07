@@ -51,7 +51,7 @@ const experts = [
 
 const repeatedExperts = [...experts, ...experts, ...experts];
 
-const TopExpert = () => {
+const LoginTopExpert = () => {
   return (
     <div className="bg-white py-10 px-4">
       {/* Header Section */}
@@ -73,7 +73,7 @@ const TopExpert = () => {
       {/* Cards Section */}
       <div className="overflow-x-auto md:overflow-visible">
         <motion.div
-          className="flex md:grid md:grid-cols-5 gap-4  md:gap-x-8 px-4 md:px-0 overflow-x-scroll scrollbar-hide"
+          className="flex md:grid md:grid-cols-5 gap-4  md:gap-x-64 px-4 md:px-0 overflow-x-scroll scrollbar-hide"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -83,7 +83,7 @@ const TopExpert = () => {
           }}
         >
           {repeatedExperts.map((expert, index) => (
-            <Link key={index} href={`/expertaboutme`} passHref>
+            <Link key={index} href={`/expertpanel/expertaboutme`} passHref>
               <motion.div
                 className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg rounded-lg cursor-pointer"
                 variants={{
@@ -121,4 +121,4 @@ const TopExpert = () => {
   );
 };
 
-export default TopExpert;
+export default LoginTopExpert;
