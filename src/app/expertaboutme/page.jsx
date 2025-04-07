@@ -17,7 +17,7 @@ const page = () => {
       <div className="md:mt-20">
         <ExpertAboutMe />
         <WhatToExpect />
-        <ScheduleQuickCalls/>
+        {/* <ScheduleQuickCalls/> */}
         <AboutMeReviews/>
         <ExpertFeatureHighights/>
         <SimilarExperts/>

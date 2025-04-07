@@ -1,8 +1,8 @@
 "use client";
+import TopExpert from "@/components/Experts/Topexpert/topexpert";
 import Footer from "@/components/Layout/Footer";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";
-import TopExpert from "@/components/Experts/Topexpert/TopExpert";
 
 
 const Page = () => {
