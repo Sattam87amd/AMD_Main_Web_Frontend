@@ -112,9 +112,21 @@ function RegisterForm() {
   // Handle form submission and send data to backend
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent page reload
-
+  
     if (handleValidation()) {
-      const formData = {
+      // Create a new FormData object to hold the file data
+      const formData = new FormData();
+  
+      // Append only the files (photoFile and certificationFile) to FormData
+      if (fileInputRefCertifications.current.files[0]) {
+        formData.append("certificationFile", fileInputRefCertifications.current.files[0]);
+      }
+      if (fileInputRefPhotos.current.files[0]) {
+        formData.append("photoFile", fileInputRefPhotos.current.files[0]);
+      }
+  
+      // Create the other form data as a JSON object
+      const otherData = {
         email,
         firstName,
         lastName,
@@ -126,36 +138,38 @@ function RegisterForm() {
         experience,
         category,
       };
-
-      // Add file names to the formData object
-      if (fileInputRefCertifications.current.files[0]) {
-        formData.certificationFile = certificationFileName;
-      }
-      if (fileInputRefPhotos.current.files[0]) {
-        formData.photoFile = photoFileName;
-      }
-
+  
       try {
         // Make the API call to register the expert
         const response = await axios.post(
           "http://localhost:8000/api/expertauth/register", 
-          formData, 
+          otherData,  // Send other fields as JSON
           {
             headers: {
-              "Content-Type": "application/json",  // Sending as JSON
+              "Content-Type": "application/json",  // Sending JSON for other data
             },
           }
         );
-
-        console.log("Expert registered successfully:", response.data);
-        router.push("/expertpanel/expertpanelprofile");  // Redirect to expert profile page
+  
+        // Send the files (photoFile and certificationFile) as FormData
+        const fileResponse = await axios.post(
+          "http://localhost:8000/api/expertauth/upload",  // Assuming the endpoint to handle file uploads is '/upload'
+          formData,  // Send the files as FormData
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",  // Ensure the request type is 'multipart/form-data' for file uploads
+            },
+          }
+        );
+  
+        console.log("Expert registered and files uploaded successfully:", fileResponse.data);
+        router.push("/expertlogin");  // Redirect to expert profile page
       } catch (error) {
         console.error("Error during registration:", error);
         alert("Error during registration. Please try again.");
       }
     }
   };
-
 
   return (
     <div className={`min-h-screen flex overflow-hidden ${interFont.variable}`}>
