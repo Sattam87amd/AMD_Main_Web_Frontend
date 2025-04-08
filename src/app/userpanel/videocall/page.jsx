@@ -1,8 +1,5 @@
 "use client"
 import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
-// import Navtop from '@/components/ExpertPanel/NavTop/NavTop';
-// import Navtop from '@/components/ExpertPanel/Navtop/navtop';
-// import Sidebar from '@/components/ExpertPanel/SideBar/SideBar';
 import Footer from '@/components/Layout/Footer';
 import Navtop from '@/components/UserPanel/NavTop/Navtop';
 import UserSidebar from '@/components/UserPanel/UseSideBar/UserSidebar';
