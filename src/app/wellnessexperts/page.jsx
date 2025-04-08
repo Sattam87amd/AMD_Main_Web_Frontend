@@ -2,10 +2,10 @@
 import Footer from "@/components/Layout/Footer";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";
-import Homeexperts from "@/components/Experts/Homeexperts/homeexperts";
-import CareerBuisnessExperts from "@/components/Experts/Career&Buisness/Career&Buisness";
-import StyleBeautyExperts from "@/components/Experts/Style&BeautyExpert/Style&BeautyExpert";
 import WellnessExperts from "@/components/Experts/WellnessExperts/WellnessExperts";
+import ExpertCategory from "@/components/ExpertCategory/ExpertCategory";
+import LoginExpertCategory from "@/components/UserPanel/LoginExpertCategory/LoginExpertCategory";
+// import ExpertCategory from "@/components/ExpertCategory/ExpertCategory";
 
 
 const Page = () => {
@@ -15,6 +15,7 @@ const Page = () => {
       {/* Desktop View - NavSearch */}
       <div className="hidden md:block">
         <NavSearch />
+        <LoginExpertCategory/>
         <WellnessExperts/>
         <Footer/>
 
@@ -24,6 +25,7 @@ const Page = () => {
       {/* Mobile View - MobileNavSearch */}
       <div className="block md:hidden">
         <MobileNavSearch />
+        {/* <ExpertCategory/> */}
         <WellnessExperts/>
         <Footer/>
 

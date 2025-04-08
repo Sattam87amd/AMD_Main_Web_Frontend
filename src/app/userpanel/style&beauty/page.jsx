@@ -1,10 +1,12 @@
 "use client";
 
+import ExpertCategory from "@/components/ExpertCategory/ExpertCategory";
 import NavSearch from "@/components/Layout/navsearch";
 // import TopExperts from "@/components/Experts/Topeexperts/topexperts";
 // import UserStyleBeautyExperts from "@/components/UserPanel/Experts/UserStyleBeautyExperts/UserStyleBeautyExperts";
 // import UserTopExpert from "@/components/UserPanel/Experts/UserTopeexpert/UserTopeexpert";
 import Footer from "@/components/userpanel/Layout/Footer";
+import LoginExpertCategory from "@/components/UserPanel/LoginExpertCategory/LoginExpertCategory";
 import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
 import LoginUserStyleBeautyExperts from "@/components/UserPanel/LoginUserExpert/LoginUserStyleBeautyExperts/LoginUserStyleBeautyExperts";
 import UserNavSearch from "@/components/UserPanel/UserNavSearch/UserNavSearch";
@@ -26,6 +28,8 @@ const Page = () => {
           {/* Desktop View - NavSearch */}
           <div className="hidden md:block">
             <NavSearch />
+            <LoginExpertCategory/>
+
             <div className="space-y-8 px-4 md:px-8">
               < LoginUserStyleBeautyExperts/> 
              
