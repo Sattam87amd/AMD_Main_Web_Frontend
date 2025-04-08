@@ -1,17 +1,16 @@
 "use client";
 
-import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
-import Footer from "@/components/userpanel/Layout/Footer";
-import LoginUserCab from "@/components/UserPanel/LoginUserExpert/LoginUserCad/LoginUserCad";
-import LoginUserFbexpert from "@/components/UserPanel/LoginUserExpert/LoginUserFashionBeautyExpert/LoginUserfbexpert";
-import LoginUserHomeexpert from "@/components/UserPanel/LoginUserExpert/LoginUserHomeexpert/LodinUserHomeexpert";
-import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
-import LoginUserThreepara from "@/components/UserPanel/LoginUserExpert/LoginUserThreepara/Login UserThreepara";
-import LoginUserTopExpert from "@/components/UserPanel/LoginUserExpert/LoginUsertopExperts/LoginUsertopExpert";
-import LoginUserWellnessExperts from "@/components/UserPanel/LoginUserExpert/LoginUserWellnessExperts/LoginUserWellnessExperts";
-import Sidebar from "@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar";
-import UserNavSearch from "@/components/UserPanel/UserNavSearch/UserNavSearch";
-import UseSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
+import ExpertCategory from "@/components/ExpertCategory/ExpertCategory";
+import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
+import CareerBusinessHomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/Career&BusinessLogin";
+import FashionBeautyHomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/Fashoin&BeautyLogin";
+import HomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/HomeExpertLogin";
+import ExpertsCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/TopExpertLogin";
+import WellnessHomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/WellnessLogin";
+import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
+import Threepara from "@/components/Experts/Threepara/threepara";
+import Footer from "@/components/Layout/Footer";
+import NavSearch from "@/components/Layout/navsearch";
 
 
 const Page = () => {
@@ -21,34 +20,35 @@ const Page = () => {
       <div className="flex flex-1">
         {/* Sidebar (Left Section - 20% Width) */}
         <aside className="w-[20%] h-[80%] hidden md:block bg-gray-100 overflow-y-auto -mt-5">
-          <UseSidebar />
+          <Sidebar/>
         </aside>
 
         {/* Main Content (Right Section - 80% Width) */}
         <div className="w-full md:w-[80%] flex flex-col">
           {/* Desktop View - NavSearch */}
           <div className="hidden md:block">
-            <UserNavSearch />
+            <NavSearch/>
+        <LoginExpertCategory/>
             <div className="space-y-8 px-4 md:px-8">
-              <LoginUserTopExpert />
-              <LoginUserWellnessExperts />
-              <LoginUserFbexpert />
-              <LoginUserCab />
-              <LoginUserHomeexpert />
-              <LoginUserThreepara />
+            <ExpertsCardsLogin/>
+             <WellnessHomeCardsLogin/>
+             <FashionBeautyHomeCardsLogin/>
+            <CareerBusinessHomeCardsLogin/>
+             <HomeCardsLogin/>
+           <Threepara/>
             </div>
           </div>
 
           {/* Mobile View - MobileNavSearch */}
           <div className="block md:hidden">
-            <LoginUserMobileNavSearch />
+            {/* <LoginUserMobileNavSearch /> */}
             <div className="space-y-8 px-4">
-              <LoginUserTopExpert />
-              <LoginUserWellnessExperts />
-              <LoginUserFbexpert />
-              <LoginUserCab />
-              <LoginUserHomeexpert />
-              <LoginUserThreepara />
+              {/* <LoginUserTopExpert /> */}
+              {/* <LoginUserWellnessExperts /> */}
+              {/* <LoginUserFbexpert /> */}
+              {/* <LoginUserCab /> */}
+              {/* <LoginUserHomeexpert /> */}
+              {/* <LoginUserThreepara /> */}
             </div>
           </div>
         </div>

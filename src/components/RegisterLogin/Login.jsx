@@ -66,7 +66,7 @@ function LoginPage() {
         // Normally, you would send the OTP to your backend for verification.
         // Here we just proceed assuming the OTP is correct.
 
-        router.push("/expertpanel/expertpanelprofile");
+        router.push("/register");
     };
 
     return (

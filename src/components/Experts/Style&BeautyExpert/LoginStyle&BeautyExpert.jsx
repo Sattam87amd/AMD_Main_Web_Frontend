@@ -51,7 +51,7 @@ const experts = [
 
 const repeatedExperts = [...experts, ...experts, ...experts];
 
-const LoginWellnessExperts = () => {
+const LoginStyleBeautyExperts = () => {
   return (
     <div className="bg-white py-10 px-4">
       {/* Header Section */}
@@ -63,10 +63,10 @@ const LoginWellnessExperts = () => {
         className="flex flex-col md:flex-row md:h-40 items-center mb-6"
       >
         <h1 className="text-3xl md:text-[60px] font-bold text-black">
-          Wellness Experts
+          Style & Beauty Experts
         </h1>
         <p className="text-[#9C9C9C] md:pt-5 pl-5 md:text-2xl">
-          Connect with nutritionists, trainers, & more about living a healthier life
+          Access to the best experts has never been easier
         </p>
       </motion.div>
 
@@ -83,7 +83,7 @@ const LoginWellnessExperts = () => {
           }}
         >
           {repeatedExperts.map((expert, index) => (
-            <Link key={index} href={`/expertaboutme`} passHref>
+            <Link key={index} href={`/expertpanel/expertaboutme`} passHref>
               <motion.div
                 className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg rounded-lg cursor-pointer"
                 variants={{
@@ -123,4 +123,4 @@ const LoginWellnessExperts = () => {
   );
 };
 
-export default LoginWellnessExperts;
+export default LoginStyleBeautyExperts;
