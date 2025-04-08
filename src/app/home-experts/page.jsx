@@ -4,6 +4,7 @@ import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";
 import Homeexpert from "@/components/Experts/Homeexpert/homeexpert";
 import ExpertCategory from "@/components/ExpertCategory/ExpertCategory";
+import LoginExpertCategory from "@/components/UserPanel/LoginExpertCategory/LoginExpertCategory";
 
 const Page = () => {
   return (
@@ -11,7 +12,7 @@ const Page = () => {
       {/* Desktop View - NavSearch */}
       <div className="hidden md:block">
         <NavSearch />
-        <ExpertCategory/>
+        <LoginExpertCategory/>
         <Homeexpert />
         <Footer />
       </div>

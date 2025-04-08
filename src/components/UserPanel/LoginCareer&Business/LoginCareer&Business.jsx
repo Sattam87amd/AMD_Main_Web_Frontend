@@ -1,4 +1,3 @@
-
 "use client";
 
 import React from "react";
@@ -52,7 +51,7 @@ const experts = [
 
 const repeatedExperts = [...experts, ...experts, ...experts];
 
-const UserTopExpert = () => {
+const LoginCareerBusiness = () => {
   return (
     <div className="bg-white py-10 px-4">
       {/* Header Section */}
@@ -64,17 +63,17 @@ const UserTopExpert = () => {
         className="flex flex-col md:flex-row md:h-40 items-center mb-6"
       >
         <h1 className="text-3xl md:text-[60px] font-bold text-black">
-          Top Experts
+          Career & Business Experts
         </h1>
         <p className="text-[#9C9C9C] md:pt-5 pl-5 md:text-2xl">
-          Access to the best has never been easier
+        Connect with CEOs, executives, coaches, and more
         </p>
       </motion.div>
 
       {/* Cards Section */}
       <div className="overflow-x-auto md:overflow-visible">
         <motion.div
-          className="flex md:grid md:grid-cols-5 gap-4 md:gap-x-64 px-4 md:px-0 overflow-x-scroll scrollbar-hide"
+          className="flex md:grid md:grid-cols-5 gap-4  md:gap-x-64 px-4 md:px-0 overflow-x-scroll scrollbar-hide"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -122,4 +121,4 @@ const UserTopExpert = () => {
   );
 };
 
-export default UserTopExpert;
+export default LoginCareerBusiness;
