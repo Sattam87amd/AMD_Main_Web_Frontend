@@ -18,7 +18,7 @@ const page = () => {
   const pathname = usePathname()
   
   const activeMenu = menuItems.find((item) => item.route === pathname)
-  const activeTab = activeMenu ? activeMenu.label : "Booking";
+  const activeTab = activeMenu ? activeMenu.label : "Video Call";
   
     return (
       <>
