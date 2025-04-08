@@ -5,7 +5,8 @@ import { IoIosSearch } from "react-icons/io";
 import { LuNotepadText } from "react-icons/lu";
 import { Inter } from "next/font/google";
 import { useState } from "react";
-import { useRouter } from "next/navigation"; // Import useRouter for navigation
+import { useRouter, useSearchParams } from "next/navigation";
+import axios from "axios";
 
 const interFont = Inter({
   subsets: ["latin"],
@@ -14,12 +15,17 @@ const interFont = Inter({
 
 function UserRegisterPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [email, setEmail] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [firstName, setfirstName] = useState("");
+  const [lastName, setlastName] = useState("");
   const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState("");
+  const [loading, setLoading] = useState(false);
+  
+  // Get phone from query parameters
+  const phone = searchParams.get('phone');
 
-  // Validation for required fields
   const handleValidation = () => {
     let tempErrors = {};
 
@@ -45,10 +51,27 @@ function UserRegisterPage() {
     return Object.keys(tempErrors).length === 0;
   };
 
-  // Handle form submission - Now routes to /expertpanel/registerform
-  const handleSubmit = () => {
-    if (handleValidation()) {
-      router.push("/userpanel/loginuserexpert"); // Navigate to the register form
+  const handleSubmit = async () => {
+    if (!handleValidation()) return;
+
+    setLoading(true);
+    setServerError("");
+
+    try {
+      const response = await axios.post("http://localhost:8000/api/userauth/registeruser", {
+        phone, // Add phone from query params
+        firstName: firstName,
+        lastName: lastName, // Send lastName separately
+        email,
+      });
+
+      if (response.status === 201) {
+        router.push("/userlogin");
+      }
+    } catch (error) {
+      setServerError(error.response?.data?.message || "Registration failed. Try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -137,7 +160,7 @@ function UserRegisterPage() {
                 value={firstName}
                 onChange={(e) => {
                   const value = e.target.value.replace(/[^A-Za-z]/g, ""); // Remove numbers and special characters
-                  setFirstName(value);
+                  setfirstName(value);
                   setErrors({ ...errors, firstName: "" });
                 }}
                 placeholder="Enter your first name"
@@ -153,7 +176,7 @@ function UserRegisterPage() {
                 value={lastName}
                 onChange={(e) => {
                   const value = e.target.value.replace(/[^A-Za-z]/g, ""); // Remove numbers and special characters
-                  setLastName(value);
+                  setlastName(value);
                   setErrors({ ...errors, lastName: "" });
                 }}
                 placeholder="Enter your last name"

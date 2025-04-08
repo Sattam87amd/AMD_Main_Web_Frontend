@@ -8,6 +8,7 @@ import "react-phone-number-input/style.css";
 import { Inter } from "next/font/google";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios"
 
 const interFont = Inter({
     subsets: ["latin"],
@@ -46,28 +47,39 @@ function LoginPage() {
         }
     };
 
-    // Handle OTP generation
-    const generateOtp = () => {
+    const generateOtp = async() => {
         if (!phone || !isValidPhoneNumber(phone)) {
             setPhoneError("Please enter a valid phone number first.");
             return;
         }
-        const randomOtp = Math.floor(1000 + Math.random() * 9000).toString();
-        setOtp(randomOtp);
-        setOtpError("");
+        try {
+            const response = await axios.post("http://localhost:8000/api/expertauth/request-otp", { phone });
+            alert("OTP sent successfully!");
+        } catch (error) {
+            console.log(error)
+            setFormError("Failed to send OTP. Please try again.");
+        }
     };
 
     const handleSubmit = async () => {
         if (!phone || !otp) {
-            setFormError("Please fill in all required fields before proceeding.");
-            return;
+          setFormError("Please fill in all required fields before proceeding.");
+          return;
         }
-
-        // Normally, you would send the OTP to your backend for verification.
-        // Here we just proceed assuming the OTP is correct.
-
-        router.push("/expertpanel/expertpanelprofile");
-    };
+      
+        try {
+          const response = await axios.post("http://localhost:8000/api/expertauth/verify-otp", { phone, otp });
+           
+          if (response.data.data.isNewExpert) {
+            router.push(`/register?phone=${encodeURIComponent(phone)}`);
+          } else {
+            localStorage.setItem('expertToken', response.data.data.token);
+            router.push("/expertpanel/expertpanelprofile");
+          }
+        } catch (error) {
+          setFormError(error.response?.data?.message || "OTP verification failed");
+        }
+      };
 
     return (
         <div className={`min-h-screen flex ${interFont.variable}`}>
