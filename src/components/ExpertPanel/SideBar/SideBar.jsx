@@ -13,7 +13,7 @@ const Sidebar = () => {
   const pathname = usePathname();
 
   const menuItems = [
-    { label: "Find Experts", icon: <FiSearch />, route: "/experts" },
+    { label: "Find Experts", icon: <FiSearch />, route: "/expertpanel/experts" },
     { label: "Video Call", icon: <FiVideo />, route: "/expertpanel/videocall" },
     {
       label: "Profile",

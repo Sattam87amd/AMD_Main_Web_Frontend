@@ -9,8 +9,8 @@ const LoginExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
     { title: "Top Experts", image: "/topexperts.png", link: "/expertpanel/topexperts" },
     { title: "Home", image: "/home.png", link: "/expertpanel/homeexperts" },
     { title: "Career & Business", image: "/career-business.png", link: "/expertpanel/career&business" },
-    { title: "Style & Beauty", image: "/style-beauty.png", link: "/style&beautyexperts" },
-    { title: "Wellness", image: "/wellness.png", link: "/wellnessexperts" },
+    { title: "Style & Beauty", image: "/style-beauty.png", link: "/expertpanel/style&beautyexperts" },
+    { title: "Wellness", image: "/wellness.png", link: "/expertpanel/wellnessexperts" },
   ];
 
   const filterOptions = [

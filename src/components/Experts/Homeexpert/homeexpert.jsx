@@ -7,46 +7,8 @@ import { HiBadgeCheck } from "react-icons/hi";
 
 // Expert Data (5 experts repeated 3 times)
 const experts = [
-  {
-    name: "Aaliya Abadi",
-    role: "Founder Of Drybar (Sold For $255M)",
-    description:
-      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
-    price: "$450",
-    image: "/aaliaabadi.png",
-  },
-  {
-    name: "Aisha Aziz",
-    role: "Founder Of Drybar (Sold For $255M)",
-    description:
-      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
-    price: "$600",
-    image: "/aishaaziz.png",
-  },
-  {
-    name: "Jenny Wilson",
-    role: "Founder Of Drybar (Sold For $255M)",
-    description:
-      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
-    price: "$250",
-    image: "/jennywilson.png",
-  },
-  {
-    name: "Guy Hawkins",
-    role: "Founder Of Drybar (Sold For $255M)",
-    description:
-      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
-    price: "$1500",
-    image: "/guyhawkins.png",
-  },
-  {
-    name: "Ralph Edwards",
-    role: "Founder Of Drybar (Sold For $255M)",
-    description:
-      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
-    price: "$450",
-    image: "/ralphedwards.png",
-  },
+ 
+ 
 ];
 
 const repeatedExperts = [...experts, ...experts, ...experts];

@@ -20,12 +20,8 @@ const Page = () => {
   const menuItems = [
     { label: "Find Experts", route: "/experts" },
     { label: "Video Call", route: "/userpanel/videocall" },
-    { label: "Profile", route: "/expertpanel/expertpanelprofile" },
-    { label: "Expert", route: "/expertpanel/expert" },
-    { label: "Dashboard", route: "/expertpanel/dashboard" },
-    { label: "Payments/Reviews", route: "/expertpanel/payments" },
-    { label: "Logout", route: "/" },
-    { label: "Chat with Users", route: "/expertpanel/chat" },
+    { label: "Profile", route: "/userpanel/expertpanelprofile" },
+
   ];
 
   const activeItem = menuItems.find(item => item.route === pathname);
