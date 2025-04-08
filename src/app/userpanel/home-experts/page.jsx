@@ -1,12 +1,13 @@
 "use client";
 
+import ExpertCategory from "@/components/ExpertCategory/ExpertCategory";
 import NavSearch from "@/components/Layout/navsearch";
 import Footer from "@/components/userpanel/Layout/Footer";
+import LoginExpertCategory from "@/components/UserPanel/LoginExpertCategory/LoginExpertCategory";
 import LoginUserHomeexpert from "@/components/UserPanel/LoginUserExpert/LoginUserHomeexpert/LodinUserHomeexpert";
 import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
 import UserHomeexperts from "@/components/UserPanel/UserExpert-Home/UserExpert-Home";
-import UserNavSearch from "@/components/UserPanel/UserNavSearch/UserNavSearch";
-import UseSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
+import UserSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
 
 
 const Page = () => {
@@ -16,7 +17,7 @@ const Page = () => {
       <div className="flex flex-1">
         {/* Sidebar (Left Section - 20% Width) */}
         <aside className="w-[15%] h-[85%] hidden md:block bg-gray-100 overflow-y-auto -mt-5">
-          <UseSidebar />
+          <UserSidebar />
         </aside>
 
         {/* Main Content (Right Section - 80% Width) */}
@@ -24,6 +25,7 @@ const Page = () => {
           {/* Desktop View - NavSearch */}
           <div className="hidden md:block">
             <NavSearch />
+            <LoginExpertCategory/>
             <div className="space-y-8 px-4 md:px-8">
               <LoginUserHomeexpert /> 
              

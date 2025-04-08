@@ -63,15 +63,16 @@ const ExpertAboutMe = () => {
     setShowTimeSelection(true); // Show time slots form when the button is clicked
   };
 
-  // const handleBackClick = () => {
-  //   router.back(); // Navigate to the previous page
-  // };
+  const handleBackClick = () => {
+    setShowTimeSelection(false); // Reset to show the consultation section
+  };
 
-   // Handle Time Slot Selection (only one slot can be selected)
-   const handleTime = (time) => {
+  // Handle Time Slot Selection (only one slot can be selected)
+  const handleTime = (time) => {
     // If the time slot is already selected, deselect it, else select the new slot
     setSelectedTime(selectedTime === time ? null : time);
   };
+
   // Handle Time Slot Selection (only select up to 5 slots per day)
   const handleTimeSelection = (day, time) => {
     // Get the current selected slots for the day
@@ -164,22 +165,18 @@ const ExpertAboutMe = () => {
           {showTimeSelection ? (
             // Show time selection form when the button is clicked
             <>
-            <Link href="/expertaboutme">
-            <button
-              className="py-2 px-4 bg-black text-white rounded-md shadow"
-              // onClick={handleBackClick}
-            >
-              Back
-            </button>
-            </Link>
-            <div className="bg-white p-6 rounded-xl">
-              <h3 className="text-4xl font-semibold mb-4">Book a video call</h3>
-              <p className="mb-4 font-semibold text-xl">Select one of the available time slots below:</p>
+              <button
+                className="py-2 px-4 bg-black text-white rounded-md shadow"
+                onClick={handleBackClick} // This is the Back button's functionality
+              >
+                Back
+              </button>
+              <div className="bg-white p-6 rounded-xl">
+                <h3 className="text-4xl font-semibold mb-4">Book a video call</h3>
+                <p className="mb-4 font-semibold text-xl">Select one of the available time slots below:</p>
 
-              {/* Time Slots for Today */}
-              {/* Time Slots */}
-              
-              <div className="grid grid-cols-2 gap-4 mb-4 justify-center items-center">
+                {/* Time Slots for Today */}
+                <div className="grid grid-cols-2 gap-4 mb-4 justify-center items-center">
                   <button
                     className={`py-2 px-4 ${selectedTime === "Quick - 15min" ? 'bg-black text-white' : 'bg-[#F8F7F3] text-black'} rounded-md shadow`}
                     onClick={() => handleTime("Quick - 15min")}
@@ -206,69 +203,69 @@ const ExpertAboutMe = () => {
                   </button>
                 </div>
 
-              <div>
-                <h4 className="font-semibold py-8">{`Today (${todayStr})`}</h4>
-                <div className="grid grid-cols-3 gap-4">
-                  {['07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'].map((time) => (
-                    <button
-                      key={time}
-                      className={`py-2 px-4 ${selectedTimeSlots.today.includes(time) ? 'bg-black text-white' : 'bg-white text-black'} rounded-xl border`}
-                      onClick={() => handleTimeSelection('today', time)}
-                    >
-                      {time}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Time Slots for Tomorrow */}
-              <div>
-                <h4 className="font-semibold py-8">{`Tomorrow (${tomorrowStr})`}</h4>
-                <div className="grid grid-cols-3 gap-4">
-                  {['07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'].map((time) => (
-                    <button
-                      key={time}
-                      className={`py-2 px-4 ${selectedTimeSlots.tomorrow.includes(time) ? 'bg-black text-white' : 'bg-white text-black'} rounded-xl border`}
-                      onClick={() => handleTimeSelection('tomorrow', time)}
-                    >
-                      {time}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Time Slots for Next Date */}
-              <div>
-                <h4 className="font-semibold py-8">{`Next Date (${nextDateStr})`}</h4>
-                <div className="grid grid-cols-3 gap-4">
-                  {['07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'].map((time) => (
-                    <button
-                      key={time}
-                      className={`py-2 px-4 ${selectedTimeSlots.nextDate.includes(time) ? 'bg-black text-white' : 'bg-white text-black'} rounded-xl border`}
-                      onClick={() => handleTimeSelection('nextDate', time)}
-                    >
-                      {time}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Submit Section */}
-              <div className="flex gap-10 py-10">
-                <div className="gap-4">
-                  <p className="text-xl font-semibold">$550 • Session</p>
-                  <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
-                    {[...Array(5)].map((_, i) => (
-                      <FaStar key={i} />
+                <div>
+                  <h4 className="font-semibold py-8">{`Today (${todayStr})`}</h4>
+                  <div className="grid grid-cols-3 gap-4">
+                    {['07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'].map((time) => (
+                      <button
+                        key={time}
+                        className={`py-2 px-4 ${selectedTimeSlots.today.includes(time) ? 'bg-black text-white' : 'bg-white text-black'} rounded-xl border`}
+                        onClick={() => handleTimeSelection('today', time)}
+                      >
+                        {time}
+                      </button>
                     ))}
-                    <span className="ml-2 font-semibold text-sm">{profile.rating}</span>
                   </div>
                 </div>
-                <Link href='/userlogin'>
-                  <button className="py-2 px-6 w-full bg-black text-white rounded-md">Request</button>
-                </Link>
+
+                {/* Time Slots for Tomorrow */}
+                <div>
+                  <h4 className="font-semibold py-8">{`Tomorrow (${tomorrowStr})`}</h4>
+                  <div className="grid grid-cols-3 gap-4">
+                    {['07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'].map((time) => (
+                      <button
+                        key={time}
+                        className={`py-2 px-4 ${selectedTimeSlots.tomorrow.includes(time) ? 'bg-black text-white' : 'bg-white text-black'} rounded-xl border`}
+                        onClick={() => handleTimeSelection('tomorrow', time)}
+                      >
+                        {time}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Time Slots for Next Date */}
+                <div>
+                  <h4 className="font-semibold py-8">{`Next Date (${nextDateStr})`}</h4>
+                  <div className="grid grid-cols-3 gap-4">
+                    {['07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'].map((time) => (
+                      <button
+                        key={time}
+                        className={`py-2 px-4 ${selectedTimeSlots.nextDate.includes(time) ? 'bg-black text-white' : 'bg-white text-black'} rounded-xl border`}
+                        onClick={() => handleTimeSelection('nextDate', time)}
+                      >
+                        {time}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Submit Section */}
+                <div className="flex gap-10 py-10">
+                  <div className="gap-4">
+                    <p className="text-xl font-semibold">$550 • Session</p>
+                    <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
+                      {[...Array(5)].map((_, i) => (
+                        <FaStar key={i} />
+                      ))}
+                      <span className="ml-2 font-semibold text-sm">{profile.rating}</span>
+                    </div>
+                  </div>
+                  <Link href='/userlogin'>
+                    <button className="py-2 px-6 w-full bg-black text-white rounded-md">Request</button>
+                  </Link>
+                </div>
               </div>
-            </div>
             </>
           ) : (
             // Show the regular consultancy cards when not in time selection mode

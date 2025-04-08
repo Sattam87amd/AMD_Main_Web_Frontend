@@ -1,14 +1,16 @@
+import React, { Suspense } from 'react'
 import Footer from '@/components/UserPanel/Layout/Footer'
 import UserRegisterPage from '@/components/UserPanel/UserRegister/UserRegister'
-import React from 'react'
 
- const page = () => {
+const Page = () => {
   return (
-    <div>
-        <UserRegisterPage/>
-        <Footer/>
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <div>
+        <UserRegisterPage />
+        <Footer />
+      </div>
+    </Suspense>
   )
 }
 
-export default page
+export default Page
