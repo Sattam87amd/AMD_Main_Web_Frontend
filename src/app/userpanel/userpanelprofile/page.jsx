@@ -8,7 +8,7 @@ import UserProfileSection from '@/components/UserPanel/UserPanelProfile/UserProf
 // import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
 import Footer from '@/components/Layout/Footer';
 import Sidebar from '@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar';
-import Navtop from '@/components/UserPanel/Navtop/Navtop';
+import Navtop from '@/components/UserPanel/NavTop/NavTopuser';
 import BottomNav from '@/components/UserPanel/BottomNav/BottomNav';
 import UseSidebar from '@/components/UserPanel/UseSideBar/UserSidebar';
 
