@@ -6,6 +6,7 @@ import { LuNotepadText } from "react-icons/lu";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { Inter } from "next/font/google";
+import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -46,35 +47,44 @@ function UserLoginPage() {
         }
     };
 
-    const generateOtp = () => {
+    const generateOtp = async() => {
         if (!phone || !isValidPhoneNumber(phone)) {
             setPhoneError("Please enter a valid phone number first.");
             return;
         }
-        const randomOtp = Math.floor(1000 + Math.random() * 9000).toString();
-        setOtp(randomOtp);
-        setOtpError("");
+        try {
+            const response = await axios.post("http://localhost:8000/api/userauth/request-otp", { phone });
+            alert("OTP sent successfully!");
+        } catch (error) {
+            setFormError("Failed to send OTP. Please try again.");
+        }
     };
 
-    const handleSubmit = () => {
-        if (!phone) {
-            setPhoneError("Phone number is required.");
-        } else if (!isValidPhoneNumber(phone)) {
-            setPhoneError("Invalid phone number.");
-            return;
+    const handleSubmit = async () => {
+        if (!phone || !otp) {
+          setFormError("Please enter both phone and OTP.");
+          return;
         }
-
-        if (!otp) {
-            setOtpError("OTP is required.");
+      
+        try {
+          const response = await axios.post("http://localhost:8000/api/userauth/verify-otp", { phone, otp });
+          
+          // Correct response structure
+          if (response.data.data.isNewUser) {
+            // Pass phone to registration page
+            router.push(`/userpanel/register?phone=${encodeURIComponent(phone)}`);
+          } else {
+            // Save token and redirect
+            localStorage.setItem('token', response.data.data.token);
+            router.push("/userpanel/loginuserexpert");
+          }
+        } catch (error) {
+          console.error("Error verifying OTP:", error);
+          setFormError("OTP verification failed.");
         }
-
-        if (!phone || !otp || !isValidPhoneNumber(phone)) {
-            setFormError("Please fill in all required fields before proceeding.");
-            return;
-        }
-
-        router.push("/userpanel/register");
-    };
+      };
+    
+    
 
     return (
         <div className={`min-h-screen flex ${interFont.variable}`}>
@@ -146,6 +156,12 @@ function UserLoginPage() {
                     <h1 className="text-2xl md:text-[35px] font-bold text-center">
                         Create an Account
                     </h1>
+                    <p className="text-center text-[#878787] mt-1 md:mt-2">
+                        or{" "}
+                        <span className="text-[#EA2B2B] font-semibold underline">
+                            Login
+                        </span>
+                    </p>
                     
                    
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   FaUser,
   FaGift,
@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import { LuPencilLine } from "react-icons/lu";
 import { FiDollarSign } from "react-icons/fi";
+import { BiLogOut } from "react-icons/bi";
 import { MdOutlineFeedback } from "react-icons/md";
 import { CiSettings } from "react-icons/ci"; 
 import UserExpertContactUs from "./UserExpertContactUs";
@@ -17,34 +18,78 @@ import UserBuyGiftCard from "./UserBuyGiftCard";
 import UserDiscountCode from "./UserDiscountCode";
 import UserPaymentMethods from "./UserPaymentMethods";
 import UserGiftCard from "./UserGiftCard";
+import axios from "axios";
+import UserPaymentHistory from "./UserPaymentHistory";
 
 const UserProfileSection = () => {
-  const [selectedSection, setSelectedSection] = useState("Profile");
-  const [isEditing, setIsEditing] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
+const[selectedSection, setSelectedSection]= useState("Profile");
+const [isEditing, setIsEditing]= useState("false");
+const[successMessage, setSuccessMessage]= useState("");
+const[profileData, setProfileData]=useState({
+  firstName:" ",
+  lastName:" ",
+  phone:"",
+  email:" ",
+});
 
-  const [profileData, setProfileData] = useState({
-    firstName: "Basim",
-    lastName: "Thakur",
-    mobileNumber: "+919876543210",
-    email: "thakur@gmail.com",
-  });
+const [userId, setUserId]= useState("");
 
-  const handleInputChange = (e) => {
-    setProfileData({ ...profileData, [e.target.name]: e.target.value });
-  };
+useEffect(() =>{
+  const userToken = localStorage.getItem("token");
 
-  const handleEditClick = () => {
-    setIsEditing(true);
-    setSuccessMessage("");
-  };
+  if(userToken){
+    try {
+      const decodedToken =JSON.parse(atob(userToken.split(".")[1]));
+      const userId= decodedToken._id;
+      setUserId(userId)
+    } catch (error) {
+      console.error("Error PArsing Token", error);
+      
+    }
+  }else{
+    alert("User Token not found Please Log In")
+  }
+},[]);
 
-  const handleSaveClick = (e) => {
-    e.preventDefault();
-    setIsEditing(false);
-    setSuccessMessage("Changes Saved!");
-    setTimeout(() => setSuccessMessage(""), 3000);
-  };
+
+useEffect(()=>{
+  if(userId){
+    const fetchUserDetails=async() =>{
+      try {
+        const response = await axios.get(
+          `http://localhost:8000/api/userauth/${userId}`
+        );
+        const {firstName,lastName,phone=" ",email}=response.data.data;
+        setProfileData({
+          firstName,
+          lastName,
+          phone,
+          email,
+        });
+      } catch (error) {
+        console.error("error fetching user details:",error);
+        alert("Error fetching user details");
+      }
+    };
+    fetchUserDetails();
+  }
+},[userId]);
+const handleInputChange = (e) => {
+  setProfileData({ ...profileData, [e.target.name]: e.target.value });
+};
+
+const handleEditClick = () => {
+  setIsEditing(true);
+  setSuccessMessage("");
+};
+
+const handleSaveClick = (e) => {
+  e.preventDefault();
+  setIsEditing(false);
+  setSuccessMessage("Changes Saved!");
+  setTimeout(() => setSuccessMessage(""), 3000);
+};
+
 
   return (
     <div className="flex flex-col md:flex-row border rounded-xl overflow-hidden bg-white m-4 md:m-8">
@@ -63,7 +108,9 @@ const UserProfileSection = () => {
             { name: "Do you have code?", icon: FaGift },
             { name: "Gift Card", icon: FaGift },
             { name: "Contact Us", icon: FaComments },
+            { name: "Payment History", icon: FiDollarSign },
             { name: "Give us Feedback", icon: MdOutlineFeedback },
+            { name: "Sign Out", icon: BiLogOut },
             { name: "Deactivate account", icon: FaTrashAlt },
           ].map((item) => (
             <button
@@ -165,8 +212,8 @@ const UserProfileSection = () => {
                 </label>
                 <input
                   type="text"
-                  name="mobileNumber"
-                  value={profileData.mobileNumber}
+                  name="phone"
+                  value={profileData.phone}
                   onChange={handleInputChange}
                   disabled={!isEditing}
                   className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${
@@ -225,6 +272,9 @@ const UserProfileSection = () => {
 
         {/* Contact Us */}
         {selectedSection === "Contact Us" && <UserExpertContactUs />}
+
+         {/* Payment History */}
+        {selectedSection === "Payment History" && <UserPaymentHistory />}
       </div>
     </div>
   );
