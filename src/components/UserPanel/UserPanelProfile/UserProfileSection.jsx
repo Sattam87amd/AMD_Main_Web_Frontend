@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 import { LuPencilLine } from "react-icons/lu";
 import { FiDollarSign } from "react-icons/fi";
+import { BiLogOut } from "react-icons/bi";
 import { MdOutlineFeedback } from "react-icons/md";
 import { CiSettings } from "react-icons/ci"; 
 import UserExpertContactUs from "./UserExpertContactUs";
@@ -18,6 +19,7 @@ import UserDiscountCode from "./UserDiscountCode";
 import UserPaymentMethods from "./UserPaymentMethods";
 import UserGiftCard from "./UserGiftCard";
 import axios from "axios";
+import UserPaymentHistory from "./UserPaymentHistory";
 
 const UserProfileSection = () => {
 const[selectedSection, setSelectedSection]= useState("Profile");
@@ -106,7 +108,9 @@ const handleSaveClick = (e) => {
             { name: "Do you have code?", icon: FaGift },
             { name: "Gift Card", icon: FaGift },
             { name: "Contact Us", icon: FaComments },
+            { name: "Payment History", icon: FiDollarSign },
             { name: "Give us Feedback", icon: MdOutlineFeedback },
+            { name: "Sign Out", icon: BiLogOut },
             { name: "Deactivate account", icon: FaTrashAlt },
           ].map((item) => (
             <button
@@ -268,6 +272,9 @@ const handleSaveClick = (e) => {
 
         {/* Contact Us */}
         {selectedSection === "Contact Us" && <UserExpertContactUs />}
+
+         {/* Payment History */}
+        {selectedSection === "Payment History" && <UserPaymentHistory />}
       </div>
     </div>
   );
