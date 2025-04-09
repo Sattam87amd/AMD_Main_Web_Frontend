@@ -63,7 +63,7 @@ const HomeCardsLogin = () => {
               <div className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
                 {/* Background Image */}
                 <img
-                  src={expert.image || "/aaliyaabadi.png"}  // Ensure there's a fallback image
+                  src={expert.photoFile || "/aaliyaabadi.png"}  // Ensure there's a fallback image
                   alt={expert.firstName}
                   className="w-full h-full object-cover"
                 />

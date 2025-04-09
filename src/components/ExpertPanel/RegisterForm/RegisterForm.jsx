@@ -67,13 +67,16 @@ function RegisterForm() {
     const file = event.target.files[0];
     if (file) {
       const fileExtension = file.name.split('.').pop().toLowerCase();
+      // Validate file size (10MB max)
       if (file.size > 10 * 1024 * 1024) {
         setErrors((prev) => ({
           ...prev,
           file: "Max 10 MB files can be uploaded",
         }));
         document.getElementById("file-display-certifications").value = "";
-      } else if (['pdf', 'jpg', 'jpeg', 'png'].includes(fileExtension)) {
+      }
+      // Validate file type (only allow PDF, JPG, JPEG, PNG)
+      else if (['pdf', 'jpg', 'jpeg', 'png'].includes(fileExtension)) {
         setCertificationFileName(file.name);
         setErrors((prev) => ({ ...prev, file: "" }));
       } else {
@@ -90,83 +93,76 @@ function RegisterForm() {
     const file = event.target.files[0];
     if (file) {
       const fileExtension = file.name.split('.').pop().toLowerCase();
+      // Validate file size (10MB max)
       if (file.size > 10 * 1024 * 1024) {
         setErrors((prev) => ({
           ...prev,
           file: "Max 10 MB files can be uploaded",
         }));
         document.getElementById("file-display-photos").value = "";
-      } else if (['pdf', 'jpg', 'jpeg', 'png'].includes(fileExtension)) {
+      }
+      // Validate file type (only allow JPG, JPEG, PNG)
+      else if (['jpg', 'jpeg', 'png'].includes(fileExtension)) {
         setPhotoFileName(file.name);
         setErrors((prev) => ({ ...prev, file: "" }));
       } else {
         setErrors((prev) => ({
           ...prev,
-          file: "Only PDF, JPG, JPEG, PNG files are allowed",
+          file: "Only JPG, JPEG, PNG files are allowed",
         }));
         document.getElementById("file-display-photos").value = "";
       }
     }
   };
+  
 
   // Handle form submission and send data to backend
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent page reload
   
     if (handleValidation()) {
-      // Create a new FormData object to hold the file data
+      // Create a new FormData object to hold the form data and files
       const formData = new FormData();
   
-      // Append only the files (photoFile and certificationFile) to FormData
+      // Append other form fields to the FormData object
+      formData.append('email', email);
+      formData.append('firstName', firstName);
+      formData.append('lastName', lastName);
+      formData.append('gender', gender);
+      formData.append('phone', mobile);
+      formData.append('socialLink', socialLink);
+      formData.append('areaOfExpertise', areaOfExpertise);
+      formData.append('specificArea', specificArea);  // Will be used if 'Others' is selected
+      formData.append('experience', experience);
+  
+      // If certification file is selected, append it
       if (fileInputRefCertifications.current.files[0]) {
-        formData.append("certificationFile", fileInputRefCertifications.current.files[0]);
-      }
-      if (fileInputRefPhotos.current.files[0]) {
-        formData.append("photoFile", fileInputRefPhotos.current.files[0]);
+        formData.append('certificationFile', fileInputRefCertifications.current.files[0]);
       }
   
-      // Create the other form data as a JSON object
-      const otherData = {
-        email,
-        firstName,
-        lastName,
-        gender,
-        phone: mobile,
-        socialLink,
-        areaOfExpertise,
-        specificArea,
-        experience,
-        category,
-      };
+      // If photo file is selected, append it
+      if (fileInputRefPhotos.current.files[0]) {
+        formData.append('photoFile', fileInputRefPhotos.current.files[0]);
+      }
   
       try {
-        // Make the API call to register the expert
+        // Make the API call to register the expert (POST request to register)
         const response = await axios.post(
-          "http://localhost:8000/api/expertauth/register", 
-          otherData,  // Send other fields as JSON
+          'http://localhost:8000/api/expertauth/register', 
+          formData,  // Send the form data (including files)
           {
             headers: {
-              "Content-Type": "application/json",  // Sending JSON for other data
+              'Content-Type': 'multipart/form-data',  // Set the correct content type for file uploads
             },
           }
         );
   
-        // Send the files (photoFile and certificationFile) as FormData
-        const fileResponse = await axios.post(
-          "http://localhost:8000/api/expertauth/upload",  // Assuming the endpoint to handle file uploads is '/upload'
-          formData,  // Send the files as FormData
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",  // Ensure the request type is 'multipart/form-data' for file uploads
-            },
-          }
-        );
-  
-        console.log("Expert registered and files uploaded successfully:", fileResponse.data);
-        router.push("/expertlogin");  // Redirect to expert profile page
+        console.log('Expert registered successfully:', response.data);
+        alert("Expert registered successfully");
+        router.push('/expertlogin');  // Redirect to expert login page after successful registration
       } catch (error) {
-        console.error("Error during registration:", error);
-        alert("Error during registration. Please try again.");
+        console.error('Error during registration:', error);
+        alert('Error during registration. Please try again.');
       }
     }
   };
