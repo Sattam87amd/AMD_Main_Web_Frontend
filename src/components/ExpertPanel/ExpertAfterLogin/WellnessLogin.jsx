@@ -15,8 +15,10 @@ const WellnessHomeCardsLogin = () => {
   useEffect(() => {
     const fetchExperts = async () => {
       try {
-        const area = "Wellness";  // Or dynamically fetch based on user's selection
-        const response = await axios.get(`http://localhost:8000/api/expertauth/area/${area}`);
+        const area = "Wellness"; // Or dynamically fetch based on user's selection
+        const response = await axios.get(
+          `http://localhost:8000/api/expertauth/area/${area}`
+        );
         setExpertData(response.data.data);
         setLoading(false);
       } catch (err) {
@@ -28,6 +30,30 @@ const WellnessHomeCardsLogin = () => {
     fetchExperts();
   }, []);
 
+  const truncateExperience = (text) => {
+    if (!text) return "";
+
+    // Find the first sentence (up to first period) within first 25 words
+    const words = text.split(/\s+/).filter((word) => word.length > 0);
+    const first25Words = words.slice(0, 25);
+
+    // Find the first period in these words
+    let firstSentence = [];
+    for (const word of first25Words) {
+      firstSentence.push(word);
+      if (word.includes(".")) {
+        break;
+      }
+    }
+
+    // If no period found, use first 25 words with ellipsis if needed
+    if (firstSentence.length === 25 && words.length > 25) {
+      return firstSentence.join(" ") + "...";
+    }
+
+    return firstSentence.join(" ");
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
@@ -35,9 +61,12 @@ const WellnessHomeCardsLogin = () => {
     <div className="bg-white p-6">
       {/* Heading Section */}
       <div className="flex flex-col md:flex-row md:h-40 items-center mb-6 md:mb-0">
-        <h1 className="text-3xl md:text-[60px] font-bold text-black">WELLNESS</h1>
+        <h1 className="text-3xl md:text-[60px] font-bold text-black">
+          WELLNESS
+        </h1>
         <p className="text-[#9C9C9C] md:pt-5 pl-5 md:text-2xl">
-        Connect with nutritionists, trainers, & more about living a healthier life
+          Connect with nutritionists, trainers, & more about living a healthier
+          life
         </p>
       </div>
 
@@ -57,20 +86,21 @@ const WellnessHomeCardsLogin = () => {
           {expertData.map((expert, index) => (
             <Link
               key={index}
-              href={`/expertpanel/expertaboutme/${expert._id}`}  // Dynamic URL with expert ID
+              href={`/expertpanel/expertaboutme/${expert._id}`} // Dynamic URL with expert ID
               passHref
             >
               <div className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
                 {/* Background Image */}
                 <img
-                  src={expert.photoFile || "/aaliyaabadi.png"}  // Ensure there's a fallback image
+                  src={expert.photoFile || "/aaliyaabadi.png"} // Ensure there's a fallback image
                   alt={expert.firstName}
                   className="w-full h-full object-cover"
                 />
 
                 {/* Price Tag */}
                 <div className="absolute top-4 right-4 bg-[#F8F7F3] text-black px-4 py-2 rounded-2xl shadow-xl font-semibold">
-                  {expert.price || "$ 0"}  {/* Default value in case price is missing */}
+                  {expert.price || "$ 0"}{" "}
+                  {/* Default value in case price is missing */}
                 </div>
 
                 {/* Transparent Blur Card */}
@@ -79,7 +109,7 @@ const WellnessHomeCardsLogin = () => {
                     {expert.firstName}
                     <HiBadgeCheck className="w-6 h-6 text-yellow-500" />
                   </h2>
-                  <p className="text-xs text-black mt-1">{expert.experience}</p>
+                  <p className="text-xs text-black mt-1"> {truncateExperience(expert.experience)}</p>
                 </div>
               </div>
             </Link>

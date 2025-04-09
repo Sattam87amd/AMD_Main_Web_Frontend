@@ -28,6 +28,30 @@ const  FashionBeautyHomeCardsLogin = () => {
     fetchExperts();
   }, []);
 
+  const truncateExperience = (text) => {
+    if (!text) return '';
+    
+    // Find the first sentence (up to first period) within first 25 words
+    const words = text.split(/\s+/).filter(word => word.length > 0);
+    const first25Words = words.slice(0, 25);
+    
+    // Find the first period in these words
+    let firstSentence = [];
+    for (const word of first25Words) {
+      firstSentence.push(word);
+      if (word.includes('.')) {
+        break;
+      }
+    }
+    
+    // If no period found, use first 25 words with ellipsis if needed
+    if (firstSentence.length === 25 && words.length > 25) {
+      return firstSentence.join(' ') + '...';
+    }
+    
+    return firstSentence.join(' ');
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
@@ -80,7 +104,7 @@ const  FashionBeautyHomeCardsLogin = () => {
                     {expert.firstName}
                     <HiBadgeCheck className="w-6 h-6 text-yellow-500" />
                   </h2>
-                  <p className="text-xs text-black mt-1">{expert.experience}</p>
+                  <p className="text-xs text-black mt-1"> {truncateExperience(expert.experience)}</p>
                 </div>
               </div>
             </Link>
