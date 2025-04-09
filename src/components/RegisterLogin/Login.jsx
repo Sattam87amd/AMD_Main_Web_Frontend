@@ -8,7 +8,7 @@ import "react-phone-number-input/style.css";
 import { Inter } from "next/font/google";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-// import axios from "axios"
+import axios from "axios"
 
 const interFont = Inter({
     subsets: ["latin"],

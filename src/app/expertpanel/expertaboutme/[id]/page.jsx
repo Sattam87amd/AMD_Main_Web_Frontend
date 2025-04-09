@@ -12,6 +12,7 @@ import Sidebar from '@/components/ExpertPanel/SideBar/SideBar';
 import Footer from "@/components/Layout/Footer";
 import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
 import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const ExpertDetail = () => {
   const [expert, setExpert] = useState(null);
@@ -24,6 +25,8 @@ const ExpertDetail = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
+  
+  const router = useRouter()
 
   // Date handling
   const today = new Date();
@@ -58,6 +61,7 @@ const ExpertDetail = () => {
           const response = await axios.get(`http://localhost:8000/api/expertauth/${expertId}`);
           setExpert(response.data.data);
           setLoading(false);
+          localStorage.setItem("consultingExpertData", JSON.stringify(response.data.data));
         } catch (err) {
           setError('Error fetching expert details.');
           setLoading(false);
@@ -85,28 +89,25 @@ const ExpertDetail = () => {
       const token = localStorage.getItem("expertToken");
       if (!token) throw new Error("No authentication token found");
 
-      const bookingData = {
+      const sessionData = {
         consultingExpertId: expert._id,
+        sessionDate: selectedDate,
+        sessionTime: selectedTime,
+        duration: selectedDuration,
         areaOfExpertise: "Home",
-        date: selectedDate,
-        time: selectedTime,
-        duration: selectedDuration.replace(" - ", "-"),
-        optionalNote: ""
-      };
-
-      const response = await axios.post(
-        "http://localhost:8000/api/session/experttoexpertsession",
-        bookingData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
-        }
-      );
-
-      console.log("Booking successful:", response.data);
-      alert("Session booked successfully!");
+      }
+    
+      // Store session data in localStorage
+      localStorage.setItem("sessionData", JSON.stringify(sessionData));
+      alert("Click Ok to proceed");
+      // Redirect to the next page
+      router.push('/expertpanel/expertbooking');  // Assuming the second page is 'expertbookingdetails'
+    
+     
+    
+    
+     
+      
       setShowTimeSelection(false);
     } catch (error) {
       console.error("Booking error:", error.response?.data || error.message);
