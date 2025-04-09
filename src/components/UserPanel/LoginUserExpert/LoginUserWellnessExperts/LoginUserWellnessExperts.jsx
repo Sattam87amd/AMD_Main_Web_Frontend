@@ -49,10 +49,10 @@ const LoginUserWellnessexpert = () => {
       {/* Heading Section */}
       <div className="flex flex-col md:flex-row md:h-40 items-center mb-6 md:mb-0">
         <h1 className="text-3xl md:text-[60px] font-bold text-black">
-        WELLNESS
+          WELLNESS
         </h1>
         <p className="text-[#9C9C9C] md:pt-5 pl-5 md:text-2xl">
-        Connect with nutritionists, trainers, & more about living a healthier life
+          Connect with nutritionists, trainers, & more about living a healthier life
         </p>
       </div>
 
@@ -68,7 +68,7 @@ const LoginUserWellnessexpert = () => {
 
       {/* Cards Section - Horizontal Scroll on Small Screens, Grid on Medium+ */}
       <div className="overflow-x-auto md:overflow-visible">
-        <div className="flex md:grid md:grid-cols-5 gap-4 md:gap-80 px-4 md:px-0 overflow-x-scroll scrollbar-hide">
+        <div className="flex md:grid md:grid-cols-5 gap-4 md:gap-80 px-4 md:px-0 overflow-x-scroll custom-scrollbar-hide">
           {expertData.map((expert, index) => (
             <Link key={index} href={`/userpanel/userexpertaboutme`} passHref>
               <div className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
