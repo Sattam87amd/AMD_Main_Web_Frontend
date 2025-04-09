@@ -1,7 +1,6 @@
 'use client';
 import NavSearch from "@/components/Layout/navsearch";
 import React, { useState, useEffect } from 'react';
-import NavSearch from "@/components/Layout/navsearch";
 import { FaStar } from 'react-icons/fa';
 import { FaInstagram } from 'react-icons/fa';
 import { Gift } from 'lucide-react';
@@ -12,6 +11,7 @@ import SimilarExpertsExpertPanel from '@/components/ExpertPanel/ExpertPanelAbout
 import Sidebar from '@/components/ExpertPanel/SideBar/SideBar';
 import Footer from "@/components/Layout/Footer";
 import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
+import axios from "axios";
 
 const ExpertDetail = () => {
   const [expert, setExpert] = useState(null);
@@ -82,7 +82,7 @@ const ExpertDetail = () => {
 
   const handleBookingRequest = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("expertToken");
       if (!token) throw new Error("No authentication token found");
 
       const bookingData = {
