@@ -6,11 +6,11 @@ import Link from "next/link";
 
 const LoginExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
   const categories = [
-    { title: "Top Experts", image: "/topexperts.png", link: "/userpanel/logintopexpert" },
-    { title: "Home", image: "/home.png", link: "/userpanel/loginhomeexpert" },
-    { title: "Career & Business", image: "/career-business.png", link: "/userpanel/logincareer&business" },
-    { title: "Style & Beauty", image: "/style-beauty.png", link: "/userpanel/loginstylebeauty" },
-    { title: "Wellness", image: "/wellness.png", link: "/userpanel/loginwellnessexpert" },
+    { title: "Top Experts", image: "/topexperts.png", link: "/expertpanel/topexperts" },
+    { title: "Home", image: "/home.png", link: "/expertpanel/homeexperts" },
+    { title: "Career & Business", image: "/career-business.png", link: "/expertpanel/career&business" },
+    { title: "Style & Beauty", image: "/style-beauty.png", link: "/expertpanel/style&beautyexperts" },
+    { title: "Wellness", image: "/wellness.png", link: "/expertpanel/wellnessexperts" },
   ];
 
   const filterOptions = [
@@ -96,13 +96,14 @@ const LoginExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
         </motion.div>
       )}
 
+      {/* Apply the custom-scrollbar-hide class here */}
       <motion.div
-        className="overflow-x-auto md:overflow-x-auto md:ml-16"
+        className="overflow-x-auto md:overflow-x-auto md:ml-16 custom-scrollbar-hide"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
-        <div className="flex gap-4 md:gap-x-32 md:px-4 md:pb-2 scrollbar-hide">
+        <div className="flex gap-4 md:gap-x-32 md:px-4 md:pb-2">
           {categories.map((category, index) => (
             <Link href={category.link} key={index} passHref>
               <motion.div
