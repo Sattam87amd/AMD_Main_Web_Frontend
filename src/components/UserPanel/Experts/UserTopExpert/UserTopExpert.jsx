@@ -1,9 +1,8 @@
-
 "use client";
 
 import React from "react";
 import Link from "next/link";
-import { motion } from "framer-motion"; // Import framer-motion for animation
+import { motion } from "framer-motion";
 import { HiBadgeCheck } from "react-icons/hi";
 
 // Expert Data (5 experts repeated 3 times)
@@ -14,7 +13,7 @@ const experts = [
     description:
       "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
     price: "$450",
-    image: "/aaliyaabadi.png",
+    image: "/aaliaabadi.png",
   },
   {
     name: "Aisha Aziz",
@@ -64,10 +63,10 @@ const UserTopExpert = () => {
         className="flex flex-col md:flex-row md:h-40 items-center mb-6"
       >
         <h1 className="text-3xl md:text-[60px] font-bold text-black">
-          Top Experts
+          Home Experts
         </h1>
         <p className="text-[#9C9C9C] md:pt-5 pl-5 md:text-2xl">
-          Access to the best has never been easier
+          Access to the best have never been easie
         </p>
       </motion.div>
 
@@ -84,7 +83,7 @@ const UserTopExpert = () => {
           }}
         >
           {repeatedExperts.map((expert, index) => (
-            <Link key={index} href={`/userpanel/userexpertaboutme`} passHref>
+            <Link key={index} href={`/expertpanel/expertaboutme`} passHref>
               <motion.div
                 className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg rounded-lg cursor-pointer"
                 variants={{
@@ -111,7 +110,9 @@ const UserTopExpert = () => {
                     {expert.name}
                     <HiBadgeCheck className="w-5 h-5 text-yellow-500" />
                   </h2>
-                  <p className="text-xs text-gray-800 mt-1">{expert.description}</p>
+                  <p className="text-xs text-gray-800 mt-1">
+                    {expert.description}
+                  </p>
                 </div>
               </motion.div>
             </Link>

@@ -6,8 +6,9 @@ import SimilarExpertsUser from '@/components/UserPanel/expertaboutme/SimilarExpe
 import WhatToExpectUser from '@/components/UserPanel/expertaboutme/WhatToExpectUser'
 import React from 'react'
 import UserFeatureHighights from '@/components/UserPanel/JoinAsExpert/UserFeatureHighlights'
-import Sidebar from '@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar'
-import NavSearch from '@/components/UserPanel/NavSearch/NavSearch'
+import UserNavSearch from '@/components/UserPanel/Layout/NavSearch'
+import UserSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
+// import Sidebar from '@/components/UserPanel/LoginUserExpert/SideBar/Sidebar'
 
 
 const page = () => {
@@ -17,11 +18,11 @@ const page = () => {
       <div className="flex flex-1">
         {/* Sidebar (Left Section - 20% Width) */}
         <aside className="w-[15%] h-[85%] hidden md:block bg-gray-100 overflow-y-auto -mt-5">
-          <Sidebar />
+          <UserSidebar />
         </aside>
 
     <div className="w-full md:w-[85%] flex flex-col ">
-        <NavSearch />
+        <UserNavSearch />
        <ExpertAboutMeUser/>
        <WhatToExpectUser/>
        <ScheduleQuickCallsUser/>

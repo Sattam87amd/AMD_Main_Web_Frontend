@@ -1,5 +1,5 @@
 "use client";
-import UseSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
+import UserSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
 import { usePathname } from "next/navigation";
 import Footer from "@/components/UserPanel/Layout/Footer";
 import Navtop from "@/components/UserPanel/NavTop/NavTopuser";
@@ -24,7 +24,7 @@ const Page = () => {
       {/* Sidebar: visible on desktop */}
       
       <div className="hidden md:block w-[20%] -mt-5">
-        <UseSidebar/>
+        <UserSidebar/>
       </div>
       {/* Main Content: full width on mobile, 80% on desktop */}
       <div className="w-full md:w-[80%] p-4 pb-20">

@@ -9,6 +9,7 @@ import UserTopExpert from '@/components/UserPanel/Experts/UserTopExpert/UserTopE
 import UserWellnessExperts from '@/components/UserPanel/Experts/UserWellnessExperts/UserWellnessExperts'
 import Footer from '@/components/UserPanel/Layout/Footer'
 import UserNavSearch from '@/components/UserPanel/Layout/NavSearch'
+import LoginExpertCategory from '@/components/UserPanel/LoginExpertCategory/LoginExpertCategory'
 import React from 'react'
 
  const page = () => {
@@ -18,6 +19,7 @@ import React from 'react'
     <div >
       <div className='hidden md:block'>
        <UserNavSearch/>
+       <LoginExpertCategory/>
        <UserTopExpert/>
        <UserWellnessExperts/>
        <UserFbexpert/>
