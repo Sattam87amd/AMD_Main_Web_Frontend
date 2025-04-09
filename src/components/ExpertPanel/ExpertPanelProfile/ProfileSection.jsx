@@ -113,24 +113,23 @@ const ProfileSection = () => {
         </h2>
 
         <nav className="space-y-6">
-          {[ 
-            { name: "Profile", icon: FaUser }, 
-            { name: "Payment Methods", icon: FiDollarSign }, 
-            { name: "Do you have code?", icon: FaGift }, 
-            { name: "Gift Card", icon: FaGift }, 
-            { name: "Contact Us", icon: FaComments }, 
+          {[
+            { name: "Profile", icon: FaUser },
+            { name: "Payment Methods", icon: FiDollarSign },
+            { name: "Do you have code?", icon: FaGift },
+            { name: "Gift Card", icon: FaGift },
+            { name: "Contact Us", icon: FaComments },
             { name: "Payment History", icon: FiDollarSign }, // New Entry
-            { name: "Give us Feedback", icon: MdOutlineFeedback }, 
-            { name: "Deactivate account", icon: FaTrashAlt }, 
+            { name: "Give us Feedback", icon: MdOutlineFeedback },
+            { name: "Deactivate account", icon: FaTrashAlt },
           ].map((item) => (
             <button
               key={item.name}
               onClick={() => setSelectedSection(item.name)}
-              className={`flex items-center gap-3 w-full text-left p-2 rounded-lg transition ${
-                selectedSection === item.name
+              className={`flex items-center gap-3 w-full text-left p-2 rounded-lg transition ${selectedSection === item.name
                   ? "bg-black text-white"
                   : "hover:bg-gray-200 text-[#7E7E7E]"
-              }`}
+                }`}
             >
               <item.icon
                 className={
@@ -152,17 +151,20 @@ const ProfileSection = () => {
               <div className="flex items-center space-x-4 md:space-x-6">
                 {/* Only render the image if the photoFile is a valid URL */}
                 {profileData.photoFile ? (
-                  <Image
-                    src={profileData.photoFile}
-                    alt="profile"
-                    width={70} // Set width
-                    height={70} // Set height
-                    className="rounded-full "
-                  />
+                  <div className="rounded-full border-2 border-white ">
+                    <div className="w-[100px] h-[100px] rounded-full overflow-hidden">
+                      <Image
+                        src={profileData.photoFile}
+                        alt="profile"
+                        width={100}
+                        height={100}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
                 ) : (
-                  <div className="w-16 h-16 rounded-full bg-gray-300" /> // Fallback placeholder
+                  <div className="w-[100px] h-[100px] rounded-full bg-gray-300" />
                 )}
-
                 <div className="text-center md:text-left">
                   <h3 className="text-lg font-semibold text-[#434966]">
                     {profileData.firstName} {profileData.lastName}
@@ -200,9 +202,8 @@ const ProfileSection = () => {
                   value={profileData.firstName}
                   onChange={handleInputChange}
                   disabled={!isEditing}
-                  className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${
-                    !isEditing ? "bg-gray-100 cursor-not-allowed" : ""
-                  }`}
+                  className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${!isEditing ? "bg-gray-100 cursor-not-allowed" : ""
+                    }`}
                 />
               </div>
 
@@ -216,9 +217,8 @@ const ProfileSection = () => {
                   value={profileData.lastName}
                   onChange={handleInputChange}
                   disabled={!isEditing}
-                  className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${
-                    !isEditing ? "bg-gray-100 cursor-not-allowed" : ""
-                  }`}
+                  className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${!isEditing ? "bg-gray-100 cursor-not-allowed" : ""
+                    }`}
                 />
               </div>
 
@@ -232,9 +232,8 @@ const ProfileSection = () => {
                   value={profileData.phone}
                   onChange={handleInputChange}
                   disabled={!isEditing}
-                  className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${
-                    !isEditing ? "bg-gray-100 cursor-not-allowed" : ""
-                  }`}
+                  className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${!isEditing ? "bg-gray-100 cursor-not-allowed" : ""
+                    }`}
                 />
               </div>
 
@@ -248,9 +247,8 @@ const ProfileSection = () => {
                   value={profileData.email}
                   onChange={handleInputChange}
                   disabled={!isEditing}
-                  className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${
-                    !isEditing ? "bg-gray-100 cursor-not-allowed" : ""
-                  }`}
+                  className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${!isEditing ? "bg-gray-100 cursor-not-allowed" : ""
+                    }`}
                 />
               </div>
 
@@ -259,11 +257,10 @@ const ProfileSection = () => {
                 <button
                   type="submit"
                   disabled={!isEditing}
-                  className={`text-white font-medium rounded-2xl text-sm px-6 md:px-16 py-2.5 text-center ${
-                    isEditing
+                  className={`text-white font-medium rounded-2xl text-sm px-6 md:px-16 py-2.5 text-center ${isEditing
                       ? "bg-black hover:bg-gray-900 focus:ring-gray-300"
                       : "bg-gray-400 cursor-not-allowed"
-                  }`}
+                    }`}
                 >
                   Save
                 </button>

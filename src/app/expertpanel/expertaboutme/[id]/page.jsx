@@ -1,9 +1,9 @@
-'use client';
-import NavSearch from "@/components/Layout/navsearch";
+"use client";
 import React, { useState, useEffect } from 'react';
 import { FaStar } from 'react-icons/fa';
 import { FaInstagram } from 'react-icons/fa';
 import { Gift } from 'lucide-react';
+import NavSearch from "@/components/Layout/navsearch";
 import WhatToExpectExpertPanel from "@/components/ExpertPanel/ExpertPanelAboutMe/WhatToExpectExpertPanel";
 import AboutMeReviews from '@/components/ExpertAboutMe/AboutMeReviews';
 import ExpertFeatureHighightsExpertPanel from '@/components/ExpertPanel/ExpertPanelAboutMe/ExpertFeatureHighightsExpertPanel';
@@ -11,7 +11,8 @@ import SimilarExpertsExpertPanel from '@/components/ExpertPanel/ExpertPanelAbout
 import Sidebar from '@/components/ExpertPanel/SideBar/SideBar';
 import Footer from "@/components/Layout/Footer";
 import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
-import axios from "axios";
+import axios from 'axios';
+import Link from 'next/link';
 
 const ExpertDetail = () => {
   const [expert, setExpert] = useState(null);
@@ -72,49 +73,46 @@ const ExpertDetail = () => {
     setPrice(type === "1:4" ? 150 : 350);
   };
 
-  const handleTimeSelection = (dayKey, time) => {
-    const date = dateMap[dayKey].toISOString().split('T')[0];
-    const formattedTime = time.replace(" AM", "").replace(" PM", "").trim();
-    
-    setSelectedDate(date);
-    setSelectedTime(formattedTime);
+  const handleSeeTimeClick = () => {
+    setShowTimeSelection(true);
   };
 
-  const handleBookingRequest = async () => {
-    try {
-      const token = localStorage.getItem("expertToken");
-      if (!token) throw new Error("No authentication token found");
-
-      const bookingData = {
-        consultingExpertId: expert._id,
-        areaOfExpertise: "Home",
-        date: selectedDate,
-        time: selectedTime,
-        duration: selectedDuration.replace(" - ", "-"),
-        optionalNote: ""
-      };
-
-      const response = await axios.post(
-        "http://localhost:8000/api/session/experttoexpertsession",
-        bookingData,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
-        }
-      );
-
-      console.log("Booking successful:", response.data);
-      alert("Session booked successfully!");
-      setShowTimeSelection(false);
-    } catch (error) {
-      console.error("Booking error:", error.response?.data || error.message);
-      alert(`Booking failed: ${error.response?.data?.message || error.message}`);
+  const handleTimeSelection = (day, time) => {
+    const currentSelectedSlots = selectedTimeSlots[day];
+    if (currentSelectedSlots.includes(time)) {
+      setSelectedTimeSlots({
+        ...selectedTimeSlots,
+        [day]: currentSelectedSlots.filter(selectedTime => selectedTime !== time)
+      });
+    } else {
+      if (currentSelectedSlots.length < 5) {
+        setSelectedTimeSlots({
+          ...selectedTimeSlots,
+          [day]: [...currentSelectedSlots, time]
+        });
+      }
     }
   };
-  
-  // Get the truncated experience text
+
+  const handleSeeMore = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const getFormattedDate = (date) => {
+    const options = { weekday: 'long', day: 'numeric', month: 'short' };
+    return new Date(date).toLocaleDateString(undefined, options);
+  };
+
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+  const nextDate = new Date(today);
+  nextDate.setDate(today.getDate() + 2);
+
+  const todayStr = getFormattedDate(today);
+  const tomorrowStr = getFormattedDate(tomorrow);
+  const nextDateStr = getFormattedDate(nextDate);
+
   const experienceText = expert?.experience || '';
   const truncatedExperience = experienceText.slice(0, 200) + (experienceText.length > 200 ? '...' : '');
 
@@ -131,9 +129,9 @@ const ExpertDetail = () => {
         </aside>
 
         <div className="w-full md:w-[80%] flex flex-col">
-        <div className="hidden md:block">
-          <NavSearch />
-        </div>
+          <div className="hidden md:block">
+            <NavSearch />
+          </div>
           <div className="min-h-screen bg-white py-10 px-4 md:px-10">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left Column: Expert Info (Unchanged) */}
@@ -166,38 +164,16 @@ const ExpertDetail = () => {
                       {isExpanded ? experienceText : truncatedExperience}
                     </p>
                   </div>
-                  {experienceText.length > 200 && (
-                    <button
-                      className="mt-6 bg-black text-white px-6 py-2 rounded-md hover:bg-gray-900 transition"
-                      onClick={handleSeeMore}
-                    >
-                      {isExpanded ? 'Show Less' : 'See More'}
-                    </button>
-                  )}
+               
 
-                  <h4 className="text-md font-semibold mt-6 flex items-center">
-                    <span className="text-yellow-500 text-lg mr-2">💡</span> Strengths:
-                  </h4>
-                  <ul className="list-none mt-2 space-y-1">
-                    {(expert?.strengths || [
-                      "Startups",
-                      "Investing",
-                      "Company Culture",
-                      "Early Stage Marketing",
-                      "Growth Tactics",
-                      "Operations",
-                      "Fundraising",
-                      "Hiring & Managing",
-                    ]).map((strength, index) => (
-                      <li key={index} className="text-gray-700 flex items-center text-sm">
-                        <span className="text-yellow-500 mr-2">✔</span> {strength}
-                      </li>
-                    ))}
-                  </ul>
+                  
                 </div>
+           
               </div>
+              
+              
 
-              {/* Right Column */}
+              {/* Right Column: Video Consultation */}
               <div className="space-y-6">
                 {showTimeSelection ? (
                   <>
@@ -271,85 +247,126 @@ const ExpertDetail = () => {
                     </div>
                   </>
                 ) : (
-                    <>
-                    {/* 1:1 Video Consultation */}
-                    <div className="bg-[#F8F7F3] p-6 rounded-xl">
-                      <div className="bg-black text-white p-2 rounded-t-xl w-max">
-                        <h3 className="text-2xl font-semibold">Book A Video Call</h3>
-                      </div>
-                      <div className="text-2xl py-4">
-                        <h2 className="font-semibold">1:1 Video Consultation</h2>
-                      </div>
-                      <p className="text-2xl font-semibold">Book a 1:1 Video consultation & get personalized advice</p>
+                  <>
+                    <div className="space-y-4">
+                      <h3 className="font-bold text-lg">Book A Video Call</h3>
 
-                      <div className="mt-4">
-                        <p className="text-xl font-semibold">Starting at ${price}</p>
-                        <div className="flex items-center justify-start">
-                          <p className="text-[#7E7E7E] text-base font-semibold">
-                            Next available - <span className="text-[#0D70E5]">4:30am on 3/25</span>
-                          </p>
-                          <div className="flex items-center">
-                            {[...Array(5)].map((_, i) => (
-                              <FaStar key={i} className="text-[#FFA629] ml-3" />
-                            ))}
-                            <span className="ml-2 text-[#FFA629] font-semibold text-sm">5.0</span>
+                      {/* 1:1 Video Consultation */}
+                      <div className="bg-[#F8F7F3] p-6 rounded-xl">
+                        <div className="bg-black text-white p-2 rounded-t-xl w-max">
+                          <h3 className="text-2xl font-semibold">Book A Video Call</h3>
+                        </div>
+                        <div className="text-2xl py-4">
+                          <h2 className="font-semibold">1:1 Video Consultation</h2>
+                        </div>
+                        <p className="text-2xl font-semibold">Book a 1:1 Video consultation & get personalized advice</p>
+
+                        <div className="mt-4">
+                          <p className="text-xl font-semibold">Starting at ${price}</p>
+                          <div className="flex items-center justify-start">
+                            <p className="text-[#7E7E7E] text-base font-semibold">
+                              Next available - <span className="text-[#0D70E5]">4:30am on 3/25</span>
+                            </p>
+                            <div className="flex items-center">
+                              {[...Array(5)].map((_, i) => (
+                                <FaStar key={i} className="text-[#FFA629] ml-3" />
+                              ))}
+                              <span className="ml-2 text-[#FFA629] font-semibold text-sm">5.0</span>
+                            </div>
                           </div>
+                        </div>
+
+                        <div className="flex items-center justify-center mt-4 gap-8">
+                          <Gift className="h-8 w-8" />
+                          <button
+                            className="bg-[#0D70E5] text-white py-3 px-24 rounded-md hover:bg-[#0A58C2]"
+                            onClick={handleSeeTimeClick}
+                          >
+                            See Time
+                          </button>
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-center mt-4 gap-8">
-                        <Gift className="h-8 w-8" />
-                        <button
-                          className="bg-[#0D70E5] text-white py-3 px-24 rounded-md hover:bg-[#0A58C2]"
-                          onClick={handleSeeTimeClick}
-                        >
-                          See Time
-                        </button>
-                      </div>
-                    </div>
+                      {/* 1:4 Video Consultation */}
+                      <div className="bg-[#F8F7F3] p-6 rounded-xl">
+                        <div className="bg-black text-white p-2 rounded-t-xl w-max">
+                          <h3 className="text-2xl font-semibold">Book A Video Call</h3>
+                        </div>
+                        <div className="text-2xl py-4">
+                          <h2 className="font-semibold">1:4 Video Consultation</h2>
+                        </div>
+                        <p className="text-2xl font-semibold">Book a 1:4 Video consultation & get personalized advice</p>
 
-                    {/* 1:4 Video Consultation */}
-                    <div className="bg-[#F8F7F3] p-6 rounded-xl">
-                      <div className="bg-black text-white p-2 rounded-t-xl w-max">
-                        <h3 className="text-2xl font-semibold">Book A Video Call</h3>
-                      </div>
-                      <div className="text-2xl py-4">
-                        <h2 className="font-semibold">1:4 Video Consultation</h2>
-                      </div>
-                      <p className="text-2xl font-semibold">Book a 1:4 Video consultation & get personalized advice</p>
-
-                      <div className="mt-4">
-                        <p className="text-xl font-semibold">Starting at ${price}</p>
-                        <div className="flex items-center justify-start">
-                          <p className="text-[#7E7E7E] text-base font-semibold">
-                            Next available - <span className="text-[#0D70E5]">5:00pm on 3/25</span>
-                          </p>
-                          <div className="flex items-center">
-                            {[...Array(5)].map((_, i) => (
-                              <FaStar key={i} className="text-[#FFA629] ml-3" />
-                            ))}
-                            <span className="ml-2 text-[#FFA629] font-semibold text-sm">5.0</span>
+                        <div className="mt-4">
+                          <p className="text-xl font-semibold">Starting at ${price}</p>
+                          <div className="flex items-center justify-start">
+                            <p className="text-[#7E7E7E] text-base font-semibold">
+                              Next available - <span className="text-[#0D70E5]">5:00pm on 3/25</span>
+                            </p>
+                            <div className="flex items-center">
+                              {[...Array(5)].map((_, i) => (
+                                <FaStar key={i} className="text-[#FFA629] ml-3" />
+                              ))}
+                              <span className="ml-2 text-[#FFA629] font-semibold text-sm">5.0</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div className="flex items-center justify-center mt-4 gap-8">
-                        <Gift className="h-8 w-8" />
-                        <button
-                          className="bg-[#0D70E5] text-white py-3 px-24 rounded-md hover:bg-[#0A58C2]"
-                          onClick={handleSeeTimeClick}
-                        >
-                          See Time
-                        </button>
+                        <div className="flex items-center justify-center mt-4 gap-8">
+                          <Gift className="h-8 w-8" />
+                          <button
+                            className="bg-[#0D70E5] text-white py-3 px-24 rounded-md hover:bg-[#0A58C2]"
+                            onClick={handleSeeTimeClick}
+                          >
+                            See Time
+                          </button>
+                        </div>
                       </div>
                     </div>
+
+                    {/* Select Plan - New Addition */}
+                    <div className="bg-white border rounded-xl shadow-md p-6">
+                      <div className="bg-black text-white px-4 py-2 rounded-md inline-block mb-4 font-semibold text-sm">
+                        Select Plan #1
+                      </div>
+                      <h3 className="text-lg font-bold mb-2">
+                        Growing A Successful Business - 1:1 Mentoring (VIP Access)
+                      </h3>
+                      <p className="text-sm text-gray-600 mb-2">What's included:</p>
+                      <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+                        <li>1:1 Chat (Unlimited)</li>
+                        <li>1:1 Video Calls (120 Min / Month)</li>
+                        <li>
+                          Real World Advice On Physical Retail, Managing Multiple
+                          Locations, Franchising, And More
+                        </li>
+                        <li>
+                          Lessons on Branding, Narrative, Local Marketing, Delightful
+                          Customer Service, Hiring, And More
+                        </li>
+                        <li>How To Launch And Grow A Successful Product Line</li>
+                        <li>
+                          Invite To The Intro CEO Day In LA (Must Subscribe For 12 Months
+                          or More)
+                        </li>
+                      </ul>
+                    </div>
+                    
                   </>
                 )}
               </div>
+              {experienceText.length > 200 && (
+                    <button
+                      className="mt-6 bg-black text-white px-6 py-2 rounded-md hover:bg-gray-900 transition w-[10rem] mx-[10rem]"
+                      onClick={handleSeeMore}
+                    >
+                      {isExpanded ? 'Show Less' : 'See More'}
+                    </button>
+                  )}
             </div>
           </div>
           <WhatToExpectExpertPanel />
-          <AboutMeReviews/> 
+          <AboutMeReviews /> 
           <ExpertFeatureHighightsExpertPanel />
           <SimilarExpertsExpertPanel />
         </div>
