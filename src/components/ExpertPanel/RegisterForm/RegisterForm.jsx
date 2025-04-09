@@ -67,13 +67,16 @@ function RegisterForm() {
     const file = event.target.files[0];
     if (file) {
       const fileExtension = file.name.split('.').pop().toLowerCase();
+      // Validate file size (10MB max)
       if (file.size > 10 * 1024 * 1024) {
         setErrors((prev) => ({
           ...prev,
           file: "Max 10 MB files can be uploaded",
         }));
         document.getElementById("file-display-certifications").value = "";
-      } else if (['pdf', 'jpg', 'jpeg', 'png'].includes(fileExtension)) {
+      }
+      // Validate file type (only allow PDF, JPG, JPEG, PNG)
+      else if (['pdf', 'jpg', 'jpeg', 'png'].includes(fileExtension)) {
         setCertificationFileName(file.name);
         setErrors((prev) => ({ ...prev, file: "" }));
       } else {
@@ -90,72 +93,79 @@ function RegisterForm() {
     const file = event.target.files[0];
     if (file) {
       const fileExtension = file.name.split('.').pop().toLowerCase();
+      // Validate file size (10MB max)
       if (file.size > 10 * 1024 * 1024) {
         setErrors((prev) => ({
           ...prev,
           file: "Max 10 MB files can be uploaded",
         }));
         document.getElementById("file-display-photos").value = "";
-      } else if (['pdf', 'jpg', 'jpeg', 'png'].includes(fileExtension)) {
+      }
+      // Validate file type (only allow JPG, JPEG, PNG)
+      else if (['jpg', 'jpeg', 'png'].includes(fileExtension)) {
         setPhotoFileName(file.name);
         setErrors((prev) => ({ ...prev, file: "" }));
       } else {
         setErrors((prev) => ({
           ...prev,
-          file: "Only PDF, JPG, JPEG, PNG files are allowed",
+          file: "Only JPG, JPEG, PNG files are allowed",
         }));
         document.getElementById("file-display-photos").value = "";
       }
     }
   };
+  
 
   // Handle form submission and send data to backend
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent page reload
-
+  
     if (handleValidation()) {
-      const formData = {
-        email,
-        firstName,
-        lastName,
-        gender,
-        phone: mobile,
-        socialLink,
-        areaOfExpertise,
-        specificArea,
-        experience,
-        category,
-      };
-
-      // Add file names to the formData object
+      // Create a new FormData object to hold the form data and files
+      const formData = new FormData();
+  
+      // Append other form fields to the FormData object
+      formData.append('email', email);
+      formData.append('firstName', firstName);
+      formData.append('lastName', lastName);
+      formData.append('gender', gender);
+      formData.append('phone', mobile);
+      formData.append('socialLink', socialLink);
+      formData.append('areaOfExpertise', areaOfExpertise);
+      formData.append('specificArea', specificArea);  // Will be used if 'Others' is selected
+      formData.append('experience', experience);
+  
+      // If certification file is selected, append it
       if (fileInputRefCertifications.current.files[0]) {
-        formData.certificationFile = certificationFileName;
+        formData.append('certificationFile', fileInputRefCertifications.current.files[0]);
       }
+  
+      // If photo file is selected, append it
       if (fileInputRefPhotos.current.files[0]) {
-        formData.photoFile = photoFileName;
+        formData.append('photoFile', fileInputRefPhotos.current.files[0]);
       }
-
+  
       try {
-        // Make the API call to register the expert
+        // Make the API call to register the expert (POST request to register)
         const response = await axios.post(
-          "http://localhost:8000/api/expertauth/register", 
-          formData, 
+          'http://localhost:8000/api/expertauth/register', 
+          formData,  // Send the form data (including files)
           {
             headers: {
-              "Content-Type": "application/json",  // Sending as JSON
+              'Content-Type': 'multipart/form-data',  // Set the correct content type for file uploads
             },
           }
         );
-
-        console.log("Expert registered successfully:", response.data);
-        router.push("/expertpanel/expertpanelprofile");  // Redirect to expert profile page
+  
+        console.log('Expert registered successfully:', response.data);
+        alert("Expert registered successfully");
+        router.push('/expertlogin');  // Redirect to expert login page after successful registration
       } catch (error) {
-        console.error("Error during registration:", error);
-        alert("Error during registration. Please try again.");
+        console.error('Error during registration:', error);
+        alert('Error during registration. Please try again.');
       }
     }
   };
-
 
   return (
     <div className={`min-h-screen flex overflow-hidden ${interFont.variable}`}>

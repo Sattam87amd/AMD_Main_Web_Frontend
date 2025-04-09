@@ -2,6 +2,7 @@
 
 import React from "react";
 import { FaBell, FaChevronDown } from "react-icons/fa";
+import Link from 'next/link'
 
 // Dummy User Data (Replace this with backend data)
 const userData = {
@@ -33,14 +34,16 @@ const Navtop = ({ activeTab }) => {
         </div>
 
         {/* Profile Section */}
-        <div className="flex items-center space-x-2 cursor-pointer">
-          <img
-            src={userData.profilePic}
-            alt="Profile"
-            className="w-8 h-8 rounded-full object-cover border border-gray-300"
-          />
-          <p className="text-sm font-semibold">{userData.name}</p>
-        </div>
+        <Link href="/userpanel/userpanelprofile">
+          <div className="flex items-center space-x-2 cursor-pointer">
+            <img
+              src={userData.profilePic}
+              alt="Profile"
+              className="w-8 h-8 rounded-full object-cover border border-gray-300"
+            />
+            <p className="text-sm font-semibold">{userData.name}</p>
+          </div>
+        </Link>
       </div>
     </div>
   );

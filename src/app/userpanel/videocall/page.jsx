@@ -1,7 +1,7 @@
 "use client"
 import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
 import Footer from '@/components/Layout/Footer';
-import Navtop from '@/components/UserPanel/NavTop/Navtop';
+import Navtop from '@/components/UserPanel/NavTop/NavTopuser';
 import UserSidebar from '@/components/UserPanel/UseSideBar/UserSidebar';
 import UserVideoCall from '@/components/UserPanel/VideoCall/UserVideoCall';
 import { usePathname } from "next/navigation";
@@ -18,7 +18,7 @@ const page = () => {
   const pathname = usePathname()
   
   const activeMenu = menuItems.find((item) => item.route === pathname)
-  const activeTab = activeMenu ? activeMenu.label : "Booking";
+  const activeTab = activeMenu ? activeMenu.label : "Video Call";
   
     return (
       <>

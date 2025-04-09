@@ -59,7 +59,7 @@ const Page = () => {
       {/* Footer (Full Width) */}
       <div className="w-full ">
         <Footer/>
-      </div>
+      </div> 
     </div>
   );
 };

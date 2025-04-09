@@ -70,7 +70,7 @@ const LoginUserCab = () => {
       <div className="overflow-x-auto md:overflow-visible">
         <div className="flex md:grid md:grid-cols-5 gap-4 md:gap-80 px-4 md:px-0 overflow-x-scroll scrollbar-hide">
           {expertData.map((expert, index) => (
-            <Link key={index} href={`/expertaboutme`} passHref>
+            <Link key={index} href={`/userpanel/userexpertaboutme`} passHref>
               <div className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
                 {/* Background Image */}
                 <img

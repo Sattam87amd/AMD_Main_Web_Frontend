@@ -2,7 +2,7 @@
 import UseSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
 import { usePathname } from "next/navigation";
 import Footer from "@/components/UserPanel/Layout/Footer";
-import Navtop from "@/components/UserPanel/NavTop/Navtop";
+import Navtop from "@/components/UserPanel/NavTop/NavTopuser";
 import UserBottomNav from "@/components/UserPanel/UserBottomNav/UserBottomNav";
 import UserBooking from "@/components/UserPanel/UserBooking/UserBooking";
 
