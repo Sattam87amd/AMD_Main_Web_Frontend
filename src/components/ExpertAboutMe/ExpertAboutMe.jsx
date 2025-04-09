@@ -115,6 +115,7 @@ const ExpertAboutMe = () => {
   return (
     <div className="min-h-screen bg-white py-10 px-4 md:px-10">
       <div className="max-w-7xl mx-auto flex items-start gap-8">
+        <div>
         {/* Left Side: Profile & About */}
         <div className="bg-[#F8F7F3] rounded-3xl p-12 shadow flex-1">
           <img
@@ -155,6 +156,15 @@ const ExpertAboutMe = () => {
             </button>
           </div>
         </div>
+
+        <div className=" w-[90%] flex justify-start mt-10 pl-10">
+                  <button type="button" onClick={() => router.push('/expertaboutme/ScheduleQuickCalls')}
+                    className="bg-[#EDECE8] text-black font-semibold py-4 px-10 rounded-lg hover:bg-gray-300 transition">
+                    Book a Video Call
+                  </button>
+                </div>
+                </div>
+                
 
         {/* Vertical Line Divider */}
         <div className="hidden md:block border-l-2 border-black h-[145vh] mx-8"></div>

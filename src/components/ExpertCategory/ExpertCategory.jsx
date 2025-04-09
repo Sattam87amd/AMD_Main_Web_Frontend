@@ -102,7 +102,7 @@ const ExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
-        <div className="flex gap-4 md:gap-x-32 md:px-4 md:pb-2 scrollbar-hide">
+        <div className="flex gap-4 md:gap-x-32 md:px-4 md:pb-2 custom-scrollbar-hide">
           {categories.map((category, index) => (
             <Link href={category.link} key={index} passHref>
               <motion.div
