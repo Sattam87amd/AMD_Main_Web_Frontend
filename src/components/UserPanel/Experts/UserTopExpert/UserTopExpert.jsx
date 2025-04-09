@@ -63,17 +63,18 @@ const UserTopExpert = () => {
         className="flex flex-col md:flex-row md:h-40 items-center mb-6"
       >
         <h1 className="text-3xl md:text-[60px] font-bold text-black">
-          Home Experts
+        Top Experts
+
         </h1>
         <p className="text-[#9C9C9C] md:pt-5 pl-5 md:text-2xl">
-          Access to the best have never been easie
+        Access to the best has never been easier
         </p>
       </motion.div>
 
       {/* Cards Section */}
       <div className="overflow-x-auto md:overflow-visible">
         <motion.div
-          className="flex md:grid md:grid-cols-5 gap-4 md:gap-x-64 px-4 md:px-0 overflow-x-scroll scrollbar-hide"
+          className="flex md:grid md:grid-cols-5 gap-4 md:gap-x-80 px-4 md:px-0 overflow-x-scroll scrollbar-hide"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -83,7 +84,7 @@ const UserTopExpert = () => {
           }}
         >
           {repeatedExperts.map((expert, index) => (
-            <Link key={index} href={`/expertpanel/expertaboutme`} passHref>
+            <Link key={index} href={`/userpanel/userexpertaboutme`} passHref>
               <motion.div
                 className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg rounded-lg cursor-pointer"
                 variants={{
