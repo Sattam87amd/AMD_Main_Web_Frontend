@@ -2,15 +2,11 @@
 
 import React from 'react';
 import { usePathname } from 'next/navigation';
-// import Sidebar from '@/components/ExpertPanel/SideBar/SideBar';
-// import Navtop from '@/components/ExpertPanel/Navtop/navtop';
 import UserProfileSection from '@/components/UserPanel/UserPanelProfile/UserProfileSection';
-// import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
-import Footer from '@/components/Layout/Footer';
-import Sidebar from '@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar';
 import Navtop from '@/components/UserPanel/NavTop/NavTopuser';
 import BottomNav from '@/components/UserPanel/BottomNav/BottomNav';
-import UseSidebar from '@/components/UserPanel/UseSideBar/UserSidebar';
+import UserSidebar from '@/components/UserPanel/UseSideBar/UserSidebar';
+import Footer from '@/components/UserPanel/Layout/Footer';
 
 
 const Page = () => {
@@ -32,7 +28,7 @@ const Page = () => {
       <div className="flex min-h-screen">
         {/* Sidebar */}
         <div className="md:w-[20%] ">
-          <UseSidebar />
+          <UserSidebar />
         </div>
 
         {/* Main Content */}
