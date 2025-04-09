@@ -9,7 +9,7 @@ import AboutMeReviews from '@/components/ExpertAboutMe/AboutMeReviews';
 import ExpertFeatureHighightsExpertPanel from '@/components/ExpertPanel/ExpertPanelAboutMe/ExpertFeatureHighightsExpertPanel';
 import SimilarExpertsExpertPanel from '@/components/ExpertPanel/ExpertPanelAboutMe/SimilarExpertsExpertPanel';
 import Sidebar from '@/components/ExpertPanel/SideBar/SideBar';
-import Footer from '@/components/Layout/Footer';
+import Footer from "@/components/Layout/Footer";
 import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
 import axios from 'axios';
 import Link from 'next/link';
@@ -18,16 +18,36 @@ const ExpertDetail = () => {
   const [expert, setExpert] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedConsultation, setSelectedConsultation] = useState("1:1");
   const [price, setPrice] = useState(350);
   const [showTimeSelection, setShowTimeSelection] = useState(false);
-  const [timeSlots, setTimeSlots] = useState([]);
+  const [selectedDuration, setSelectedDuration] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
+  const [selectedTime, setSelectedTime] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
-  const [selectedTimeSlots, setSelectedTimeSlots] = useState({
-    today: [],
-    tomorrow: [],
-    nextDate: []
-  });
+
+  // Date handling
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+  const nextDate = new Date(today);
+  nextDate.setDate(today.getDate() + 2);
+
+  const getFormattedDate = (date) => {
+    return date.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'short' });
+  };
+  const handleSeeMore = () => {
+    setIsExpanded(!isExpanded);
+  };
+  const handleSeeTimeClick = () => {
+    setShowTimeSelection(true);
+  };
+
+  const dateMap = {
+    today: today,
+    tomorrow: tomorrow,
+    nextDate: nextDate
+  };
 
   useEffect(() => {
     const pathParts = window.location.pathname.split('/');
@@ -44,26 +64,13 @@ const ExpertDetail = () => {
           setLoading(false);
         }
       };
-
       fetchExpertData();
     }
   }, []);
 
-  useEffect(() => {
-    if (showTimeSelection) {
-      setTimeSlots([
-        '07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM', 
-        '12:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'
-      ]);
-    }
-  }, [showTimeSelection]);
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>{error}</div>;
-
   const handleConsultationChange = (type) => {
-    setSelectedTime(null);
-    setPrice(type === '1:4' ? 150 : 350);
+    setSelectedConsultation(type);
+    setPrice(type === "1:4" ? 150 : 350);
   };
 
   const handleSeeTimeClick = () => {
@@ -109,6 +116,11 @@ const ExpertDetail = () => {
   const experienceText = expert?.experience || '';
   const truncatedExperience = experienceText.slice(0, 200) + (experienceText.length > 200 ? '...' : '');
 
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
+
+
   return (
     <>
       <div className="flex min-h-screen">
@@ -122,7 +134,7 @@ const ExpertDetail = () => {
           </div>
           <div className="min-h-screen bg-white py-10 px-4 md:px-10">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Left Column: Expert Info */}
+              {/* Left Column: Expert Info (Unchanged) */}
               <div className="bg-[#F8F7F3] rounded-3xl p-12 shadow">
                 <img
                   src={expert?.photoFile || '/guyhawkins.png'}
@@ -164,64 +176,76 @@ const ExpertDetail = () => {
               {/* Right Column: Video Consultation */}
               <div className="space-y-6">
                 {showTimeSelection ? (
-                  <div className="bg-white p-6 rounded-xl">
-                    <button
-                      className="py-2 px-4 bg-black text-white rounded-md shadow mb-4"
+                  <>
+                    <button 
                       onClick={() => setShowTimeSelection(false)}
+                      className="py-2 px-4 bg-black text-white rounded-md shadow mb-6"
                     >
                       Back
                     </button>
-                    <h3 className="text-4xl font-semibold mb-4">Book a video call</h3>
-                    <p className="mb-4 font-semibold text-xl">Select one of the available time slots below:</p>
+                    <div className="bg-white p-6 rounded-xl">
+                      <h3 className="text-4xl font-semibold mb-4">Book a video call</h3>
+                      <p className="mb-4 font-semibold text-xl">Select duration and time slot:</p>
 
-                    <div className="grid grid-cols-2 gap-4 mb-4">
-                      {["Quick - 15min", "Regular - 30min", "Extra - 45min", "All Access - 60min"].map((duration) => (
-                        <button
-                          key={duration}
-                          className={`py-2 px-4 ${selectedTime === duration ? 'bg-black text-white' : 'bg-[#F8F7F3] text-black'} rounded-md shadow`}
-                          onClick={() => setSelectedTime(duration)}
-                        >
-                          {duration}
-                        </button>
+                      <div className="grid grid-cols-2 gap-4 mb-4">
+                        {['Quick - 15min', 'Regular - 30min', 'Extra - 45min', 'All Access - 60min'].map((duration) => (
+                          <button
+                            key={duration}
+                            className={`py-2 px-4 ${
+                              selectedDuration === duration 
+                                ? 'bg-black text-white' 
+                                : 'bg-[#F8F7F3] text-black'
+                            } rounded-md shadow`}
+                            onClick={() => setSelectedDuration(duration)}
+                          >
+                            {duration}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Time Slots */}
+                      {[['Today', 'today'], ['Tomorrow', 'tomorrow'], ['Next Date', 'nextDate']].map(([label, dayKey]) => (
+                        <div key={dayKey} className="mb-8">
+                          <h4 className="font-semibold py-4 text-xl">
+                            {`${label} (${getFormattedDate(dateMap[dayKey])})`}
+                          </h4>
+                          <div className="grid grid-cols-3 gap-3">
+                            {['07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', 
+                              '11:00 AM', '12:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'].map((time) => (
+                              <button
+                                key={time}
+                                className={`py-2 px-3 text-sm ${
+                                  selectedDate === dateMap[dayKey].toISOString().split('T')[0] &&
+                                  selectedTime === time.replace(" AM", "").replace(" PM", "").trim()
+                                    ? 'bg-black text-white'
+                                    : 'bg-white text-black'
+                                } rounded-xl border`}
+                                onClick={() => handleTimeSelection(dayKey, time)}
+                              >
+                                {time}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
                       ))}
-                    </div>
 
-                    {[
-                      { title: `Today (${todayStr})`, slots: 'today' },
-                      { title: `Tomorrow (${tomorrowStr})`, slots: 'tomorrow' },
-                      { title: `Next Date (${nextDateStr})`, slots: 'nextDate' }
-                    ].map((day) => (
-                      <div key={day.title}>
-                        <h4 className="font-semibold py-8">{day.title}</h4>
-                        <div className="grid grid-cols-3 gap-4">
-                          {timeSlots.map((time) => (
-                            <button
-                              key={time}
-                              className={`py-2 px-4 ${selectedTimeSlots[day.slots].includes(time) ? 'bg-black text-white' : 'bg-white text-black'} rounded-xl border`}
-                              onClick={() => handleTimeSelection(day.slots, time)}
-                            >
-                              {time}
-                            </button>
-                          ))}
+                      <div className="flex gap-10 py-10 items-center">
+                        <div>
+                          <p className="text-xl font-semibold">${price} • Session</p>
+                          <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
+                            {[...Array(5)].map((_, i) => <FaStar key={i} />)}
+                          </div>
                         </div>
+                        <button
+                          className="py-3 px-12 bg-black text-white rounded-md hover:bg-gray-900 transition"
+                          onClick={handleBookingRequest}
+                          disabled={!selectedDuration || !selectedDate || !selectedTime}
+                        >
+                          Request
+                        </button>
                       </div>
-                    ))}
-
-                    <div className="flex gap-10 py-10">
-                      <div>
-                        <p className="text-xl font-semibold">${price} • Session</p>
-                        <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
-                          {[...Array(5)].map((_, i) => (
-                            <FaStar key={i} />
-                          ))}
-                          <span className="ml-2 font-semibold text-sm">5.0</span>
-                        </div>
-                      </div>
-                      <button className="py-2 px-6 w-full bg-black text-white rounded-md">
-                        Request
-                      </button>
                     </div>
-                  </div>
+                  </>
                 ) : (
                   <>
                     <div className="space-y-4">

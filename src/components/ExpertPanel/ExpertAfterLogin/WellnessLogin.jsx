@@ -82,7 +82,7 @@ const WellnessHomeCardsLogin = () => {
 
       {/* Cards Section - Horizontal Scroll on Small Screens, Grid on Medium+ */}
       <div className="overflow-x-auto md:overflow-visible">
-        <div className="flex md:grid md:grid-cols-5 gap-4 md:gap-80 px-4 md:px-0 overflow-x-scroll scrollbar-hide">
+        <div className="flex md:grid md:grid-cols-5 gap-4 md:gap-80 px-4 md:px-0 overflow-x-scroll custom-scrollbar-hide">
           {expertData.map((expert, index) => (
             <Link
               key={index}
