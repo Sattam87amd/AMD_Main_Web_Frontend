@@ -97,12 +97,12 @@ const LoginExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
       )}
 
       <motion.div
-        className="overflow-x-auto md:overflow-x-auto md:ml-16"
+        className="overflow-x-auto md:overflow-x-auto md:ml-16 custom-scrollbar-hide"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
-        <div className="flex gap-4 md:gap-x-32 md:px-4 md:pb-2 scrollbar-hide">
+        <div className="flex gap-4 md:gap-x-32 md:px-4 md:pb-2">
           {categories.map((category, index) => (
             <Link href={category.link} key={index} passHref>
               <motion.div
