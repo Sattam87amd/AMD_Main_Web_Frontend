@@ -3,6 +3,7 @@
 import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
 import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
 import Homeexpert from "@/components/Experts/Homeexpert/homeexpert";
+import Footer from "@/components/Layout/Footer";
 // import Homeexpert from "@/components/Experts/Homeexpert/LoginHomeExpert";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";

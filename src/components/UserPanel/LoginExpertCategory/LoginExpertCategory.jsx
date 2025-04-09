@@ -6,11 +6,11 @@ import Link from "next/link";
 
 const LoginExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
   const categories = [
-    { title: "Top Experts", image: "/topexperts.png", link: "/expertpanel/topexperts" },
-    { title: "Home", image: "/home.png", link: "/expertpanel/homeexperts" },
-    { title: "Career & Business", image: "/career-business.png", link: "/expertpanel/career&business" },
-    { title: "Style & Beauty", image: "/style-beauty.png", link: "/expertpanel/style&beautyexperts" },
-    { title: "Wellness", image: "/wellness.png", link: "/expertpanel/wellnessexperts" },
+    { title: "Top Experts", image: "/topexperts.png", link: "/userpanel/logintopexpert" },
+    { title: "Home", image: "/home.png", link: "/userpanel/loginhomeexpert" },
+    { title: "Career & Business", image: "/career-business.png", link: "/userpanel/logincareer&business" },
+    { title: "Style & Beauty", image: "/style-beauty.png", link: "/userpanel/loginstylebeauty" },
+    { title: "Wellness", image: "/wellness.png", link: "/userpanel/loginwellnessexpert" },
   ];
 
   const filterOptions = [
