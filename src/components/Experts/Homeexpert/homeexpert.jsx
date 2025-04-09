@@ -7,8 +7,46 @@ import { HiBadgeCheck } from "react-icons/hi";
 
 // Expert Data (5 experts repeated 3 times)
 const experts = [
- 
- 
+  {
+    name: "Aaliya Abadi",
+    role: "Founder Of Drybar (Sold For $255M)",
+    description:
+      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
+    price: "$450",
+    image: "/aaliaabadi.png",
+  },
+  {
+    name: "Aisha Aziz",
+    role: "Founder Of Drybar (Sold For $255M)",
+    description:
+      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
+    price: "$600",
+    image: "/aishaaziz.png",
+  },
+  {
+    name: "Jenny Wilson",
+    role: "Founder Of Drybar (Sold For $255M)",
+    description:
+      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
+    price: "$250",
+    image: "/jennywilson.png",
+  },
+  {
+    name: "Guy Hawkins",
+    role: "Founder Of Drybar (Sold For $255M)",
+    description:
+      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
+    price: "$1500",
+    image: "/guyhawkins.png",
+  },
+  {
+    name: "Ralph Edwards",
+    role: "Founder Of Drybar (Sold For $255M)",
+    description:
+      "Grew Drybar to 150 locations across the US with products sold at Sephora, Nordstrom, Ulta Beauty, and Macy’s.",
+    price: "$450",
+    image: "/ralphedwards.png",
+  },
 ];
 
 const repeatedExperts = [...experts, ...experts, ...experts];
@@ -35,7 +73,7 @@ const Homeexpert = () => {
       {/* Cards Section */}
       <div className="overflow-x-auto md:overflow-visible">
         <motion.div
-          className="flex md:grid md:grid-cols-5 gap-4 md:gap-x-8 px-4 md:px-0 overflow-x-scroll scrollbar-hide"
+          className="flex md:grid md:grid-cols-5 gap-4 md:gap-x-64 px-4 md:px-0 overflow-x-scroll scrollbar-hide"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -45,7 +83,7 @@ const Homeexpert = () => {
           }}
         >
           {repeatedExperts.map((expert, index) => (
-            <Link key={index} href={`/expertaboutme`} passHref>
+            <Link key={index} href={`/expertpanel/expertaboutme`} passHref>
               <motion.div
                 className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg rounded-lg cursor-pointer"
                 variants={{

@@ -18,7 +18,7 @@ import UserBuyGiftCard from "./UserBuyGiftCard";
 import UserDiscountCode from "./UserDiscountCode";
 import UserPaymentMethods from "./UserPaymentMethods";
 import UserGiftCard from "./UserGiftCard";
-import axios from "axios";
+// import axios from "axios";
 import UserPaymentHistory from "./UserPaymentHistory";
 
 const UserProfileSection = () => {

@@ -4,16 +4,9 @@
     import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
     import CareerBusinessExperts from "@/components/Experts/Career&Buisness/Career&Buisness";
     import LoginCareerBusinessExperts from "@/components/Experts/Career&Buisness/LoginCareer&Business";
-    import Homeexpert from "@/components/Experts/Homeexpert/LoginHomeExpert";
-    import TopExpert from "@/components/Experts/Topexpert/logintopexpert";
     import MobileNavSearch from "@/components/Layout/mobilenavsearch";
     import NavSearch from "@/components/Layout/navsearch";
-    import UserTopExpert from "@/components/UserPanel/Experts/UserTopeexpert/UserTopeexpert";
     import Footer from "@/components/userpanel/Layout/Footer";
-    import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
-    import UserNavSearch from "@/components/UserPanel/UserNavSearch/UserNavSearch";
-    import UseSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
-
 
     const Page = () => {
     return (

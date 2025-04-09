@@ -1,6 +1,6 @@
 "use client"
-import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
-import Footer from '@/components/Layout/Footer';
+import BottomNav from '@/components/UserPanel/BottomNav/BottomNav';
+import Footer from '@/components/UserPanel/Layout/Footer';
 import Navtop from '@/components/UserPanel/NavTop/NavTopuser';
 import UserSidebar from '@/components/UserPanel/UseSideBar/UserSidebar';
 import UserVideoCall from '@/components/UserPanel/VideoCall/UserVideoCall';

@@ -3,7 +3,6 @@
 import React from 'react';
 import Sidebar from '@/components/ExpertPanel/SideBar/SideBar';
 import Navtop from '@/components/ExpertPanel/Navtop/navtop';
-import ChatComponent from '@/components/ExpertPanel/ChatComponent/chatcomponent';
 import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
 import ExpertChat from '@/components/ExpertPanel/ExpertChat/Expertchat';
 
