@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-// import axios from "axios";
+import axios from "axios";
 import Image from "next/image"; // Import Image from Next.js
 import { FaBell, FaChevronDown } from "react-icons/fa";
 

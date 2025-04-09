@@ -7,7 +7,6 @@ import Footer from "@/components/Layout/Footer";
 // import Homeexpert from "@/components/Experts/Homeexpert/LoginHomeExpert";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";
-import Footer from "@/components/userpanel/Layout/Footer";
 import { useState, useEffect } from "react";
 
 const Page = () => {
