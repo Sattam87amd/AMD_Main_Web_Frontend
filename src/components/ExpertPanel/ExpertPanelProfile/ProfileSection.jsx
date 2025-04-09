@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import axios from "axios";
+import Image from "next/image";
 import {
   FaUser,
   FaGift,
@@ -21,12 +22,12 @@ import ExpertContactUs from "./ExpertContactUs";
 import PaymentHistory from "./PaymentHistory";
 
 const ProfileSection = () => {
-
   const [selectedSection, setSelectedSection] = useState("Profile");
   const [isEditing, setIsEditing] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
   const [profileData, setProfileData] = useState({
+    photoFile: "",
     firstName: "",
     lastName: "",
     phone: "", // Set default value to an empty string
@@ -61,12 +62,19 @@ const ProfileSection = () => {
           const response = await axios.get(
             `http://localhost:8000/api/expertauth/${expertId}`
           );
-          const { firstName, lastName, phone = "", email } = response.data.data; // Default empty string for phone
+          const {
+            photoFile,
+            firstName,
+            lastName,
+            phone = "",
+            email,
+          } = response.data.data; // Default empty string for phone
           setProfileData({
             firstName,
             lastName,
             phone, // Assign phone with a default value if missing
             email,
+            photoFile, // Ensure the photoFile is added to profileData
           });
         } catch (error) {
           console.error("Error fetching expert details:", error);
@@ -93,7 +101,7 @@ const ProfileSection = () => {
     setSuccessMessage("Changes Saved!");
     setTimeout(() => setSuccessMessage(""), 3000);
   };
-  
+
   return (
     <div className="flex flex-col md:flex-row border rounded-xl overflow-hidden bg-white m-4 md:m-8">
       {/* Sidebar - Hidden on Small Screens, Visible on Medium+ */}
@@ -105,15 +113,15 @@ const ProfileSection = () => {
         </h2>
 
         <nav className="space-y-6">
-          {[
-            { name: "Profile", icon: FaUser },
-            { name: "Payment Methods", icon: FiDollarSign },
-            { name: "Do you have code?", icon: FaGift },
-            { name: "Gift Card", icon: FaGift },
-            { name: "Contact Us", icon: FaComments },
+          {[ 
+            { name: "Profile", icon: FaUser }, 
+            { name: "Payment Methods", icon: FiDollarSign }, 
+            { name: "Do you have code?", icon: FaGift }, 
+            { name: "Gift Card", icon: FaGift }, 
+            { name: "Contact Us", icon: FaComments }, 
             { name: "Payment History", icon: FiDollarSign }, // New Entry
-            { name: "Give us Feedback", icon: MdOutlineFeedback },
-            { name: "Deactivate account", icon: FaTrashAlt },
+            { name: "Give us Feedback", icon: MdOutlineFeedback }, 
+            { name: "Deactivate account", icon: FaTrashAlt }, 
           ].map((item) => (
             <button
               key={item.name}
@@ -126,9 +134,7 @@ const ProfileSection = () => {
             >
               <item.icon
                 className={
-                  selectedSection === item.name
-                    ? "text-white"
-                    : "text-[#7E7E7E]"
+                  selectedSection === item.name ? "text-white" : "text-[#7E7E7E]"
                 }
               />
               {item.name}
@@ -144,11 +150,19 @@ const ProfileSection = () => {
           <div className="mt-6">
             <div className="flex flex-col md:flex-row items-center md:justify-between space-y-4 md:space-y-0">
               <div className="flex items-center space-x-4 md:space-x-6">
-                <img
-                  src="/guyhawkins.png"
-                  alt="profile"
-                  className="w-16 h-16 rounded-full"
-                />
+                {/* Only render the image if the photoFile is a valid URL */}
+                {profileData.photoFile ? (
+                  <Image
+                    src={profileData.photoFile}
+                    alt="profile"
+                    width={70} // Set width
+                    height={70} // Set height
+                    className="rounded-full "
+                  />
+                ) : (
+                  <div className="w-16 h-16 rounded-full bg-gray-300" /> // Fallback placeholder
+                )}
+
                 <div className="text-center md:text-left">
                   <h3 className="text-lg font-semibold text-[#434966]">
                     {profileData.firstName} {profileData.lastName}
@@ -276,7 +290,7 @@ const ProfileSection = () => {
         {selectedSection === "Contact Us" && <ExpertContactUs />}
 
         {/* Payment History */}
-        {selectedSection === "Payment History" && <PaymentHistory/>}
+        {selectedSection === "Payment History" && <PaymentHistory />}
 
         {/* Give us Feedback */}
         {selectedSection === "Give us Feedback" && (
