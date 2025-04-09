@@ -2,7 +2,7 @@
 
 import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
 import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
-import TopExpert from "@/components/Experts/Topexpert/logintopexpert";
+import TopExpert from "@/components/Experts/Topexpert/topexpert";
 import Footer from "@/components/Layout/Footer";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";

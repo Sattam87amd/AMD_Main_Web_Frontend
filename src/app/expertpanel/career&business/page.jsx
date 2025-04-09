@@ -3,7 +3,7 @@
     import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
     import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
     import CareerBusinessExperts from "@/components/Experts/Career&Buisness/Career&Buisness";
-    import LoginCareerBusinessExperts from "@/components/Experts/Career&Buisness/LoginCareer&Business";
+    import LoginCareerBusinessExperts from "@/components/Experts/Career&Buisness/Career&Buisness";
     import MobileNavSearch from "@/components/Layout/mobilenavsearch";
     import NavSearch from "@/components/Layout/navsearch";
     import Footer from "@/components/userpanel/Layout/Footer";
