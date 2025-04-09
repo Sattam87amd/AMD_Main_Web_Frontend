@@ -1,20 +1,58 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Image from "next/image"; // Import Image from Next.js
 import { FaBell, FaChevronDown } from "react-icons/fa";
 
-// Dummy User Data (Replace this with backend data)
-const userData = {
-  name: "Basim Thakur",
-  profilePic: "/ralphedwards.png", // Replace with dynamic image URL if needed
-};
-
 const Navtop = ({ activeTab }) => {
+  const [userData, setUserData] = useState({
+    firstName: "",
+    photoFile: "",
+  });
+
+  // Fetch expertId from localStorage (similar to ProfileSection)
+  const [expertId, setExpertId] = useState("");
+
+  useEffect(() => {
+    const expertToken = localStorage.getItem("expertToken");
+
+    if (expertToken) {
+      try {
+        // Assuming the expertToken contains the _id directly (if it's JWT)
+        const decodedToken = JSON.parse(atob(expertToken.split(".")[1])); // Decode JWT token
+        const expertId = decodedToken._id;
+        setExpertId(expertId); // Set the expertId to state
+      } catch (error) {
+        console.error("Error parsing expertToken:", error);
+      }
+    } else {
+      alert("Expert token not found in localStorage");
+    }
+  }, []); // Runs once when the component mounts
+
+  // Fetch user data using expertId (similar to ProfileSection)
+  useEffect(() => {
+    if (expertId) {
+      const fetchUserData = async () => {
+        try {
+          const response = await axios.get(`http://localhost:8000/api/expertauth/${expertId}`); // Replace with actual API endpoint
+          const { firstName, photoFile } = response.data.data;
+          setUserData({ firstName, photoFile });
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+        }
+      };
+
+      fetchUserData();
+    }
+  }, [expertId]); // Fetch data when expertId changes
+
   return (
     <div className="w-full flex justify-between items-center bg-white py-4 px-6 shadow-sm">
       {/* Left Section */}
       <div>
-        <p className="text-gray-500 text-sm">Hi, {userData.name}</p>
+        <p className="text-gray-500 text-sm">Hi, {userData.firstName || "Loading..."}</p>
         <h1 className="text-2xl font-bold">{activeTab}</h1>
       </div>
 
@@ -34,12 +72,21 @@ const Navtop = ({ activeTab }) => {
 
         {/* Profile Section */}
         <div className="flex items-center space-x-2 cursor-pointer">
-          <img
-            src={userData.profilePic}
-            alt="Profile"
-            className="w-8 h-8 rounded-full object-cover border border-gray-300"
-          />
-          <p className="text-sm font-semibold">{userData.name}</p>
+          {/* Use Next.js Image component for profile picture */}
+          {userData.photoFile ? (
+            <div className="relative w-8 h-8 rounded-full">
+              <Image
+                src={userData.photoFile} // Ensure this URL is valid and points to the image
+                alt="Profile"
+                width={32} // Set width (64px size for example)
+                height={32} // Set height (64px size for example)
+                className="rounded-full object-cover border border-gray-300"
+              />
+            </div>
+          ) : (
+            <div className="w-8 h-8 rounded-full bg-gray-300"></div> // Fallback if image is not loaded
+          )}
+          <p className="text-sm font-semibold">{userData.firstName || "Loading..."}</p>
         </div>
       </div>
     </div>
