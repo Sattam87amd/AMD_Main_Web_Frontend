@@ -6,7 +6,7 @@
     import LoginCareerBusinessExperts from "@/components/Experts/Career&Buisness/Career&Buisness";
     import MobileNavSearch from "@/components/Layout/mobilenavsearch";
     import NavSearch from "@/components/Layout/navsearch";
-    import Footer from "@/components/userpanel/Layout/Footer";
+    import Footer from "@/components/UserPanel/Layout/Footer";
 
     const Page = () => {
     return (

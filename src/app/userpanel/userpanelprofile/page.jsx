@@ -2,11 +2,11 @@
 
 import React from 'react';
 import { usePathname } from 'next/navigation';
-import UserProfileSection from '@/components/userpanel/UserPanelProfile/UserProfileSection';
-import Navtop from '@/components/userpanel/NavTop/NavTopuser';
-import BottomNav from '@/components/userpanel/BottomNav/BottomNav';
-import UserSidebar from '@/components/userpanel/UseSideBar/UserSidebar';
-import Footer from '@/components/userpanel/Layout/Footer';
+import UserProfileSection from '@/components/UserPanel/UserPanelProfile/UserProfileSection';
+import Navtop from '@/components/UserPanel/NavTop/NavTopuser';
+import BottomNav from '@/components/UserPanel/BottomNav/BottomNav';
+import UserSidebar from '@/components/UserPanel/UseSideBar/UserSidebar';
+import Footer from '@/components/UserPanel/Layout/Footer';
 
 
 const Page = () => {

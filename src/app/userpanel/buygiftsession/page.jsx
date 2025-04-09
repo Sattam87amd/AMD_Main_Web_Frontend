@@ -1,6 +1,6 @@
-import Footer from '@/components/userpanel/Layout/Footer'
+import Footer from '@/components/UserPanel/Layout/Footer'
 
-import UserBuyGiftSession from '@/components/userpanel/Giftsession/UserBuyGiftSession'
+import UserBuyGiftSession from '@/components/UserPanel/Giftsession/UserBuyGiftSession'
 import React from 'react'
 
 const page = () => {

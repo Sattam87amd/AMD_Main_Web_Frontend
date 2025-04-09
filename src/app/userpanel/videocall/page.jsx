@@ -1,9 +1,9 @@
 "use client"
-import BottomNav from '@/components/userpanel/BottomNav/BottomNav';
-import Footer from '@/components/userpanel/Layout/Footer';
-import Navtop from '@/components/userpanel/NavTop/NavTopuser';
-import UserSidebar from '@/components/userpanel/UseSideBar/UserSidebar';
-import UserVideoCall from '@/components/userpanel/VideoCall/UserVideoCall';
+import BottomNav from '@/components/UserPanel/BottomNav/BottomNav';
+import Footer from '@/components/UserPanel/Layout/Footer';
+import Navtop from '@/components/UserPanel/NavTop/NavTopuser';
+import UserSidebar from '@/components/UserPanel/UseSideBar/UserSidebar';
+import UserVideoCall from '@/components/UserPanel/VideoCall/UserVideoCall';
 import { usePathname } from "next/navigation";
 
 import React from 'react'

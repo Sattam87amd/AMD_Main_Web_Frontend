@@ -1,13 +1,13 @@
 import React from "react";
-import Footer from "@/components/userpanel/Layout/Footer";
-import UserExpertAboutMe from "@/components/userpanel/UserAboutMe/UserExpertAboutMe";
-import UserWhatToExpect from "@/components/userpanel/UserAboutMe/UserWhatToExpect";
-import UserAboutMeReviews from "@/components/userpanel/UserAboutMe/UserAboutMeReviews";
-import UserExpertFeatureHighights from "@/components/userpanel/UserAboutMe/UserExpertFeatureHighights";
-import UserSimilarExperts from "@/components/userpanel/UserAboutMe/UserSimilarExperts";
-import BottomNav from "@/components/userpanel/BottomNav/BottomNav";
-import UserSidebar from "@/components/userpanel/UseSideBar/UserSidebar";
-import UserNavSearch from "@/components/userpanel/Layout/NavSearch";
+import Footer from "@/components/UserPanel/Layout/Footer";
+import UserExpertAboutMe from "@/components/UserPanel/UserAboutMe/UserExpertAboutMe";
+import UserWhatToExpect from "@/components/UserPanel/UserAboutMe/UserWhatToExpect";
+import UserAboutMeReviews from "@/components/UserPanel/UserAboutMe/UserAboutMeReviews";
+import UserExpertFeatureHighights from "@/components/UserPanel/UserAboutMe/UserExpertFeatureHighights";
+import UserSimilarExperts from "@/components/UserPanel/UserAboutMe/UserSimilarExperts";
+import BottomNav from "@/components/UserPanel/BottomNav/BottomNav";
+import UserSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
+import UserNavSearch from "@/components/UserPanel/Layout/NavSearch";
 
 const Page = () => {
   return (

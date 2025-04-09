@@ -1,10 +1,10 @@
 "use client";
-import UserSidebar from "@/components/userpanel/UseSideBar/UserSidebar";
+import UserSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
 import { usePathname } from "next/navigation";
-import Footer from "@/components/userpanel/Layout/Footer";
-import Navtop from "@/components/userpanel/NavTop/NavTopuser";
-import UserBottomNav from "@/components/userpanel/UserBottomNav/UserBottomNav";
-import UserBooking from "@/components/userpanel/UserBooking/UserBooking";
+import Footer from "@/components/UserPanel/Layout/Footer";
+import Navtop from "@/components/UserPanel/NavTop/NavTopuser";
+import UserBottomNav from "@/components/UserPanel/UserBottomNav/UserBottomNav";
+import UserBooking from "@/components/UserPanel/UserBooking/UserBooking";
 
 const Page = () => {
   const pathname = usePathname();

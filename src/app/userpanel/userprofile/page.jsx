@@ -1,8 +1,8 @@
 "use client";
 import Footer from "@/components/Layout/Footer";
-import Navtop from "@/components/userpanel/NavTop/NavTopuser";
-import UserProfile from "@/components/userpanel/UserProfile/UserProfile";
-import UseSidebar from "@/components/userpanel/UseSideBar/UserSidebar";
+import Navtop from "@/components/UserPanel/NavTop/NavTopuser";
+import UserProfile from "@/components/UserPanel/UserProfile/UserProfile";
+import UseSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
 
 import { usePathname } from "next/navigation";
 

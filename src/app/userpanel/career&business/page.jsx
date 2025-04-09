@@ -2,13 +2,13 @@
 
 
 // import NavSearch from "@/components/Layout/navsearch";
-import UserCareerBusinessHomeCards from "@/components/userpanel/Home/UserCareerBusinessHomeCards";
-import Footer from "@/components/userpanel/Layout/Footer";
+import UserCareerBusinessHomeCards from "@/components/UserPanel/Home/UserCareerBusinessHomeCards";
+import Footer from "@/components/UserPanel/Layout/Footer";
 
-import UserNavSearch from "@/components/userpanel/Layout/NavSearch";
-import LoginExpertCategory from "@/components/userpanel/LoginExpertCategory/LoginExpertCategory";
-import LoginUserMobileNavSearch from "@/components/userpanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
-import UserSidebar from "@/components/userpanel/UseSideBar/UserSidebar";
+import UserNavSearch from "@/components/UserPanel/Layout/NavSearch";
+import LoginExpertCategory from "@/components/UserPanel/LoginExpertCategory/LoginExpertCategory";
+import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
+import UserSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
 
 
 const Page = () => {

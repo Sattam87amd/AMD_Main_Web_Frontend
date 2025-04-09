@@ -1,7 +1,7 @@
-import Footer from '@/components/userpanel/Layout/Footer'
-import Navbar from '@/components/userpanel/Layout/Navbar'
-import UserFaQ from '@/components/userpanel/FaQ/UserFaQ'
-import UserFrequentlyAskedQuestions from '@/components/userpanel/FaQ/UserFrequentlyAskedQuestion'
+import Footer from '@/components/UserPanel/Layout/Footer'
+import Navbar from '@/components/UserPanel/Layout/Navbar'
+import UserFaQ from '@/components/UserPanel/FaQ/UserFaQ'
+import UserFrequentlyAskedQuestions from '@/components/UserPanel/FaQ/UserFrequentlyAskedQuestion'
 import React from 'react'
 
  const page = () => {
