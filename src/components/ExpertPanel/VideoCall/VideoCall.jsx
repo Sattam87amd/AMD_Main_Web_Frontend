@@ -1,32 +1,116 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import axios from "axios";
+import { CiClock2 } from "react-icons/ci";
+
 
 const VideoCall = () => {
   const [activeTab, setActiveTab] = useState("bookings");
-  const [myBookings, setMyBookings] = useState([]);
   const [mySessions, setMySessions] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Dummy Data (to be replaced with API later)
+  // Fetching data from API
   useEffect(() => {
-    const dummyBookings = [
-      { id: 1, day: "Thu", date: "15", time: "09:00am - 09:30am", consultant: "Stephine Claire", status: "Confirmed" },
-      { id: 2, day: "Fri", date: "16", time: "09:00am - 09:30am", consultant: "Ralph Edwards", status: "Not Confirmed" },
-      { id: 3, day: "Mon", date: "19", time: "09:00am - 09:30am", consultant: "Darlene Robertson", status: "Not Confirmed" },
-    ];
+    const fetchSessions = async () => {
+      try {
+        setLoading(true);
 
-    const dummySessions = [
-      { id: 1, day: "Thu", date: "15", time: "09:00am - 09:30am", user: "Stephine Claire" },
-      { id: 2, day: "Fri", date: "16", time: "09:00am - 09:30am", user: "Ralph Edwards" },
-      { id: 3, day: "Mon", date: "19", time: "09:00am - 09:30am", user: "Darlene Robertson" },
-    ];
+        // Retrieve the token from localStorage
+        const token = localStorage.getItem("expertToken");
 
-    localStorage.setItem("myBookings", JSON.stringify(dummyBookings));
-    localStorage.setItem("mySessions", JSON.stringify(dummySessions));
+        if (!token) {
+          setError("Token is required");
+          return;
+        }
 
-    setMyBookings(dummyBookings);
-    setMySessions(dummySessions);
+        // Fetching expert-to-expert session data with the token
+        const sessionsResponse = await axios.get("http://localhost:8000/api/session/getexpertsession", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include token in Authorization header
+          },
+        });
+
+        // Update state with fetched session data
+        setMySessions(sessionsResponse.data);
+      } catch (err) {
+        setError("Failed to fetch data");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSessions();
   }, []);
+
+  // Handle session accept action
+  const handleAccept = async (sessionId) => {
+    try {
+      const token = localStorage.getItem("expertToken");
+
+      if (!token) {
+        setError("Token is required");
+        return;
+      }
+
+      const response = await axios.put(`http://localhost:8000/api/session/accept/${sessionId}`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Update session status in state
+      const updatedSessions = mySessions.map((session) => {
+        if (session._id === sessionId) {
+          return { ...session, status: 'confirmed' };
+        }
+        return session;
+      });
+      setMySessions(updatedSessions);
+      alert(response.data.message); // Optional: Display success message
+    } catch (err) {
+      setError("Failed to accept the session");
+    }
+  };
+
+  // Handle session decline action
+  const handleDecline = async (sessionId) => {
+    try {
+      const token = localStorage.getItem("expertToken");
+
+      if (!token) {
+        setError("Token is required");
+        return;
+      }
+
+      const response = await axios.put(`http://localhost:8000/api/session/decline/${sessionId}`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      // Update session status in state
+      const updatedSessions = mySessions.map((session) => {
+        if (session._id === sessionId) {
+          return { ...session, status: 'rejected' };
+        }
+        return session;
+      });
+      setMySessions(updatedSessions);
+      alert(response.data.message); // Optional: Display success message
+    } catch (err) {
+      setError("Failed to decline the session");
+    }
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className="w-full md:max-w-6xl max-w-4xl mx-auto py-10 px-4 mt-20 md:mt-0 ">
@@ -51,11 +135,12 @@ const VideoCall = () => {
       </div>
 
       {/* Bookings Tab */}
-      {activeTab === "bookings" && (
+      {/* The code for fetching bookings has been commented out as per the request */}
+       {/* {activeTab === "bookings" && (
         <div className="space-y-4">
           {myBookings.map((booking) => (
             <div key={booking.id} className="flex items-center justify-between p-4 border rounded-lg shadow-sm">
-              {/* Left Side (Date and Details) */}
+              Left Side (Date and Details)
               <div className="flex items-center space-x-4">
                 <div className="text-center bg-gray-100 px-3 py-2 rounded-lg">
                   <p className="text-xs">{booking.day}</p>
@@ -67,7 +152,7 @@ const VideoCall = () => {
                 </div>
               </div>
 
-              {/* Right Side (Status & Chat) */}
+              Right Side (Status & Chat)
               <div className="flex items-center space-x-4">
                 <span
                   className={`px-3 py-1 text-xs font-medium rounded ${
@@ -81,29 +166,54 @@ const VideoCall = () => {
             </div>
           ))}
         </div>
-      )}
+      )} */}
 
-      {/* Sessions Tab */}
-      {activeTab === "sessions" && (
+     {/* Sessions Tab */}
+     {activeTab === "sessions" && (
         <div className="space-y-4">
           {mySessions.map((session) => (
-            <div key={session.id} className="flex items-center justify-between p-4 border rounded-lg shadow-sm">
+            <div key={session._id} className="flex items-center justify-between p-4 border rounded-lg shadow-sm bg-white hover:shadow-xl transition-shadow duration-300">
               {/* Left Side (Date and Details) */}
               <div className="flex items-center space-x-4">
-                <div className="text-center bg-gray-100 px-3 py-2 rounded-lg">
-                  <p className="text-xs">{session.day}</p>
-                  <p className="text-lg font-bold">{session.date}</p>
+                <div className="text-center bg-gray-100 px-3 py-2 rounded-lg shadow-md">
+                  <p className="text-xs text-gray-500">{new Date(session.sessionDate).toLocaleDateString('en-US', { weekday: 'short'})}</p>
+                  <p className="text-lg font-bold">{new Date(session.sessionDate).toLocaleDateString('en-US', { day: 'numeric' })}</p>
                 </div>
                 <div>
-                  <p className="text-sm">{session.time}</p>
-                  <p className="text-sm font-medium">👤 {session.user}</p>
+                 <div className="flex">
+                  <div><CiClock2 className="mt-[3px] mr-1"/></div>
+                    <p className="text-sm text-gray-500 mr-5">{session.sessionTime}</p>
+                    <p className="text-sm text-gray-500">{session.duration}</p>
+                 </div>
+                  <p className="text-sm font-medium text-gray-700">👤 {session.firstName} {session.lastName}</p> {/* Displaying expert's name */}
                 </div>
               </div>
 
-              {/* Right Side (Accept/Decline Buttons) */}
-              <div className="flex space-x-2">
-                <button className="px-4 py-1 border rounded text-green-500 text-sm">Accept</button>
-                <button className="px-4 py-1 border rounded text-red-500 text-sm">Decline</button>
+              {/* Right Side (Accept/Decline Buttons or Status) */}
+              <div className="flex items-center space-x-4">
+                {session.status === 'confirmed' ? (
+                  <>
+                    <span className="text-green-500 text-sm font-medium">Accepted</span>
+                    <button className="px-4 py-1 border rounded text-sm">💬 Chat</button>
+                  </>
+                ) : session.status === 'rejected' ? (
+                  <span className="text-red-500 text-sm font-medium">Rejected</span>
+                ) : (
+                  <>
+                    <button
+                      className="px-4 py-2 bg-green-500 text-white rounded text-sm hover:bg-green-600 transition-all duration-200"
+                      onClick={() => handleAccept(session._id)}
+                    >
+                      Accept
+                    </button>
+                    <button
+                      className="px-4 py-2 bg-red-500 text-white rounded text-sm hover:bg-red-600 transition-all duration-200"
+                      onClick={() => handleDecline(session._id)}
+                    >
+                      Decline
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           ))}
@@ -112,5 +222,4 @@ const VideoCall = () => {
     </div>
   );
 };
-
 export default VideoCall;
