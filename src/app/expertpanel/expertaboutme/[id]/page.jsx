@@ -1,7 +1,7 @@
 'use client';
 import NavSearch from "@/components/Layout/navsearch";
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import NavSearch from "@/components/Layout/navsearch";
 import { FaStar } from 'react-icons/fa';
 import { FaInstagram } from 'react-icons/fa';
 import { Gift } from 'lucide-react';
@@ -131,10 +131,10 @@ const ExpertDetail = () => {
         </aside>
 
         <div className="w-full md:w-[80%] flex flex-col">
-          <div className="hidden md:block">
-            <NavSearch />
-          </div>
-          <div className="min-h-screen w-full bg-white py-10 px-4 md:px-10">
+        <div className="hidden md:block">
+          <NavSearch />
+        </div>
+          <div className="min-h-screen bg-white py-10 px-4 md:px-10">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left Column: Expert Info (Unchanged) */}
               <div className="bg-[#F8F7F3] rounded-3xl p-12 shadow">
