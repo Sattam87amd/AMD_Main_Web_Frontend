@@ -1,11 +1,11 @@
 'use client'
 
-import Footer from '@/components/UserPanel/Layout/Footer'
+import Footer from '@/components/userpanel/Layout/Footer'
 import { usePathname } from 'next/navigation';
-import UserNavtop from '@/components/UserPanel/UseNavTop/UserNavTop'
-import UserBottomNav from '@/components/UserPanel/UserBottomNav/UserBottomNav'
-import UserProfileSection from '@/components/UserPanel/Userloginpanel/UserProfileSection'
-import UseSidebar from '@/components/UserPanel/UseSideBar/UserSidebar'
+import UserNavtop from '@/components/userpanel/UseNavTop/UserNavTop'
+import UserBottomNav from '@/components/userpanel/UserBottomNav/UserBottomNav'
+import UserProfileSection from '@/components/userpanel/Userloginpanel/UserProfileSection'
+import UseSidebar from '@/components/userpanel/UseSideBar/UserSidebar'
 import React from 'react'
 
 

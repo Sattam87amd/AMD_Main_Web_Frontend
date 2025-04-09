@@ -1,5 +1,5 @@
-import Footer from '@/components/UserPanel/Layout/Footer'
-import UserPaymentGiftSession from '@/components/UserPanel/Giftsession/UserPaymentGiftSession'
+import Footer from '@/components/userpanel/Layout/Footer'
+import UserPaymentGiftSession from '@/components/userpanel/Giftsession/UserPaymentGiftSession'
 import React from 'react'
 
 const page = () => {

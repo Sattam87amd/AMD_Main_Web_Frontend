@@ -1,13 +1,13 @@
-import Footer from '@/components/UserPanel/Layout/Footer'
-import AboutMeReviewsUser from '@/components/UserPanel/expertaboutme/AboutMeReviewsUser'
-import ExpertAboutMeUser from '@/components/UserPanel/expertaboutme/ExpertAboutMeUser'
-import ScheduleQuickCallsUser from '@/components/UserPanel/expertaboutme/ScheduleQuickCallsUser'
-import SimilarExpertsUser from '@/components/UserPanel/expertaboutme/SimilarExpertUser'
-import WhatToExpectUser from '@/components/UserPanel/expertaboutme/WhatToExpectUser'
+import Footer from '@/components/userpanel/Layout/Footer'
+import AboutMeReviewsUser from '@/components/userpanel/Expertaboutme/AboutMeReviewsUser'
+import ExpertAboutMeUser from '@/components/userpanel/Expertaboutme/ExpertAboutMeUser'
+import ScheduleQuickCallsUser from '@/components/userpanel/Expertaboutme/ScheduleQuickCallsUser'
+import SimilarExpertsUser from '@/components/userpanel/Expertaboutme/SimilarExpertUser'
+import WhatToExpectUser from '@/components/userpanel/Expertaboutme/WhatToExpectUser'
 import React from 'react'
-import UserFeatureHighights from '@/components/UserPanel/JoinAsExpert/UserFeatureHighlights'
-import UserNavSearch from '@/components/UserPanel/Layout/NavSearch'
-import UserSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
+import UserFeatureHighights from '@/components/userpanel/JoinAsExpert/UserFeatureHighlights'
+import UserNavSearch from '@/components/userpanel/Layout/NavSearch'
+import UserSidebar from "@/components/userpanel/UseSideBar/UserSidebar";
 // import Sidebar from '@/components/UserPanel/LoginUserExpert/SideBar/Sidebar'
 
 

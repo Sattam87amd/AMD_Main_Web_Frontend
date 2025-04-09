@@ -2,16 +2,16 @@
 
 
 import Footer from "@/components/userpanel/Layout/Footer";
-import LoginUserCab from "@/components/UserPanel/LoginUserExpert/LoginUserCad/LoginUserCad";
-import LoginUserFbexpert from "@/components/UserPanel/LoginUserExpert/LoginUserFashion&BeautyExpert/LoginUserfbexpert";
-import LoginUserHomeexpert from "@/components/UserPanel/LoginUserExpert/LoginUserHomeexpert/LodinUserHomeexpert";
-import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
-import LoginUserThreepara from "@/components/UserPanel/LoginUserExpert/LoginUserThreepara/Login UserThreepara";
-import LoginUserTopExpert from "@/components/UserPanel/LoginUserExpert/LoginUsertopExperts/LoginUsertopExpert";
-import LoginUserWellnessExperts from "@/components/UserPanel/LoginUserExpert/LoginUserWellnessExperts/LoginUserWellnessExperts";
-import UserNavSearch from "@/components/UserPanel/Layout/NavSearch";
-import UserSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
-import LoginExpertCategory from "@/components/UserPanel/LoginExpertCategory/LoginExpertCategory";
+import LoginUserCab from "@/components/userpanel/LoginUserExpert/LoginUserCad/LoginUserCad";
+import LoginUserFbexpert from "@/components/userpanel/LoginUserExpert/LoginUserFashion&BeautyExpert/LoginUserfbexpert";
+import LoginUserHomeexpert from "@/components/userpanel/LoginUserExpert/LoginUserHomeexpert/LodinUserHomeexpert";
+import LoginUserMobileNavSearch from "@/components/userpanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
+import LoginUserThreepara from "@/components/userpanel/LoginUserExpert/LoginUserThreepara/Login UserThreepara";
+import LoginUserTopExpert from "@/components/userpanel/LoginUserExpert/LoginUsertopExperts/LoginUsertopExpert";
+import LoginUserWellnessExperts from "@/components/userpanel/LoginUserExpert/LoginUserWellnessExperts/LoginUserWellnessExperts";
+import UserNavSearch from "@/components/userpanel/Layout/NavSearch";
+import UserSidebar from "@/components/userpanel/UseSideBar/UserSidebar";
+import LoginExpertCategory from "@/components/userpanel/LoginExpertCategory/LoginExpertCategory";
 
 
 const Page = () => {

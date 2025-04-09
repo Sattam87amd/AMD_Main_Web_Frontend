@@ -1,4 +1,4 @@
-import UserLoginPage from '@/components/UserPanel/Login/UserLogin'
+import UserLoginPage from '@/components/userpanel/Login/UserLogin'
 import React from 'react'
 
 

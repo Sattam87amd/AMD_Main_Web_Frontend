@@ -3,12 +3,12 @@
 import ExpertCategory from "@/components/ExpertCategory/ExpertCategory";
 import NavSearch from "@/components/Layout/navsearch";
 import Footer from "@/components/userpanel/Layout/Footer";
-import LoginExpertCategory from "@/components/UserPanel/LoginExpertCategory/LoginExpertCategory";
-import LoginHomeexpert from "@/components/UserPanel/LoginHomeExpert/LoginHomeExpert";
-import LoginUserHomeexpert from "@/components/UserPanel/LoginUserExpert/LoginUserHomeexpert/LodinUserHomeexpert";
-import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
-import UserHomeexperts from "@/components/UserPanel/UserExpert-Home/UserExpert-Home";
-import UserSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
+import LoginExpertCategory from "@/components/userpanel/LoginExpertCategory/LoginExpertCategory";
+import LoginHomeexpert from "@/components/userpanel/LoginHomeExpert/LoginHomeExpert";
+import LoginUserHomeexpert from "@/components/userpanel/LoginUserExpert/LoginUserHomeexpert/LodinUserHomeexpert";
+import LoginUserMobileNavSearch from "@/components/userpanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
+import UserHomeexperts from "@/components/userpanel/UserExpert-Home/UserExpert-Home";
+import UserSidebar from "@/components/userpanel/UseSideBar/UserSidebar";
 
 
 const Page = () => {

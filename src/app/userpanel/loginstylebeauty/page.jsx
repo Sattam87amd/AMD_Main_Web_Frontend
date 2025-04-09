@@ -2,10 +2,10 @@
 
 import NavSearch from "@/components/Layout/navsearch";
 import Footer from "@/components/userpanel/Layout/Footer";
-import LoginExpertCategory from "@/components/UserPanel/LoginExpertCategory/LoginExpertCategory";
-import LoginStyleBeauty from "@/components/UserPanel/LoginStyle&Beauty/Loginstyle&beauty";
-import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
-import UserSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
+import LoginExpertCategory from "@/components/userpanel/LoginExpertCategory/LoginExpertCategory";
+import LoginStyleBeauty from "@/components/userpanel/LoginStyle&Beauty/Loginstyle&beauty";
+import LoginUserMobileNavSearch from "@/components/userpanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
+import UserSidebar from "@/components/userpanel/UseSideBar/UserSidebar";
 
 
 const Page = () => {

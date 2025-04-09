@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
-import Footer from '@/components/UserPanel/Layout/Footer'
-import UserRegisterPage from '@/components/UserPanel/UserRegister/UserRegister'
+import Footer from '@/components/userpanel/Layout/Footer'
+import UserRegisterPage from '@/components/userpanel/UserRegister/UserRegister'
 
 const Page = () => {
   return (

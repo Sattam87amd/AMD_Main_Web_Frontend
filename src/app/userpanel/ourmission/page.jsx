@@ -1,8 +1,8 @@
 'use client'
-import UserGameChangers from '@/components/UserPanel/JoinAsExpert/UserGameChanger'
-import Footer from '@/components/UserPanel/Layout/Footer'
-import Navbar from '@/components/UserPanel/Layout/Navbar'
-import UserOurMission from '@/components/UserPanel/OurMission/UserOurMisson'
+import UserGameChangers from '@/components/userpanel/JoinAsExpert/UserGameChanger'
+import Footer from '@/components/userpanel/Layout/Footer'
+import Navbar from '@/components/userpanel/Layout/Navbar'
+import UserOurMission from '@/components/userpanel/OurMission/UserOurMisson'
 
 import React from 'react'
 

@@ -6,11 +6,11 @@ import NavSearch from "@/components/Layout/navsearch";
 // import UserStyleBeautyExperts from "@/components/UserPanel/Experts/UserStyleBeautyExperts/UserStyleBeautyExperts";
 // import UserTopExpert from "@/components/UserPanel/Experts/UserTopeexpert/UserTopeexpert";
 import Footer from "@/components/userpanel/Layout/Footer";
-import LoginExpertCategory from "@/components/UserPanel/LoginExpertCategory/LoginExpertCategory";
-import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
-import LoginUserStyleBeautyExperts from "@/components/UserPanel/LoginUserExpert/LoginUserStyleBeautyExperts/LoginUserStyleBeautyExperts";
-import UserNavSearch from "@/components/UserPanel/UserNavSearch/UserNavSearch";
-import UseSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
+import LoginExpertCategory from "@/components/userpanel/LoginExpertCategory/LoginExpertCategory";
+import LoginUserMobileNavSearch from "@/components/userpanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
+import LoginUserStyleBeautyExperts from "@/components/userpanel/LoginUserExpert/LoginUserStyleBeautyExperts/LoginUserStyleBeautyExperts";
+import UserNavSearch from "@/components/userpanel/UserNavSearch/UserNavSearch";
+import UseSidebar from "@/components/userpanel/UseSideBar/UserSidebar";
 
 
 const Page = () => {

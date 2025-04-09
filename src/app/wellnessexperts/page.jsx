@@ -4,7 +4,7 @@ import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";
 import WellnessExperts from "@/components/Experts/WellnessExperts/WellnessExperts";
 import ExpertCategory from "@/components/ExpertCategory/ExpertCategory";
-import LoginExpertCategory from "@/components/UserPanel/LoginExpertCategory/LoginExpertCategory";
+import LoginExpertCategory from "@/components/userpanel/LoginExpertCategory/LoginExpertCategory";
 // import ExpertCategory from "@/components/ExpertCategory/ExpertCategory";
 
 

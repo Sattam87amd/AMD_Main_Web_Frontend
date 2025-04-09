@@ -1,9 +1,9 @@
 "use client"
-import UserThreepara from '@/components/UserPanel/Experts/UserThreepara/UserThreepara'
-import Footer from '@/components/UserPanel/Layout/Footer'
-import MobileNavSearch from '@/components/UserPanel/Layout/MobileNavSearch'
-import UserNavSearch from '@/components/UserPanel/Layout/NavSearch'
-import UserHomeexperts from '@/components/UserPanel/UserExpert-Home/UserExpert-Home'
+import UserThreepara from '@/components/userpanel/Experts/UserThreepara/UserThreepara'
+import Footer from '@/components/userpanel/Layout/Footer'
+import MobileNavSearch from '@/components/userpanel/Layout/MobileNavSearch'
+import UserNavSearch from '@/components/userpanel/Layout/NavSearch'
+import UserHomeexperts from '@/components/userpanel/UserExpert-Home/UserExpert-Home'
 import React from 'react'
 
 const page = () => {
