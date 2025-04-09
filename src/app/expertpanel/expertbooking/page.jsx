@@ -1,8 +1,6 @@
 "use client";
 
 import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
-import Dashboard from "@/components/ExpertPanel/Dashboard/Dashboard";
-import CouponUserCount from "@/components/ExpertPanel/Dashboard/CouponUserCount";
 import Navtop from "@/components/ExpertPanel/Navtop/navtop";
 import { usePathname } from "next/navigation";
 import ExpertBooking from "@/components/ExpertPanel/ExpertBooking/ExpertBooking";

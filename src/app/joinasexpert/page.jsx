@@ -1,4 +1,3 @@
-import Footer from '@/components/UserPanel/Layout/Footer'
 import React from 'react'
 import Navbar from '@/components/Layout/Navbar'
 import BecomeExpert from '@/components/JoinAsExpert/BecomeExpert'
@@ -7,6 +6,7 @@ import OurClientsSay from '@/components/HomePage/OurClientsSay'
 import FeatureHighights from '@/components/ContactUs/FeatureHighlights'
 import HowItWork from '@/components/JoinAsExpert/HowItWork'
 import GameChanger from '@/components/JoinAsExpert/GameChanger'
+import Footer from '@/components/Layout/Footer'
 
 const page = () => {
     return (

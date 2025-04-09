@@ -1,6 +1,4 @@
-
-import Footer from '@/components/Layout/Footer'
-import NavSearch from '@/components/Layout/navsearch'
+'use client'
 import UserCab from '@/components/UserPanel/Experts/UserCAD/Usercad'
 
 import UserFbexpert from '@/components/UserPanel/Experts/UserFashion&Beauty-Expert/UserFbexpert'
@@ -8,9 +6,9 @@ import UserHomeexpert from '@/components/UserPanel/Experts/UserHomeexpert/UserHo
 import UserMobileNavSearch from '@/components/UserPanel/Experts/UserMobileexpert/UserMobileNavSearch'
 import UserThreepara from '@/components/UserPanel/Experts/UserThreepara/UserThreepara'
 import UserTopExpert from '@/components/UserPanel/Experts/UserTopExpert/UserTopExpert'
-//import UserTopExpert from '@/components/UserPanel/Experts/UserTopeexpert/UserTopeexpert'
 import UserWellnessExperts from '@/components/UserPanel/Experts/UserWellnessExperts/UserWellnessExperts'
-// import LoginUserMobileNavSearch from '@/components/UserPanel/LoginUserExpert/LoginUserMoblieNavSearch/LoginUserMoblieNavSearch'
+import Footer from '@/components/UserPanel/Layout/Footer'
+import UserNavSearch from '@/components/UserPanel/Layout/NavSearch'
 import React from 'react'
 
  const page = () => {
@@ -19,7 +17,7 @@ import React from 'react'
     //Desktop view navsearch
     <div >
       <div className='hidden md:block'>
-       <NavSearch/>
+       <UserNavSearch/>
        <UserTopExpert/>
        <UserWellnessExperts/>
        <UserFbexpert/>

@@ -2,7 +2,6 @@
 import Footer from "@/components/Layout/Footer";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";
-import Homeexpert from "@/components/Experts/Homeexpert/homeexpert";
 import ExpertCategory from "@/components/ExpertCategory/ExpertCategory";
 import StyleBeautyExperts from "@/components/Experts/Style&BeautyExpert/Style&BeautyExpert";
 

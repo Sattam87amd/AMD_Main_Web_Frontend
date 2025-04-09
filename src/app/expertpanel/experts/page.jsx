@@ -1,6 +1,5 @@
 "use client";
 
-import ExpertCategory from "@/components/ExpertCategory/ExpertCategory";
 import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
 import CareerBusinessHomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/Career&BusinessLogin";
 import FashionBeautyHomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/Fashoin&BeautyLogin";

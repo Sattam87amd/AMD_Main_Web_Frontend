@@ -1,5 +1,4 @@
 import Footer from '@/components/UserPanel/Layout/Footer'
-// import Navbar from '@/components/UserPanel/Layout/Navbar'
 import AboutMeReviewsUser from '@/components/UserPanel/expertaboutme/AboutMeReviewsUser'
 import ExpertAboutMeUser from '@/components/UserPanel/expertaboutme/ExpertAboutMeUser'
 import ScheduleQuickCallsUser from '@/components/UserPanel/expertaboutme/ScheduleQuickCallsUser'
@@ -8,7 +7,6 @@ import WhatToExpectUser from '@/components/UserPanel/expertaboutme/WhatToExpectU
 import React from 'react'
 import UserFeatureHighights from '@/components/UserPanel/JoinAsExpert/UserFeatureHighlights'
 import Sidebar from '@/components/UserPanel/LoginUserExpert/Sidebar/Sidebar'
-// import UserNavSearch from '@/components/UserPanel/UserNavSearch/UserNavSearch'
 import NavSearch from '@/components/UserPanel/NavSearch/NavSearch'
 
 
