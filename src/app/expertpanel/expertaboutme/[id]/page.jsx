@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import NavSearch from "@/components/Layout/navsearch";
 import { FaStar } from 'react-icons/fa';
 import { FaInstagram } from 'react-icons/fa';
 import { Gift } from 'lucide-react';
-import NavSearch from "@/components/Layout/navsearch";
 import WhatToExpectExpertPanel from "@/components/ExpertPanel/ExpertPanelAboutMe/WhatToExpectExpertPanel";
 import AboutMeReviews from '@/components/ExpertAboutMe/AboutMeReviews';
 import ExpertFeatureHighightsExpertPanel from '@/components/ExpertPanel/ExpertPanelAboutMe/ExpertFeatureHighightsExpertPanel';
@@ -119,6 +119,9 @@ const ExpertDetail = () => {
         </aside>
 
         <div className="w-full md:w-[80%] flex flex-col">
+        <div className="hidden md:block">
+          <NavSearch />
+        </div>
           <div className="min-h-screen bg-white py-10 px-4 md:px-10">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left Column: Expert Info */}
