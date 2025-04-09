@@ -1,12 +1,11 @@
 "use client";
 
-import NavSearch from "@/components/Layout/navsearch";
-import UserWellnessexpert from "@/components/UserPanel/Experts/UserWellness/UserWellness";
+
 import Footer from "@/components/userpanel/Layout/Footer";
+import UserNavSearch from "@/components/UserPanel/Layout/NavSearch";
+import LoginExpertCategory from "@/components/UserPanel/LoginExpertCategory/LoginExpertCategory";
 import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
 import LoginUserWellnessexpert from "@/components/UserPanel/LoginUserExpert/LoginUserWellness/LoginUserWellness";
-import UserHomeexperts from "@/components/UserPanel/UserExpert-Home/UserExpert-Home";
-import UserNavSearch from "@/components/UserPanel/UserNavSearch/UserNavSearch";
 import UseSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
 
 
@@ -24,7 +23,8 @@ const Page = () => {
         <div className="w-full md:w-[85%] flex flex-col">
           {/* Desktop View - NavSearch */}
           <div className="hidden md:block">
-            <NavSearch />
+            <UserNavSearch />
+            <LoginExpertCategory/>
             <div className="space-y-8 px-4 md:px-8">
               <LoginUserWellnessexpert /> 
              

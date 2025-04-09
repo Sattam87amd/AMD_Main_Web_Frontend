@@ -161,7 +161,7 @@ const ExpertAboutMeUser = () => {
         </div>
          {/* Book a Video Call Button Aligned Left */}
          <div className=" w-[90%] flex justify-start mt-10 pl-10">
-                  <button type="button" onClick={() => router.push('/userpanel/userbooking')}
+                  <button type="button" onClick={() => router.push('/userpanel/expertaboutme')}
                     className="bg-[#EDECE8] text-black font-semibold py-4 px-10 rounded-lg hover:bg-gray-300 transition">
                     Book a Video Call
                   </button>

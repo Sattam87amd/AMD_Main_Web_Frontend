@@ -6,7 +6,7 @@ import { LuNotepadText } from "react-icons/lu";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { Inter } from "next/font/google";
-import axios from "axios";
+// import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -85,7 +85,6 @@ function UserLoginPage() {
       };
     
     
-
     return (
         <div className={`min-h-screen flex ${interFont.variable}`}>
             <div className="hidden md:flex w-1/2 flex-col relative">
