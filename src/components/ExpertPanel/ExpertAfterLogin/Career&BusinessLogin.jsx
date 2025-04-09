@@ -15,7 +15,7 @@ const CareerBusinessHomeCardsLogin = () => {
   useEffect(() => {
     const fetchExperts = async () => {
       try {
-        const area = "Home";  // Or dynamically fetch based on user's selection
+        const area = "Career and Business";  // Or dynamically fetch based on user's selection
         const response = await axios.get(`http://localhost:8000/api/expertauth/area/${area}`);
         setExpertData(response.data.data);
         setLoading(false);
@@ -43,7 +43,7 @@ const CareerBusinessHomeCardsLogin = () => {
 
       {/* "See All" Button */}
       <div className="flex justify-start mb-6">
-        <Link href="/expertpanel/homeexperts" passHref>
+        <Link href="/expertpanel/carrer&business" passHref>
           <button className="flex items-center text-xl font-semibold text-black">
             See All
             <HiChevronRight className="ml-2 w-5 h-5" />
@@ -64,7 +64,7 @@ const CareerBusinessHomeCardsLogin = () => {
                 {/* Background Image */}
                 <img
                   src={expert.image || "/aaliyaabadi.png"}  // Ensure there's a fallback image
-                  alt={expert.firstName}
+                  alt={expert.photoFile}
                   className="w-full h-full object-cover"
                 />
 
