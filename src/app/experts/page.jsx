@@ -1,45 +1,109 @@
 
-import Footer from '@/components/Layout/Footer'
-import NavSearch from '@/components/Layout/navsearch'
-import TopExpert from '@/components/HomePage/TopExpert'
-import React from 'react'
-import WellnessHomeCards from '@/components/HomePage/WellnessHomeCards'
-import FashionBeautyHomeCards from '@/components/HomePage/FashionBeautyHomeCards'
-import CareerBusinessHomeCards from '@/components/HomePage/CareerBusinessHomeCards'
-import HomeCards from '@/components/HomePage/HomeCards'
-import MobileNavSearch from '@/components/Layout/mobilenavsearch'
-import Threepara from '@/components/Experts/Threepara/threepara'
-import ExpertCategory from '@/components/ExpertCategory/ExpertCategory'
+// import Footer from '@/components/Layout/Footer'
+// import NavSearch from '@/components/Layout/navsearch'
+// import TopExpert from '@/components/HomePage/TopExpert'
+// import React from 'react'
+// import WellnessHomeCards from '@/components/HomePage/WellnessHomeCards'
+// import FashionBeautyHomeCards from '@/components/HomePage/FashionBeautyHomeCards'
+// import CareerBusinessHomeCards from '@/components/HomePage/CareerBusinessHomeCards'
+// import HomeCards from '@/components/HomePage/HomeCards'
+// import MobileNavSearch from '@/components/Layout/mobilenavsearch'
+// import Threepara from '@/components/Experts/Threepara/threepara'
+// import ExpertCategory from '@/components/ExpertCategory/ExpertCategory'
 
- const page = () => {
-  return (
+//  const page = () => {
+//   return (
 
   
-    <div >
-      <div className=''>
-        <MobileNavSearch/>
-       <NavSearch/>
-       <ExpertCategory/>
-       <TopExpert/>
-       <WellnessHomeCards/>
-       <FashionBeautyHomeCards/>
-       <CareerBusinessHomeCards/>
-       <HomeCards/>
-       <Threepara />
-       <Footer/>
-       </div>
+//     <div >
+//       <div className=''>
+//         <MobileNavSearch/>
+//        <NavSearch/>
+//        <ExpertCategory/>
+//        <TopExpert/>
+//        <WellnessHomeCards/>
+//        <FashionBeautyHomeCards/>
+//        <CareerBusinessHomeCards/>
+//        <HomeCards/>
+//        <Threepara />
+//        <Footer/>
+//        </div>
       
 
 
 
 
-    </div>
+//     </div>
     
 
 
    
-  );
+//   );
 
+// };
+
+// export default page;
+
+"use client";
+
+import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
+import CareerBusinessHomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/Career&BusinessLogin";
+import FashionBeautyHomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/Fashoin&BeautyLogin";
+import HomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/HomeExpertLogin";
+import ExpertsCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/TopExpertLogin";
+import WellnessHomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/WellnessLogin";
+import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
+import Threepara from "@/components/Experts/Threepara/threepara";
+import Footer from "@/components/Layout/Footer";
+import NavSearch from "@/components/Layout/navsearch";
+import { useState, useEffect } from "react";
+
+const Page = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    const token = localStorage.getItem("expertToken")
+
+    if(token){
+      setIsLoggedIn(true)
+    }
+    else{
+      setIsLoggedIn(false)
+    }
+  });
+
+  return (
+    <div className="flex min-h-screen flex-col">
+      {/* Main Content and Sidebar Container */}
+      <div className="flex flex-1">
+        {/* Sidebar (Left Section - 20% Width) */}
+        <aside className="w-[20%] h-[80%] hidden md:block bg-gray-100 overflow-y-auto -mt-5">
+          {isLoggedIn && <Sidebar />}
+        </aside>
+
+        {/* Main Content (Right Section - 80% Width) */}
+        <div className={`w-full ${isLoggedIn ? "md:w-[80%]" : "md:w-[100%]"} flex flex-col`}>
+          {/* Desktop View - NavSearch */}
+          <div className="">
+            <NavSearch />
+            <LoginExpertCategory />
+            <div className="space-y-8 px-4 md:px-8">
+              <ExpertsCardsLogin />
+              <WellnessHomeCardsLogin />
+              <FashionBeautyHomeCardsLogin />
+              <CareerBusinessHomeCardsLogin />
+              <HomeCardsLogin />
+              <Threepara />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer (Full Width) */}
+      <div className="w-full ">
+        <Footer />
+      </div>
+    </div>
+  );
 };
 
-export default page;
+export default Page;

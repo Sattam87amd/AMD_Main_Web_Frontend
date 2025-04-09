@@ -2,7 +2,7 @@
 
 import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
 import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
-import LoginWellnessExperts from "@/components/Experts/WellnessExperts/LoginWellnessExperts";
+import LoginWellnessExperts from "@/components/Experts/WellnessExperts/WellnessExperts";
 import Footer from "@/components/Layout/Footer";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";

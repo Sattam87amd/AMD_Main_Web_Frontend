@@ -6,16 +6,30 @@ import Homeexpert from "@/components/Experts/Homeexpert/homeexpert";
 // import Homeexpert from "@/components/Experts/Homeexpert/LoginHomeExpert";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";
-// import Footer from "@/components/userpanel/Layout/Footer";
+import Footer from "@/components/userpanel/Layout/Footer";
+import { useState, useEffect } from "react";
 
 const Page = () => {
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+    useEffect(() => {
+      const token = localStorage.getItem("expertToken")
+  
+      if(token){
+        setIsLoggedIn(true)
+      }
+      else{
+        setIsLoggedIn(false)
+      }
+    });
+
   return (
     <div className="flex min-h-screen flex-col">
       {/* Main Content and Sidebar Container */}
       <div className="flex flex-1">
         {/* Sidebar (Left Section - 20% Width) */}
         <aside className="w-[15%] h-[85%] hidden md:block bg-gray-100 overflow-y-auto -mt-5">
-          <Sidebar />
+        {isLoggedIn && <Sidebar />}
         </aside>
 
         {/* Main Content (Right Section - 80% Width) */}
