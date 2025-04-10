@@ -188,7 +188,7 @@ function UserLoginPage() {
                                 onClick={generateOtp}
                                 disabled={!phone || !isValidPhoneNumber(phone)}
                             >
-                                Set OTP
+                                Send OTP
                             </button>
 
                         </div>
