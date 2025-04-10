@@ -97,7 +97,7 @@ const LoginWellnessExpert = () => {
           {expertData.map((expert, index) => (
             <Link
               key={index}
-              href={`/expertpanel/expertaboutme/${expert._id}`}
+              href={`/userpanel/userexpertaboutme/${expert._id}`}
               passHref
             >
               <motion.div

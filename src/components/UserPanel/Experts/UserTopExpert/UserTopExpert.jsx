@@ -89,7 +89,7 @@ const UserTopExpert = () => {
           }}
         >
           {expertData.map((expert, index) => (
-            <Link key={index} href={`/expertpanel/expertaboutme/${expert._id}`} passHref>
+            <Link key={index} href={`/userpanel/userexpertaboutme/${expert._id}`} passHref>
               <motion.div
                 className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg rounded-lg cursor-pointer"
                 variants={{
