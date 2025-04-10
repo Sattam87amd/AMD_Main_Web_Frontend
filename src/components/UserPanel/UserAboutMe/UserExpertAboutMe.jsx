@@ -4,6 +4,7 @@ import { FaStar } from "react-icons/fa";
 import { Gift } from 'lucide-react'; // Gift Icon from lucide-react
 import { useRouter } from 'next/navigation';
 import Link from "next/link";
+import { FaInstagram } from "react-icons/fa";
 
 const ExpertAboutMeUser = () => {
   const [selectedConsultation, setSelectedConsultation] = useState("1:1");
@@ -120,7 +121,7 @@ const ExpertAboutMeUser = () => {
         <div>
           
 
-        <div className="bg-[#F8F7F3] rounded-3xl p-12 shadow flex-1">
+        <div className="bg-[#F8F7F3] rounded-3xl p-12 shadow w-[44rem] ">
           <img
             src={profile.image}
             alt={profile.name}
@@ -138,7 +139,12 @@ const ExpertAboutMeUser = () => {
           </div>
 
           <div className="mt-6">
-            <h3 className="text-lg md:text-3xl font-semibold">About Me</h3>
+          <h3 className="text-lg md:text-3xl font-semibold flex items-center gap-[30rem]">
+  About Me
+  <FaInstagram  className="text-4xl"/>
+</h3>
+
+            
             {/* Display the first paragraph initially */}
             <p className="text-sm md:text-xl text-black mt-3">{profile.about.first}</p>
 
@@ -159,15 +165,9 @@ const ExpertAboutMeUser = () => {
             </button>
           </div>
         </div>
-        <div className=" w-[90%] flex justify-start mt-10 pl-10">
-                  <button type="button" onClick={() => router.push('/userpanel/expertaboutme')}
-                    className="bg-[#EDECE8] text-black font-semibold py-4 px-10 rounded-lg hover:bg-gray-300 transition">
-                    Book a Video Call
-                  </button>
-                </div>
          {/* Book a Video Call Button Aligned Left */}
          <div className=" w-[90%] flex justify-start mt-10 pl-10">
-                  <button type="button" onClick={() => router.push('/userpanel/expertaboutme')}
+                  <button type="button" onClick={handleSeeTimeClick}//onClick={() => router.push('/userpanel/userbooking')}
                     className="bg-[#EDECE8] text-black font-semibold py-4 px-10 rounded-lg hover:bg-gray-300 transition">
                     Book a Video Call
                   </button>
