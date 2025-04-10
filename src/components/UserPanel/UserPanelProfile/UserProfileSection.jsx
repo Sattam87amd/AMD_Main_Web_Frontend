@@ -1,101 +1,121 @@
-"use client";
-
 import { useEffect, useState } from "react";
-import {
-  FaUser,
-  FaGift,
-  FaComments,
-  FaTrashAlt,
-  FaCheckCircle,
-} from "react-icons/fa";
+import axios from "axios";
+import Image from "next/image"; // For optimized image handling
+import { FaUser, FaCloudUploadAlt, FaComments, FaTrashAlt, FaCheckCircle } from "react-icons/fa"; // Updated to use FaCloudUploadAlt
 import { LuPencilLine } from "react-icons/lu";
 import { FiDollarSign } from "react-icons/fi";
 import { BiLogOut } from "react-icons/bi";
 import { MdOutlineFeedback } from "react-icons/md";
-import { CiSettings } from "react-icons/ci"; 
+import { CiSettings } from "react-icons/ci";
 import UserExpertContactUs from "./UserExpertContactUs";
 import UserBuyGiftCard from "./UserBuyGiftCard";
 import UserDiscountCode from "./UserDiscountCode";
 import UserPaymentMethods from "./UserPaymentMethods";
 import UserGiftCard from "./UserGiftCard";
-// import axios from "axios";
 import UserPaymentHistory from "./UserPaymentHistory";
 
 const UserProfileSection = () => {
-const[selectedSection, setSelectedSection]= useState("Profile");
-const [isEditing, setIsEditing]= useState("false");
-const[successMessage, setSuccessMessage]= useState("");
-const[profileData, setProfileData]=useState({
-  firstName:" ",
-  lastName:" ",
-  phone:"",
-  email:" ",
-});
+  const [selectedSection, setSelectedSection] = useState("Profile");
+  const [isEditing, setIsEditing] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [profileData, setProfileData] = useState({
+    firstName: "",
+    lastName: "",
+    phone: "",
+    email: "",
+    photoFile: "", // Assuming you have a field for storing photo URL
+  });
+  const [userId, setUserId] = useState("");
+  const [imagePreview, setImagePreview] = useState(null); // State for image preview
 
-const [userId, setUserId]= useState("");
-
-useEffect(() =>{
-  const userToken = localStorage.getItem("token");
-
-  if(userToken){
-    try {
-      const decodedToken =JSON.parse(atob(userToken.split(".")[1]));
-      const userId= decodedToken._id;
-      setUserId(userId)
-    } catch (error) {
-      console.error("Error PArsing Token", error);
-      
-    }
-  }else{
-    alert("User Token not found Please Log In")
-  }
-},[]);
-
-
-useEffect(()=>{
-  if(userId){
-    const fetchUserDetails=async() =>{
+  // Get userId from the token
+  useEffect(() => {
+    const userToken = localStorage.getItem("token");
+    if (userToken) {
       try {
-        const response = await axios.get(
-          `http://localhost:8000/api/userauth/${userId}`
-        );
-        const {firstName,lastName,phone=" ",email}=response.data.data;
-        setProfileData({
-          firstName,
-          lastName,
-          phone,
-          email,
-        });
+        const decodedToken = JSON.parse(atob(userToken.split(".")[1]));
+        const userId = decodedToken._id;
+        setUserId(userId);
       } catch (error) {
-        console.error("error fetching user details:",error);
-        alert("Error fetching user details");
+        console.error("Error Parsing Token", error);
       }
-    };
-    fetchUserDetails();
-  }
-},[userId]);
-const handleInputChange = (e) => {
-  setProfileData({ ...profileData, [e.target.name]: e.target.value });
-};
+    } else {
+      alert("User Token not found. Please log in.");
+    }
+  }, []);
 
-const handleEditClick = () => {
-  setIsEditing(true);
-  setSuccessMessage("");
-};
+  // Fetch user details after getting userId
+  useEffect(() => {
+    if (userId) {
+      const fetchUserDetails = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:8000/api/userauth/${userId}`
+          );
+          const { firstName, lastName, phone = " ", email, photoFile } = response.data.data;
+          setProfileData({
+            firstName,
+            lastName,
+            phone,
+            email,
+            photoFile,
+          });
+        } catch (error) {
+          console.error("Error fetching user details:", error);
+          alert("Error fetching user details.");
+        }
+      };
+      fetchUserDetails();
+    }
+  }, [userId]);
 
-const handleSaveClick = (e) => {
-  e.preventDefault();
-  setIsEditing(false);
-  setSuccessMessage("Changes Saved!");
-  setTimeout(() => setSuccessMessage(""), 3000);
-};
+  // Handle file input for photo upload
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImagePreview(URL.createObjectURL(file)); // Preview the image before upload
+      const formData = new FormData();
+      formData.append("photoFile", file); // Add file to FormData
 
+      // Upload image to Cloudinary and update the user's photo
+      axios
+        .post(`http://localhost:8000/api/userauth/uploadProfileImage/${userId}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((response) => {
+          setProfileData({ ...profileData, photoFile: response.data.user.photoFile });
+          setSuccessMessage("Profile image updated successfully!");
+          setTimeout(() => setSuccessMessage(""), 3000);
+        })
+        .catch((error) => {
+          console.error("Error uploading image:", error);
+          alert("Error uploading image.");
+        });
+    }
+  };
+
+  const handleInputChange = (e) => {
+    setProfileData({ ...profileData, [e.target.name]: e.target.value });
+  };
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+    setSuccessMessage("");
+  };
+
+  const handleSaveClick = (e) => {
+    e.preventDefault();
+    setIsEditing(false);
+    setSuccessMessage("Changes Saved!");
+    setTimeout(() => setSuccessMessage(""), 3000);
+  };
 
   return (
     <div className="flex flex-col md:flex-row border rounded-xl overflow-hidden bg-white m-4 md:m-8">
-      {/* Sidebar - Hidden on Small Screens, Visible on Medium+ */}
+      {/* Sidebar */}
       <aside className="hidden md:block w-64 bg-white p-6 border-r h-[800px]">
-        {/* Updated Settings Heading with Icon */}
         <h2 className="flex items-center justify-between text-lg font-semibold pb-4 border-b mb-3">
           <span>Settings</span>
           <CiSettings className="text-3xl text-[#7E7E7E]" />
@@ -105,8 +125,8 @@ const handleSaveClick = (e) => {
           {[
             { name: "Profile", icon: FaUser },
             { name: "Payment Methods", icon: FiDollarSign },
-            { name: "Do you have code?", icon: FaGift },
-            { name: "Gift Card", icon: FaGift },
+            { name: "Do you have code?", icon: FaCloudUploadAlt },
+            { name: "Gift Card", icon: FaCloudUploadAlt },
             { name: "Contact Us", icon: FaComments },
             { name: "Payment History", icon: FiDollarSign },
             { name: "Give us Feedback", icon: MdOutlineFeedback },
@@ -141,12 +161,28 @@ const handleSaveClick = (e) => {
         {selectedSection === "Profile" && (
           <div className="mt-6">
             <div className="flex flex-col md:flex-row items-center md:justify-between space-y-4 md:space-y-0">
-              <div className="flex i  tems-center space-x-4 md:space-x-6">
-                <img
-                  src="/guyhawkins.png"
-                  alt="profile"
-                  className="w-16 h-16 rounded-full"
-                />
+              <div className="flex items-center space-x-4 md:space-x-6 relative">
+                {/* Image with a cloud upload icon */}
+                <div className="relative">
+                  <Image
+                    src={imagePreview || profileData.photoFile || "/default-profile.png"} // Fallback image if no photo
+                    alt="profile"
+                    width={60}
+                    height={60}
+                    className="w-full h-full object-cover rounded-full"
+                  />
+                  <label htmlFor="imageUpload" className="absolute bottom-0 right-0 bg-black text-white p-2 rounded-full cursor-pointer">
+                    <FaCloudUploadAlt className="w-6 h-6" />
+                  </label>
+                  <input
+                    id="imageUpload"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="hidden"
+                  />
+                </div>
+
                 <div className="text-center md:text-left">
                   <h3 className="text-lg font-semibold text-[#434966]">
                     {profileData.firstName} {profileData.lastName}
@@ -256,24 +292,14 @@ const handleSaveClick = (e) => {
           </div>
         )}
 
-        {/* Payment Methods */}
+        {/* Other Sections */}
         {selectedSection === "Payment Methods" && <UserPaymentMethods />}
-
-        {/* Discount Code */}
         {selectedSection === "Do you have code?" && <UserDiscountCode />}
-
-        {/* Gift Card */}
         {selectedSection === "Gift Card" && (
           <UserGiftCard onContinue={() => setSelectedSection("BuyGiftCard")} />
         )}
-
-        {/* Buy Gift Card */}
         {selectedSection === "BuyGiftCard" && <UserBuyGiftCard />}
-
-        {/* Contact Us */}
         {selectedSection === "Contact Us" && <UserExpertContactUs />}
-
-         {/* Payment History */}
         {selectedSection === "Payment History" && <UserPaymentHistory />}
       </div>
     </div>
