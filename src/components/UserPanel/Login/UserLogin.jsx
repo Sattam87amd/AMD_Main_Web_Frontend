@@ -6,7 +6,7 @@ import { LuNotepadText } from "react-icons/lu";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { Inter } from "next/font/google";
-// import axios from "axios";
+import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -188,7 +188,7 @@ function UserLoginPage() {
                                 onClick={generateOtp}
                                 disabled={!phone || !isValidPhoneNumber(phone)}
                             >
-                                Set OTP
+                                Send OTP
                             </button>
 
                         </div>

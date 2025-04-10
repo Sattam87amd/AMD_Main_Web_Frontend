@@ -6,6 +6,7 @@ import { LuNotepadText } from "react-icons/lu";
 import { Inter } from "next/font/google";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { IoIosArrowBack } from "react-icons/io";
 import axios from "axios";
 
 const interFont = Inter({
@@ -134,7 +135,14 @@ function UserRegisterPage() {
         </div>
 
         <div className="w-full max-w-md p-8 -mt-20 md:-mt-0">
-          <h1 className="text-[29px] md:text-[35px] font-extrabold text-center">Please Enter Your Info</h1>
+      
+        <h1 className="text-[29px] md:text-[30px] font-extrabold text-center flex items-center justify-center gap-1">
+          <a href="/userlogin" className="text-black">
+            <IoIosArrowBack />
+             </a>
+          Please Enter Your Info
+        </h1>
+
 
           {/* Registration Form */}
           <div className="mt-8 space-y-8">
@@ -184,7 +192,8 @@ function UserRegisterPage() {
               />
               {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
             </div>
-
+            <div>
+              <a href="/userpanel/loginuserexpert">
             <button
               className={`w-full py-3 rounded-lg transition ${
                 email && firstName && lastName
@@ -196,6 +205,8 @@ function UserRegisterPage() {
             >
               Continue
             </button>
+            </a>
+            </div>
           </div>
         </div>
       </div>
