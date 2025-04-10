@@ -47,12 +47,18 @@ const VideoCall = () => {
   const isJoinEnabled = (sessionDate, sessionTime, duration) => {
     const [hours, minutes] = sessionTime.split(':').map(Number);
     const sessionDateTime = new Date(sessionDate);
-    sessionDateTime.setHours(hours, minutes, 0, 0);
+    sessionDateTime.setHours(hours, minutes, 0, 0); // Set the session time on the sessionDate
   
     const now = new Date();
-    const diff = (sessionDateTime - now) / 60000;
-    return diff <= 2 && diff >= -duration;
+    console.log("Current Time:", now);
+    console.log("Session Time:", sessionDateTime);
+  
+    const diff = (sessionDateTime - now) / 60000; // Difference in minutes
+    console.log("Time Difference (in minutes):", diff);
+  
+    return diff <= 2 && diff >= -duration; // Join is enabled if within the 2-minute window before or during the session
   };
+  
 
   // Handle session accept action
   const handleAccept = async (sessionId) => {
@@ -199,7 +205,7 @@ const VideoCall = () => {
                 </div>
               </div>
 
-            {/* Right Side (Accept/Decline Buttons or Status) */}
+   {/* Right Side (Accept/Decline Buttons or Status) */}
 <div className="flex items-center space-x-4">
   {session.status === 'confirmed' ? (
     <>
@@ -209,17 +215,12 @@ const VideoCall = () => {
       {/* Display Zoom Join Button */}
       {session.zoomMeetingLink ? (
         <a
-          href={isJoinEnabled(session.sessionDate, session.sessionTime, session.duration) ? session.zoomMeetingLink : "#"}
+          href={session.zoomMeetingLink} // Remove time check for now, just use the link
           target="_blank"
           rel="noopener noreferrer"
         >
           <button
-            className={`px-4 py-1 text-sm rounded ml-2 ${
-              isJoinEnabled(session.sessionDate, session.sessionTime, session.duration)
-                ? 'bg-blue-500 text-white hover:bg-blue-600'
-                : 'bg-gray-300 text-gray-600 cursor-not-allowed'
-            }`}
-            disabled={!isJoinEnabled(session.sessionDate, session.sessionTime, session.duration)}
+            className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600"
           >
             🎥 Join
           </button>
