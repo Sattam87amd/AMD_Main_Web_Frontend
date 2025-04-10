@@ -43,7 +43,7 @@ const VideoCall = () => {
           setMySessions(sessionsResponse.data);
         }
       } catch (err) {
-        setError("Failed to fetch data");
+        setError("No Bookings Found");
       } finally {
         setLoading(false);
       }
