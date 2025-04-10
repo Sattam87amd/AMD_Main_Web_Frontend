@@ -44,6 +44,16 @@ const VideoCall = () => {
     fetchSessions();
   }, []);
 
+  const isJoinEnabled = (sessionDate, sessionTime, duration) => {
+    const [hours, minutes] = sessionTime.split(':').map(Number);
+    const sessionDateTime = new Date(sessionDate);
+    sessionDateTime.setHours(hours, minutes, 0, 0);
+  
+    const now = new Date();
+    const diff = (sessionDateTime - now) / 60000;
+    return diff <= 2 && diff >= -duration;
+  };
+
   // Handle session accept action
   const handleAccept = async (sessionId) => {
     try {
@@ -189,32 +199,56 @@ const VideoCall = () => {
                 </div>
               </div>
 
-              {/* Right Side (Accept/Decline Buttons or Status) */}
-              <div className="flex items-center space-x-4">
-                {session.status === 'confirmed' ? (
-                  <>
-                    <span className="text-green-500 text-sm font-medium">Accepted</span>
-                    <button className="px-4 py-1 border rounded text-sm">💬 Chat</button>
-                  </>
-                ) : session.status === 'rejected' ? (
-                  <span className="text-red-500 text-sm font-medium">Rejected</span>
-                ) : (
-                  <>
-                    <button
-                      className="px-4 py-2 bg-green-500 text-white rounded text-sm hover:bg-green-600 transition-all duration-200"
-                      onClick={() => handleAccept(session._id)}
-                    >
-                      Accept
-                    </button>
-                    <button
-                      className="px-4 py-2 bg-red-500 text-white rounded text-sm hover:bg-red-600 transition-all duration-200"
-                      onClick={() => handleDecline(session._id)}
-                    >
-                      Decline
-                    </button>
-                  </>
-                )}
-              </div>
+            {/* Right Side (Accept/Decline Buttons or Status) */}
+<div className="flex items-center space-x-4">
+  {session.status === 'confirmed' ? (
+    <>
+      <span className="text-green-500 text-sm font-medium">Accepted</span>
+      <button className="px-4 py-1 border rounded text-sm">💬 Chat</button>
+
+      {/* Display Zoom Join Button */}
+      {session.zoomMeetingLink ? (
+        <a
+          href={isJoinEnabled(session.sessionDate, session.sessionTime, session.duration) ? session.zoomMeetingLink : "#"}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <button
+            className={`px-4 py-1 text-sm rounded ml-2 ${
+              isJoinEnabled(session.sessionDate, session.sessionTime, session.duration)
+                ? 'bg-blue-500 text-white hover:bg-blue-600'
+                : 'bg-gray-300 text-gray-600 cursor-not-allowed'
+            }`}
+            disabled={!isJoinEnabled(session.sessionDate, session.sessionTime, session.duration)}
+          >
+            🎥 Join
+          </button>
+        </a>
+      ) : (
+        <span className="text-yellow-500 text-sm ml-2">Zoom link not ready</span>
+      )}
+    </>
+  ) : session.status === 'rejected' ? (
+    <span className="text-red-500 text-sm font-medium">Rejected</span>
+  ) : (
+    <>
+      <button
+        className="px-4 py-2 bg-green-500 text-white rounded text-sm hover:bg-green-600 transition-all duration-200"
+        onClick={() => handleAccept(session._id)}
+      >
+        Accept
+      </button>
+      <button
+        className="px-4 py-2 bg-red-500 text-white rounded text-sm hover:bg-red-600 transition-all duration-200"
+        onClick={() => handleDecline(session._id)}
+      >
+        Decline
+      </button>
+    </>
+  )}
+</div>
+
+
             </div>
           ))}
         </div>
