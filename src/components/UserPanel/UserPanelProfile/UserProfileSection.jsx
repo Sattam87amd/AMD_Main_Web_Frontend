@@ -167,8 +167,8 @@ const UserProfileSection = () => {
                   <Image
                     src={imagePreview || profileData.photoFile || "/default-profile.png"} // Fallback image if no photo
                     alt="profile"
-                    width={100}
-                    height={100}
+                    width={60}
+                    height={60}
                     className="w-full h-full object-cover rounded-full"
                   />
                   <label htmlFor="imageUpload" className="absolute bottom-0 right-0 bg-black text-white p-2 rounded-full cursor-pointer">
