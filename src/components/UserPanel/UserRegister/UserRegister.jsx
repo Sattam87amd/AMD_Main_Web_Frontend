@@ -7,7 +7,7 @@ import { Inter } from "next/font/google";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
-// import axios from "axios";
+import axios from "axios";
 
 const interFont = Inter({
   subsets: ["latin"],
@@ -192,7 +192,8 @@ function UserRegisterPage() {
               />
               {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
             </div>
-
+            <div>
+              <a href="/userpanel/loginuserexpert">
             <button
               className={`w-full py-3 rounded-lg transition ${
                 email && firstName && lastName
@@ -204,6 +205,8 @@ function UserRegisterPage() {
             >
               Continue
             </button>
+            </a>
+            </div>
           </div>
         </div>
       </div>
