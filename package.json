@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@zoomus/websdk": "^2.18.3",
     "axios": "^1.8.4",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.4.7",
