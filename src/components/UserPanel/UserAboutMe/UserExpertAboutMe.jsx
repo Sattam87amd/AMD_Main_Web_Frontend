@@ -139,7 +139,7 @@ const ExpertAboutMeUser = () => {
           </div>
 
           <div className="mt-6">
-          <h3 className="text-lg md:text-3xl font-semibold flex items-center gap-[30rem]">
+          <h3 className="text-lg md:text-3xl font-semibold flex items-center gap-[27rem]">
   About Me
   <FaInstagram  className="text-4xl"/>
 </h3>
@@ -279,7 +279,7 @@ const ExpertAboutMeUser = () => {
                       <span className="ml-2 font-semibold text-sm">{profile.rating}</span>
                     </div>
                   </div>
-                  <Link href='/userlogin'>
+                  <Link href='/userpanel/userbooking'>
                     <button className="py-2 px-6 w-full bg-black text-white rounded-md">Request</button>
                   </Link>
                 </div>

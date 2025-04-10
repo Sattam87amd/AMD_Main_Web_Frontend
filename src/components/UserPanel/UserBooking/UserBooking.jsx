@@ -119,7 +119,7 @@ const UserBooking = () => {
 
         {/* Right Section (Booking Form) */}
         <div className="w-full h-1/2 md:w-1/2 p-6 relative">
-          <div className="border rounded-lg p-6 relative mb-4 shadow-md">
+          <div className="border rounded-lg p-6 relative mb-4 shadow-sm">
 
             {/* Change Button */}
             <button className="absolute top-4 right-4 text-sm border rounded-lg px-3 py-1 -translate-y-8 bg-white">
@@ -175,7 +175,7 @@ const UserBooking = () => {
           </div>
 
           {/* Booking Type */}
-          <div className="flex items-center justify-center gap-6 mb-6 space-x-8 md:space-x-40">
+          {/* <div className="flex items-center justify-center gap-6 mb-6 space-x-8 md:space-x-40">
             <label className="flex items-center">
               <input
                 type="radio"
@@ -198,7 +198,7 @@ const UserBooking = () => {
               />
               Group
             </label>
-          </div>
+          </div> */}
 
           {/* Invite Friend (Only for Group) */}
           {userData.bookingType === "group" && (
@@ -223,13 +223,13 @@ const UserBooking = () => {
            <div className="flex justify-center" >
   <div className="mb-6 md:w-1/2 rounded-lg ">
     {/* <label className="block text-sm mb-1">Promo Code</label>  */}
-    <div className="flex">
+    <div className="flex my-6">
       <input
         type="text"
         name="promoCode"
         value={userData.promoCode}
         onChange={handleInputChange}
-        className="w-full border rounded-l px-3 py-2 text-sm"
+        className="w-full border rounded-l px-3 py-2 text-black text-sm "
         placeholder="Enter promo code"
       />
       <button className="bg-black text-white px-4 py-2 text-sm rounded-r">
