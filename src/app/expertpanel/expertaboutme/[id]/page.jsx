@@ -99,7 +99,7 @@ const ExpertDetail = () => {
     
       // Store session data in localStorage
       localStorage.setItem("sessionData", JSON.stringify(sessionData));
-      alert("Click Ok to proceed");
+
       // Redirect to the next page
       router.push('/expertpanel/expertbooking');  // Assuming the second page is 'expertbookingdetails'
     
