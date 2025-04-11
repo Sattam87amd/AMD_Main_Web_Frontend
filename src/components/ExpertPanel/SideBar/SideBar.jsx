@@ -10,69 +10,50 @@ import Image from "next/image";
 
 const Sidebar = () => {
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = usePathname(); // Can be undefined briefly
 
   const menuItems = [
     { label: "Find Experts", icon: <FiSearch />, route: "/expertpanel/experts" },
     { label: "Video Call", icon: <FiVideo />, route: "/expertpanel/videocall" },
-    {
-      label: "Profile",
-      icon: <CgProfile />,
-      route: "/expertpanel/expertpanelprofile",
-    },
-    {
-      label: "Expert",
-      icon: <LucideBadgeCheck />,
-      route: "/expertpanel/expert",
-    },
-    {
-      label: "Dashboard",
-      icon: <PiCirclesFour />,
-      route: "/expertpanel/dashboard",
-    },
-    {
-      label: "Payments/Reviews",
-      icon: <LucideDollarSign />,
-      route: "/expertpanel/payments",
-    },
-    { label: "Logout", icon: <FiLogOut />, route: "/" },
-    {
-      label: "Chat with Users",
-      icon: <IoChatbubbleEllipsesOutline />,
-      route: "/expertpanel/chat",
-    },
+    { label: "Profile", icon: <CgProfile />, route: "/expertpanel/expertpanelprofile" },
+    { label: "Expert", icon: <LucideBadgeCheck />, route: "/expertpanel/expert" },
+    { label: "Dashboard", icon: <PiCirclesFour />, route: "/expertpanel/dashboard" },
+    { label: "Payments/Reviews", icon: <LucideDollarSign />, route: "/expertpanel/payments" },
+    { label: "Chat with Users", icon: <IoChatbubbleEllipsesOutline />, route: "/expertpanel/chat" },
+    { label: "Logout", icon: <FiLogOut />, route: "/" }, // logout action
   ];
 
-  const handleClick = (itemRoute) => {
-    router.push(itemRoute);
+  const handleClick = (item) => {
+    if (item.label === "Logout") {
+      localStorage.clear();
+      router.push(item.route);
+    } else {
+      router.push(item.route);
+    }
   };
 
   return (
     <div className="hidden md:block w-full bg-white shadow-md h-[99.5%]">
       {/* Logo Section */}
       <div className="p-4 mt-5 flex justify-center">
-        <Image
-          src="/Frame.png.png"
-          alt="Nexcore Logo"
-          width={100}
-          height={30}
-        />
+        <Image src="/Frame.png.png" alt="Nexcore Logo" width={100} height={30} />
       </div>
 
       {/* Sidebar Menu */}
       <ul className="flex flex-col space-y-6 px-6 text-lg flex-grow">
-        {menuItems.map(({ label, icon, route }) => {
-          const isActive = pathname === route;
+        {menuItems.map((item) => {
+          const isActive = pathname && pathname === item.route; // ✅ Protect against undefined pathname
+
           return (
             <li
-              key={label}
+              key={item.label}
               className={`p-3 rounded-lg cursor-pointer flex items-center space-x-3 ${
                 isActive ? "bg-black text-white" : "hover:bg-gray-100"
               }`}
-              onClick={() => handleClick(route)}
+              onClick={() => handleClick(item)}
             >
-              <span className="text-lg">{icon}</span>
-              <span className="text-md">{label}</span>
+              <span className="text-lg">{item.icon}</span>
+              <span className="text-md">{item.label}</span>
             </li>
           );
         })}
@@ -93,7 +74,7 @@ const Sidebar = () => {
           onClick={() => router.push("/gethelp")}
           className="absolute bottom-[30px] px-14 py-3 bg-black text-white text-sm rounded-md hover:bg-gray-800"
         >
-          Get Help 
+          Get Help
         </button>
       </div>
     </div>
