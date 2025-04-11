@@ -13,11 +13,13 @@ import AchieveTheLook from '@/components/HomePage/AchieveTheLook'
 import ConnectWithExpertCard from '@/components/HomePage/ConnectWithExpertCard'
 import OurPartners from '@/components/HomePage/OurPartners'
 import Footer from '@/components/Layout/Footer'
+import Chatbot from '@/components/HomePage/ChatBot'
 
 const page = () => {
   return (
     <div>
         <Navbar/>
+       
         <HeroHome/>
         <HowItWorks/>
         <ExpertCategories/>
@@ -31,6 +33,7 @@ const page = () => {
         <ConnectWithExpertCard/>
         <OurPartners/>
         <Footer/>
+        <Chatbot />
     </div>
   )
 }
