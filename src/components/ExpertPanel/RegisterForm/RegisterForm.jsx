@@ -17,6 +17,11 @@ const interFont = Inter({
 function RegisterForm() {
   const router = useRouter();
 
+  const validateLinkedInLink = (link) => {
+    const linkedinPattern = /^(https?:\/\/)?(www\.)?linkedin\.com\/.*$/;
+    return linkedinPattern.test(link);
+  };
+
   // States for storing form data
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -119,12 +124,24 @@ function RegisterForm() {
   // Handle form submission and send data to backend
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent page reload
+    
+    // Check if socialLink is empty before validating LinkedIn link
+    if (!socialLink) {
+      alert("Please enter your LinkedIn link.");
+      return; // Prevent form submission if socialLink is empty
+    }
   
+    // LinkedIn URL validation
+    if (socialLink && !validateLinkedInLink(socialLink)) {
+      alert("Please enter a valid LinkedIn link.");
+      return; // Prevent form submission if the link is not valid
+    }
+    
     if (handleValidation()) {
       // Create a new FormData object to hold the form data and files
       const formData = new FormData();
   
-      // Append other form fields to the FormData object
+      // Append form data
       formData.append('email', email);
       formData.append('firstName', firstName);
       formData.append('lastName', lastName);
@@ -135,37 +152,36 @@ function RegisterForm() {
       formData.append('specificArea', specificArea);  // Will be used if 'Others' is selected
       formData.append('experience', experience);
   
-      // If certification file is selected, append it
+      // Append certification and photo files if selected
       if (fileInputRefCertifications.current.files[0]) {
         formData.append('certificationFile', fileInputRefCertifications.current.files[0]);
       }
-  
-      // If photo file is selected, append it
       if (fileInputRefPhotos.current.files[0]) {
         formData.append('photoFile', fileInputRefPhotos.current.files[0]);
       }
   
       try {
-        // Make the API call to register the expert (POST request to register)
+        // API call to register the expert
         const response = await axios.post(
           'http://localhost:8000/api/expertauth/register', 
-          formData,  // Send the form data (including files)
+          formData,
           {
             headers: {
-              'Content-Type': 'multipart/form-data',  // Set the correct content type for file uploads
+              'Content-Type': 'multipart/form-data', // Ensure correct content type for file uploads
             },
           }
         );
   
         console.log('Expert registered successfully:', response.data);
         alert("Expert registered successfully");
-        router.push('/expertlogin');  // Redirect to expert login page after successful registration
+        router.push('/expertlogin');  // Redirect to login after successful registration
       } catch (error) {
         console.error('Error during registration:', error);
         alert('Error during registration. Please try again.');
       }
     }
   };
+  
 
   return (
     <div className={`min-h-screen flex overflow-hidden ${interFont.variable}`}>
@@ -342,24 +358,25 @@ function RegisterForm() {
               {errors.gender && <p className="text-red-500 text-xs mt-1">{errors.gender}</p>}
             </div>
 
-            {/* Social Media Link */}
+            {/* Social Media Link */} 
             <div className="mb-6">
-              <label className="block mb-2 text-sm font-medium text-gray-500">
-                Social Media Link
-              </label>
-              <div className="relative">
-                <input
-                  type="text"
-                  value={socialLink}
-                  onChange={(e) => setSocialLink(e.target.value)}
-                  className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
-                  placeholder="https://your-social-link"
-                />
-                <span className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <FiLink className="text-black" />
-                </span>
-              </div>
-            </div>
+  <label className="block mb-2 text-sm font-medium text-gray-500">
+    Social Media Link
+  </label>
+  <div className="relative">
+    <input
+      type="text"
+      value={socialLink}
+      onChange={(e) => setSocialLink(e.target.value)}
+      className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
+      placeholder="Enter LinkedIn link"  // **Updated Placeholder**
+    />
+    <span className="absolute right-3 top-1/2 transform -translate-y-1/2">
+      <FiLink className="text-black" />
+    </span>
+  </div>
+</div>
+
 
             {/* Area of Expertise */}
             <div className="mb-6">
