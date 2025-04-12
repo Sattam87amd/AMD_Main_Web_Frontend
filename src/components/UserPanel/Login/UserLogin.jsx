@@ -70,7 +70,6 @@ function UserLoginPage() {
         }
     };
 
-<<<<<<< HEAD
     const generateOtp = async () => {
         if (useEmail) {
             if (!email || !email.includes("@")) {
@@ -96,18 +95,6 @@ function UserLoginPage() {
                 console.log(error);
                 setFormError("Failed to send OTP. Please try again.");
             }
-=======
-    const generateOtp = async() => {
-        if (!phone || !isValidPhoneNumber(phone)) {
-            setPhoneError("Please enter a valid phone number first.");
-            return;
-        }
-        try {
-            const response = await axios.post("https://amd-api.code4bharat.com/api/userauth/request-otp", { phone });
-            alert("OTP sent successfully!");
-        } catch (error) {
-            setFormError("Failed to send OTP. Please try again.");
->>>>>>> 0000b7aba7d4ba3d9f842e2ad017f366c67469d5
         }
     };
 
@@ -118,7 +105,6 @@ function UserLoginPage() {
         }
 
         try {
-<<<<<<< HEAD
             const payload = useEmail ? { email, otp } : { phone, otp };
             const response = await axios.post("http://localhost:8000/api/userauth/verify-otp", payload);
 
@@ -129,19 +115,6 @@ function UserLoginPage() {
                 localStorage.setItem('userToken', response.data.data.token);
                 router.push("/userpanel/loginuserexpert");
             }
-=======
-          const response = await axios.post("https://amd-api.code4bharat.com/api/userauth/verify-otp", { phone, otp });
-          
-          // Correct response structure
-          if (response.data.data.isNewUser) {
-            // Pass phone to registration page
-            router.push(`/userpanel/register?phone=${encodeURIComponent(phone)}`);
-          } else {
-            // Save token and redirect
-            localStorage.setItem('token', response.data.data.token);
-            router.push("/userpanel/loginuserexpert");
-          }
->>>>>>> 0000b7aba7d4ba3d9f842e2ad017f366c67469d5
         } catch (error) {
             console.error("Error verifying OTP:", error);
             setFormError("OTP verification failed.");
