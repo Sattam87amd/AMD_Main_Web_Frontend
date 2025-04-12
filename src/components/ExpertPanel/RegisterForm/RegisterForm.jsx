@@ -8,6 +8,8 @@ import { useState, useRef, useEffect } from "react";
 import { FiLink } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import axios from "axios";  // Import axios for making HTTP requests
+// const [price, setPrice] = useState('');
+
 
 const interFont = Inter({
   subsets: ["latin"],
@@ -36,6 +38,7 @@ function RegisterForm() {
   const [errors, setErrors] = useState({});
   const [certificationFileName, setCertificationFileName] = useState('');
   const [photoFileName, setPhotoFileName] = useState('');
+  const [price, setPrice] = useState('');
 
   const fileInputRefCertifications = useRef(null);
   const fileInputRefPhotos = useRef(null);
@@ -122,65 +125,73 @@ function RegisterForm() {
   
 
   // Handle form submission and send data to backend
-  const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent page reload
-    
-    // Check if socialLink is empty before validating LinkedIn link
-    if (!socialLink) {
-      alert("Please enter your LinkedIn link.");
-      return; // Prevent form submission if socialLink is empty
+  // Handle form submission and send data to backend
+const handleSubmit = async (e) => {
+  e.preventDefault(); // Prevent page reload
+
+  // Check if the price is below 100
+  if (price < 100 && price !== '') {
+    alert("Please enter a price greater than 100 Riyals.");
+    return; // Prevent form submission if the price is less than 100
+  }
+
+  // Check if socialLink is empty before validating LinkedIn link
+  if (!socialLink) {
+    alert("Please enter your LinkedIn link.");
+    return; // Prevent form submission if socialLink is empty
+  }
+
+  // LinkedIn URL validation
+  if (socialLink && !validateLinkedInLink(socialLink)) {
+    alert("Please enter a valid LinkedIn link.");
+    return; // Prevent form submission if the link is not valid
+  }
+
+  if (handleValidation()) {
+    // Create a new FormData object to hold the form data and files
+    const formData = new FormData();
+
+    // Append form data
+    formData.append('email', email);
+    formData.append('firstName', firstName);
+    formData.append('lastName', lastName);
+    formData.append('gender', gender);
+    formData.append('phone', mobile);
+    formData.append('socialLink', socialLink);
+    formData.append('areaOfExpertise', areaOfExpertise);
+    formData.append('specificArea', specificArea);  // Will be used if 'Others' is selected
+    formData.append('experience', experience);
+    formData.append('price', price);
+    // Append certification and photo files if selected
+    if (fileInputRefCertifications.current.files[0]) {
+      formData.append('certificationFile', fileInputRefCertifications.current.files[0]);
     }
-  
-    // LinkedIn URL validation
-    if (socialLink && !validateLinkedInLink(socialLink)) {
-      alert("Please enter a valid LinkedIn link.");
-      return; // Prevent form submission if the link is not valid
+    if (fileInputRefPhotos.current.files[0]) {
+      formData.append('photoFile', fileInputRefPhotos.current.files[0]);
     }
-    
-    if (handleValidation()) {
-      // Create a new FormData object to hold the form data and files
-      const formData = new FormData();
-  
-      // Append form data
-      formData.append('email', email);
-      formData.append('firstName', firstName);
-      formData.append('lastName', lastName);
-      formData.append('gender', gender);
-      formData.append('phone', mobile);
-      formData.append('socialLink', socialLink);
-      formData.append('areaOfExpertise', areaOfExpertise);
-      formData.append('specificArea', specificArea);  // Will be used if 'Others' is selected
-      formData.append('experience', experience);
-  
-      // Append certification and photo files if selected
-      if (fileInputRefCertifications.current.files[0]) {
-        formData.append('certificationFile', fileInputRefCertifications.current.files[0]);
-      }
-      if (fileInputRefPhotos.current.files[0]) {
-        formData.append('photoFile', fileInputRefPhotos.current.files[0]);
-      }
-  
-      try {
-        // API call to register the expert
-        const response = await axios.post(
-          'http://localhost:8000/api/expertauth/register', 
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data', // Ensure correct content type for file uploads
-            },
-          }
-        );
-  
-        console.log('Expert registered successfully:', response.data);
-        alert("Expert registered successfully");
-        router.push('/expertlogin');  // Redirect to login after successful registration
-      } catch (error) {
-        console.error('Error during registration:', error);
-        alert('Error during registration. Please try again.');
-      }
+
+    try {
+      // API call to register the expert
+      const response = await axios.post(
+        'http://localhost:8000/api/expertauth/register',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data', // Ensure correct content type for file uploads
+          },
+        }
+      );
+
+      console.log('Expert registered successfully:', response.data);
+      alert("Expert registered successfully");
+      router.push('/expertlogin');  // Redirect to login after successful registration
+    } catch (error) {
+      console.error('Error during registration:', error);
+      alert('Error during registration. Please try again.');
     }
-  };
+  }
+};
+
   
 
   return (
@@ -378,29 +389,52 @@ function RegisterForm() {
 </div>
 
 
-            {/* Area of Expertise */}
-            <div className="mb-6">
-              <label className="block mb-2 text-sm font-medium text-gray-500">
-                Area of Expertise
-              </label>
-              <select
-                value={areaOfExpertise}
-                onChange={(e) => {
-                  setAreaOfExpertise(e.target.value);
-                  if (e.target.value !== "Others") {
-                    setSpecificArea("");
-                  }
-                }}
-                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
-              >
-                <option value="">Select Area</option>
-                <option value="Home">Home</option>
-                <option value="Career and Business">Career and Business</option>
-                <option value="Style and Beauty">Style and Beauty</option>
-                <option value="Wellness">Wellness</option>
-                <option value="Others">Others</option>
-              </select>
-            </div>
+            {/* Area of Expertise and Price */}
+{/* Area of Expertise and Price */}
+<div className="mb-6 flex space-x-4">
+  <div className="w-1/2">
+    <label className="block mb-2 text-sm font-medium text-gray-500">
+      Area of Expertise
+    </label>
+    <select
+      value={areaOfExpertise}
+      onChange={(e) => {
+        setAreaOfExpertise(e.target.value);
+        if (e.target.value !== "Others") {
+          setSpecificArea("");
+        }
+      }}
+      className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
+    >
+      <option value="">Select Area</option>
+      <option value="Home">Home</option>
+      <option value="Career and Business">Career and Business</option>
+      <option value="Style and Beauty">Style and Beauty</option>
+      <option value="Wellness">Wellness</option>
+      <option value="Others">Others</option>
+    </select>
+  </div>
+
+  <div className="w-1/2">
+    <label className="block mb-2 text-sm font-medium text-gray-500">
+      Price (in Riyals)
+    </label>
+    <input
+      type="number"
+      value={price}
+      onChange={(e) => {
+        setPrice(e.target.value);
+        setErrors((prev) => ({ ...prev, price: "" }));  // Clear any previous price errors
+      }}
+      className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
+      placeholder="Enter price"
+    />
+    {price < 100 && price !== '' && (
+      <p className="text-red-500 text-xs mt-1">Price must be greater than 100 Riyals</p>
+    )}
+  </div>
+</div>
+
 
             {/* Conditional Input for 'Others' */}
             {areaOfExpertise === "Others" && (

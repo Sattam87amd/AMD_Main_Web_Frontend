@@ -15,14 +15,27 @@ const interFont = Inter({
     variable: "--font-inter",
 });
 
+
 function UserLoginPage() {
     const router = useRouter();
     const [phone, setPhone] = useState("");
     const [otp, setOtp] = useState("");
+    const [email, setEmail] = useState(""); // State for email
+    const [useEmail, setUseEmail] = useState(false); // Toggle between email and phone login
     const [phoneError, setPhoneError] = useState("");
     const [otpError, setOtpError] = useState("");
     const [formError, setFormError] = useState("");
+    const [emailError, setEmailError] = useState(""); // State for email validation
 
+ // Toggle between phone and email login
+ const toggleLoginMethod = () => {
+    setUseEmail(!useEmail);
+    setPhone("");
+    setEmail("");
+    setPhoneError("");
+    setEmailError("");
+    setFormError("");
+};
     const handlePhoneChange = (value) => {
         if (!value) {
             setPhone(value);
@@ -36,7 +49,17 @@ function UserLoginPage() {
         }
         setFormError("");
     };
+    const handleEmailChange = (e) => {
+        const value = e.target.value;
+        setEmail(value);
 
+        if (!value || !value.includes("@")) {
+            setEmailError("Please enter a valid email.");
+        } else {
+            setEmailError("");
+        }
+        setFormError("");
+    };  
     const handleOtpChange = (e) => {
         const value = e.target.value.replace(/\D/g, "");
         if (value.length <= 4) {
@@ -47,43 +70,56 @@ function UserLoginPage() {
         }
     };
 
-    const generateOtp = async() => {
-        if (!phone || !isValidPhoneNumber(phone)) {
-            setPhoneError("Please enter a valid phone number first.");
-            return;
-        }
-        try {
-            const response = await axios.post("http://localhost:8000/api/userauth/request-otp", { phone });
-            alert("OTP sent successfully!");
-        } catch (error) {
-            setFormError("Failed to send OTP. Please try again.");
+    const generateOtp = async () => {
+        if (useEmail) {
+            if (!email || !email.includes("@")) {
+                setFormError("Please enter a valid email address.");
+                return;
+            }
+            try {
+                await axios.post("http://localhost:8000/api/userauth/request-otp", { email });
+                alert("OTP sent to your email!");
+            } catch (error) {
+                console.log(error);
+                setFormError("Failed to send OTP. Please try again.");
+            }
+        } else {
+            if (!phone || !isValidPhoneNumber(phone)) {
+                setPhoneError("Please enter a valid phone number.");
+                return;
+            }
+            try {
+                await axios.post("http://localhost:8000/api/userauth/request-otp", { phone });
+                alert("OTP sent to your phone!");
+            } catch (error) {
+                console.log(error);
+                setFormError("Failed to send OTP. Please try again.");
+            }
         }
     };
 
-    const handleSubmit = async () => {
-        if (!phone || !otp) {
-          setFormError("Please enter both phone and OTP.");
-          return;
+     const handleSubmit = async () => {
+        if (!otp || otp.length !== 4) {
+            setFormError("Please enter a valid 4-digit OTP.");
+            return;
         }
-      
+
         try {
-          const response = await axios.post("http://localhost:8000/api/userauth/verify-otp", { phone, otp });
-          
-          // Correct response structure
-          if (response.data.data.isNewUser) {
-            // Pass phone to registration page
-            router.push(`/userpanel/register?phone=${encodeURIComponent(phone)}`);
-          } else {
-            // Save token and redirect
-            localStorage.setItem('token', response.data.data.token);
-            router.push("/userpanel/loginuserexpert");
-          }
+            const payload = useEmail ? { email, otp } : { phone, otp };
+            const response = await axios.post("http://localhost:8000/api/userauth/verify-otp", payload);
+
+            if (response.data.data.isNewUser) {
+                const identifier = useEmail ? `email=${encodeURIComponent(email)}` : `phone=${encodeURIComponent(phone)}`;
+                router.push(`/userpanel/register?${identifier}`);
+            } else {
+                localStorage.setItem('userToken', response.data.data.token);
+                router.push("/userpanel/loginuserexpert");
+            }
         } catch (error) {
-          console.error("Error verifying OTP:", error);
-          setFormError("OTP verification failed.");
+            console.error("Error verifying OTP:", error);
+            setFormError("OTP verification failed.");
         }
-      };
-    
+    };
     
     return (
         <div className={`min-h-screen flex ${interFont.variable}`}>
@@ -164,9 +200,48 @@ function UserLoginPage() {
                     
                    
 
+                   
                     <div className="mt-8 space-y-8">
                         <div>
-                            <label className="block text-sm font-medium">Phone Number</label>
+                        {useEmail ? (
+    <>
+        <label className="block text-sm font-medium">Email</label>
+        <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-8 focus:border-black"
+        />
+        <p
+            className="text-sm text-blue-600 mt-2 cursor-pointer underline"
+            onClick={toggleLoginMethod}
+        >
+            Use phone number instead
+        </p>
+    </>
+) : (
+    <>
+        <label className="block text-sm font-medium">Phone Number</label>
+        <PhoneInput
+            international
+            defaultCountry="SA"
+            value={phone}
+            onChange={handlePhoneChange}
+            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-8 focus:border-black pl-4"
+        />
+        {phoneError && (
+            <p className="text-red-500 text-xs mt-1">{phoneError}</p>
+        )}
+        <p
+            className="text-sm text-blue-600 mt-2 cursor-pointer underline"
+            onClick={toggleLoginMethod}
+        >
+            Use email instead
+        </p>
+    </>
+)}
+{/* 
                             <div className="relative">
                                 <PhoneInput
                                     international
@@ -174,24 +249,33 @@ function UserLoginPage() {
                                     value={phone}
                                     onChange={handlePhoneChange}
                                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-8 focus:border-black pl-4"
-                                />
+                                /> */}
                                
                             </div>
-                            {phoneError && (
-                                <p className="text-red-500 text-xs mt-1">{phoneError}</p>
-                            )}
-                            <button
-                                className={`w-full py-3 rounded-lg transition mt-8 ${phone && isValidPhoneNumber(phone)
-                                        ? "bg-black text-white hover:bg-gray-800"
-                                        : "bg-black text-white cursor-not-allowed"
-                                    }`}
-                                onClick={generateOtp}
-                                disabled={!phone || !isValidPhoneNumber(phone)}
-                            >
-                                Send OTP
-                            </button>
+                            {!useEmail && phoneError && (
+  <p className="text-red-500 text-xs mt-1">{phoneError}</p>
+)}
+{useEmail && !email.includes("@") && formError && (
+  <p className="text-red-500 text-xs mt-1">{formError}</p>
+)}
 
-                        </div>
+<button
+  className={`w-full py-3 rounded-lg transition mt-8 ${
+    (useEmail && email.includes("@")) ||
+    (!useEmail && phone && isValidPhoneNumber(phone))
+      ? "bg-black text-white hover:bg-gray-800"
+      : "bg-black text-white cursor-not-allowed"
+  }`}
+  onClick={generateOtp}
+  disabled={
+    useEmail
+      ? !email || !email.includes("@")
+      : !phone || !isValidPhoneNumber(phone)
+  }
+>
+  Send OTP
+</button>
+
 
                         <div>
                             <label className="block text-sm font-medium">OTP</label>
@@ -217,15 +301,18 @@ function UserLoginPage() {
                                 }`}
                             onClick={handleSubmit}
                             disabled={
-                                !phone || otp.length !== 4 || !isValidPhoneNumber(phone)
-                            }
+                                (!useEmail && (!phone || !isValidPhoneNumber(phone))) ||
+                                (useEmail && !email.includes("@")) ||
+                                otp.length !== 4
+                              }
+                              
                         >
                             Proceed
                         </button>
                     </div>
                 </div>
             </div>
-        </div>
+        // </div>
     );
 }
 
