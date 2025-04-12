@@ -13,7 +13,11 @@ import AchieveTheLook from '@/components/HomePage/AchieveTheLook'
 import ConnectWithExpertCard from '@/components/HomePage/ConnectWithExpertCard'
 import OurPartners from '@/components/HomePage/OurPartners'
 import Footer from '@/components/Layout/Footer'
-import Chatbot from '@/components/HomePage/ChatBot'
+import ExpertsCardsBefore from '@/components/ExpertBeforeLogin/TopExpertsBefore'
+import WellnessBefore from '@/components/ExpertBeforeLogin/WellnessBefore'
+import FashionBeautyBefore from '@/components/ExpertBeforeLogin/Fasion&BeautyBefore'
+import CareerBusinessBefore from '@/components/ExpertBeforeLogin/Career&BusinessBefore'
+import HomeExpertsBefore from '@/components/ExpertBeforeLogin/HomeExpertBefore'
 
 const page = () => {
   return (
@@ -23,12 +27,12 @@ const page = () => {
         <HeroHome/>
         <HowItWorks/>
         <ExpertCategories/>
-        <ExpertCard/>
+        <ExpertsCardsBefore/>
         <OurClientsSay/>
-        <WellnessHomeCards/>
-        <FashionBeautyHomeCards/>
-        <CareerBusinessHomeCards/>
-        <HomeCards/>
+        <WellnessBefore/>
+        <FashionBeautyBefore/>
+        <CareerBusinessBefore/>
+        <HomeExpertsBefore/>
         <AchieveTheLook/>
         <ConnectWithExpertCard/>
         <OurPartners/>
