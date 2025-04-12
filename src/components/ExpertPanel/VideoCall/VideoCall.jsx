@@ -11,7 +11,7 @@ const VideoCall = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetching data from API
+  // Fetching data once when the component loads
   useEffect(() => {
     const fetchSessions = async () => {
       try {
@@ -25,23 +25,24 @@ const VideoCall = () => {
           return;
         }
 
-        // Choose the endpoint based on activeTab
-        const endpoint =
-          activeTab === "bookings" ? "http://localhost:8000/api/session/mybookings" : "http://localhost:8000/api/session/getexpertsession";
-        
-        // Fetching expert-to-expert session data with the token
-        const sessionsResponse = await axios.get(endpoint, {
-          headers: {
-            Authorization: `Bearer ${token}`, // Include token in Authorization header
-          },
-        });
+        // Fetch both bookings and sessions in parallel
+        const [bookingsResponse, sessionsResponse] = await Promise.all([
+          axios.get("http://localhost:8000/api/session/mybookings", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }),
+          axios.get("http://localhost:8000/api/session/getexpertsession", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }),
+        ]);
 
         // Update the state with fetched data
-        if (activeTab === "bookings") {
-          setMyBookings(sessionsResponse.data);
-        } else {
-          setMySessions(sessionsResponse.data);
-        }
+        setMyBookings(bookingsResponse?.data || []);
+        setMySessions(sessionsResponse?.data || []);
+        console.log(bookingsResponse.data, sessionsResponse.data);
       } catch (err) {
         setError("No Bookings Found");
       } finally {
@@ -50,7 +51,7 @@ const VideoCall = () => {
     };
 
     fetchSessions();
-  }, [activeTab]); // Re-fetch when the activeTab changes
+  }, []); // Empty dependency array to run only on component mount
 
   const isJoinEnabled = (sessionDate, sessionTime, duration) => {
     const [hours, minutes] = sessionTime.split(":").map(Number);
@@ -140,7 +141,30 @@ const VideoCall = () => {
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <div className="w-full md:max-w-6xl max-w-4xl mx-auto py-10 px-4 mt-20 md:mt-0 ">
+        {/* Tabs */}
+        <div className="flex space-x-2 mb-6">
+          <button
+            className={`px-4 py-2 text-sm font-medium rounded ${
+              activeTab === "bookings" ? "bg-black text-white" : "bg-gray-200"
+            }`}
+            onClick={() => setActiveTab("bookings")}
+          >
+            My Bookings
+          </button>
+          <button
+            className={`px-4 py-2 text-sm font-medium rounded ${
+              activeTab === "sessions" ? "bg-black text-white" : "bg-gray-200"
+            }`}
+            onClick={() => setActiveTab("sessions")}
+          >
+            My Sessions
+          </button>
+        </div>
+        {error}
+      </div>
+    );
   }
 
   return (
@@ -165,74 +189,66 @@ const VideoCall = () => {
         </button>
       </div>
 
-{/* My Bookings Tab */}
-{activeTab === "bookings" && (
-  <div className="space-y-4">
-    {myBookings.length === 0 ? (
-      <div className="text-center text-gray-500">No Bookings</div>
-    ) : (
-      myBookings.map((booking) => (
-        <div key={booking._id} className="flex items-center justify-between p-4 border rounded-lg shadow-sm">
-          {/* Left Side (Date and Details) */}
-          <div className="flex items-center space-x-4">
-            <div className="text-center bg-gray-100 px-3 py-2 rounded-lg shadow-md">
-              <p className="text-xs text-gray-500">
-                {new Date(booking.sessionDate).toLocaleDateString("en-US", { weekday: "short" })}
-              </p>
-              <p className="text-lg font-bold">
-                {new Date(booking.sessionDate).toLocaleDateString("en-US", { day: "numeric" })}
-              </p>
-            </div>
-            <div>
-              <p className="text-sm font-medium text-gray-700">
-                👤 {booking.firstName} {booking.lastName}
-                
-              </p>
-            </div>
-          </div>
+      {/* My Bookings Tab */}
+      {activeTab === "bookings" && (
+        <div className="space-y-4">
+          {myBookings.length === 0 ? (
+            <div className="text-center text-gray-500">No Bookings Yet</div>
+          ) : (
+            myBookings.map((booking) => (
+              <div key={booking._id} className="flex items-center justify-between p-4 border rounded-lg shadow-sm">
+                {/* Left Side (Date and Details) */}
+                <div className="flex items-center space-x-4">
+                  <div className="text-center bg-gray-100 px-3 py-2 rounded-lg shadow-md">
+                    <p className="text-xs text-gray-500">
+                      {new Date(booking.sessionDate).toLocaleDateString("en-US", { weekday: "short" })}
+                    </p>
+                    <p className="text-lg font-bold">
+                      {new Date(booking.sessionDate).toLocaleDateString("en-US", { day: "numeric" })}
+                    </p>
+                  </div>
+                  <div>
+                    <div className="flex">
+                      <div><CiClock2 className="mt-[3px] mr-1" /></div>
+                      <p className="text-sm text-gray-500 mr-5">{booking.sessionTime}</p>
+                      <p className="text-sm text-gray-500">{booking.duration}</p>
+                    </div>
+                    <p className="text-sm font-medium text-gray-700">
+                      👤 {booking.firstName} {booking.lastName}
+                    </p>
+                  </div>
+                </div>
 
-          {/* Right Side (Confirm/Unconfirm Status & Zoom Join Button) */}
-          <div className="flex items-center space-x-4">
-            {booking.status === "confirmed" ? (
-              <>
-                {/* Display green "Confirmed" status */}
-                <span className="text-green-500 text-sm font-medium">Confirmed</span>
-                <button className="px-4 py-1 border rounded text-sm">💬 Chat</button>
-
-                {/* Display Zoom Join Button */}
-                {booking.zoomMeetingLink ? (
-                  <a
-                    href={booking.zoomMeetingLink} // Direct link to the meeting
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <button className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600">
-                      🎥 Join
-                    </button>
-                  </a>
-                ) : (
-                  <span className="text-yellow-500 text-sm ml-2">Zoom link not ready</span>
-                )}
-              </>
-            ) : booking.status === "unconfirmed" ? (
-              <>
-                {/* Display red "Unconfirmed" status */}
-                <span className="text-red-500 text-sm font-medium">Unconfirmed</span>
-                <button className="px-4 py-1 border rounded text-sm">💬 Chat</button>
-              </>
-            ) : (
-              <></>
-            )}
-          </div>
+                {/* Right Side (Confirm/Unconfirm Status & Zoom Join Button) */}
+                <div className="flex items-center space-x-4">
+                  {booking.status === "confirmed" ? (
+                    <>
+                      <span className="text-green-500 text-sm font-medium">Confirmed</span>
+                      <button className="px-4 py-1 border rounded text-sm">💬 Chat</button>
+                      {booking.zoomMeetingLink ? (
+                        <a href={booking.zoomMeetingLink} target="_blank" rel="noopener noreferrer">
+                          <button className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600">
+                            🎥 Join
+                          </button>
+                        </a>
+                      ) : (
+                        <span className="text-yellow-500 text-sm ml-2">Zoom link not ready</span>
+                      )}
+                    </>
+                  ) : booking.status === "unconfirmed" ? (
+                    <>
+                      <span className="text-red-500 text-sm font-medium">Unconfirmed</span>
+                      <button className="px-4 py-1 border rounded text-sm">💬 Chat</button>
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </div>
+              </div>
+            ))
+          )}
         </div>
-      ))
-    )}
-  </div>
-)}
-            
-          
-       
-
+      )}
 
       {/* My Sessions Tab */}
       {activeTab === "sessions" && (
@@ -252,7 +268,7 @@ const VideoCall = () => {
                     <div className="flex">
                       <div><CiClock2 className="mt-[3px] mr-1" /></div>
                       <p className="text-sm text-gray-500 mr-5">{session.sessionTime}</p>
-                      <p className="text-sm text-gray-500">{session.duration}</p>
+                      <p className="text-sm text-gray-500 mr-5">{session.duration}</p>
                     </div>
                     <p className="text-sm font-medium text-gray-700">👤 {session.firstName} {session.lastName}</p>
                   </div>
@@ -265,11 +281,7 @@ const VideoCall = () => {
                       <span className="text-green-500 text-sm font-medium">Accepted</span>
                       <button className="px-4 py-1 border rounded text-sm">💬 Chat</button>
                       {session.zoomMeetingLink ? (
-                        <a
-                          href={session.zoomMeetingLink} // Direct link to the meeting
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
+                        <a href={session.zoomMeetingLink} target="_blank" rel="noopener noreferrer">
                           <button className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600">
                             🎥 Join
                           </button>
@@ -294,10 +306,14 @@ const VideoCall = () => {
                       >
                         Decline
                       </button>
+                      
                     </>
-                  )}
+                  
+                )}
                 </div>
+                
               </div>
+              
             ))
           )}
         </div>
