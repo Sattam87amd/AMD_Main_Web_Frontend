@@ -17,7 +17,7 @@ const LoginWellnessExpert = () => {
       try {
         const area = "Wellness";
         const response = await axios.get(
-          `https://amd-api.code4bahart.com/api/expertauth/area/${area}`
+          `https://amd-api.code4bharat.com.com/api/expertauth/area/${area}`
         );
         setExpertData(response.data.data);
         setLoading(false);

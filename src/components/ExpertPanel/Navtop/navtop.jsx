@@ -36,7 +36,7 @@ const Navtop = ({ activeTab }) => {
     if (expertId) {
       const fetchUserData = async () => {
         try {
-          const response = await axios.get(`https://amd-api.code4bahart.com/api/expertauth/${expertId}`); // Replace with actual API endpoint
+          const response = await axios.get(`https://amd-api.code4bharat.com.com/api/expertauth/${expertId}`); // Replace with actual API endpoint
           const { firstName, photoFile } = response.data.data;
           setUserData({ firstName, photoFile });
         } catch (error) {
