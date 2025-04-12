@@ -60,9 +60,9 @@ function Chatbot() {
           position: 'fixed',
           bottom: '20px',
           right: '20px',
-          width: '64px',
-          height: '64px',
-          borderRadius: '50%',
+          width: '80px',
+          height: '80px',
+          borderRadius: '70%',
           backgroundColor: '#000',
           color: '#fff',
           display: 'flex',
@@ -73,10 +73,10 @@ function Chatbot() {
           boxShadow: '0 4px 12px rgba(0, 0, 0, 0.4)',
         }}
       >
-        <Bot size={28} />
+        <Bot size={40} />
       </div>
     );
-  }
+  } 
 
   // Expanded chat window
   return (
@@ -107,7 +107,7 @@ function Chatbot() {
           alignItems: 'center',
         }}
       >
-        <strong>Gemini Assistant</strong>
+        <strong>AMD Assistant</strong>
         <button
           onClick={toggleChat}
           style={{
@@ -134,7 +134,7 @@ function Chatbot() {
         {messages.map((msg, index) => (
           <div key={index} style={{ marginBottom: '12px' }}>
             <div style={{ fontWeight: 'bold', marginBottom: '4px', color: msg.sender === 'user' ? '#007bff' : '#111' }}>
-              {msg.sender === 'user' ? 'You' : 'Gemini'}
+              {msg.sender === 'user' ? 'You' : 'AMD Bot'}
             </div>
             <div style={{ lineHeight: '1.5', fontSize: '15px' }}>{renderMarkdownBold(msg.text)}</div>
           </div>
