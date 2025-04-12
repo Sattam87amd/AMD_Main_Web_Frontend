@@ -17,7 +17,7 @@ const LoginCareerBusinessExperts = () => {
       try {
         const area = "Career and Business";
         const response = await axios.get(
-          `http://localhost:8000/api/expertauth/area/${area}`
+          `https://amd-api.code4bahart.com/api/expertauth/area/${area}`
         );
         setExpertData(response.data.data);
         setLoading(false);
@@ -96,7 +96,7 @@ const LoginCareerBusinessExperts = () => {
           {expertData.map((expert, index) => (
             <Link
               key={index}
-              href={`/expertpanel/expertaboutme/${expert._id}`}
+              href={`/expertaboutme/${expert._id}`}
               passHref
             >
               <motion.div

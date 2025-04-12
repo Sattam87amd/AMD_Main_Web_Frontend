@@ -58,7 +58,7 @@ const ExpertDetail = () => {
     if (expertId) {
       const fetchExpertData = async () => {
         try {
-          const response = await axios.get(`http://localhost:8000/api/expertauth/${expertId}`);
+          const response = await axios.get(`https://amd-api.code4bharat.com/api/expertauth/${expertId}`);
           setExpert(response.data.data);
           setLoading(false);
           localStorage.setItem("consultingExpertData", JSON.stringify(response.data.data));
@@ -239,7 +239,7 @@ const ExpertDetail = () => {
                               '11:00 AM', '12:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'].map((time) => (
                               <button
                                 key={time}
-                                className={`py-2 px-3 text-sm ${
+                                className={`py-2 px-3 text-sm ${        
                                   selectedDate === dateMap[dayKey].toISOString().split('T')[0] &&
                                   selectedTime === time.replace(" AM", "").replace(" PM", "").trim()
                                     ? 'bg-black text-white'

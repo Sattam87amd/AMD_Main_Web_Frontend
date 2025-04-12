@@ -126,72 +126,65 @@ function RegisterForm() {
 
   // Handle form submission and send data to backend
   // Handle form submission and send data to backend
-const handleSubmit = async (e) => {
-  e.preventDefault(); // Prevent page reload
-
-  // Check if the price is below 100
-  if (price < 100 && price !== '') {
-    alert("Please enter a price greater than 100 Riyals.");
-    return; // Prevent form submission if the price is less than 100
-  }
-
-  // Check if socialLink is empty before validating LinkedIn link
-  if (!socialLink) {
-    alert("Please enter your LinkedIn link.");
-    return; // Prevent form submission if socialLink is empty
-  }
-
-  // LinkedIn URL validation
-  if (socialLink && !validateLinkedInLink(socialLink)) {
-    alert("Please enter a valid LinkedIn link.");
-    return; // Prevent form submission if the link is not valid
-  }
-
-  if (handleValidation()) {
-    // Create a new FormData object to hold the form data and files
-    const formData = new FormData();
-
-    // Append form data
-    formData.append('email', email);
-    formData.append('firstName', firstName);
-    formData.append('lastName', lastName);
-    formData.append('gender', gender);
-    formData.append('phone', mobile);
-    formData.append('socialLink', socialLink);
-    formData.append('areaOfExpertise', areaOfExpertise);
-    formData.append('specificArea', specificArea);  // Will be used if 'Others' is selected
-    formData.append('experience', experience);
-    formData.append('price', price);
-    // Append certification and photo files if selected
-    if (fileInputRefCertifications.current.files[0]) {
-      formData.append('certificationFile', fileInputRefCertifications.current.files[0]);
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent page reload
+    
+    // Check if socialLink is empty before validating LinkedIn link
+    if (!socialLink) {
+      alert("Please enter your LinkedIn link.");
+      return; // Prevent form submission if socialLink is empty
     }
-    if (fileInputRefPhotos.current.files[0]) {
-      formData.append('photoFile', fileInputRefPhotos.current.files[0]);
+  
+    // LinkedIn URL validation
+    if (socialLink && !validateLinkedInLink(socialLink)) {
+      alert("Please enter a valid LinkedIn link.");
+      return; // Prevent form submission if the link is not valid
     }
-
-    try {
-      // API call to register the expert
-      const response = await axios.post(
-        'http://localhost:8000/api/expertauth/register',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data', // Ensure correct content type for file uploads
-          },
-        }
-      );
-
-      console.log('Expert registered successfully:', response.data);
-      alert("Expert registered successfully");
-      router.push('/expertlogin');  // Redirect to login after successful registration
-    } catch (error) {
-      console.error('Error during registration:', error);
-      alert('Error during registration. Please try again.');
+    
+    if (handleValidation()) {
+      // Create a new FormData object to hold the form data and files
+      const formData = new FormData();
+  
+      // Append form data
+      formData.append('email', email);
+      formData.append('firstName', firstName);
+      formData.append('lastName', lastName);
+      formData.append('gender', gender);
+      formData.append('phone', mobile);
+      formData.append('socialLink', socialLink);
+      formData.append('areaOfExpertise', areaOfExpertise);
+      formData.append('specificArea', specificArea);  // Will be used if 'Others' is selected
+      formData.append('experience', experience);
+  
+      // Append certification and photo files if selected
+      if (fileInputRefCertifications.current.files[0]) {
+        formData.append('certificationFile', fileInputRefCertifications.current.files[0]);
+      }
+      if (fileInputRefPhotos.current.files[0]) {
+        formData.append('photoFile', fileInputRefPhotos.current.files[0]);
+      }
+  
+      try {
+        // API call to register the expert
+        const response = await axios.post(
+          'http://localhost:8000/api/expertauth/register', 
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data', // Ensure correct content type for file uploads
+            },
+          }
+        );
+  
+        console.log('Expert registered successfully:', response.data);
+        alert("Expert registered successfully");
+        router.push('/expertlogin');  // Redirect to login after successful registration
+      } catch (error) {
+        console.error('Error during registration:', error);
+        alert('Error during registration. Please try again.');
+      }
     }
-  }
-};
-
+  };
   
 
   return (

@@ -16,7 +16,7 @@ const CareerBusinessHomeCardsLogin = () => {
     const fetchExperts = async () => {
       try {
         const area = "Career and Business";  // Or dynamically fetch based on user's selection
-        const response = await axios.get(`http://localhost:8000/api/expertauth/area/${area}`);
+        const response = await axios.get(`https://amd-api.code4bahart.com/api/expertauth/area/${area}`);
         setExpertData(response.data.data);
         setLoading(false);
       } catch (err) {
@@ -70,7 +70,7 @@ const CareerBusinessHomeCardsLogin = () => {
 
       {/* "See All" Button */}
       <div className="flex justify-start mb-6">
-        <Link href="/expertpanel/carrer&business" passHref>
+        <Link href="/expertpanel/career&business" passHref>
           <button className="flex items-center text-xl font-semibold text-black">
             See All
             <HiChevronRight className="ml-2 w-5 h-5" />

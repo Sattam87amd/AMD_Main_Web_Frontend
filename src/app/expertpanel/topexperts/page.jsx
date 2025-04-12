@@ -1,8 +1,9 @@
 "use client";
 
 import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
+import ExpertsCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/TopExpertLogin";
+import LoginTopExpert from "@/components/ExpertPanel/ExpertsList/topexpert";
 import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
-import TopExpert from "@/components/Experts/Topexpert/topexpert";
 import Footer from "@/components/Layout/Footer";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";
@@ -25,7 +26,7 @@ const Page = () => {
             <NavSearch />
             <LoginExpertCategory/>
             <div className="space-y-8 px-4 md:px-8 ">
-              <TopExpert/>
+             <LoginTopExpert/>
              
             </div>
           </div>
@@ -34,7 +35,7 @@ const Page = () => {
           <div className="block md:hidden">
             <MobileNavSearch />
             <div className="space-y-8 px-4">
-             <TopExpert/>
+            <LoginTopExpert/>
             </div>
           </div>
         </div>

@@ -35,6 +35,7 @@ const ExpertBooking = () => {
     lastName: '',
     mobileNumber: '',
     email: '',
+    note:''
   });
   
   const [sessionData, setSessionData] = useState(null);
@@ -91,6 +92,7 @@ const ExpertBooking = () => {
         lastName: expertData.lastName,
         mobile: expertData.mobileNumber,
         email: expertData.email,
+        note: expertData.note
       };
   
       try {
@@ -99,7 +101,7 @@ const ExpertBooking = () => {
   
         // Send the full booking data to the server
         const response = await axios.post(
-          "http://localhost:8000/api/session/experttoexpertsession",
+          "https://amd-api.code4bharat.com/api/session/experttoexpertsession",
           fullBookingData,
           {
             headers: {
@@ -241,6 +243,18 @@ const ExpertBooking = () => {
                   value={expertData.email}
                   onChange={handleInputChange}
                   className="w-full border rounded px-3 py-2 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm mb-1">Note</label>
+                <textarea
+                  type="text"
+                  name="note"
+                  placeholder="Write something about yourself in minimum 100 words.."
+                  value={expertData.note}
+                  onChange={handleInputChange}
+                  className="w-full border flex justify-center items-center rounded px-3 py-2 text-sm"
                 />
               </div>
             </div>

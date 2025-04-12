@@ -7,7 +7,7 @@ import { HiChevronRight } from "react-icons/hi";
 import axios from "axios";
 import { motion } from "framer-motion";
 
-const LoginCareerBusiness = () => {
+const WellnessLogin = () => {
   const [expertData, setExpertData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -15,7 +15,7 @@ const LoginCareerBusiness = () => {
   useEffect(() => {
     const fetchExperts = async () => {
       try {
-        const area = "Career and Business";
+        const area = "Wellness";
         const response = await axios.get(
           `https://amd-api.code4bahart.com/api/expertauth/area/${area}`
         );
@@ -64,14 +64,13 @@ const LoginCareerBusiness = () => {
         transition={{ duration: 0.6 }}
         className="flex flex-col md:flex-row md:h-40 items-center mb-6"
       >
-       <div className="flex flex-col md:flex-row md:h-40 items-center mb-6 md:mb-0">
-        <h1 className="text-5xl md:text-[60px] font-bold text-black">
-        CAREER AND BUSINESS
+        <h1 className="text-3xl md:text-[60px] font-bold text-black">
+          WELLNESS
         </h1>
         <p className="text-[#9C9C9C] md:pt-5 pl-5 md:text-2xl">
-        Connect with CEOs, executives, coaches, and more
+          Connect with nutritionists, trainers, & more about living a healthier
+          life
         </p>
-      </div>
       </motion.div>
 
       {/* "See All" Button with Animation */}
@@ -86,7 +85,7 @@ const LoginCareerBusiness = () => {
       {/* Cards Section with Animation */}
       <div className="overflow-x-auto md:overflow-visible">
         <motion.div
-          className="flex md:grid md:grid-cols-5 gap-4 md:gap-64 px-4 md:px-0 overflow-x-scroll scrollbar-hide"
+          className="flex md:grid md:grid-cols-5 gap-4 md:gap-8 px-4 md:px-0 overflow-x-scroll scrollbar-hide"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -98,7 +97,7 @@ const LoginCareerBusiness = () => {
           {expertData.map((expert, index) => (
             <Link
               key={index}
-              href={`/userpanel/userexpertaboutme/${expert._id}`}
+              href={`/expertpanel/expertaboutme/${expert._id}`}
               passHref
             >
               <motion.div
@@ -109,7 +108,7 @@ const LoginCareerBusiness = () => {
                 }}
                 whileHover={{ scale: 1.05 }}
               >
-                {/* Background Image */}
+                {/* Expert Image */}
                 <img
                   src={expert.photoFile || "/aaliyaabadi.png"}
                   alt={expert.firstName}
@@ -140,4 +139,4 @@ const LoginCareerBusiness = () => {
   );
 };
 
-export default LoginCareerBusiness;
+export default WellnessLogin;

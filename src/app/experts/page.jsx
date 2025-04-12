@@ -1,52 +1,12 @@
 
-// import Footer from '@/components/Layout/Footer'
-// import NavSearch from '@/components/Layout/navsearch'
-// import TopExpert from '@/components/HomePage/TopExpert'
-// import React from 'react'
-// import WellnessHomeCards from '@/components/HomePage/WellnessHomeCards'
-// import FashionBeautyHomeCards from '@/components/HomePage/FashionBeautyHomeCards'
-// import CareerBusinessHomeCards from '@/components/HomePage/CareerBusinessHomeCards'
-// import HomeCards from '@/components/HomePage/HomeCards'
-// import MobileNavSearch from '@/components/Layout/mobilenavsearch'
-// import Threepara from '@/components/Experts/Threepara/threepara'
-// import ExpertCategory from '@/components/ExpertCategory/ExpertCategory'
-
-//  const page = () => {
-//   return (
-
-  
-//     <div >
-//       <div className=''>
-//         <MobileNavSearch/>
-//        <NavSearch/>
-//        <ExpertCategory/>
-//        <TopExpert/>
-//        <WellnessHomeCards/>
-//        <FashionBeautyHomeCards/>
-//        <CareerBusinessHomeCards/>
-//        <HomeCards/>
-//        <Threepara />
-//        <Footer/>
-//        </div>
-      
-
-
-
-
-//     </div>
-    
-
-
-   
-//   );
-
-// };
-
-// export default page;
-
 "use client";
 
-import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
+import CareerBusinessBefore from "@/components/ExpertBeforeLogin/Career&BusinessBefore";
+import FashionBeautyBefore from "@/components/ExpertBeforeLogin/Fasion&BeautyBefore";
+import HomeExpertsBefore from "@/components/ExpertBeforeLogin/HomeExpertBefore";
+import ExpertsCardsBefore from "@/components/ExpertBeforeLogin/TopExpertsBefore";
+import WellnessBefore from "@/components/ExpertBeforeLogin/WellnessBefore";
+import ExpertCategory from "@/components/ExpertCategory/ExpertCategory";
 import CareerBusinessHomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/Career&BusinessLogin";
 import FashionBeautyHomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/Fashoin&BeautyLogin";
 import HomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/HomeExpertLogin";
@@ -74,13 +34,14 @@ const Page = () => {
           {/* Desktop View - NavSearch */}
           <div className="">
             <NavSearch />
-            <LoginExpertCategory />
+            <ExpertCategory/>
             <div className="space-y-8 px-4 md:px-8">
-              <ExpertsCardsLogin />
-              <WellnessHomeCardsLogin />
-              <FashionBeautyHomeCardsLogin />
-              <CareerBusinessHomeCardsLogin />
-              <HomeCardsLogin />
+              <ExpertsCardsBefore/>
+              
+             <WellnessBefore/>
+             <FashionBeautyBefore/>
+             <CareerBusinessBefore/>
+             <HomeExpertsBefore/>
               <Threepara />
             </div>
           </div>

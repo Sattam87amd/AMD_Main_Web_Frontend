@@ -17,7 +17,7 @@ const FashionBeautyHomeCardsLogin = () => {
     const fetchExperts = async () => {
       try {
         const area = "Style and Beauty";  // Or dynamically fetch based on user's selection
-        const response = await axios.get(`http://localhost:8000/api/expertauth/area/${area}`);
+        const response = await axios.get(`https://amd-api.code4bahart.com/api/expertauth/area/${area}`);
         setExpertData(response.data.data);
         setLoading(false);
       } catch (err) {
@@ -88,7 +88,7 @@ const FashionBeautyHomeCardsLogin = () => {
           }}
         >
           {expertData.map((expert, index) => (
-            <Link key={index} href={`/expertpanel/expertaboutme/${expert._id}`} passHref>
+            <Link key={index} href={`/expertaboutme/${expert._id}`} passHref>
               <motion.div
                 className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg rounded-lg cursor-pointer"
                 variants={{

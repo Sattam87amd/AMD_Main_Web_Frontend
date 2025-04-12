@@ -39,7 +39,7 @@ function HeroHome() {
               alt="Industry Expert"
               width={450}
               height={400}
-              className="object-contain md:w-[560px]"
+              className="object-contain md:w-[490px]"
               priority
             />
           </div>

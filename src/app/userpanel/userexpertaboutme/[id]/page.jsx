@@ -54,10 +54,11 @@ const ExpertDetail = () => {
     const pathParts = window.location.pathname.split("/");
     const expertId = pathParts[pathParts.length - 1];
 
+    localStorage.setItem("expertId",expertId)
     if (expertId) {
       const fetchExpertData = async () => {
         try {
-          const response = await axios.get(`http://localhost:8000/api/expertauth/${expertId}`);
+          const response = await axios.get(`https://amd-api.code4bahart.com/api/expertauth/${expertId}`);
           setExpert(response.data.data);
           setLoading(false);
           localStorage.setItem("consultingExpertData", JSON.stringify(response.data.data));
@@ -70,6 +71,7 @@ const ExpertDetail = () => {
     }
   }, []);
 
+  
   const handleConsultationChange = (type) => {
     setSelectedConsultation(type);
     setPrice(type === "1:4" ? 150 : 350);

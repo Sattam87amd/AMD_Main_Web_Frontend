@@ -1,6 +1,7 @@
     "use client";
 
     import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
+import CareerBusinesslogin from "@/components/ExpertPanel/ExpertsList/Career&Buisness";
     import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
     import CareerBusinessExperts from "@/components/Experts/Career&Buisness/Career&Buisness";
     import LoginCareerBusinessExperts from "@/components/Experts/Career&Buisness/Career&Buisness";
@@ -25,7 +26,7 @@
                 <NavSearch />
                 <LoginExpertCategory/>
                 <div className="space-y-8 px-4 md:px-8 ">
-                <LoginCareerBusinessExperts/>
+                <CareerBusinesslogin/>
                 
                 </div>
             </div>
@@ -34,7 +35,7 @@
             <div className="block md:hidden">
                 <MobileNavSearch />
                 <div className="space-y-8 px-4">
-                <CareerBusinessExperts/>
+               <CareerBusinesslogin/>
                 </div>
             </div>
             </div>

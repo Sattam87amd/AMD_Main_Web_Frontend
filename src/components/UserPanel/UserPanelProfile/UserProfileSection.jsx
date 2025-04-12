@@ -50,7 +50,7 @@ const UserProfileSection = () => {
       const fetchUserDetails = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:8000/api/userauth/${userId}`
+            `https://amd-api.code4bahart.com/api/userauth/${userId}`
           );
           const { firstName, lastName, phone = " ", email, photoFile } = response.data.data;
           setProfileData({
@@ -79,7 +79,7 @@ const UserProfileSection = () => {
 
       // Upload image to Cloudinary and update the user's photo
       axios
-        .post(`http://localhost:8000/api/userauth/uploadProfileImage/${userId}`, formData, {
+        .post(`https://amd-api.code4bahart.com/api/userauth/uploadProfileImage/${userId}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
