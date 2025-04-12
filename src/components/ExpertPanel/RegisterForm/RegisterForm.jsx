@@ -7,7 +7,7 @@ import { Inter } from "next/font/google";
 import { useState, useRef, useEffect } from "react";
 import { FiLink } from "react-icons/fi";
 import { useRouter } from "next/navigation";
-// import axios from "axios";  // Import axios for making HTTP requests
+import axios from "axios";  // Import axios for making HTTP requests
 
 const interFont = Inter({
   subsets: ["latin"],
