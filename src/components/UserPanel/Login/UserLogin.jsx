@@ -53,7 +53,7 @@ function UserLoginPage() {
             return;
         }
         try {
-            const response = await axios.post("http://localhost:8000/api/userauth/request-otp", { phone });
+            const response = await axios.post("https://amd-api.code4bharat.com/api/userauth/request-otp", { phone });
             alert("OTP sent successfully!");
         } catch (error) {
             setFormError("Failed to send OTP. Please try again.");
@@ -67,7 +67,7 @@ function UserLoginPage() {
         }
       
         try {
-          const response = await axios.post("http://localhost:8000/api/userauth/verify-otp", { phone, otp });
+          const response = await axios.post("https://amd-api.code4bharat.com/api/userauth/verify-otp", { phone, otp });
           
           // Correct response structure
           if (response.data.data.isNewUser) {

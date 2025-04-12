@@ -11,7 +11,7 @@ ZoomMtg.prepareJssdk();
 const ZoomMeeting = ({ session, role }) => {
   useEffect(() => {
     const startMeeting = async () => {
-      const response = await axios.post("http://localhost:8000/api/zoom/generate-signature", {
+      const response = await axios.post("https://amd-api.code4bharat.com/api/zoom/generate-signature", {
         meetingNumber: session.zoomMeetingId, // ensure this exists
         role: role === "expert" ? 1 : 0,
       });
