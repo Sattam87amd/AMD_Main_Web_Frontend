@@ -239,7 +239,7 @@ const ExpertDetail = () => {
                               '11:00 AM', '12:00 PM', '02:00 PM', '03:00 PM', '04:00 PM'].map((time) => (
                               <button
                                 key={time}
-                                className={`py-2 px-3 text-sm ${
+                                className={`py-2 px-3 text-sm ${        
                                   selectedDate === dateMap[dayKey].toISOString().split('T')[0] &&
                                   selectedTime === time.replace(" AM", "").replace(" PM", "").trim()
                                     ? 'bg-black text-white'
