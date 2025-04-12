@@ -70,7 +70,7 @@ const CareerBusinessHomeCardsLogin = () => {
 
       {/* "See All" Button */}
       <div className="flex justify-start mb-6">
-        <Link href="/expertpanel/carrer&business" passHref>
+        <Link href="/expertpanel/career&business" passHref>
           <button className="flex items-center text-xl font-semibold text-black">
             See All
             <HiChevronRight className="ml-2 w-5 h-5" />

@@ -10,20 +10,9 @@ import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
 import Threepara from "@/components/Experts/Threepara/threepara";
 import Footer from "@/components/Layout/Footer";
 import NavSearch from "@/components/Layout/navsearch";
-import { useState, useEffect } from "react";
 
 const Page = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  useEffect(() => {
-    const token = localStorage.getItem("expertToken")
-
-    if(token){
-      setIsLoggedIn(true)
-    }
-    else{
-      setIsLoggedIn(false)
-    }
-  });
+ 
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -31,11 +20,11 @@ const Page = () => {
       <div className="flex flex-1">
         {/* Sidebar (Left Section - 20% Width) */}
         <aside className="w-[20%] h-[80%] hidden md:block bg-gray-100 overflow-y-auto -mt-5">
-          {isLoggedIn && <Sidebar />}
+          <Sidebar />
         </aside>
 
         {/* Main Content (Right Section - 80% Width) */}
-        <div className={`w-full ${isLoggedIn ? "md:w-[80%]" : "md:w-[100%]"} flex flex-col`}>
+        <div className= "w-full md:w-[80%]">
           {/* Desktop View - NavSearch */}
           <div className="">
             <NavSearch />

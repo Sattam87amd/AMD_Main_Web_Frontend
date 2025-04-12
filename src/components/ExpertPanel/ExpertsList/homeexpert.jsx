@@ -7,7 +7,7 @@ import { HiChevronRight } from "react-icons/hi";
 import axios from "axios";
 import { motion } from "framer-motion";
 
-const WellnessHomeCardsLogin = () => {
+const HomeexpertLogin = () => {
   const [expertData, setExpertData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -15,10 +15,8 @@ const WellnessHomeCardsLogin = () => {
   useEffect(() => {
     const fetchExperts = async () => {
       try {
-        const area = "Wellness";
-        const response = await axios.get(
-          `http://localhost:8000/api/expertauth/area/${area}`
-        );
+        const area = "Home";
+        const response = await axios.get(`http://localhost:8000/api/expertauth/area/${area}`);
         setExpertData(response.data.data);
         setLoading(false);
       } catch (err) {
@@ -31,24 +29,24 @@ const WellnessHomeCardsLogin = () => {
   }, []);
 
   const truncateExperience = (text) => {
-    if (!text) return "";
-
-    const words = text.split(/\s+/).filter((word) => word.length > 0);
+    if (!text) return '';
+    
+    const words = text.split(/\s+/).filter(word => word.length > 0);
     const first25Words = words.slice(0, 25);
-
+    
     let firstSentence = [];
     for (const word of first25Words) {
       firstSentence.push(word);
-      if (word.includes(".")) {
+      if (word.includes('.')) {
         break;
       }
     }
-
+    
     if (firstSentence.length === 25 && words.length > 25) {
-      return firstSentence.join(" ") + "...";
+      return firstSentence.join(' ') + '...';
     }
-
-    return firstSentence.join(" ");
+    
+    return firstSentence.join(' ');
   };
 
   if (loading) return <div>Loading...</div>;
@@ -56,7 +54,7 @@ const WellnessHomeCardsLogin = () => {
 
   return (
     <div className="bg-white py-10 px-4">
-      {/* Header Section with Animation */}
+      {/* Heading Section with Animation */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -64,28 +62,32 @@ const WellnessHomeCardsLogin = () => {
         transition={{ duration: 0.6 }}
         className="flex flex-col md:flex-row md:h-40 items-center mb-6"
       >
-        <h1 className="text-3xl md:text-[60px] font-bold text-black">
-          WELLNESS
-        </h1>
+        <h1 className="text-3xl md:text-[60px] font-bold text-black">HOME.</h1>
         <p className="text-[#9C9C9C] md:pt-5 pl-5 md:text-2xl">
-          Connect with nutritionists, trainers, & more about living a healthier
-          life
+          Transform Your Space with Expert Interior Design Insights
         </p>
       </motion.div>
 
-      {/* "See All" Button with Animation */}
+      {/* "See All" Button */}
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ delay: 0.2 }}
         className="flex justify-start mb-6"
-      ></motion.div>
+      >
+          {/* <Link href="/expertpanel/homeexperts" passHref>
+            <button className="flex items-center text-xl font-semibold text-black hover:text-gray-700 transition-colors">
+              See All
+              <HiChevronRight className="ml-2 w-5 h-5" />
+            </button>
+          </Link> */}
+      </motion.div>
 
       {/* Cards Section with Animation */}
       <div className="overflow-x-auto md:overflow-visible">
         <motion.div
-          className="flex md:grid md:grid-cols-5 gap-4 md:gap-8 px-4 md:px-0 overflow-x-scroll scrollbar-hide"
+          className="flex md:grid md:grid-cols-5 gap-4 md:gap-x-64 px-4 md:px-0 overflow-x-scroll scrollbar-hide"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -97,7 +99,7 @@ const WellnessHomeCardsLogin = () => {
           {expertData.map((expert, index) => (
             <Link
               key={index}
-              href={`/expertaboutme/${expert._id}`}
+              href={`/expertpanel/expertaboutme/${expert._id}`}
               passHref
             >
               <motion.div
@@ -106,16 +108,16 @@ const WellnessHomeCardsLogin = () => {
                   hidden: { opacity: 0, y: 30 },
                   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
                 }}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.01 }}
               >
-                {/* Expert Image */}
+                {/* Background Image */}
                 <img
                   src={expert.photoFile || "/aaliyaabadi.png"}
                   alt={expert.firstName}
                   className="w-full h-full object-cover"
                 />
 
-                {/* Price Badge */}
+                {/* Price Tag */}
                 <div className="absolute top-4 right-4 bg-[#F8F7F3] text-black px-4 py-2 rounded-2xl shadow-xl font-semibold">
                   {expert.price || "$ 0"}
                 </div>
@@ -139,4 +141,4 @@ const WellnessHomeCardsLogin = () => {
   );
 };
 
-export default WellnessHomeCardsLogin;
+export default HomeexpertLogin;

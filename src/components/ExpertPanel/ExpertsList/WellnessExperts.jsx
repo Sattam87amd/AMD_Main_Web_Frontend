@@ -7,7 +7,7 @@ import { HiChevronRight } from "react-icons/hi";
 import axios from "axios";
 import { motion } from "framer-motion";
 
-const WellnessHomeCardsLogin = () => {
+const WellnessLogin = () => {
   const [expertData, setExpertData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -97,7 +97,7 @@ const WellnessHomeCardsLogin = () => {
           {expertData.map((expert, index) => (
             <Link
               key={index}
-              href={`/expertaboutme/${expert._id}`}
+              href={`/expertpanel/expertaboutme/${expert._id}`}
               passHref
             >
               <motion.div
@@ -139,4 +139,4 @@ const WellnessHomeCardsLogin = () => {
   );
 };
 
-export default WellnessHomeCardsLogin;
+export default WellnessLogin;

@@ -99,7 +99,7 @@ const Homeexpert = () => {
           {expertData.map((expert, index) => (
             <Link
               key={index}
-              href={`/expertpanel/expertaboutme/${expert._id}`}
+              href={`/expertaboutme/${expert._id}`}
               passHref
             >
               <motion.div

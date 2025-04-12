@@ -1,6 +1,8 @@
 "use client";
 
+import WellnessBefore from "@/components/ExpertBeforeLogin/WellnessBefore";
 import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
+import WellnessLogin from "@/components/ExpertPanel/ExpertsList/WellnessExperts";
 import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
 import LoginWellnessExperts from "@/components/Experts/WellnessExperts/WellnessExperts";
 import Footer from "@/components/Layout/Footer";
@@ -25,7 +27,7 @@ const Page = () => {
             <NavSearch />
             <LoginExpertCategory/>
             <div className="space-y-8 px-4 md:px-8 ">
-            <LoginWellnessExperts/>
+         <WellnessLogin/>
              
             </div>
           </div>
@@ -34,7 +36,7 @@ const Page = () => {
           <div className="block md:hidden">
             <MobileNavSearch />
             <div className="space-y-8 px-4">
-             <LoginWellnessExperts/>
+            <WellnessLogin/>
             </div>
           </div>
         </div>

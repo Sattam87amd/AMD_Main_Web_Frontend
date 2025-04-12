@@ -15,7 +15,7 @@ const Page = () => {
       {/* Desktop View - NavSearch */}
       <div className="hidden md:block">
         <NavSearch />
-        <LoginExpertCategory/>
+       <ExpertCategory/>
         <WellnessExperts/>
         <Footer/>
 
