@@ -106,7 +106,7 @@ const UserToExpertBooking = () => {
         fullBookingData,
         {
           headers: {
-            Authorization: Bearer ${token},
+            Authorization: Bearer `${token}`,
             "Content-Type": "application/json",
           },
         }
@@ -119,7 +119,7 @@ const UserToExpertBooking = () => {
       router.push('/userpanel/bookingconfirmation');
     } catch (error) {
       console.error("Booking error:", error.response?.data || error.message);
-      alert(Booking failed: ${error.response?.data?.message || error.message});
+      alert(`Booking failed: ${error.response?.data?.message || error.message}`);
     }
   };
   
@@ -134,7 +134,7 @@ const UserToExpertBooking = () => {
           <div className="w-32 h-38 md:w-[14rem] md:h-[16rem] rounded-lg overflow-hidden shadow-md">
             <Image
               src={consultingExpert?.photoFile || "/guyhawkins.png"} // Use expert photo from localStorage
-              alt={${consultingExpert?.firstName} ${consultingExpert?.lastName}}
+              alt={`${consultingExpert?.firstName}` `${consultingExpert?.lastName}`}
               width={224}
               height={224}
               className="object-cover"
