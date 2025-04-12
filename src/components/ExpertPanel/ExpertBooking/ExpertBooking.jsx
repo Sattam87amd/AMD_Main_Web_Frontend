@@ -113,7 +113,7 @@ const ExpertBooking = () => {
         alert("Session booked successfully!");
   
         // Redirect to the success page or reset the form
-        router.push('/expertpanel/expertbooking');
+        router.push('/expertpanel/videocall');
       } catch (error) {
         console.error("Booking error:", error.response?.data || error.message);
         alert(`Booking failed: ${error.response?.data?.message || error.message}`);

@@ -23,6 +23,7 @@ const page = () => {
   return (
     <div>
         <Navbar/>
+       
         <HeroHome/>
         <HowItWorks/>
         <ExpertCategories/>
@@ -36,6 +37,7 @@ const page = () => {
         <ConnectWithExpertCard/>
         <OurPartners/>
         <Footer/>
+        <Chatbot />
     </div>
   )
 }
