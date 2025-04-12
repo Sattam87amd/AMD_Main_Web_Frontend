@@ -102,7 +102,7 @@ const UserToExpertBooking = () => {
   
       // Send the full booking data to the server
       const response = await axios.post(
-        "http://localhost:8000/api/usersession/usertoexpertsession", // Adjust the API endpoint
+        "https://amd-api.code4bahart.com/api/usersession/usertoexpertsession", // Adjust the API endpoint
         fullBookingData,
         {
           headers: {
