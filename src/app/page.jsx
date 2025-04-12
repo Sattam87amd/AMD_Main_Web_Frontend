@@ -18,6 +18,7 @@ import WellnessBefore from '@/components/ExpertBeforeLogin/WellnessBefore'
 import FashionBeautyBefore from '@/components/ExpertBeforeLogin/Fasion&BeautyBefore'
 import CareerBusinessBefore from '@/components/ExpertBeforeLogin/Career&BusinessBefore'
 import HomeExpertsBefore from '@/components/ExpertBeforeLogin/HomeExpertBefore'
+import Chatbot from '@/components/HomePage/ChatBot'
 
 const page = () => {
   return (
