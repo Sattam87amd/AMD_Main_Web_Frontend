@@ -243,6 +243,18 @@ const ExpertBooking = () => {
                   className="w-full border rounded px-3 py-2 text-sm"
                 />
               </div>
+
+              <div>
+                <label className="block text-sm mb-1">Note</label>
+                <textarea
+                  type="text"
+                  name="text"
+                  placeholder="Write something about yourself in minimum 100 words.."
+                  value={expertData.Note}
+                  onChange={handleInputChange}
+                  className="w-full border flex justify-center items-center rounded px-3 py-2 text-sm"
+                />
+              </div>
             </div>
           </div>
 
