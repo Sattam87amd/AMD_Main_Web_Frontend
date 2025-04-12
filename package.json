@@ -18,12 +18,8 @@
     "lucide": "^0.487.0",
     "lucide-react": "^0.475.0",
     "next": "15.1.7",
-<<<<<<< HEAD
     "nodemailer": "^6.10.0",
-    "react": "^19.0.0",
-=======
     "react": "^19.1.0",
->>>>>>> 72c5edfa36c6e9a31e485cfd4e6b47e74957ca06
     "react-countup": "^6.5.3",
     "react-dom": "^19.0.0",
     "react-icon": "^1.0.0",
