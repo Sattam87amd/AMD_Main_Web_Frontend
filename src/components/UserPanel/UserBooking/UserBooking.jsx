@@ -1,23 +1,12 @@
-"use client";
+'use client';
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { StarIcon, UserPlusIcon } from "lucide-react";
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
-const UserBooking = () => {
-  const [userData, setUserData] = useState({
-    firstName: "",
-    lastName: "",
-    mobileNumber: "",
-    email: "",
-    bookingType: "individual",
-    inviteFriend: "",
-    promoCode: "",
-    selectedSessions: [],
-  });
-
+const UserToExpertBooking = () => {
   const [sessions] = useState([
     {
       day: "Thu",
@@ -38,36 +27,114 @@ const UserBooking = () => {
     },
   ]);
 
+  const [expertData, setExpertData] = useState({
+    firstName: '',
+    lastName: '',
+    mobileNumber: '',
+    email: '',
+  });
+  
+  const [sessionData, setSessionData] = useState(null);
+  const [consultingExpert, setConsultingExpert] = useState(null);
+  const router = useRouter();
+
   useEffect(() => {
-    const savedData = localStorage.getItem("bookingData");
-    if (savedData) {
-      setUserData(JSON.parse(savedData));
+    // Retrieve the consulting expert's data from localStorage
+    const expertData = localStorage.getItem("consultingExpertData");
+    if (expertData) {
+      setConsultingExpert(JSON.parse(expertData)); // Set the expert data in state
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("bookingData", JSON.stringify(userData));
-  }, [userData]);
+    const savedData = localStorage.getItem("bookingData");
+    if (savedData) {
+      setExpertData(JSON.parse(savedData));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("bookingData", JSON.stringify(expertData));
+  }, [expertData]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setUserData((prev) => ({
+    setExpertData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-  const router = useRouter()
+
+  useEffect(() => {
+    const storedSessionData = localStorage.getItem('sessionData');
+    if (storedSessionData) {
+      setSessionData(JSON.parse(storedSessionData));
+    }
+  }, []);
+  
+
+  const handleBookingRequest = async () => {
+    if (!sessionData) {
+      alert('No session data found.');
+      return;
+    }
+    
+    
+    // Ensure sessionData has all required fields
+    const fullBookingData = {
+      expertId: consultingExpert?._id,  // Ensure this is set from the consultingExpert state
+      areaOfExpertise: sessionData?.areaOfExpertise || "Home",  // Fallback to "Home" if not set
+      sessionDate: sessionData?.sessionDate || "",  // Ensure sessionDate is properly set
+      sessionTime: sessionData?.sessionTime || "",  // Ensure sessionTime is set
+      duration: sessionData?.duration || "",  // Ensure duration is set
+      optionalNote: expertData?.text || "",  // Include optional note if available
+    };
+    
+  
+    console.log(fullBookingData);
+    if (!consultingExpert?._id || !sessionData?.areaOfExertise || !sessionData?.sessionDate || !sessionData?.sessionTime) {
+      alert('Please fill in all required fields before submitting the booking.');
+      return;
+    }
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("No authentication token found");
+  
+      // Send the full booking data to the server
+      const response = await axios.post(
+        "http://localhost:8000/api/usersession/usertoexpertsession", // Adjust the API endpoint
+        fullBookingData,
+        {
+          headers: {
+            Authorization: Bearer ${token},
+            "Content-Type": "application/json",
+          },
+        }
+      );
+  
+      console.log("Booking successful:", response.data);
+      alert("Session booked successfully!");
+  
+      // Redirect to the success page or reset the form
+      router.push('/userpanel/bookingconfirmation');
+    } catch (error) {
+      console.error("Booking error:", error.response?.data || error.message);
+      alert(Booking failed: ${error.response?.data?.message || error.message});
+    }
+  };
+  
+  if (!consultingExpert) return <div>Loading...</div>; // Wait for the consulting expert data to load
+
   return (
     <div className="w-full mx-8 mt-8 px-6 md:px-10 py-[6rem]">
-      <div className="flex flex-col  md:flex-row gap-10">
-        
+      <div className="flex flex-col md:flex-row gap-10">
         {/* Left Section (Profile & Sessions) */}
-        <div className="w-full md:w-1/2  flex flex-col items-center text-center md:text-left">
+        <div className="w-full md:w-1/2 flex flex-col items-center text-center md:text-left">
           {/* Profile Image */}
           <div className="w-32 h-38 md:w-[14rem] md:h-[16rem] rounded-lg overflow-hidden shadow-md">
             <Image
-              src="/image.png"
-              alt="Darrell Steward"
+              src={consultingExpert?.photoFile || "/guyhawkins.png"} // Use expert photo from localStorage
+              alt={${consultingExpert?.firstName} ${consultingExpert?.lastName}}
               width={224}
               height={224}
               className="object-cover"
@@ -76,26 +143,28 @@ const UserBooking = () => {
 
           {/* Expert Info */}
           <div className="mt-4 md:mt-6 bg-[#F8F7F3] px-4 md:p-6 rounded-lg shadow-md w-full">
-            <h1 className="text-xl md:text-2xl font-bold">Darrell Steward</h1>
-            <p className="text-gray-500 text-sm md:text-base">Tech Entrepreneur + Investor</p>
-            
+            <h1 className="text-xl md:text-2xl font-bold">
+              {consultingExpert?.firstName} {consultingExpert?.lastName}
+            </h1>
+            <p className="text-gray-500 text-sm md:text-base">{consultingExpert?.designation || "Expert"}</p>
+
             {/* Ratings */}
             <div className="flex items-center gap-1 mt-2">
               {[...Array(5)].map((_, i) => (
                 <StarIcon key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
               ))}
-              <span className="ml-1 text-sm font-semibold">5.0</span>
+              <span className="ml-1 text-sm font-semibold">{consultingExpert?.rating || 5.0}</span>
             </div>
 
             {/* Sessions */}
             <div className="mt-4">
-              <p className="font-medium mb-2 text-gray-700 ">Sessions -</p>
+              <p className="font-medium mb-2 text-gray-700">Sessions -</p>
               {sessions.map((session, idx) => (
                 <div key={idx} className="mb-3">
                   <p className="text-sm font-medium text-gray-700">
                     {session.day}, {session.date}
                   </p>
-                  <div className="flex flex-wrap  gap-2 mt-1">
+                  <div className="flex flex-wrap gap-2 mt-1">
                     {session.timeSlots.map((slot) => (
                       <button
                         key={slot.id}
@@ -115,14 +184,15 @@ const UserBooking = () => {
         </div>
 
         {/* Horizontal Line (Only on MD Screens) */}
-        <span className="hidden md:block border h-auto"><hr /></span>
+        <span className="hidden md:block border h-auto">
+          <hr />
+        </span>
 
         {/* Right Section (Booking Form) */}
         <div className="w-full h-1/2 md:w-1/2 p-6 relative">
-          <div className="border rounded-lg p-6 relative mb-4 shadow-sm">
-
+          <div className="border rounded-lg p-6 relative mb-4 shadow-md">
             {/* Change Button */}
-            <button className="absolute top-4 right-4 text-sm border rounded-lg px-3 py-1 -translate-y-8 bg-white">
+            <button className="absolute top-4 right-4 text-sm border rounded px-3 py-1 -translate-y-8 bg-white">
               Change
             </button>
 
@@ -133,7 +203,7 @@ const UserBooking = () => {
                 <input
                   type="text"
                   name="firstName"
-                  value={userData.firstName}
+                  value={expertData.firstName}
                   onChange={handleInputChange}
                   className="w-full border rounded px-3 py-2 text-sm"
                 />
@@ -143,7 +213,7 @@ const UserBooking = () => {
                 <input
                   type="text"
                   name="lastName"
-                  value={userData.lastName}
+                  value={expertData.lastName}
                   onChange={handleInputChange}
                   className="w-full border rounded px-3 py-2 text-sm"
                 />
@@ -156,7 +226,7 @@ const UserBooking = () => {
                 <input
                   type="tel"
                   name="mobileNumber"
-                  value={userData.mobileNumber}
+                  value={expertData.mobileNumber}
                   onChange={handleInputChange}
                   className="w-full border rounded px-3 py-2 text-sm"
                 />
@@ -166,84 +236,51 @@ const UserBooking = () => {
                 <input
                   type="email"
                   name="email"
-                  value={userData.email}
+                  value={expertData.email}
                   onChange={handleInputChange}
                   className="w-full border rounded px-3 py-2 text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm mb-1">Note</label>
+                <textarea
+                  type="text"
+                  name="text"
+                  placeholder="Write something about yourself in minimum 100 words.."
+                  value={expertData.Note}
+                  onChange={handleInputChange}
+                  className="w-full border flex justify-center items-center rounded px-3 py-2 text-sm"
                 />
               </div>
             </div>
           </div>
 
-          {/* Booking Type */}
-          {/* <div className="flex items-center justify-center gap-6 mb-6 space-x-8 md:space-x-40">
-            <label className="flex items-center">
-              <input
-                type="radio"
-                name="bookingType"
-                value="individual"
-                checked={userData.bookingType === "individual"}
-                onChange={handleInputChange}
-                className="mr-2 accent-black "
-              />
-              Individual
-            </label>
-            <label className="flex items-center">
-              <input
-                type="radio"
-                name="bookingType"
-                value="group"
-                checked={userData.bookingType === "group"}
-                onChange={handleInputChange}
-                className="mr-2 accent-black "
-              />
-              Group
-            </label>
-          </div> */}
-
-          {/* Invite Friend (Only for Group) */}
-          {userData.bookingType === "group" && (
-            <div className="mb-6">
-              <label className="block text-sm mb-1">Invite a Friend</label>
-              <div className="relative">
+          {/* Apply Promo Code Section (Added Back) */}
+          <div className="flex justify-center">
+            <div className="mb-6 md:w-1/2 rounded-lg">
+              <div className="flex">
                 <input
                   type="text"
-                  name="inviteFriend"
-                  value={userData.inviteFriend}
+                  name="promoCode"
+                  value={expertData.promoCode}
                   onChange={handleInputChange}
-                  className="w-full border rounded px-3 py-2 text-sm pr-10"
-                  placeholder="Enter friend's email or phone"
+                  className="w-full border rounded-l px-3 py-2 text-sm"
+                  placeholder="Enter promo code"
                 />
-                <UserPlusIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
+                <button className="bg-black text-white px-4 py-2 text-sm rounded-r">
+                  Apply
+                </button>
               </div>
             </div>
-          )}
-
-
-           {/* Apply Promo Code Section (Added Back) */}
-           <div className="flex justify-center" >
-  <div className="mb-6 md:w-1/2 rounded-lg ">
-    {/* <label className="block text-sm mb-1">Promo Code</label>  */}
-    <div className="flex my-6">
-      <input
-        type="text"
-        name="promoCode"
-        value={userData.promoCode}
-        onChange={handleInputChange}
-        className="w-full border rounded-l px-3 py-2 text-black text-sm "
-        placeholder="Enter promo code"
-      />
-      <button className="bg-black text-white px-4 py-2 text-sm rounded-r">
-        Apply
-      </button>
-    </div>
-  </div>
-  </div>
-
+          </div>
 
           {/* Book Button */}
           <div className="flex justify-center">
-            <button type="button" onClick={() => router.push('/userpanel/userprofile')}
-            className="w-32 bg-black text-white rounded-full px-8 py-3  text-sm font-medium">
+            <button
+              onClick={handleBookingRequest}
+              className="w-32 bg-black text-white rounded-full px-8 py-3 text-sm font-medium"
+            >
               Book
             </button>
           </div>
@@ -253,4 +290,4 @@ const UserBooking = () => {
   );
 };
 
-export default UserBooking;
+export default UserToExpertBooking;
