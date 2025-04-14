@@ -4,6 +4,7 @@ import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
 import Navtop from "@/components/ExpertPanel/Navtop/navtop";
 import { usePathname } from "next/navigation";
 import ExpertBooking from "@/components/ExpertPanel/ExpertBooking/ExpertBooking";
+import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
 
 const Page = () => {
   const pathname = usePathname();
@@ -24,9 +25,12 @@ const Page = () => {
         <Sidebar />
       </div>
       {/* Main Content: full width on mobile, 80% on desktop */}
-      <div className="w-full md:w-[80%] p-4 pb-20">
+      <div className="w-full md:w-[80%] p-4 pb-30">
         <Navtop activeTab={activeTab} />
         <ExpertBooking/>
+      </div>
+      <div>
+        <BottomNav/>
       </div>
     </div>
   );

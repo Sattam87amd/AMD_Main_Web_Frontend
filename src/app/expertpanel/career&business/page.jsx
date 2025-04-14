@@ -1,6 +1,7 @@
     "use client";
 
     import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
+import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
 import CareerBusinesslogin from "@/components/ExpertPanel/ExpertsList/Career&Buisness";
     import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
     import CareerBusinessExperts from "@/components/Experts/Career&Buisness/Career&Buisness";
@@ -42,9 +43,10 @@ import CareerBusinesslogin from "@/components/ExpertPanel/ExpertsList/Career&Bui
         </div>
 
         {/* Footer (Full Width) */}
-        <div className="w-full ">
+        <div className="w-full hidden sm:block">
             <Footer/>
         </div>
+        <div><BottomNav/></div>
         </div>
     );
     };

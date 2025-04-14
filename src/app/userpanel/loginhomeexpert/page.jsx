@@ -7,6 +7,7 @@ import LoginExpertCategory from "@/components/UserPanel/LoginExpertCategory/Logi
 import LoginHomeexpert from "@/components/UserPanel/LoginHomeExpert/LoginHomeExpert";
 import LoginUserHomeexpert from "@/components/UserPanel/LoginUserExpert/LoginUserHomeexpert/LodinUserHomeexpert";
 import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
+import UserBottomNav from "@/components/UserPanel/UserBottomNav/UserBottomNav";
 import UserHomeexperts from "@/components/UserPanel/UserExpert-Home/UserExpert-Home";
 import UserSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
 
@@ -44,9 +45,12 @@ const Page = () => {
       </div>
 
       {/* Footer (Full Width) */}
-      <div className="w-full ">
+      <div className="w-full hidden sm:block ">
         <Footer/>
       </div>
+      <div className="block sm:hidden ">
+  <UserBottomNav />
+</div>
     </div>
   );
 };

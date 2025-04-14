@@ -5,9 +5,13 @@ import UserWhatToExpect from "@/components/UserPanel/UserAboutMe/UserWhatToExpec
 import UserAboutMeReviews from "@/components/UserPanel/UserAboutMe/UserAboutMeReviews";
 import UserExpertFeatureHighights from "@/components/UserPanel/UserAboutMe/UserExpertFeatureHighights";
 import UserSimilarExperts from "@/components/UserPanel/UserAboutMe/UserSimilarExperts";
-import BottomNav from "@/components/UserPanel/BottomNav/BottomNav";
+// import BottomNav from "@/components/UserPanel/BottomNav/BottomNav";
 import UserSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
 import UserNavSearch from "@/components/UserPanel/Layout/NavSearch";
+import UserBottomNav from "@/components/UserPanel/UserBottomNav/UserBottomNav";
+import UserMobileNavSearch from "@/components/UserPanel/Experts/UserMobileexpert/UserMobileNavSearch";
+import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
+import LoginUserMobNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobNavSearch";
 
 const Page = () => {
   return (
@@ -24,9 +28,12 @@ const Page = () => {
         <div className="hidden md:block">
           <UserNavSearch />
         </div>
+        <div className="block md:hidden">
+  <LoginUserMobNavSearch />
+</div>
 
         {/* Content Container - Ensures Consistent Spacing */}
-        <div className="space-y-8 px-4 md:px-8">
+        <div className="space-y-8 px-4 md:px-8 pb-12 md:pb-0">
           <UserExpertAboutMe />
           <UserWhatToExpect />
           <UserAboutMeReviews/>   
@@ -35,10 +42,12 @@ const Page = () => {
         </div>
       </div>
     </div>
-    <div>
-    <Footer className="z-10"/>
-    <BottomNav/>
+    <div className="z-10 hidden md:block">
+    <Footer />
     </div>
+    <div >
+          <UserBottomNav/>
+        </div>
     </>
   );
 };

@@ -1,6 +1,7 @@
 "use client";
 
 import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
+import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
 import HomeexpertLogin from "@/components/ExpertPanel/ExpertsList/homeexpert";
 import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
 import Homeexpert from "@/components/Experts/Homeexpert/homeexpert";
@@ -45,9 +46,10 @@ const Page = () => {
       </div>
 
       {/* Footer (Full Width) */}
-      <div className="w-full ">
+      <div className="w-full hidden sm:block">
         <Footer/>
       </div>
+      <div><BottomNav/></div>
     </div>
   );
 };

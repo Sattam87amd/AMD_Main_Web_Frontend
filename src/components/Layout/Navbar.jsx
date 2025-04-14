@@ -101,7 +101,7 @@ function Navbar() {
 
             <div className="flex flex-col space-y-2 mt-4">
               <button
-                onClick={() => router.push("/userpanel/giftsession")}
+                onClick={() => router.push("/giftsession")}
                 className="flex items-center bg-black text-white font-medium rounded-lg text-[16px] px-4 py-2 w-full"
               >
                 Gift a Session
@@ -116,7 +116,7 @@ function Navbar() {
               </button>
 
               <button
-                onClick={() => router.push("/signup")}
+                onClick={() => router.push("/userlogin")}
                 className="flex items-center bg-white text-black font-medium rounded-lg text-[16px] px-4 py-2 w-full"
               >
                 Sign Up

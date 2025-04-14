@@ -6,7 +6,10 @@ const page = () => {
   return (
     <div>
       <LoginPage/>
-        <Footer/>
+      <div className='hidden sm:block'>
+  <Footer/>
+</div>
+
     </div>
   )
 }

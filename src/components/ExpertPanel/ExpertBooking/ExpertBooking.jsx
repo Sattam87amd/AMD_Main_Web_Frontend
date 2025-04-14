@@ -257,7 +257,7 @@ const ExpertBooking = () => {
           </div>
 
           {/* Booking Type */}
-          <div className="flex items-center justify-center gap-6 mb-6 space-x-8 md:space-x-40">
+          {/* <div className="flex items-center justify-center gap-6 mb-6 space-x-8 md:space-x-40">
             <label className="flex items-center">
               <input
                 type="radio"
@@ -280,7 +280,7 @@ const ExpertBooking = () => {
               />
               Group
             </label>
-          </div>
+          </div> */}
 
           {/* Invite Friend */}
           {expertData.bookingType === "group" && (
@@ -301,7 +301,7 @@ const ExpertBooking = () => {
           )}
 
           {/* Promo Code */}
-          <div className="flex justify-center">
+          <div className="flex justify-center my-7">
             <div className="mb-6 md:w-1/2 rounded-lg">
               <div className="flex">
                 <input

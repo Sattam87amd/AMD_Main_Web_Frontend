@@ -5,7 +5,7 @@ import Footer from "@/components/UserPanel/Layout/Footer";
 import LoginExpertCategory from "@/components/UserPanel/LoginExpertCategory/LoginExpertCategory";
 import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
 import NavSearch from "@/components/UserPanel/NavSearch/NavSearch";
-import UserNavSearch from "@/components/UserPanel/UserNavSearch/UserNavSearch";
+import UserBottomNav from "@/components/UserPanel/UserBottomNav/UserBottomNav";
 import UseSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
 
 
@@ -33,7 +33,7 @@ const Page = () => {
           </div>
 
           {/* Mobile View - MobileNavSearch */}
-          <div className="block md:hidden">
+          <div className="block md:hidden pb-12 md:pb-0">
             <LoginUserMobileNavSearch />
             <div className="space-y-8 px-4">
               <UserTopExpert />
@@ -43,9 +43,12 @@ const Page = () => {
       </div>
 
       {/* Footer (Full Width) */}
-      <div className="w-full ">
+      <div className="w-full hidden sm:block">
         <Footer/>
       </div>
+      <div className="block sm:hidden ">
+  <UserBottomNav />
+</div>
     </div>
   );
 };

@@ -2,6 +2,7 @@
 
 import WellnessBefore from "@/components/ExpertBeforeLogin/WellnessBefore";
 import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
+import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
 import WellnessLogin from "@/components/ExpertPanel/ExpertsList/WellnessExperts";
 import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
 import LoginWellnessExperts from "@/components/Experts/WellnessExperts/WellnessExperts";
@@ -43,9 +44,10 @@ const Page = () => {
       </div>
 
       {/* Footer (Full Width) */}
-      <div className="w-full ">
+      <div className="w-full hidden sm:block">
         <Footer/>
       </div>
+      <div><BottomNav/></div>
     </div>
   );
 };

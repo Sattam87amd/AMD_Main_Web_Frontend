@@ -8,6 +8,8 @@ import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
 import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
 import ExpertAboutMe from "@/components/ExpertAboutMe/ExpertAboutMe";
 import AboutMeReviews from "@/components/ExpertAboutMe/AboutMeReviews";
+import MobileNavSearch from "@/components/Layout/mobilenavsearch";
+import MobileNavSeearch from "@/components/MobileNavSeearch/MobileNavSeearch";
 
 const Page = () => {
   return (
@@ -24,9 +26,12 @@ const Page = () => {
         <div className="hidden md:block">
           <NavSearch />
         </div>
+        <div className="block md:hidden">
+          <MobileNavSeearch/>
+        </div>
 
         {/* Content Container - Ensures Consistent Spacing */}
-        <div className="space-y-8 px-4 md:px-8">
+        <div className="space-y-8 px-4 md:px-8 pb-12 md:pb-0">
           {/* <AboutMeExpertPanel /> */}
           <ExpertAboutMe/>
           <WhatToExpectExpertPanel />
@@ -37,10 +42,11 @@ const Page = () => {
         </div>
       </div>
     </div>
-    <div>
+    <div className="hidden sm:block">
     <Footer/>
-    <BottomNav/>
+    
     </div>
+    <div><BottomNav/></div>
     </>
   );
 };
