@@ -246,6 +246,7 @@ const ExpertBooking = () => {
                 />
               </div>
 
+            </div>
               <div>
                 <label className="block text-sm mb-1">Note</label>
                 <textarea
@@ -254,10 +255,9 @@ const ExpertBooking = () => {
                   placeholder="Write something about yourself in minimum 100 words.."
                   value={expertData.note}
                   onChange={handleInputChange}
-                  className="w-full border flex justify-center items-center rounded px-3 py-2 text-sm"
+                  className="w-full h-[120px] border flex justify-center items-center rounded px-3 py-2 text-sm"
                 />
               </div>
-            </div>
           </div>
 
           {/* Booking Type */}
