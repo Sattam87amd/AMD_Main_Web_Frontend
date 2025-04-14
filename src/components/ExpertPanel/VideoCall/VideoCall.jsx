@@ -218,6 +218,7 @@ const VideoCall = () => {
                       <FaUser className="inline mr-1" />
                       {booking.firstName} {booking.lastName}
                     </p>
+                    
                   </div>
                 </div>
 
