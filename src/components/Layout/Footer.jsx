@@ -13,8 +13,8 @@ const Footer = () => {
           <div className="mb-6 md:mb-0">
             <h1 className="text-3xl md:text-4xl font-bold text-black">AMD</h1>
             <p className="mt-2 text-black text-base md:text-2xl md:py-4 leading-relaxed">
-              Book the most in-demand experts <br />
-              & get advice over a video call.
+              Book the most in-demand experts <br />& get advice over a video
+              call.
             </p>
             <Link href="/expertlogin">
               <button className="mt-4 px-6 py-2 md:px-16 md:py-3 md:text-xl bg-black text-white rounded-lg">
@@ -24,7 +24,8 @@ const Footer = () => {
           </div>
 
           {/* Middle Section - Company and Support */}
-          <div className="grid grid-cols-2 gap-6 sm:grid-cols-2">
+          <div className="flex flex-col md:flex-row md:space-x-16 gap-10">
+
             {/* Company Section */}
             <div>
               <h2 className="mb-4 text-sm md:text-lg font-semibold text-black">
@@ -87,6 +88,55 @@ const Footer = () => {
                 </li>
               </ul>
             </div>
+
+            {/* Policies Section */}
+            <div>
+              <h2 className="mb-4 text-sm md:text-lg font-semibold text-black">
+                Policies
+              </h2>
+              <ul className="text-gray-700 text-sm md:text-lg">
+                <li className="mb-2">
+                  <Link href="/policies/about" className="hover:underline">
+                    About AMD
+                  </Link>
+                </li>
+                <li className="mb-2">
+                  <Link href="/policies/contact" className="hover:underline">
+                    Contact
+                  </Link>
+                </li>
+                <li className="mb-2">
+                  <Link href="/policies/termsandcondition" className="hover:underline">
+                    Terms & Conditions
+                  </Link>
+                </li>
+                <li className="mb-2">
+                  <Link href="/policies/privacy" className="hover:underline">
+                    Privacy & Policy
+                  </Link>
+                </li>
+                <li className="mb-2">
+                  <Link href="/policies/product-pricing" className="hover:underline">
+                    Product Pricing
+                  </Link>
+                </li>
+                <li className="mb-2">
+                  <Link href="/policies/cancellation-policy" className="hover:underline">
+                    Cancelation Policy
+                  </Link>
+                </li>
+                <li className="mb-2">
+                  <Link href="/policies/refund-policy" className="hover:underline">
+                    Refund Policy
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/policies/shipping-policies" className="hover:underline">
+                    Shipping & Delivery Policy
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
 
           {/* Right Section - Social Media */}
@@ -95,13 +145,25 @@ const Footer = () => {
               Follow us for peaks
             </h2>
             <div className="flex justify-start md:justify-center items-center space-x-4">
-              <Link href="https://www.instagram.com" target="_blank" className="text-[#A6A6A6] hover:text-black">
+              <Link
+                href="https://www.instagram.com"
+                target="_blank"
+                className="text-[#A6A6A6] hover:text-black"
+              >
                 <FaInstagram size={28} />
               </Link>
-              <Link href="https://www.twitter.com" target="_blank" className="text-[#A6A6A6] hover:text-black">
+              <Link
+                href="https://www.twitter.com"
+                target="_blank"
+                className="text-[#A6A6A6] hover:text-black"
+              >
                 <FaTwitter size={28} />
               </Link>
-              <Link href="https://www.facebook.com" target="_blank" className="text-[#A6A6A6] hover:text-black">
+              <Link
+                href="https://www.facebook.com"
+                target="_blank"
+                className="text-[#A6A6A6] hover:text-black"
+              >
                 <FaFacebook size={28} />
               </Link>
             </div>

@@ -352,7 +352,6 @@ const ExpertDetail = () => {
         </div>
       </div>
       <Footer />
-      <BottomNav />
     </>
   );
 };

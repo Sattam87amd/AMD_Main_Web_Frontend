@@ -3,6 +3,9 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { CiClock2 } from "react-icons/ci";
+import { FaUser, FaUserTie } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const VideoCall = () => {
   const [activeTab, setActiveTab] = useState("bookings");
@@ -11,7 +14,9 @@ const VideoCall = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetching data once when the component loads
+  console.log(mySessions)
+
+  // Fetch data once on component mount
   useEffect(() => {
     const fetchSessions = async () => {
       try {
@@ -19,7 +24,6 @@ const VideoCall = () => {
 
         // Retrieve the token from localStorage
         const token = localStorage.getItem("expertToken");
-
         if (!token) {
           setError("Token is required");
           return;
@@ -39,7 +43,7 @@ const VideoCall = () => {
           }),
         ]);
 
-        // Update the state with fetched data
+        // Update state with fetched data
         setMyBookings(bookingsResponse?.data || []);
         setMySessions(sessionsResponse?.data || []);
         console.log(bookingsResponse.data, sessionsResponse.data);
@@ -51,7 +55,7 @@ const VideoCall = () => {
     };
 
     fetchSessions();
-  }, []); // Empty dependency array to run only on component mount
+  }, []);
 
   const isJoinEnabled = (sessionDate, sessionTime, duration) => {
     const [hours, minutes] = sessionTime.split(":").map(Number);
@@ -59,20 +63,14 @@ const VideoCall = () => {
     sessionDateTime.setHours(hours, minutes, 0, 0); // Set the session time on the sessionDate
 
     const now = new Date();
-    console.log("Current Time:", now);
-    console.log("Session Time:", sessionDateTime);
-
     const diff = (sessionDateTime - now) / 60000; // Difference in minutes
-    console.log("Time Difference (in minutes):", diff);
-
-    return diff <= 2 && diff >= -duration; // Join is enabled if within the 2-minute window before or during the session
+    return diff <= 2 && diff >= -duration; // Join if within 2-minute window or during session
   };
 
-  // Handle session accept action
+  // Handle session accept
   const handleAccept = async (sessionId) => {
     try {
       const token = localStorage.getItem("expertToken");
-
       if (!token) {
         setError("Token is required");
         return;
@@ -89,24 +87,22 @@ const VideoCall = () => {
       );
 
       // Update session status in state
-      const updatedSessions = mySessions.map((session) => {
-        if (session._id === sessionId) {
-          return { ...session, status: "confirmed" };
-        }
-        return session;
-      });
+      const updatedSessions = mySessions.map((session) =>
+        session._id === sessionId
+          ? { ...session, status: "confirmed" }
+          : session
+      );
       setMySessions(updatedSessions);
-      alert(response.data.message); // Optional: Display success message
+      toast.success(response.data.message);
     } catch (err) {
-      setError("Failed to accept the session");
+      toast.error("Failed to accept the session");
     }
   };
 
-  // Handle session decline action
+  // Handle session decline
   const handleDecline = async (sessionId) => {
     try {
       const token = localStorage.getItem("expertToken");
-
       if (!token) {
         setError("Token is required");
         return;
@@ -123,16 +119,13 @@ const VideoCall = () => {
       );
 
       // Update session status in state
-      const updatedSessions = mySessions.map((session) => {
-        if (session._id === sessionId) {
-          return { ...session, status: "rejected" };
-        }
-        return session;
-      });
+      const updatedSessions = mySessions.map((session) =>
+        session._id === sessionId ? { ...session, status: "rejected" } : session
+      );
       setMySessions(updatedSessions);
-      alert(response.data.message); // Optional: Display success message
+      toast.success(response.data.message);
     } catch (err) {
-      setError("Failed to decline the session");
+      toast.error("Failed to decline the session");
     }
   };
 
@@ -142,7 +135,7 @@ const VideoCall = () => {
 
   if (error) {
     return (
-      <div className="w-full md:max-w-6xl max-w-4xl mx-auto py-10 px-4 mt-20 md:mt-0 ">
+      <div className="w-full md:max-w-6xl max-w-4xl mx-auto py-10 px-4 mt-20 md:mt-0">
         {/* Tabs */}
         <div className="flex space-x-2 mb-6">
           <button
@@ -168,7 +161,10 @@ const VideoCall = () => {
   }
 
   return (
-    <div className="w-full md:max-w-6xl max-w-4xl mx-auto py-10 px-4 mt-20 md:mt-0 ">
+    <div className="w-full md:max-w-6xl max-w-4xl mx-auto py-10 px-4 mt-20 md:mt-0">
+      {/* Toast notifications */}
+      <ToastContainer />
+
       {/* Tabs */}
       <div className="flex space-x-2 mb-6">
         <button
@@ -196,53 +192,93 @@ const VideoCall = () => {
             <div className="text-center text-gray-500">No Bookings Yet</div>
           ) : (
             myBookings.map((booking) => (
-              <div key={booking._id} className="flex items-center justify-between p-4 border rounded-lg shadow-sm">
-                {/* Left Side (Date and Details) */}
+              <div
+                key={booking._id}
+                className="flex items-center justify-between p-4 border rounded-lg shadow-sm"
+              >
+                {/* Left Side (Date & Details) */}
                 <div className="flex items-center space-x-4">
                   <div className="text-center bg-gray-100 px-3 py-2 rounded-lg shadow-md">
                     <p className="text-xs text-gray-500">
-                      {new Date(booking.sessionDate).toLocaleDateString("en-US", { weekday: "short" })}
+                      {new Date(booking.sessionDate).toLocaleDateString(
+                        "en-US",
+                        {
+                          weekday: "short",
+                        }
+                      )}
                     </p>
                     <p className="text-lg font-bold">
-                      {new Date(booking.sessionDate).toLocaleDateString("en-US", { day: "numeric" })}
+                      {new Date(booking.sessionDate).toLocaleDateString(
+                        "en-US",
+                        {
+                          day: "numeric",
+                        }
+                      )}
                     </p>
                   </div>
                   <div>
-                    <div className="flex">
-                      <div><CiClock2 className="mt-[3px] mr-1" /></div>
-                      <p className="text-sm text-gray-500 mr-5">{booking.sessionTime}</p>
-                      <p className="text-sm text-gray-500">{booking.duration}</p>
+                    <div className="flex ">
+                      <div>
+                        <CiClock2 className="mt-[3px] mr-1" />
+                      </div>
+                      <p className="text-sm text-gray-500 mr-5">
+                        {booking.sessionTime}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        {booking.duration}
+                      </p>
                     </div>
-                    <p className="text-sm font-medium text-gray-700">
-                      👤 {booking.firstName} {booking.lastName}
-                    </p>
+                    {/* User and Consultant Details */}
+                    <div className="mt-3">
+                      <p className="text-sm font-medium text-gray-700">
+                        <FaUser className="inline mr-1" />
+                        Client: {booking.firstName} {booking.lastName}
+                      </p>
+                      <p className="text-sm font-medium text-gray-700 mt-1">
+                        <FaUserTie className="inline mr-1" />
+                        Expert: {booking.consultingExpertID.firstName}{" "}
+                        {booking.consultingExpertID.lastName}
+                      </p>
+                    </div>
                   </div>
                 </div>
 
-                {/* Right Side (Confirm/Unconfirm Status & Zoom Join Button) */}
+                {/* Right Side (Status & Zoom Join) */}
                 <div className="flex items-center space-x-4">
                   {booking.status === "confirmed" ? (
                     <>
-                      <span className="text-green-500 text-sm font-medium">Confirmed</span>
-                      <button className="px-4 py-1 border rounded text-sm">💬 Chat</button>
+                      <span className="text-green-500 text-sm font-medium">
+                        Confirmed
+                      </span>
+                      <button className="px-4 py-1 border rounded text-sm">
+                        💬 Chat
+                      </button>
                       {booking.zoomMeetingLink ? (
-                        <a href={booking.zoomMeetingLink} target="_blank" rel="noopener noreferrer">
+                        <a
+                          href={booking.zoomMeetingLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           <button className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600">
                             🎥 Join
                           </button>
                         </a>
                       ) : (
-                        <span className="text-yellow-500 text-sm ml-2">Zoom link not ready</span>
+                        <span className="text-yellow-500 text-sm ml-2">
+                          Zoom link not ready
+                        </span>
                       )}
                     </>
                   ) : booking.status === "unconfirmed" ? (
                     <>
-                      <span className="text-red-500 text-sm font-medium">Unconfirmed</span>
-                      <button className="px-4 py-1 border rounded text-sm">💬 Chat</button>
+                      <span className="text-red-500 text-sm font-medium">
+                        Unconfirmed
+                      </span>
+                      <button className="px-4 py-1 border rounded text-sm">
+                        💬 Chat
+                      </button>
                     </>
-                  ) : (
-                    <></>
-                  )}
+                  ) : null}
                 </div>
               </div>
             ))
@@ -254,34 +290,65 @@ const VideoCall = () => {
       {activeTab === "sessions" && (
         <div className="space-y-4">
           {mySessions.length === 0 ? (
-            <div className="text-center text-gray-500">No Upcoming Sessions</div>
+            <div className="text-center text-gray-500">
+              No Upcoming Sessions
+            </div>
           ) : (
             mySessions.map((session) => (
-              <div key={session._id} className="flex items-center justify-between p-4 border rounded-lg shadow-sm bg-white hover:shadow-xl transition-shadow duration-300">
-                {/* Left Side (Date and Details) */}
-                <div className="flex items-center space-x-4">
-                  <div className="text-center bg-gray-100 px-3 py-2 rounded-lg shadow-md">
-                    <p className="text-xs text-gray-500">{new Date(session.sessionDate).toLocaleDateString('en-US', { weekday: 'short'})}</p>
-                    <p className="text-lg font-bold">{new Date(session.sessionDate).toLocaleDateString('en-US', { day: 'numeric' })}</p>
-                  </div>
-                  <div>
-                    <div className="flex">
-                      <div><CiClock2 className="mt-[3px] mr-1" /></div>
-                      <p className="text-sm text-gray-500 mr-5">{session.sessionTime}</p>
-                      <p className="text-sm text-gray-500 mr-5">{session.duration}</p>
+              <div
+                key={session._id}
+                className="p-4 border rounded-lg shadow-sm bg-white hover:shadow-xl transition-shadow duration-300"
+              >
+                {/* Upper Section (Date & Time, Name) */}
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className="text-center bg-gray-100 px-3 py-2 rounded-lg shadow-md">
+                      <p className="text-xs text-gray-500">
+                        {new Date(session.sessionDate).toLocaleDateString(
+                          "en-US",
+                          {
+                            weekday: "short",
+                          }
+                        )}
+                      </p>
+                      <p className="text-lg font-bold">
+                        {new Date(session.sessionDate).toLocaleDateString(
+                          "en-US",
+                          {
+                            day: "numeric",
+                          }
+                        )}
+                      </p>
                     </div>
-                    <p className="text-sm font-medium text-gray-700">👤 {session.firstName} {session.lastName}</p>
+                    <div>
+                      <div className="flex">
+                        <CiClock2 className="mt-[3px] mr-1" />
+                        <p className="text-sm text-gray-500 mr-5">
+                          {session.sessionTime}
+                        </p>
+                        <p className="text-sm text-gray-500 mr-5">
+                          {session.duration}
+                        </p>
+                      </div>
+                      <p className="text-sm font-medium text-gray-700 mt-2">
+                        <FaUser className="inline mr-1" />
+                        {session.firstName} {session.lastName}
+                      </p>
+                    </div>
                   </div>
-                </div>
 
-                {/* Right Side (Accept/Decline Buttons or Status) */}
+                 {/* Right Side (Accept/Decline Buttons or Status) */}
                 <div className="flex items-center space-x-4">
                   {session.status === 'confirmed' ? (
                     <>
                       <span className="text-green-500 text-sm font-medium">Accepted</span>
                       <button className="px-4 py-1 border rounded text-sm">💬 Chat</button>
                       {session.zoomMeetingLink ? (
-                        <a href={session.zoomMeetingLink} target="_blank" rel="noopener noreferrer">
+                        <a
+                          href={session.zoomMeetingLink} // Direct link to the meeting
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           <button className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600">
                             🎥 Join
                           </button>
@@ -306,14 +373,26 @@ const VideoCall = () => {
                       >
                         Decline
                       </button>
-                      
                     </>
-                  
-                )}
+                    )}
+                  </div>
                 </div>
-                
+
+                {/* Note Section (Below Date/Name) */}
+                {session.note && (
+                  <div className="mt-4">
+                    <p className="text-sm font-semibold text-gray-700 mb-1">
+                      Note:
+                    </p>
+                    <ul className="list-disc pl-5 text-sm text-gray-600">
+                      {session.note.split(".").map((sentence, index) => {
+                        const trimmed = sentence.trim();
+                        return trimmed ? <li key={index}>{trimmed}.</li> : null;
+                      })}
+                    </ul>
+                  </div>
+                )}
               </div>
-              
             ))
           )}
         </div>

@@ -105,7 +105,10 @@ function UserLoginPage() {
         }
 
         try {
-            const payload = useEmail ? { email, otp } : { phone, otp };
+            const payload = useEmail
+            ? { email, otp }
+            : { phone, otp };
+          
             const response = await axios.post("http://localhost:5070/api/userauth/verify-otp", payload);
 
             if (response.data.data.isNewUser) {
