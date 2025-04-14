@@ -63,7 +63,7 @@ const SearchExperts = ({ closeSearchPage }) => {
   };
 
   return (
-    <div className="bg-white p-0 relative min-h-screen">
+    <div className="bg-white p-0 relative min-h-screen px-1 mt-2">
       {/* NAVIGATION BAR - Centered Search Bar & Close Button */}
       <motion.nav
         initial={{ opacity: 0, y: -20 }}
@@ -72,7 +72,7 @@ const SearchExperts = ({ closeSearchPage }) => {
         className="flex items-center justify-center w-full mb-6 relative"
       >
         {/* AMD Logo (Left Aligned) */}
-        <div className="absolute left-4 text-3xl font-bold text-black">AMD</div>
+        <div className="hidden md:block absolute left-4 text-3xl font-bold text-black">AMD</div>
 
         {/* Centered Search Bar & Close Button */}
         <div className="flex items-center justify-center gap-2 w-full max-w-3xl">
