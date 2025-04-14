@@ -19,7 +19,7 @@ const ExpertDetail = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedConsultation, setSelectedConsultation] = useState("1:1");
-  const [price, setPrice] = useState(350);
+  const [price, setPrice] = useState();
   const [showTimeSelection, setShowTimeSelection] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
@@ -256,7 +256,7 @@ const ExpertDetail = () => {
 
                       <div className="flex gap-10 py-10 items-center">
                         <div>
-                          <p className="text-xl font-semibold">${price} • Session</p>
+                          <p className="text-xl font-semibold">SAR {expert.price} • Session</p>
                           <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
                             {[...Array(5)].map((_, i) => <FaStar key={i} />)}
                           </div>
@@ -284,7 +284,7 @@ const ExpertDetail = () => {
                       <p className="text-2xl font-semibold">Book a 1:1 Video consultation & get personalized advice</p>
 
                       <div className="mt-4">
-                        <p className="text-xl font-semibold">Starting at ${price}</p>
+                        <p className="text-xl font-semibold">Starting at SAR {expert.price}</p>
                         <div className="flex items-center justify-start">
                           <p className="text-[#7E7E7E] text-base font-semibold">
                             Next available - <span className="text-[#0D70E5]">4:30am on 3/25</span>
@@ -320,7 +320,7 @@ const ExpertDetail = () => {
                       <p className="text-2xl font-semibold">Book a 1:4 Video consultation & get personalized advice</p>
 
                       <div className="mt-4">
-                        <p className="text-xl font-semibold">Starting at ${price}</p>
+                        <p className="text-xl font-semibold">Starting at SAR {expert.price}</p>
                         <div className="flex items-center justify-start">
                           <p className="text-[#7E7E7E] text-base font-semibold">
                             Next available - <span className="text-[#0D70E5]">5:00pm on 3/25</span>
