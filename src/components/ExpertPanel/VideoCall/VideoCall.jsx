@@ -230,9 +230,9 @@ const VideoCall = () => {
                     <div className="mt-3">
                       <p className="text-sm font-medium text-gray-700">
                         <FaUser className="inline mr-1" />
-                        Client: {booking.firstName} {booking.lastName}
+                        Guest: {booking.firstName} {booking.lastName}
                       </p>
-                      <p className="text-sm font-medium text-gray-700 mt-1">
+                      <p className="text-sm font-medium mt-2 text-gray-700">
                         <FaUserTie className="inline mr-1" />
                         Expert: {booking.consultingExpertID.firstName}{" "}
                         {booking.consultingExpertID.lastName}
