@@ -77,7 +77,7 @@ function UserLoginPage() {
                 return;
             }
             try {
-                await axios.post("https://amd-api.code4bharat.com/api/userauth/request-otp", { email });
+                await axios.post("http://localhost:5070/api/userauth/request-otp", { email });
                 alert("OTP sent to your email!");
             } catch (error) {
                 console.log(error);
@@ -89,7 +89,7 @@ function UserLoginPage() {
                 return;
             }
             try {
-                await axios.post("https://amd-api.code4bharat.com/api/userauth/request-otp", { phone });
+                await axios.post("http://localhost:5070/api/userauth/request-otp", { phone });
                 alert("OTP sent to your phone!");
             } catch (error) {
                 console.log(error);
@@ -106,7 +106,7 @@ function UserLoginPage() {
 
         try {
             const payload = useEmail ? { email, otp } : { phone, otp };
-            const response = await axios.post("https://amd-api.code4bharat.com/api/userauth/verify-otp", payload);
+            const response = await axios.post("http://localhost:5070/api/userauth/verify-otp", payload);
 
             if (response.data.data.isNewUser) {
                 const identifier = useEmail ? `email=${encodeURIComponent(email)}` : `phone=${encodeURIComponent(phone)}`;

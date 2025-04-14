@@ -27,12 +27,12 @@ const VideoCall = () => {
 
         // Fetch both bookings and sessions in parallel
         const [bookingsResponse, sessionsResponse] = await Promise.all([
-          axios.get("https://amd-api.code4bharat.com/api/session/mybookings", {
+          axios.get("http://localhost:5070/api/session/mybookings", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }),
-          axios.get("https://amd-api.code4bharat.com/api/session/getexpertsession", {
+          axios.get("http://localhost:5070/api/session/getexpertsession", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -79,7 +79,7 @@ const VideoCall = () => {
       }
 
       const response = await axios.put(
-        `https://amd-api.code4bharat.com/api/session/accept/${sessionId}`,
+        `http://localhost:5070/api/session/accept/${sessionId}`,
         {},
         {
           headers: {
@@ -113,7 +113,7 @@ const VideoCall = () => {
       }
 
       const response = await axios.put(
-        `https://amd-api.code4bharat.com/api/session/decline/${sessionId}`,
+        `http://localhost:5070/api/session/decline/${sessionId}`,
         {},
         {
           headers: {
