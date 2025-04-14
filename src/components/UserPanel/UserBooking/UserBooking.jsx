@@ -32,25 +32,38 @@ const UserToExpertBooking = () => {
     lastName: '',
     mobileNumber: '',
     email: '',
+    note: '',
+    promoCode: '',
   });
-  
+
   const [sessionData, setSessionData] = useState(null);
   const [consultingExpert, setConsultingExpert] = useState(null);
+  const [token, setToken] = useState(null); // ✅ ensure localStorage access only on client
   const router = useRouter();
 
+  // Wait until component is mounted
   useEffect(() => {
-    // Retrieve the consulting expert's data from localStorage
     const expertData = localStorage.getItem("consultingExpertData");
     if (expertData) {
-      setConsultingExpert(JSON.parse(expertData)); // Set the expert data in state
+      setConsultingExpert(JSON.parse(expertData));
     }
-  }, []);
 
-  useEffect(() => {
     const savedData = localStorage.getItem("bookingData");
     if (savedData) {
       setExpertData(JSON.parse(savedData));
     }
+
+    const storedSessionData = localStorage.getItem("sessionData");
+    if (storedSessionData) {
+      setSessionData(JSON.parse(storedSessionData));
+    }
+
+    const userToken = localStorage.getItem("userToken");
+    console.log("TOKEN CHECK:", userToken);
+    if (!userToken) {
+      console.warn("⚠️ No user token found in localStorage.");
+    }
+    setToken(userToken);
   }, []);
 
   useEffect(() => {
@@ -65,90 +78,74 @@ const UserToExpertBooking = () => {
     }));
   };
 
-  useEffect(() => {
-    const storedSessionData = localStorage.getItem('sessionData');
-    if (storedSessionData) {
-      setSessionData(JSON.parse(storedSessionData));
-    }
-  }, []);
-  
-
   const handleBookingRequest = async () => {
     if (!sessionData) {
       alert('No session data found.');
       return;
     }
-    
-    
-    // Ensure sessionData has all required fields
+
     const fullBookingData = {
-      expertId: consultingExpert?._id,  // Ensure this is set from the consultingExpert state
-      areaOfExpertise: sessionData?.areaOfExpertise || "Home",  // Fallback to "Home" if not set
-      sessionDate: sessionData?.sessionDate || "",  // Ensure sessionDate is properly set
-      sessionTime: sessionData?.sessionTime || "",  // Ensure sessionTime is set
-      duration: sessionData?.duration || "",  // Ensure duration is set
-      optionalNote: expertData?.text || "",  // Include optional note if available
+      expertId: consultingExpert?._id,
+      areaOfExpertise: sessionData?.areaOfExpertise || "Home",
+      sessionDate: sessionData?.sessionDate || "",
+      sessionTime: sessionData?.sessionTime || "",
+      duration: sessionData?.duration || "",
+      optionalNote: expertData?.note || "",
     };
-    
-  
-    console.log(fullBookingData);
-    if (!consultingExpert?._id || !sessionData?.areaOfExertise || !sessionData?.sessionDate || !sessionData?.sessionTime) {
+
+    console.log("Booking Data:", fullBookingData);
+
+    if (!consultingExpert?._id || !sessionData?.areaOfExpertise || !sessionData?.sessionDate || !sessionData?.sessionTime) {
       alert('Please fill in all required fields before submitting the booking.');
       return;
     }
+
     try {
-      const token = localStorage.getItem("token");
       if (!token) throw new Error("No authentication token found");
-  
-      // Send the full booking data to the server
+
       const response = await axios.post(
-        "http://localhost:5070/api/usersession/usertoexpertsession", // Adjust the API endpoint
+        "http://localhost:5070/api/usersession/usertoexpertsession",
         fullBookingData,
         {
           headers: {
-            Authorization: Bearer `${token}`,
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         }
       );
-  
+
       console.log("Booking successful:", response.data);
       alert("Session booked successfully!");
-  
-      // Redirect to the success page or reset the form
       router.push('/userpanel/bookingconfirmation');
     } catch (error) {
       console.error("Booking error:", error.response?.data || error.message);
       alert(`Booking failed: ${error.response?.data?.message || error.message}`);
     }
   };
-  
-  if (!consultingExpert) return <div>Loading...</div>; // Wait for the consulting expert data to load
+
+  if (!consultingExpert) return <div>Loading...</div>;
 
   return (
     <div className="w-full mx-8 mt-8 px-6 md:px-10 py-[6rem]">
       <div className="flex flex-col md:flex-row gap-10">
-        {/* Left Section (Profile & Sessions) */}
+        {/* Left Section */}
         <div className="w-full md:w-1/2 flex flex-col items-center text-center md:text-left">
-          {/* Profile Image */}
           <div className="w-32 h-38 md:w-[14rem] md:h-[16rem] rounded-lg overflow-hidden shadow-md">
             <Image
-              src={consultingExpert?.photoFile || "/guyhawkins.png"} // Use expert photo from localStorage
-              alt={`${consultingExpert?.firstName}` `${consultingExpert?.lastName}`}
+              src={consultingExpert?.photoFile || "/guyhawkins.png"}
+              alt={`${consultingExpert?.firstName} ${consultingExpert?.lastName}`}
               width={224}
               height={224}
               className="object-cover"
             />
           </div>
 
-          {/* Expert Info */}
           <div className="mt-4 md:mt-6 bg-[#F8F7F3] px-4 md:p-6 rounded-lg shadow-md w-full">
             <h1 className="text-xl md:text-2xl font-bold">
               {consultingExpert?.firstName} {consultingExpert?.lastName}
             </h1>
             <p className="text-gray-500 text-sm md:text-base">{consultingExpert?.designation || "Expert"}</p>
 
-            {/* Ratings */}
             <div className="flex items-center gap-1 mt-2">
               {[...Array(5)].map((_, i) => (
                 <StarIcon key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
@@ -156,7 +153,6 @@ const UserToExpertBooking = () => {
               <span className="ml-1 text-sm font-semibold">{consultingExpert?.rating || 5.0}</span>
             </div>
 
-            {/* Sessions */}
             <div className="mt-4">
               <p className="font-medium mb-2 text-gray-700">Sessions -</p>
               {sessions.map((session, idx) => (
@@ -183,20 +179,18 @@ const UserToExpertBooking = () => {
           </div>
         </div>
 
-        {/* Horizontal Line (Only on MD Screens) */}
+        {/* Divider */}
         <span className="hidden md:block border h-auto">
           <hr />
         </span>
 
-        {/* Right Section (Booking Form) */}
+        {/* Right Section */}
         <div className="w-full h-1/2 md:w-1/2 p-6 relative">
           <div className="border rounded-lg p-6 relative mb-4 shadow-md">
-            {/* Change Button */}
             <button className="absolute top-4 right-4 text-sm border rounded px-3 py-1 -translate-y-8 bg-white">
               Change
             </button>
 
-            {/* Form Fields */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div>
                 <label className="block text-sm mb-1">First Name</label>
@@ -241,22 +235,19 @@ const UserToExpertBooking = () => {
                   className="w-full border rounded px-3 py-2 text-sm"
                 />
               </div>
-
               <div>
                 <label className="block text-sm mb-1">Note</label>
                 <textarea
-                  type="text"
-                  name="text"
+                  name="note"
                   placeholder="Write something about yourself in minimum 100 words.."
-                  value={expertData.Note}
+                  value={expertData.note}
                   onChange={handleInputChange}
-                  className="w-full border flex justify-center items-center rounded px-3 py-2 text-sm"
+                  className="w-full border rounded px-3 py-2 text-sm"
                 />
               </div>
             </div>
           </div>
 
-          {/* Apply Promo Code Section (Added Back) */}
           <div className="flex justify-center">
             <div className="mb-6 md:w-1/2 rounded-lg">
               <div className="flex">
@@ -275,7 +266,6 @@ const UserToExpertBooking = () => {
             </div>
           </div>
 
-          {/* Book Button */}
           <div className="flex justify-center">
             <button
               onClick={handleBookingRequest}
