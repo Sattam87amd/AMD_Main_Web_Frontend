@@ -7,8 +7,6 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 
 const ExpertBooking = () => {
-
-
   const [sessions] = useState([
     {
       day: "Thu",
@@ -29,22 +27,26 @@ const ExpertBooking = () => {
     },
   ]);
 
-  const [consultingExpert, setConsultingExpert] = useState(null); // State for storing consulting expert data
+  const [consultingExpert, setConsultingExpert] = useState(null);
   const [expertData, setExpertData] = useState({
     firstName: '',
     lastName: '',
     mobileNumber: '',
     email: '',
-    note:''
+    note: '',
+    bookingType: 'individual',
+    inviteFriend: '',
+    promoCode: ''
   });
-  
+
   const [sessionData, setSessionData] = useState(null);
+  const [noteError, setNoteError] = useState(""); // ⛔ Note validation error state
   const router = useRouter();
+
   useEffect(() => {
-    // Retrieve the consulting expert's data from localStorage
     const expertData = localStorage.getItem("consultingExpertData");
     if (expertData) {
-      setConsultingExpert(JSON.parse(expertData)); // Set the expert data in state
+      setConsultingExpert(JSON.parse(expertData));
     }
   }, []);
 
@@ -59,85 +61,83 @@ const ExpertBooking = () => {
     localStorage.setItem("bookingData", JSON.stringify(expertData));
   }, [expertData]);
 
+  useEffect(() => {
+    const storedSessionData = localStorage.getItem('sessionData');
+    if (storedSessionData) {
+      setSessionData(JSON.parse(storedSessionData));
+    }
+  }, []);
+
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setExpertData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+
+    // Clear note error when editing note
+    if (name === "note") {
+      setNoteError("");
+    }
   };
 
-  
- 
-  
-    useEffect(() => {
-      // Fetch session data from localStorage
-      const storedSessionData = localStorage.getItem('sessionData');
-      if (storedSessionData) {
-        setSessionData(JSON.parse(storedSessionData));
-      }
-    }, []);
-  
+  const handleBookingRequest = async () => {
+    if (!sessionData) {
+      alert('No session data found.');
+      return;
+    }
 
-  
-    const handleBookingRequest = async () => {
-      if (!sessionData) {
-        alert('No session data found.');
-        return;
-      }
-  
-      const fullBookingData = {
-        ...sessionData,  // Include the session data
-        firstName: expertData.firstName,
-        lastName: expertData.lastName,
-        mobile: expertData.mobileNumber,
-        email: expertData.email,
-        note: expertData.note
-      };
-  
-      try {
-        const token = localStorage.getItem("expertToken");
-        if (!token) throw new Error("No authentication token found");
-  
-        // Send the full booking data to the server
-        const response = await axios.post(
-          "http://localhost:5070/api/session/experttoexpertsession",
-          fullBookingData,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-  
-        console.log("Booking successful:", response.data);
-        alert("Session booked successfully!");
-  
-        // Redirect to the success page or reset the form
-        router.push('/expertpanel/videocall');
-      } catch (error) {
-        console.error("Booking error:", error.response?.data || error.message);
-        alert(`Booking failed: ${error.response?.data?.message || error.message}`);
-      }
+    const noteWords = expertData.note.trim().split(/\s+/);
+    if (noteWords.length < 70) {
+      setNoteError("Note must contain at least 70 words.");
+      return;
+    }
+
+    setNoteError(""); // Clear any previous error if passed
+
+    const fullBookingData = {
+      ...sessionData,
+      firstName: expertData.firstName,
+      lastName: expertData.lastName,
+      mobile: expertData.mobileNumber,
+      email: expertData.email,
+      note: expertData.note
     };
-  
 
- 
+    try {
+      const token = localStorage.getItem("expertToken");
+      if (!token) throw new Error("No authentication token found");
 
-  
+      const response = await axios.post(
+        "http://localhost:5070/api/session/experttoexpertsession",
+        fullBookingData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-  if (!consultingExpert) return <div>Loading...</div>; // Wait for the consulting expert data to load
+      console.log("Booking successful:", response.data);
+      alert("Session booked successfully!");
+      router.push('/expertpanel/videocall');
+    } catch (error) {
+      console.error("Booking error:", error.response?.data || error.message);
+      alert(`Booking failed: ${error.response?.data?.message || error.message}`);
+    }
+  };
+
+  if (!consultingExpert) return <div>Loading...</div>;
 
   return (
     <div className="w-full mx-8 mt-8 px-6 md:px-10 py-[6rem]">
       <div className="flex flex-col md:flex-row gap-10">
-        {/* Left Section (Profile & Sessions) */}
+        {/* Left Section */}
         <div className="w-full md:w-1/2 flex flex-col items-center text-center md:text-left">
-          {/* Profile Image */}
           <div className="w-32 h-38 md:w-[14rem] md:h-[16rem] rounded-lg overflow-hidden shadow-md">
             <Image
-              src={consultingExpert?.photoFile || "/guyhawkins.png"} // Use expert photo from localStorage
+              src={consultingExpert?.photoFile || "/guyhawkins.png"}
               alt={`${consultingExpert?.firstName} ${consultingExpert?.lastName}`}
               width={224}
               height={224}
@@ -145,14 +145,12 @@ const ExpertBooking = () => {
             />
           </div>
 
-          {/* Expert Info */}
           <div className="mt-4 md:mt-6 bg-[#F8F7F3] px-4 md:p-6 rounded-lg shadow-md w-full">
             <h1 className="text-xl md:text-2xl font-bold">
               {consultingExpert?.firstName} {consultingExpert?.lastName}
             </h1>
             <p className="text-gray-500 text-sm md:text-base">{consultingExpert?.designation || "Expert"}</p>
 
-            {/* Ratings */}
             <div className="flex items-center gap-1 mt-2">
               {[...Array(5)].map((_, i) => (
                 <StarIcon key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
@@ -160,7 +158,6 @@ const ExpertBooking = () => {
               <span className="ml-1 text-sm font-semibold">{consultingExpert?.rating || 5.0}</span>
             </div>
 
-            {/* Sessions */}
             <div className="mt-4">
               <p className="font-medium mb-2 text-gray-700">Sessions -</p>
               {sessions.map((session, idx) => (
@@ -187,20 +184,17 @@ const ExpertBooking = () => {
           </div>
         </div>
 
-        {/* Horizontal Line (Only on MD Screens) */}
         <span className="hidden md:block border h-auto">
           <hr />
         </span>
 
-        {/* Right Section (Booking Form) */}
+        {/* Right Section */}
         <div className="w-full h-1/2 md:w-1/2 p-6 relative">
           <div className="border rounded-lg p-6 relative mb-4 shadow-md">
-            {/* Change Button */}
             <button className="absolute top-4 right-4 text-sm border rounded px-3 py-1 -translate-y-8 bg-white">
               Change
             </button>
 
-            {/* Form Fields */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div>
                 <label className="block text-sm mb-1">First Name</label>
@@ -245,19 +239,21 @@ const ExpertBooking = () => {
                   className="w-full border rounded px-3 py-2 text-sm"
                 />
               </div>
-
             </div>
-              <div>
-                <label className="block text-sm mb-1">Note</label>
-                <textarea
-                  type="text"
-                  name="note"
-                  placeholder="Write something about yourself in minimum 100 words.."
-                  value={expertData.note}
-                  onChange={handleInputChange}
-                  className="w-full h-[120px] border flex justify-center items-center rounded px-3 py-2 text-sm"
-                />
-              </div>
+
+            <div>
+              <label className="block text-sm mb-1">Note</label>
+              <textarea
+                name="note"
+                placeholder="Write something about yourself in minimum 70 words..."
+                value={expertData.note}
+                onChange={handleInputChange}
+                className="w-full h-[120px] border flex justify-center items-center rounded px-3 py-2 text-sm"
+              />
+              {noteError && (
+                <p className="text-red-500 text-xs mt-1">{noteError}</p>
+              )}
+            </div>
           </div>
 
           {/* Booking Type */}
@@ -286,7 +282,7 @@ const ExpertBooking = () => {
             </label>
           </div>
 
-          {/* Invite Friend (Only for Group) */}
+          {/* Invite Friend */}
           {expertData.bookingType === "group" && (
             <div className="mb-6">
               <label className="block text-sm mb-1">Invite a Friend</label>
@@ -304,7 +300,7 @@ const ExpertBooking = () => {
             </div>
           )}
 
-          {/* Apply Promo Code Section (Added Back) */}
+          {/* Promo Code */}
           <div className="flex justify-center">
             <div className="mb-6 md:w-1/2 rounded-lg">
               <div className="flex">
@@ -326,8 +322,9 @@ const ExpertBooking = () => {
           {/* Book Button */}
           <div className="flex justify-center">
             <button
-            onClick={handleBookingRequest}
-            className="w-32 bg-black text-white rounded-full px-8 py-3  text-sm font-medium">
+              onClick={handleBookingRequest}
+              className="w-32 bg-black text-white rounded-full px-8 py-3 text-sm font-medium"
+            >
               Book
             </button>
           </div>
