@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { CiClock2 } from "react-icons/ci";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaUserTie } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -86,7 +86,9 @@ const VideoCall = () => {
 
       // Update session status in state
       const updatedSessions = mySessions.map((session) =>
-        session._id === sessionId ? { ...session, status: "confirmed" } : session
+        session._id === sessionId
+          ? { ...session, status: "confirmed" }
+          : session
       );
       setMySessions(updatedSessions);
       toast.success(response.data.message);
@@ -196,29 +198,46 @@ const VideoCall = () => {
                 <div className="flex items-center space-x-4">
                   <div className="text-center bg-gray-100 px-3 py-2 rounded-lg shadow-md">
                     <p className="text-xs text-gray-500">
-                      {new Date(booking.sessionDate).toLocaleDateString("en-US", {
-                        weekday: "short",
-                      })}
+                      {new Date(booking.sessionDate).toLocaleDateString(
+                        "en-US",
+                        {
+                          weekday: "short",
+                        }
+                      )}
                     </p>
                     <p className="text-lg font-bold">
-                      {new Date(booking.sessionDate).toLocaleDateString("en-US", {
-                        day: "numeric",
-                      })}
+                      {new Date(booking.sessionDate).toLocaleDateString(
+                        "en-US",
+                        {
+                          day: "numeric",
+                        }
+                      )}
                     </p>
                   </div>
                   <div>
-                    <div className="flex">
+                    <div className="flex ">
                       <div>
                         <CiClock2 className="mt-[3px] mr-1" />
                       </div>
-                      <p className="text-sm text-gray-500 mr-5">{booking.sessionTime}</p>
-                      <p className="text-sm text-gray-500">{booking.duration}</p>
+                      <p className="text-sm text-gray-500 mr-5">
+                        {booking.sessionTime}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        {booking.duration}
+                      </p>
                     </div>
-                    <p className="text-sm font-medium text-gray-700 mt-1">
-                      <FaUser className="inline mr-1" />
-                      {booking.firstName} {booking.lastName}
-                    </p>
-                    
+                    {/* User and Consultant Details */}
+                    <div className="mt-3">
+                      <p className="text-sm font-medium text-gray-700">
+                        <FaUser className="inline mr-1" />
+                        Client: {booking.firstName} {booking.lastName}
+                      </p>
+                      <p className="text-sm font-medium text-gray-700 mt-1">
+                        <FaUserTie className="inline mr-1" />
+                        Expert: {booking.consultingExpertID.firstName}{" "}
+                        {booking.consultingExpertID.lastName}
+                      </p>
+                    </div>
                   </div>
                 </div>
 
@@ -226,8 +245,12 @@ const VideoCall = () => {
                 <div className="flex items-center space-x-4">
                   {booking.status === "confirmed" ? (
                     <>
-                      <span className="text-green-500 text-sm font-medium">Confirmed</span>
-                      <button className="px-4 py-1 border rounded text-sm">💬 Chat</button>
+                      <span className="text-green-500 text-sm font-medium">
+                        Confirmed
+                      </span>
+                      <button className="px-4 py-1 border rounded text-sm">
+                        💬 Chat
+                      </button>
                       {booking.zoomMeetingLink ? (
                         <a
                           href={booking.zoomMeetingLink}
@@ -239,13 +262,19 @@ const VideoCall = () => {
                           </button>
                         </a>
                       ) : (
-                        <span className="text-yellow-500 text-sm ml-2">Zoom link not ready</span>
+                        <span className="text-yellow-500 text-sm ml-2">
+                          Zoom link not ready
+                        </span>
                       )}
                     </>
                   ) : booking.status === "unconfirmed" ? (
                     <>
-                      <span className="text-red-500 text-sm font-medium">Unconfirmed</span>
-                      <button className="px-4 py-1 border rounded text-sm">💬 Chat</button>
+                      <span className="text-red-500 text-sm font-medium">
+                        Unconfirmed
+                      </span>
+                      <button className="px-4 py-1 border rounded text-sm">
+                        💬 Chat
+                      </button>
                     </>
                   ) : null}
                 </div>
@@ -259,7 +288,9 @@ const VideoCall = () => {
       {activeTab === "sessions" && (
         <div className="space-y-4">
           {mySessions.length === 0 ? (
-            <div className="text-center text-gray-500">No Upcoming Sessions</div>
+            <div className="text-center text-gray-500">
+              No Upcoming Sessions
+            </div>
           ) : (
             mySessions.map((session) => (
               <div
@@ -271,21 +302,31 @@ const VideoCall = () => {
                   <div className="flex items-center space-x-4">
                     <div className="text-center bg-gray-100 px-3 py-2 rounded-lg shadow-md">
                       <p className="text-xs text-gray-500">
-                        {new Date(session.sessionDate).toLocaleDateString("en-US", {
-                          weekday: "short",
-                        })}
+                        {new Date(session.sessionDate).toLocaleDateString(
+                          "en-US",
+                          {
+                            weekday: "short",
+                          }
+                        )}
                       </p>
                       <p className="text-lg font-bold">
-                        {new Date(session.sessionDate).toLocaleDateString("en-US", {
-                          day: "numeric",
-                        })}
+                        {new Date(session.sessionDate).toLocaleDateString(
+                          "en-US",
+                          {
+                            day: "numeric",
+                          }
+                        )}
                       </p>
                     </div>
                     <div>
                       <div className="flex">
                         <CiClock2 className="mt-[3px] mr-1" />
-                        <p className="text-sm text-gray-500 mr-5">{session.sessionTime}</p>
-                        <p className="text-sm text-gray-500 mr-5">{session.duration}</p>
+                        <p className="text-sm text-gray-500 mr-5">
+                          {session.sessionTime}
+                        </p>
+                        <p className="text-sm text-gray-500 mr-5">
+                          {session.duration}
+                        </p>
                       </div>
                       <p className="text-sm font-medium text-gray-700 mt-2">
                         <FaUser className="inline mr-1" />
@@ -298,8 +339,12 @@ const VideoCall = () => {
                   <div className="flex items-center space-x-4">
                     {session.status === "confirmed" ? (
                       <>
-                        <span className="text-green-500 text-sm font-medium">Accepted</span>
-                        <button className="px-4 py-1 border rounded text-sm">💬 Chat</button>
+                        <span className="text-green-500 text-sm font-medium">
+                          Accepted
+                        </span>
+                        <button className="px-4 py-1 border rounded text-sm">
+                          💬 Chat
+                        </button>
                         {session.zoomMeetingLink ? (
                           <a
                             href={session.zoomMeetingLink}
@@ -311,11 +356,15 @@ const VideoCall = () => {
                             </button>
                           </a>
                         ) : (
-                          <span className="text-yellow-500 text-sm ml-2">Zoom link not ready</span>
+                          <span className="text-yellow-500 text-sm ml-2">
+                            Zoom link not ready
+                          </span>
                         )}
                       </>
                     ) : session.status === "rejected" ? (
-                      <span className="text-red-500 text-sm font-medium">Rejected</span>
+                      <span className="text-red-500 text-sm font-medium">
+                        Rejected
+                      </span>
                     ) : (
                       <>
                         <button
@@ -338,7 +387,9 @@ const VideoCall = () => {
                 {/* Note Section (Below Date/Name) */}
                 {session.note && (
                   <div className="mt-4">
-                    <p className="text-sm font-semibold text-gray-700 mb-1">Note:</p>
+                    <p className="text-sm font-semibold text-gray-700 mb-1">
+                      Note:
+                    </p>
                     <ul className="list-disc pl-5 text-sm text-gray-600">
                       {session.note.split(".").map((sentence, index) => {
                         const trimmed = sentence.trim();
