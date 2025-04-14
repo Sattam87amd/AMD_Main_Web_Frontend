@@ -14,6 +14,8 @@ const VideoCall = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  console.log(mySessions)
+
   // Fetch data once on component mount
   useEffect(() => {
     const fetchSessions = async () => {
@@ -335,51 +337,43 @@ const VideoCall = () => {
                     </div>
                   </div>
 
-                  {/* Accept/Decline or Status */}
-                  <div className="flex items-center space-x-4">
-                    {session.status === "confirmed" ? (
-                      <>
-                        <span className="text-green-500 text-sm font-medium">
-                          Accepted
-                        </span>
-                        <button className="px-4 py-1 border rounded text-sm">
-                          💬 Chat
-                        </button>
-                        {session.zoomMeetingLink ? (
-                          <a
-                            href={session.zoomMeetingLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <button className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600">
-                              🎥 Join
-                            </button>
-                          </a>
-                        ) : (
-                          <span className="text-yellow-500 text-sm ml-2">
-                            Zoom link not ready
-                          </span>
-                        )}
-                      </>
-                    ) : session.status === "rejected" ? (
-                      <span className="text-red-500 text-sm font-medium">
-                        Rejected
-                      </span>
-                    ) : (
-                      <>
-                        <button
-                          className="px-4 py-2 bg-green-500 text-white rounded text-sm hover:bg-green-600 transition-all duration-200"
-                          onClick={() => handleAccept(session._id)}
+                 {/* Right Side (Accept/Decline Buttons or Status) */}
+                <div className="flex items-center space-x-4">
+                  {session.status === 'confirmed' ? (
+                    <>
+                      <span className="text-green-500 text-sm font-medium">Accepted</span>
+                      <button className="px-4 py-1 border rounded text-sm">💬 Chat</button>
+                      {session.zoomMeetingLink ? (
+                        <a
+                          href={session.zoomMeetingLink} // Direct link to the meeting
+                          target="_blank"
+                          rel="noopener noreferrer"
                         >
-                          Accept
-                        </button>
-                        <button
-                          className="px-4 py-2 bg-red-500 text-white rounded text-sm hover:bg-red-600 transition-all duration-200"
-                          onClick={() => handleDecline(session._id)}
-                        >
-                          Decline
-                        </button>
-                      </>
+                          <button className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600">
+                            🎥 Join
+                          </button>
+                        </a>
+                      ) : (
+                        <span className="text-yellow-500 text-sm ml-2">Zoom link not ready</span>
+                      )}
+                    </>
+                  ) : session.status === 'rejected' ? (
+                    <span className="text-red-500 text-sm font-medium">Rejected</span>
+                  ) : (
+                    <>
+                      <button
+                        className="px-4 py-2 bg-green-500 text-white rounded text-sm hover:bg-green-600 transition-all duration-200"
+                        onClick={() => handleAccept(session._id)}
+                      >
+                        Accept
+                      </button>
+                      <button
+                        className="px-4 py-2 bg-red-500 text-white rounded text-sm hover:bg-red-600 transition-all duration-200"
+                        onClick={() => handleDecline(session._id)}
+                      >
+                        Decline
+                      </button>
+                    </>
                     )}
                   </div>
                 </div>
