@@ -17,23 +17,23 @@ const Navtop = ({ activeTab }) => {
 
   const [userId, setUserId] = useState("");
 
-  // ✅ Get userId from token in localStorage
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const userToken = localStorage.getItem("token"); // Make sure you store it with this key
-      if (userToken) {
-        try {
-          const decodedToken = JSON.parse(atob(userToken.split(".")[1]));
-          setUserId(decodedToken._id);
-        } catch (error) {
-          console.error("Error decoding userToken:", error);
-        }
-      } else {
-        console.warn("User token not found in localStorage");
-        router.push("/"); // redirect if token not found
-      }
-    }
-  }, [router]);
+  // // ✅ Get userId from token in localStorage
+  // useEffect(() => {
+  //   if (typeof window !== "undefined") {
+  //     const userToken = localStorage.getItem("token"); // Make sure you store it with this key
+  //     if (userToken) {
+  //       try {
+  //         const decodedToken = JSON.parse(atob(userToken.split(".")[1]));
+  //         setUserId(decodedToken._id);
+  //       } catch (error) {
+  //         console.error("Error decoding userToken:", error);
+  //       }
+  //     } else {
+  //       console.warn("User token not found in localStorage");
+  //       router.push("/"); // redirect if token not found
+  //     }
+  //   }
+  // }, [router]);
 
   // ✅ Fetch user data from backend
   useEffect(() => {

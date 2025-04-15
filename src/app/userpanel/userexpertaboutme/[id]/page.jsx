@@ -61,7 +61,7 @@ const ExpertDetail = () => {
           const response = await axios.get(`http://localhost:5070/api/expertauth/${expertId}`);
           setExpert(response.data.data);
           setLoading(false);
-          localStorage.setItem("consultingExpertData", JSON.stringify(response.data.data));
+          localStorage.setItem("expertData", JSON.stringify(response.data.data));
         } catch (err) {
           setError("Error fetching expert details.");
           setLoading(false);
@@ -84,11 +84,12 @@ const ExpertDetail = () => {
   const handleBookingRequest = async () => {
     try {
       const sessionData = {
-        consultingExpertId: expert._id,
+        expertId: expert._id,
         sessionDate: selectedDate,
         sessionTime: selectedTime,
         duration: selectedDuration,
         areaOfExpertise: "Home",
+       
       };
     
       localStorage.setItem("sessionData", JSON.stringify(sessionData));

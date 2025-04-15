@@ -1,50 +1,96 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import axios from "axios";
+import { CiClock2 } from "react-icons/ci";
+import { FaUser, FaUserTie } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const UserVideoCall = () => {
   const [activeTab, setActiveTab] = useState("bookings");
   const [myBookings, setMyBookings] = useState([]);
   const [mySessions, setMySessions] = useState([]);
 
-  // Dummy Data (to be replaced with API later)
+  // Fetch data from API (replace with actual API endpoints)
   useEffect(() => {
-    const dummyBookings = [
-      { id: 1, day: "Thu", date: "15", time: "09:00am - 09:30am", consultant: "Stephine Claire", status: "Confirmed" },
-      { id: 2, day: "Fri", date: "16", time: "09:00am - 09:30am", consultant: "Ralph Edwards", status: "Not Confirmed" },
-      { id: 3, day: "Mon", date: "19", time: "09:00am - 09:30am", consultant: "Darlene Robertson", status: "Not Confirmed" },
-    ];
+    const fetchBookingsAndSessions = async () => {
+      try {
+        const token = localStorage.getItem("userToken");
 
-    const dummySessions = [
-      { id: 1, day: "Thu", date: "15", time: "09:00am - 09:30am", user: "Stephine Claire" },
-      { id: 2, day: "Fri", date: "16", time: "09:00am - 09:30am", user: "Ralph Edwards" },
-      { id: 3, day: "Mon", date: "19", time: "09:00am - 09:30am", user: "Darlene Robertson" },
-    ];
+        if (token) {
+          // Fetch bookings data
+          const bookingsResponse = await axios.get(
+            "http://localhost:5070/api/session/Userbookings",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          setMyBookings(bookingsResponse.data);
 
-    localStorage.setItem("myBookings", JSON.stringify(dummyBookings));
-    localStorage.setItem("mySessions", JSON.stringify(dummySessions));
+          
+          
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-    setMyBookings(dummyBookings);
-    setMySessions(dummySessions);
+    fetchBookingsAndSessions();
   }, []);
 
   return (
     <div className="w-full max-w-8xl mx-left py-10 px-4 mt-20 ">
-
       {/* Bookings Tab */}
       {activeTab === "bookings" && (
         <div className="space-y-4">
           {myBookings.map((booking) => (
-            <div key={booking.id} className="flex items-center justify-between p-4 border rounded-lg shadow-sm">
-              {/* Left Side (Date and Details) */}
+            <div
+              key={booking._id}
+              className="flex items-center justify-between p-4 border rounded-lg shadow-sm"
+            >
+              {/* Left Side (Date & Details) */}
               <div className="flex items-center space-x-4">
-                <div className="text-center bg-gray-100 px-3 py-2 rounded-lg">
-                  <p className="text-xs">{booking.day}</p>
-                  <p className="text-lg font-bold">{booking.date}</p>
+                <div className="text-center bg-gray-100 px-3 py-2 rounded-lg shadow-md">
+                  <p className="text-xs text-gray-500">
+                    {new Date(booking.sessionDate).toLocaleDateString("en-US", {
+                      weekday: "short",
+                    })}
+                  </p>
+                  <p className="text-lg font-bold">
+                    {new Date(booking.sessionDate).toLocaleDateString("en-US", {
+                      day: "numeric",
+                    })}
+                  </p>
                 </div>
                 <div>
-                  <p className="text-sm">{booking.time}</p>
-                  <p className="text-sm font-medium">👤 {booking.consultant}</p>
+                  <div>
+                    <div className="flex ">
+                      <div>
+                        <CiClock2 className="mt-[3px] mr-1" />
+                      </div>
+                      <p className="text-sm text-gray-500 mr-5">
+                        {booking.sessionTime}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        {booking.duration}
+                      </p>
+                    </div>
+                  </div>
+                  {/* User and Consultant Details */}
+                  <div className="mt-3">
+                    <p className="text-sm font-medium text-gray-700">
+                      <FaUser className="inline mr-1" />
+                      Client: {booking.firstName} {booking.lastName}
+                    </p>
+                    <p className="text-sm font-medium text-gray-700 mt-1">
+                      <FaUserTie className="inline mr-1" />
+                      Expert: {booking?.expertId.firstName}{" "}
+                      {booking?.expertId.lastName}
+                    </p>
+                  </div>
                 </div>
               </div>
 
@@ -52,40 +98,22 @@ const UserVideoCall = () => {
               <div className="flex items-center space-x-4">
                 <span
                   className={`px-3 py-1 text-xs font-medium rounded ${
-                    booking.status === "Confirmed" ? "text-green-500" : "text-red-500"
+                    booking.status === "Confirmed"
+                      ? "text-green-500"
+                      : "text-red-500"
                   }`}
                 >
                   {booking.status}
                 </span>
-                <button className={`px-4 py-1 border rounded text-sm ${
-                    booking.status === "Not Confirmed" ?  "hidden" : "text-green-500" }`}>💬 Chat</button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Sessions Tab */}
-      {activeTab === "sessions" && (
-        <div className="space-y-4">
-          {mySessions.map((session) => (
-            <div key={session.id} className="flex items-center justify-between p-4 border rounded-lg shadow-sm">
-              {/* Left Side (Date and Details) */}
-              <div className="flex items-center space-x-4">
-                <div className="text-center bg-gray-100 px-3 py-2 rounded-lg">
-                  <p className="text-xs">{session.day}</p>
-                  <p className="text-lg font-bold">{session.date}</p>
-                </div>
-                <div>
-                  <p className="text-sm">{session.time}</p>
-                  <p className="text-sm font-medium">👤 {session.user}</p>
-                </div>
-              </div>
-
-              {/* Right Side (Accept/Decline Buttons) */}
-              <div className="flex space-x-2">
-                <button className="px-4 py-1 border rounded text-green-500 text-sm">Accept</button>
-                <button className="px-4 py-1 border rounded text-red-500 text-sm">Decline</button>
+                <button
+                  className={`px-4 py-1 border rounded text-sm ${
+                    booking.status === "Not Confirmed"
+                      ? "hidden"
+                      : "text-green-500"
+                  }`}
+                >
+                  💬 Chat
+                </button>
               </div>
             </div>
           ))}
