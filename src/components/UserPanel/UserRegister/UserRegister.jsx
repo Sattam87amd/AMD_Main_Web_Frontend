@@ -65,14 +65,17 @@ function UserRegisterPage() {
         lastName: lastName, // Send lastName separately
         email,
       });
-
-      if (response.status === 200) {
+      
+      if (response.status === 201) {
+        // alert('Successfully registered!');
         router.push("/userlogin");
+      }else {
+        console.log('Unexpected status:', response.status);
       }
     } catch (error) {
       setServerError(error.response?.data?.message || "Registration failed. Try again.");
     } finally {
-      setLoading(false);
+      setLoading(false);  
     }
   };
 
@@ -193,7 +196,7 @@ function UserRegisterPage() {
               {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
             </div>
             <div>
-              <a href="/userpanel/loginuserexpert">
+              
             <button
               className={`w-full py-3 rounded-lg transition ${
                 email && firstName && lastName
@@ -205,7 +208,6 @@ function UserRegisterPage() {
             >
               Continue
             </button>
-            </a>
             </div>
           </div>
         </div>

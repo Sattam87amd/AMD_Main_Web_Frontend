@@ -20,7 +20,7 @@ const Navtop = ({ activeTab }) => {
   // ✅ Get userId from token in localStorage
   useEffect(() => {
     if (typeof window !== "undefined") {
-      const userToken = localStorage.getItem("token"); // Make sure you store it with this key
+      const userToken = localStorage.getItem("userToken"); // Make sure you store it with this key
       if (userToken) {
         try {
           const decodedToken = JSON.parse(atob(userToken.split(".")[1]));
