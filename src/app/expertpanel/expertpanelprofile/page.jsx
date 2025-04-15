@@ -45,7 +45,7 @@ const Page = () => {
           <BottomNav />
         </div>
       </div>
-      <div className="md:mt-3.5">
+      <div className="md:mt-3.5 hidden sm:block">
         <Footer />
       </div>
     </>

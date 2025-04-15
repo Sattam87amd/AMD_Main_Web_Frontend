@@ -6,9 +6,13 @@ const page = () => {
   return (
     <div>
       <RegisterForm/>
-      <Footer/>
-    </div>
+  
+    <div className='hidden sm:block'>
+    <Footer/>
+  </div>
+  </div>
+  
   )
 }
 
-export default page
+export default page;

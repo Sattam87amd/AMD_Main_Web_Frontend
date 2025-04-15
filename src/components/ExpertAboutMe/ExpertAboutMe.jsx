@@ -114,14 +114,14 @@ const ExpertAboutMe = () => {
 
   return (
     <div className="min-h-screen bg-white py-10 px-4 md:px-10">
-      <div className="max-w-7xl mx-auto flex items-start gap-8">
+      <div className="w-full mx-auto flex flex-col md:flex-row items-center md:items-start gap-8">
         <div>
         {/* Left Side: Profile & About */}
-        <div className="bg-[#F8F7F3] rounded-3xl p-12 shadow flex-1">
+        <div className="bg-[#F8F7F3] rounded-3xl p-4 sm:p-6 md:p-12 shadow w-[95vw] sm:w-[90vw] md:w-[44rem] mx-auto">
           <img
             src={profile.image}
             alt={profile.name}
-            className="w-[520px] h-[530px] rounded-xl"
+            className="w-full max-w-[520px] h-auto rounded-xl"
           />
           <div className="mt-6">
             <h2 className="text-2xl font-bold text-gray-900">{profile.name}</h2>

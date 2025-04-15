@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { FaSearch, FaGift, FaUser, FaFilter, FaArrowLeft } from "react-icons/fa";
 
-const LoginUserMobileNavSearch = () => {
+const LoginUserMobNavSearch = () => {
   const [showFilter, setShowFilter] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState(null);
 
@@ -15,14 +15,6 @@ const LoginUserMobileNavSearch = () => {
     { label: "Most Reviewed", value: "most_reviewed" },
     { label: "Expert Language - Arabic", value: "language_arabic" },
     { label: "Expert Language - English", value: "language_english" },
-  ];
-
-  const categories = [
-    { title: "Top Experts", image: "/topexperts.png" },
-    { title: "Home", image: "/home.png" },
-    { title: "Career & Business", image: "/career&buisness.png" },
-    { title: "Style & Beauty", image: "/style&beauty.png" },
-    { title: "Wellness", image: "/wellness.png" },
   ];
 
   const toggleFilter = () => setShowFilter(!showFilter);
@@ -95,27 +87,8 @@ const LoginUserMobileNavSearch = () => {
       <h1 className="text-xl font-bold text-black mb-4">
         Find The Right Expert In Seconds!
       </h1>
-
-      {/* Categories Section */}
-      <div className="flex overflow-x-auto space-x-4 py-2">
-        {categories.map((category, index) => (
-          <div
-            key={index}
-            className="relative w-36 h-24 flex-shrink-0 rounded-xl overflow-hidden shadow-md cursor-pointer"
-          >
-            <img
-              src={category.image}
-              alt={category.title}
-              className="absolute inset-0 w-full h-full object-cover opacity-80"
-            />
-            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 rounded-xl">
-              <p className="text-white font-semibold">{category.title}</p>
-            </div>
-          </div>
-        ))}
-      </div>
     </div>
   );
 };
 
-export default LoginUserMobileNavSearch;
+export default LoginUserMobNavSearch;

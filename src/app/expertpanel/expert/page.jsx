@@ -7,6 +7,7 @@ import ExpertProfile from "@/components/ExpertPanel/Expert/ExpertProfile";
 import EditExpertProfile from "@/components/ExpertPanel/Expert/EditExpertProfile";
 import Footer from "@/components/Layout/Footer";
 import Navtop from "@/components/ExpertPanel/Navtop/navtop";
+import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
 
 const Page = () => {
   const [expertData, setExpertData] = useState({
@@ -63,8 +64,11 @@ const Page = () => {
           />
         </div>
       </div>
-      <div className="md:mt-2">
+      <div className="md:mt-2 hidden sm:block">
         <Footer />
+      </div>
+      <div>
+        <BottomNav/>
       </div>
     </>
   );
