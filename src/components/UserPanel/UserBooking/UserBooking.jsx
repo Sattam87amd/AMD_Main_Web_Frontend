@@ -38,7 +38,10 @@ const UserToExpertBooking = () => {
 
   const [sessionData, setSessionData] = useState(null);
   const [consultingExpert, setConsultingExpert] = useState(null);
-  const [token, setToken] = useState(null); // ✅ ensure localStorage access only on client
+
+  const [noteError, setNoteError] = useState(""); // Error message for note
+  const [noteWordCount, setNoteWordCount] = useState(0); // Word count
+  const [token, setToken] = useState(null); // Ensure localStorage access only on client
   const router = useRouter();
 
   // Wait until component is mounted
@@ -59,7 +62,6 @@ const UserToExpertBooking = () => {
     }
 
     const userToken = localStorage.getItem("userToken");
-    console.log("TOKEN CHECK:", userToken);
     if (!userToken) {
       console.warn("⚠️ No user token found in localStorage.");
     }
@@ -76,11 +78,23 @@ const UserToExpertBooking = () => {
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
+
+    if (name === "note") {
+      const wordCount = value.trim().split(/\s+/).filter(Boolean).length;
+      setNoteWordCount(wordCount);
+      setNoteError(""); // Clear error when user starts typing
+    }
   };
 
   const handleBookingRequest = async () => {
     if (!sessionData) {
       alert('No session data found.');
+      return;
+    }
+
+    if (noteWordCount < 50) {
+      setNoteError("Note must contain at least 50 words.");
+      alert("✍️ Your note must be at least 50 words.");
       return;
     }
 
@@ -91,6 +105,10 @@ const UserToExpertBooking = () => {
       sessionTime: sessionData?.sessionTime || "",
       duration: sessionData?.duration || "",
       optionalNote: expertData?.note || "",
+      firstName: expertData?.firstName,
+  lastName: expertData?.lastName,
+  email: expertData?.email,
+  phone: expertData?.mobileNumber,
     };
 
     console.log("Booking Data:", fullBookingData);
@@ -116,7 +134,7 @@ const UserToExpertBooking = () => {
 
       console.log("Booking successful:", response.data);
       alert("Session booked successfully!");
-      router.push('/userpanel/bookingconfirmation');
+      router.push('/userpanel/videocall');
     } catch (error) {
       console.error("Booking error:", error.response?.data || error.message);
       alert(`Booking failed: ${error.response?.data?.message || error.message}`);
@@ -235,17 +253,25 @@ const UserToExpertBooking = () => {
                   className="w-full border rounded px-3 py-2 text-sm"
                 />
               </div>
-              <div>
+
+            </div>
+              {/* Note Input with Word Count and Validation */}
+              <div className="relative">
                 <label className="block text-sm mb-1">Note</label>
                 <textarea
                   name="note"
-                  placeholder="Write something about yourself in minimum 100 words.."
+                  placeholder="Write something about yourself in minimum 50 words..."
                   value={expertData.note}
                   onChange={handleInputChange}
-                  className="w-full border rounded px-3 py-2 text-sm"
+                  className="w-full h-[120px] border flex justify-center items-center rounded px-3 py-2 text-sm"
                 />
+                <div className="absolute bottom-2 right-3 text-xs text-gray-500">
+                  {noteWordCount} word{noteWordCount !== 1 && 's'}
+                </div>
+                {noteError && (
+                  <p className="text-red-500 text-xs mt-1">{noteError}</p>
+                )}
               </div>
-            </div>
           </div>
 
           <div className="flex justify-center">

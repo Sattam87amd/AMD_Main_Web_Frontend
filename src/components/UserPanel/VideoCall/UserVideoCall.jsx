@@ -1,32 +1,44 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 const UserVideoCall = () => {
   const [activeTab, setActiveTab] = useState("bookings");
   const [myBookings, setMyBookings] = useState([]);
   const [mySessions, setMySessions] = useState([]);
 
-  // Dummy Data (to be replaced with API later)
+  // Fetch data from API (replace with actual API endpoints)
   useEffect(() => {
-    const dummyBookings = [
-      { id: 1, day: "Thu", date: "15", time: "09:00am - 09:30am", consultant: "Stephine Claire", status: "Confirmed" },
-      { id: 2, day: "Fri", date: "16", time: "09:00am - 09:30am", consultant: "Ralph Edwards", status: "Not Confirmed" },
-      { id: 3, day: "Mon", date: "19", time: "09:00am - 09:30am", consultant: "Darlene Robertson", status: "Not Confirmed" },
-    ];
+    const fetchBookingsAndSessions = async () => {
+      try {
+        const token = localStorage.getItem("userToken");
 
-    const dummySessions = [
-      { id: 1, day: "Thu", date: "15", time: "09:00am - 09:30am", user: "Stephine Claire" },
-      { id: 2, day: "Fri", date: "16", time: "09:00am - 09:30am", user: "Ralph Edwards" },
-      { id: 3, day: "Mon", date: "19", time: "09:00am - 09:30am", user: "Darlene Robertson" },
-    ];
+        if (token) {
+          // Fetch bookings data
+          const bookingsResponse = await axios.get("http://localhost:5070/api/usersession/Userbookings", {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          setMyBookings(bookingsResponse.data);
 
-    localStorage.setItem("myBookings", JSON.stringify(dummyBookings));
-    localStorage.setItem("mySessions", JSON.stringify(dummySessions));
+          // Fetch sessions data
+          const sessionsResponse = await axios.get("http://localhost:5070/api/usersession/sessions", {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          setMySessions(sessionsResponse.data);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-    setMyBookings(dummyBookings);
-    setMySessions(dummySessions);
+    fetchBookingsAndSessions();
   }, []);
+  
 
   return (
     <div className="w-full max-w-8xl mx-left py-10 px-4 mt-20 ">
@@ -35,7 +47,7 @@ const UserVideoCall = () => {
       {activeTab === "bookings" && (
         <div className="space-y-4">
           {myBookings.map((booking) => (
-            <div key={booking.id} className="flex items-center justify-between p-4 border rounded-lg shadow-sm">
+            <div key={booking._id} className="flex items-center justify-between p-4 border rounded-lg shadow-sm">
               {/* Left Side (Date and Details) */}
               <div className="flex items-center space-x-4">
                 <div className="text-center bg-gray-100 px-3 py-2 rounded-lg">
@@ -43,8 +55,8 @@ const UserVideoCall = () => {
                   <p className="text-lg font-bold">{booking.date}</p>
                 </div>
                 <div>
-                  <p className="text-sm">{booking.time}</p>
-                  <p className="text-sm font-medium">👤 {booking.consultant}</p>
+                  <p className="text-sm">{booking.sessionTime}</p> {/* Display Time as it was before */}
+                  <p className="text-sm font-medium">👤 {booking.consultant?.firstName} {booking.consultant?.lastName}</p> {/* Consultant's Name */}
                 </div>
               </div>
 
@@ -69,7 +81,7 @@ const UserVideoCall = () => {
       {activeTab === "sessions" && (
         <div className="space-y-4">
           {mySessions.map((session) => (
-            <div key={session.id} className="flex items-center justify-between p-4 border rounded-lg shadow-sm">
+            <div key={session._id} className="flex items-center justify-between p-4 border rounded-lg shadow-sm">
               {/* Left Side (Date and Details) */}
               <div className="flex items-center space-x-4">
                 <div className="text-center bg-gray-100 px-3 py-2 rounded-lg">
@@ -77,16 +89,16 @@ const UserVideoCall = () => {
                   <p className="text-lg font-bold">{session.date}</p>
                 </div>
                 <div>
-                  <p className="text-sm">{session.time}</p>
-                  <p className="text-sm font-medium">👤 {session.user}</p>
+                  <p className="text-sm">{session.sessionTime}</p> {/* Display Time as it was before */}
+                  <p className="text-sm font-medium">👤 {session.user?.firstName} {session.user?.lastName}</p> {/* User's Name */}
                 </div>
               </div>
 
               {/* Right Side (Accept/Decline Buttons) */}
-              <div className="flex space-x-2">
+              {/* <div className="flex space-x-2">
                 <button className="px-4 py-1 border rounded text-green-500 text-sm">Accept</button>
                 <button className="px-4 py-1 border rounded text-red-500 text-sm">Decline</button>
-              </div>
+              </div> */}
             </div>
           ))}
         </div>

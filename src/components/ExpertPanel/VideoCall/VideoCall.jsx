@@ -147,6 +147,8 @@ const VideoCall = () => {
     return <div>Loading...</div>;
   }
 
+
+
   if (error) {
     return (
       <div className="w-full md:max-w-6xl max-w-4xl mx-auto py-10 px-4 mt-20 md:mt-0">
@@ -199,8 +201,8 @@ const VideoCall = () => {
         </button>
       </div>
 
-      {/* My Bookings Tab */}
-      {activeTab === "bookings" && (
+{/* My Bookings Tab */}
+{activeTab === "bookings" && (
         <div className="space-y-4">
           {myBookings.length === 0 ? (
             <div className="text-center text-gray-500">No Bookings Yet</div>
@@ -307,13 +309,13 @@ const VideoCall = () => {
                         Rate
                       </button>
                     </>
-                  ) : booking.status === "Rating Submitted" ? (
+                  ): booking.status === "Rating Submitted"? (
                     <>
-                      <span className="text-green-400 text-sm font-medium">
+                     <span className="text-green-400 text-sm font-medium">
                         Rating Submitted
                       </span>
                     </>
-                  ) : null}
+                  ):null}
                 </div>
               </div>
             ))
@@ -321,8 +323,8 @@ const VideoCall = () => {
         </div>
       )}
 
-      {/* Modal for Rate Component */}
-      {showRateComponent && selectedBooking && (
+          {/* Modal for Rate Component */}
+          {showRateComponent && selectedBooking && (
         <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-96">
             <button
@@ -465,5 +467,6 @@ const VideoCall = () => {
     </div>
   );
 };
+
 
 export default VideoCall;
