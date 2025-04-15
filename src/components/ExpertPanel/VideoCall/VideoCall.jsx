@@ -6,30 +6,28 @@ import { CiClock2 } from "react-icons/ci";
 import { FaUser, FaUserTie } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Rate from '@/components/Rate/Rate.jsx';  // Import the Rate component
 
 const VideoCall = () => {
   const [activeTab, setActiveTab] = useState("bookings");
-  const [mySessions, setMySessions] = useState([]);
+  const [mySessions, setMySessions] = useState([]); // Combined sessions state
   const [myBookings, setMyBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showRateComponent, setShowRateComponent] = useState(false); // New state to show/hide the Rate component
+  const [selectedBooking, setSelectedBooking] = useState(null); // Store selected booking for rating
 
-  console.log(mySessions)
-
-  // Fetch data once on component mount
   useEffect(() => {
+    console.log('Fetching Sessions...');
     const fetchSessions = async () => {
       try {
         setLoading(true);
-
-        // Retrieve the token from localStorage
         const token = localStorage.getItem("expertToken");
         if (!token) {
           setError("Token is required");
           return;
         }
-
-        // Fetch both bookings and sessions in parallel
+  
         const [bookingsResponse, sessionsResponse] = await Promise.all([
           axios.get("http://localhost:5070/api/session/mybookings", {
             headers: {
@@ -42,20 +40,35 @@ const VideoCall = () => {
             },
           }),
         ]);
-
-        // Update state with fetched data
+  
+        // Combining expert and user sessions into one
+        const combinedSessions = [
+          ...sessionsResponse?.data.expertSessions || [],
+          ...sessionsResponse?.data.userSessions || [],
+        ];
+  
         setMyBookings(bookingsResponse?.data || []);
-        setMySessions(sessionsResponse?.data || []);
-        console.log(bookingsResponse.data, sessionsResponse.data);
+        setMySessions(combinedSessions);
       } catch (err) {
         setError("No Bookings Found");
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchSessions();
   }, []);
+
+  const handleRateClick = (booking) => {
+  // Add a log to check if this is being called
+    setShowRateComponent(true); // Show the Rate component
+    setSelectedBooking(booking); // Store selected booking for rating
+  };
+
+  const closeModal = () => {
+    setShowRateComponent(false); // Close the modal
+    setSelectedBooking(null); // Clear the selected booking
+  };
 
   const isJoinEnabled = (sessionDate, sessionTime, duration) => {
     const [hours, minutes] = sessionTime.split(":").map(Number);
@@ -120,7 +133,9 @@ const VideoCall = () => {
 
       // Update session status in state
       const updatedSessions = mySessions.map((session) =>
-        session._id === sessionId ? { ...session, status: "rejected" } : session
+        session._id === sessionId
+          ? { ...session, status: "rejected" }
+          : session
       );
       setMySessions(updatedSessions);
       toast.success(response.data.message);
@@ -133,11 +148,13 @@ const VideoCall = () => {
     return <div>Loading...</div>;
   }
 
+
+
   if (error) {
     return (
       <div className="w-full md:max-w-6xl max-w-4xl mx-auto py-10 px-4 mt-20 md:mt-0">
-        {/* Tabs */}
-        <div className="flex space-x-2 mb-6">
+         {/* Tabs */}
+         <div className="flex space-x-2 mb-6">
           <button
             className={`px-4 py-2 text-sm font-medium rounded ${
               activeTab === "bookings" ? "bg-black text-white" : "bg-gray-200"
@@ -185,8 +202,8 @@ const VideoCall = () => {
         </button>
       </div>
 
-      {/* My Bookings Tab */}
-      {activeTab === "bookings" && (
+{/* My Bookings Tab */}
+{activeTab === "bookings" && (
         <div className="space-y-4">
           {myBookings.length === 0 ? (
             <div className="text-center text-gray-500">No Bookings Yet</div>
@@ -278,13 +295,54 @@ const VideoCall = () => {
                         💬 Chat
                       </button>
                     </>
-                  ) : null}
+                  ) : booking.status === "rejected" ? (
+                    <>
+                      <span className="text-red-500 text-sm font-medium">
+                        Rejected
+                      </span>
+                    </>
+
+                  ): booking.status === "completed" ?(
+                    <>
+                   <button
+                      className="px-4 py-1 text-white bg-blue-500 rounded"
+                      onClick={() => handleRateClick(booking)}
+                    >
+                      Rate
+                    </button>
+                    </>
+                  ): booking.status === "Rating Submitted"? (
+                    <>
+                     <span className="text-green-400 text-sm font-medium">
+                        Rating Submitted
+                      </span>
+                    </>
+                  ):null}
                 </div>
               </div>
             ))
           )}
         </div>
       )}
+
+          {/* Modal for Rate Component */}
+          {showRateComponent && selectedBooking && (
+        <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <button
+              onClick={closeModal}
+              className="absolute top-2 right-2 text-xl font-bold"
+            >
+              X
+            </button>
+            <Rate
+              booking={selectedBooking}
+              setShowRateComponent={setShowRateComponent}
+            />
+          </div>
+        </div>
+      )}
+
 
       {/* My Sessions Tab */}
       {activeTab === "sessions" && (
@@ -337,43 +395,43 @@ const VideoCall = () => {
                     </div>
                   </div>
 
-                 {/* Right Side (Accept/Decline Buttons or Status) */}
-                <div className="flex items-center space-x-4">
-                  {session.status === 'confirmed' ? (
-                    <>
-                      <span className="text-green-500 text-sm font-medium">Accepted</span>
-                      <button className="px-4 py-1 border rounded text-sm">💬 Chat</button>
-                      {session.zoomMeetingLink ? (
-                        <a
-                          href={session.zoomMeetingLink} // Direct link to the meeting
-                          target="_blank"
-                          rel="noopener noreferrer"
+                  {/* Right Side (Accept/Decline Buttons or Status) */}
+                  <div className="flex items-center space-x-4">
+                    {session.status === 'confirmed' ? (
+                      <>
+                        <span className="text-green-500 text-sm font-medium">Accepted</span>
+                        <button className="px-4 py-1 border rounded text-sm">💬 Chat</button>
+                        {session.zoomMeetingLink ? (
+                          <a
+                            href={session.zoomMeetingLink} // Direct link to the meeting
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <button className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600">
+                              🎥 Join
+                            </button>
+                          </a>
+                        ) : (
+                          <span className="text-yellow-500 text-sm ml-2">Zoom link not ready</span>
+                        )}
+                      </>
+                    ) : session.status === 'rejected' ? (
+                      <span className="text-red-500 text-sm font-medium">Rejected</span>
+                    ) : (
+                      <>
+                        <button
+                          className="px-4 py-2 bg-green-500 text-white rounded text-sm hover:bg-green-600 transition-all duration-200"
+                          onClick={() => handleAccept(session._id)}
                         >
-                          <button className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600">
-                            🎥 Join
-                          </button>
-                        </a>
-                      ) : (
-                        <span className="text-yellow-500 text-sm ml-2">Zoom link not ready</span>
-                      )}
-                    </>
-                  ) : session.status === 'rejected' ? (
-                    <span className="text-red-500 text-sm font-medium">Rejected</span>
-                  ) : (
-                    <>
-                      <button
-                        className="px-4 py-2 bg-green-500 text-white rounded text-sm hover:bg-green-600 transition-all duration-200"
-                        onClick={() => handleAccept(session._id)}
-                      >
-                        Accept
-                      </button>
-                      <button
-                        className="px-4 py-2 bg-red-500 text-white rounded text-sm hover:bg-red-600 transition-all duration-200"
-                        onClick={() => handleDecline(session._id)}
-                      >
-                        Decline
-                      </button>
-                    </>
+                          Accept
+                        </button>
+                        <button
+                          className="px-4 py-2 bg-red-500 text-white rounded text-sm hover:bg-red-600 transition-all duration-200"
+                          onClick={() => handleDecline(session._id)}
+                        >
+                          Decline
+                        </button>
+                      </>
                     )}
                   </div>
                 </div>
@@ -400,5 +458,6 @@ const VideoCall = () => {
     </div>
   );
 };
+
 
 export default VideoCall;

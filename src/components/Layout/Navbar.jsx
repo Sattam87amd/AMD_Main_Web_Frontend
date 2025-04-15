@@ -6,6 +6,9 @@ import { Gift, Menu, X, Search, User } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import SeacthExperts from "../SearchExperts/SearchExperts";  // Import SearchExperts component
+import GoogleTranslateButton from "../GoogleTranslateButton";
+
+
 
 function Navbar() {
   const router = useRouter();
@@ -59,6 +62,9 @@ function Navbar() {
                 <Gift className="ml-2 h-5 w-5" />
               </button>
             </Link>
+            <GoogleTranslateButton />         
+          
+       
 
             <Link href="/profile">
               <User className="h-6 w-6 text-black cursor-pointer hover:opacity-80" />
