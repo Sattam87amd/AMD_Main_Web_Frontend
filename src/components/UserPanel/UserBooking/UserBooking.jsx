@@ -97,7 +97,7 @@ const UserToExpertBooking = () => {
       return;
     }
     try {
-      const token = localStorage.getItem("token");
+      const token = localStorage.getItem("userToken");
       if (!token) throw new Error("No authentication token found");
   
       // Send the full booking data to the server
