@@ -6,6 +6,7 @@ import { CiClock2 } from "react-icons/ci";
 import { FaUser, FaUserTie } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Rate from '@/components/Rate/Rate.jsx';  // Import the Rate component
 
 const VideoCall = () => {
   const [activeTab, setActiveTab] = useState("bookings");
@@ -13,6 +14,8 @@ const VideoCall = () => {
   const [myBookings, setMyBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showRateComponent, setShowRateComponent] = useState(false); // New state to show/hide the Rate component
+  const [selectedBooking, setSelectedBooking] = useState(null); // Store selected booking for rating
 
   useEffect(() => {
     console.log('Fetching Sessions...');
@@ -55,6 +58,17 @@ const VideoCall = () => {
   
     fetchSessions();
   }, []);
+
+  const handleRateClick = (booking) => {
+  // Add a log to check if this is being called
+    setShowRateComponent(true); // Show the Rate component
+    setSelectedBooking(booking); // Store selected booking for rating
+  };
+
+  const closeModal = () => {
+    setShowRateComponent(false); // Close the modal
+    setSelectedBooking(null); // Clear the selected booking
+  };
 
   const isJoinEnabled = (sessionDate, sessionTime, duration) => {
     const [hours, minutes] = sessionTime.split(":").map(Number);
@@ -281,13 +295,47 @@ const VideoCall = () => {
                         💬 Chat
                       </button>
                     </>
-                  ) : null}
+                  ) : booking.status === "completed" ?(
+                    <>
+                   <button
+                      className="px-4 py-1 text-white bg-blue-500 rounded"
+                      onClick={() => handleRateClick(booking)}
+                    >
+                      Rate
+                    </button>
+                    </>
+                  ): booking.status === "Rating Submitted"? (
+                    <>
+                     <span className="text-green-400 text-sm font-medium">
+                        Rating Submitted
+                      </span>
+                    </>
+                  ):null}
                 </div>
               </div>
             ))
           )}
         </div>
       )}
+
+          {/* Modal for Rate Component */}
+          {showRateComponent && selectedBooking && (
+        <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <button
+              onClick={closeModal}
+              className="absolute top-2 right-2 text-xl font-bold"
+            >
+              X
+            </button>
+            <Rate
+              booking={selectedBooking}
+              setShowRateComponent={setShowRateComponent}
+            />
+          </div>
+        </div>
+      )}
+
 
       {/* My Sessions Tab */}
       {activeTab === "sessions" && (
