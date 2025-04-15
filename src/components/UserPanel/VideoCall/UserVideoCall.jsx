@@ -13,6 +13,7 @@ const UserVideoCall = () => {
   const [mySessions, setMySessions] = useState([]);
 
   // Fetch data from API (replace with actual API endpoints)
+  // Fetch data from API (replace with actual API endpoints)
   useEffect(() => {
     const fetchBookingsAndSessions = async () => {
       try {
@@ -40,6 +41,7 @@ const UserVideoCall = () => {
 
     fetchBookingsAndSessions();
   }, []);
+  
 
   return (
     <div className="w-full max-w-8xl mx-left py-10 px-4 mt-20 ">

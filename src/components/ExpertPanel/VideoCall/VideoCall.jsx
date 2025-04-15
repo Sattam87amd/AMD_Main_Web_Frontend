@@ -3,10 +3,11 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { CiClock2 } from "react-icons/ci";
+import { MessagesSquare, Video } from "lucide-react";
 import { FaUser, FaUserTie } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Rate from '@/components/Rate/Rate.jsx';  // Import the Rate component
+import Rate from "@/components/Rate/Rate.jsx"; // Import the Rate component
 
 const VideoCall = () => {
   const [activeTab, setActiveTab] = useState("bookings");
@@ -18,7 +19,7 @@ const VideoCall = () => {
   const [selectedBooking, setSelectedBooking] = useState(null); // Store selected booking for rating
 
   useEffect(() => {
-    console.log('Fetching Sessions...');
+    console.log("Fetching Sessions...");
     const fetchSessions = async () => {
       try {
         setLoading(true);
@@ -27,7 +28,7 @@ const VideoCall = () => {
           setError("Token is required");
           return;
         }
-  
+
         const [bookingsResponse, sessionsResponse] = await Promise.all([
           axios.get("http://localhost:5070/api/session/mybookings", {
             headers: {
@@ -40,13 +41,13 @@ const VideoCall = () => {
             },
           }),
         ]);
-  
+
         // Combining expert and user sessions into one
         const combinedSessions = [
-          ...sessionsResponse?.data.expertSessions || [],
-          ...sessionsResponse?.data.userSessions || [],
+          ...(sessionsResponse?.data.expertSessions || []),
+          ...(sessionsResponse?.data.userSessions || []),
         ];
-  
+
         setMyBookings(bookingsResponse?.data || []);
         setMySessions(combinedSessions);
       } catch (err) {
@@ -55,12 +56,12 @@ const VideoCall = () => {
         setLoading(false);
       }
     };
-  
+
     fetchSessions();
   }, []);
 
   const handleRateClick = (booking) => {
-  // Add a log to check if this is being called
+    // Add a log to check if this is being called
     setShowRateComponent(true); // Show the Rate component
     setSelectedBooking(booking); // Store selected booking for rating
   };
@@ -133,9 +134,7 @@ const VideoCall = () => {
 
       // Update session status in state
       const updatedSessions = mySessions.map((session) =>
-        session._id === sessionId
-          ? { ...session, status: "rejected" }
-          : session
+        session._id === sessionId ? { ...session, status: "rejected" } : session
       );
       setMySessions(updatedSessions);
       toast.success(response.data.message);
@@ -153,8 +152,8 @@ const VideoCall = () => {
   if (error) {
     return (
       <div className="w-full md:max-w-6xl max-w-4xl mx-auto py-10 px-4 mt-20 md:mt-0">
-         {/* Tabs */}
-         <div className="flex space-x-2 mb-6">
+        {/* Tabs */}
+        <div className="flex space-x-2 mb-6">
           <button
             className={`px-4 py-2 text-sm font-medium rounded ${
               activeTab === "bookings" ? "bg-black text-white" : "bg-gray-200"
@@ -267,8 +266,10 @@ const VideoCall = () => {
                       <span className="text-green-500 text-sm font-medium">
                         Confirmed
                       </span>
-                      <button className="px-4 py-1 border rounded text-sm">
-                        💬 Chat
+                      <button className="px-4 py-1 border rounded text-sm flex items-center space-x-2">
+                        <MessagesSquare className="w-5 h-5" />{" "}
+                        {/* Message icon on the left */}
+                        <span>Chat</span> {/* Text on the right */}
                       </button>
                       {booking.zoomMeetingLink ? (
                         <a
@@ -276,8 +277,10 @@ const VideoCall = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          <button className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600">
-                            🎥 Join
+                          <button className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600 flex items-center space-x-2">
+                            <Video className="w-5 h-5" />{" "}
+                            {/* Video icon on the left */}
+                            <span>Join</span> {/* Text on the right */}
                           </button>
                         </a>
                       ) : (
@@ -291,25 +294,20 @@ const VideoCall = () => {
                       <span className="text-red-500 text-sm font-medium">
                         Unconfirmed
                       </span>
-                      <button className="px-4 py-1 border rounded text-sm">
-                        💬 Chat
+                      <button className="px-4 py-1 border rounded text-sm flex items-center space-x-2">
+                        <MessagesSquare className="w-5 h-5" />{" "}
+                        {/* Message icon on the left */}
+                        <span>Chat</span> {/* Text on the right */}
                       </button>
                     </>
-                  ) : booking.status === "rejected" ? (
+                  ) : booking.status === "completed" ? (
                     <>
-                      <span className="text-red-500 text-sm font-medium">
-                        Rejected
-                      </span>
-                    </>
-
-                  ): booking.status === "completed" ?(
-                    <>
-                   <button
-                      className="px-4 py-1 text-white bg-blue-500 rounded"
-                      onClick={() => handleRateClick(booking)}
-                    >
-                      Rate
-                    </button>
+                      <button
+                        className="px-4 py-1 text-white bg-blue-500 rounded"
+                        onClick={() => handleRateClick(booking)}
+                      >
+                        Rate
+                      </button>
                     </>
                   ): booking.status === "Rating Submitted"? (
                     <>
@@ -342,7 +340,6 @@ const VideoCall = () => {
           </div>
         </div>
       )}
-
 
       {/* My Sessions Tab */}
       {activeTab === "sessions" && (
@@ -397,26 +394,38 @@ const VideoCall = () => {
 
                   {/* Right Side (Accept/Decline Buttons or Status) */}
                   <div className="flex items-center space-x-4">
-                    {session.status === 'confirmed' ? (
+                    {session.status === "confirmed" ? (
                       <>
-                        <span className="text-green-500 text-sm font-medium">Accepted</span>
-                        <button className="px-4 py-1 border rounded text-sm">💬 Chat</button>
+                        <span className="text-green-500 text-sm font-medium">
+                          Accepted
+                        </span>
+                        <button className="px-4 py-1 border rounded text-sm flex items-center space-x-2">
+                          <MessagesSquare className="w-5 h-5" />{" "}
+                          {/* Message icon on the left */}
+                          <span>Chat</span> {/* Text on the right */}
+                        </button>
                         {session.zoomMeetingLink ? (
                           <a
                             href={session.zoomMeetingLink} // Direct link to the meeting
                             target="_blank"
                             rel="noopener noreferrer"
                           >
-                            <button className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600">
-                              🎥 Join
+                            <button className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600 flex items-center space-x-2">
+                              <Video className="w-5 h-5" />{" "}
+                              {/* Video icon on the left */}
+                              <span>Join</span> {/* Text on the right */}
                             </button>
                           </a>
                         ) : (
-                          <span className="text-yellow-500 text-sm ml-2">Zoom link not ready</span>
+                          <span className="text-yellow-500 text-sm ml-2">
+                            Zoom link not ready
+                          </span>
                         )}
                       </>
-                    ) : session.status === 'rejected' ? (
-                      <span className="text-red-500 text-sm font-medium">Rejected</span>
+                    ) : session.status === "rejected" ? (
+                      <span className="text-red-500 text-sm font-medium">
+                        Rejected
+                      </span>
                     ) : (
                       <>
                         <button
