@@ -62,7 +62,8 @@ const VideoCall = () => {
   const handleRateClick = (booking) => {
   // Add a log to check if this is being called
     setShowRateComponent(true); // Show the Rate component
-    setSelectedBooking(booking); // Store selected booking for rating
+    setSelectedBooking(booking);
+     // Store selected booking for rating
   };
 
   const closeModal = () => {
@@ -410,7 +411,13 @@ const VideoCall = () => {
                       </>
                     ) : session.status === 'rejected' ? (
                       <span className="text-red-500 text-sm font-medium">Rejected</span>
-                    ) : (
+                    ) :session.status === "Report Submitted" ?(
+                      <>
+                        <span className="text-green-400 text-sm font-medium">Rating Given</span>
+                      </>
+
+                    
+                  ): (
                       <>
                         <button
                           className="px-4 py-2 bg-green-500 text-white rounded text-sm hover:bg-green-600 transition-all duration-200"
@@ -425,7 +432,8 @@ const VideoCall = () => {
                           Decline
                         </button>
                       </>
-                    )}
+                    )} 
+                    
                   </div>
                 </div>
 
