@@ -60,7 +60,8 @@ const VideoCall = () => {
 
   const handleRateClick = (booking) => {
     setShowRateComponent(true); // Show the Rate component
-    setSelectedBooking(booking); // Store selected booking for rating
+    setSelectedBooking(booking);
+     // Store selected booking for rating
   };
 
   const closeModal = () => {
