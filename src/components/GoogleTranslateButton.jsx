@@ -1,36 +1,40 @@
-// components/GoogleTranslateButton.jsx
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Globe } from 'lucide-react';
 
 const GoogleTranslateButton = () => {
+  const [isArabic, setIsArabic] = useState(false);
+
+  // Set and get cookies
+  const setCookie = (name, value) => {
+    document.cookie = `${name}=${value}; path=/; domain=${window.location.hostname}`;
+  };
+
+  const getCookie = (name) => {
+    const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+    return match ? match[2] : null;
+  };
+
   useEffect(() => {
     // 1. Inject Translate script
     const script = document.createElement('script');
-    script.src = 'https://translate.google.com/translate_a/element.js';
+    script.src = 'https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
     script.async = true;
     document.body.appendChild(script);
 
-    // 2. Initialize widget
-    const initInterval = setInterval(() => {
-      if (
-        window.google &&
-        window.google.translate &&
-        typeof window.google.translate.TranslateElement === 'function'
-      ) {
-        new window.google.translate.TranslateElement(
-          {
-            pageLanguage: 'en',
-            includedLanguages: 'ar',
-            layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
-            autoDisplay: false,
-          },
-          'google_translate_element'
-        );
-        clearInterval(initInterval);
-      }
-    }, 300);
+    // 2. Define global init function for Google Translate
+    window.googleTranslateElementInit = () => {
+      new window.google.translate.TranslateElement(
+        {
+          pageLanguage: 'en',
+          includedLanguages: 'ar',
+          layout: window.google.translate.TranslateElement.InlineLayout.SIMPLE,
+          autoDisplay: false,
+        },
+        'google_translate_element'
+      );
+    };
 
-    // 3. Remove the blue banner iframe
+    // 3. Remove banner logic
     const removeBanner = () => {
       const iframe = document.querySelector('iframe.goog-te-banner-frame');
       const body = document.body;
@@ -42,47 +46,41 @@ const GoogleTranslateButton = () => {
 
       if (body && body.style.top !== '0px') {
         body.style.top = '0px';
+        console.log('✅ Body top style reset');
       }
     };
 
-    const bannerInterval = setInterval(removeBanner, 300);
-    const timeout = setTimeout(() => clearInterval(bannerInterval), 20000);
+    // Initial language check from cookie
+    const lang = getCookie('googtrans');
+    setIsArabic(lang?.includes('/en/ar'));
 
-    removeBanner(); // try once immediately
+    // Repeated cleanup
+    const interval = setInterval(removeBanner, 500);
+    const timeout = setTimeout(() => clearInterval(interval), 10000);
+
+    // MutationObserver as backup
+    const observer = new MutationObserver(removeBanner);
+    observer.observe(document.body, { childList: true, subtree: true });
+
+    removeBanner(); // Immediate
 
     return () => {
-      clearInterval(initInterval);
-      clearInterval(bannerInterval);
+      clearInterval(interval);
       clearTimeout(timeout);
+      observer.disconnect();
     };
   }, []);
 
   const handleTranslate = () => {
-    const path = window.location.pathname;
-    const hostname = window.location.hostname;
-    document.cookie = 'googtrans=/en/ar; path=/;';
-    document.cookie = `googtrans=/en/ar; domain=${hostname}; path=/;`;
-  
-    // Add hash but don't reload
-    window.location.hash = 'googtrans(en|ar)';
-  
-    // Wait and remove banner once translation is applied
-    const removeBanner = () => {
-      const iframe = document.querySelector('iframe.goog-te-banner-frame');
-      const body = document.querySelector('body');
-  
-      if (iframe) iframe.remove();
-      if (body) body.style.top = '0px';
-    };
-  
-    setTimeout(removeBanner, 500); // run once
-    const retry = setInterval(removeBanner, 300);
-    setTimeout(() => clearInterval(retry), 10000);
+    const newLang = isArabic ? '/ar/en' : '/en/ar';
+    setCookie('googtrans', newLang);
+    setIsArabic(!isArabic);
+    window.location.reload(); // Apply translation
   };
-  
 
   return (
     <div className="relative">
+      {/* Hidden container for Google Translate widget */}
       <div
         id="google_translate_element"
         className="absolute opacity-0 pointer-events-none h-0 w-0 overflow-hidden"
@@ -93,7 +91,7 @@ const GoogleTranslateButton = () => {
         className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-semibold rounded-md shadow transition duration-150 ease-in-out"
       >
         <Globe size={20} />
-        <span>Translate to Arabic</span>
+        <span>{isArabic ? 'Translate to English' : 'ترجم إلى العربية'}</span>
       </button>
     </div>
   );

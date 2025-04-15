@@ -7,27 +7,15 @@ import HomeExpertsBefore from "@/components/ExpertBeforeLogin/HomeExpertBefore";
 import ExpertsCardsBefore from "@/components/ExpertBeforeLogin/TopExpertsBefore";
 import WellnessBefore from "@/components/ExpertBeforeLogin/WellnessBefore";
 import ExpertCategory from "@/components/ExpertCategory/ExpertCategory";
-import CareerBusinessHomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/Career&BusinessLogin";
-import FashionBeautyHomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/Fashoin&BeautyLogin";
-import HomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/HomeExpertLogin";
-import ExpertsCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/TopExpertLogin";
-import WellnessHomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/WellnessLogin";
-import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
 import Threepara from "@/components/Experts/Threepara/threepara";
 import Footer from "@/components/Layout/Footer";
 import NavSearch from "@/components/Layout/navsearch";
-import { useState, useEffect } from "react";
 
 const Page = () => {
   
   return (
     <div className="flex min-h-screen flex-col">
-      {/* Main Content and Sidebar Container */}
-      <div className="flex flex-1">
-        {/* Sidebar (Left Section - 20% Width) */}
-        <aside className="w-[20%] h-[80%] hidden md:block bg-gray-100 overflow-y-auto -mt-5">
-           <Sidebar />
-        </aside>
+      
 
         {/* Main Content (Right Section - 80% Width) */}
         <div className='w-full flex flex-col'>
@@ -46,7 +34,7 @@ const Page = () => {
             </div>
           </div>
         </div>
-      </div>
+      
 
       {/* Footer (Full Width) */}
       <div className="w-full ">

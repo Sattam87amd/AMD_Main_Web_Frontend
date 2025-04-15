@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";  // Make sure axios is imported
+import axios from "axios";
+import Box from "@mui/material/Box";
+import Rating from "@mui/material/Rating";
+import { IconButton } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 
 const Rate = ({ booking, setShowRateComponent }) => {
-  console.log("Rate component received booking:", booking);  // Log to ensure it's received
+  console.log("Rate component received booking:", booking);
 
-  const [rating, setRating] = useState(1);
+  const [rating, setRating] = useState(2); // Default rating value
   const [comment, setComment] = useState('');
+  const [starSize, setStarSize] = useState(50); // Control star size here (default 50)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,84 +24,98 @@ const Rate = ({ booking, setShowRateComponent }) => {
     try {
       // Submit the rating
       const response = await axios.post(
-        'http://localhost:5070/api/ratings/', // API for rating submission
+        'http://localhost:5070/api/ratings/',
         {
-          expertId: booking.consultingExpertID._id,  // Ensure the booking object has the necessary fields
-          raterId: booking.expertId._id,  // Ensure this is the correct raterId (this might be user or expert depending on your structure)
-          sessionType: 'expert-to-expert',  // You can modify this based on session type
+          expertId: booking.consultingExpertID._id,  
+          raterId: booking.expertId._id,  
+          sessionType: 'expert-to-expert',
           rating,
           comment,
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}` ,
           },
         }
       );
 
-      // After submitting the rating, update the status of the booking
+      // Update booking status after rating submission
       await axios.put(
         `http://localhost:5070/api/ratings/update-status/${booking._id}`,
-        { status: 'Rating Submitted' }, // Update status to 'Rating Submitted'
+        { status: 'Rating Submitted' },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}` ,
           },
         }
       );
 
       toast.success('Rating submitted successfully');
       setShowRateComponent(false); // Close the modal
+      window.location.reload()
     } catch (err) {
-      // Log the entire error to the console for debugging
       console.error("Error submitting rating:", err);
-
-      // Handle different error types
       if (err.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.error("Server Response Error: ", err.response.data);  // Log the error response data
         toast.error(`Error: ${err.response.data.message || 'Failed to submit rating'}`);
       } else if (err.request) {
-        // The request was made but no response was received
-        console.error("Request Error: ", err.request);
         toast.error("No response from server.");
       } else {
-        // Something happened in setting up the request that triggered an Error
-        console.error("Request Setup Error: ", err.message);
         toast.error(`Error: ${err.message}`);
       }
     }
   };
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 p-6 bg-white rounded-lg shadow-lg max-w-xl mx-auto relative">
+      {/* Close Button */}
+      <IconButton
+        onClick={() => setShowRateComponent(false)}
+        className="absolute top-2 right-2"
+      >
+        <CloseIcon />
+      </IconButton>
+
+      <h3 className="text-2xl font-bold text-center text-gray-800 mb-6">We'd love your feedback!</h3>
+      
       <form onSubmit={handleSubmit}>
-        <div>
-          <label className="block text-gray-700">Rating</label>
-          <input
-            type="number"
-            value={rating}
-            onChange={(e) => setRating(e.target.value)}
-            min="1"
-            max="5"
-            className="mt-2 p-2 border rounded"
-          />
+        {/* Material-UI Rating Component */}
+        <div className="flex justify-center mb-6">
+          <Box sx={{ '& > legend': { mt: 2 } }}>
+            <Rating
+              name="simple-controlled"
+              value={rating}
+              size="large"  // You can keep this if you want large size as a fallback
+              onChange={(event, newValue) => {
+                setRating(newValue);
+              }}
+              sx={{
+                fontSize: `${starSize}px`,  // Adjust the size of the stars here
+              }}
+            />
+          </Box>
         </div>
-        <div className="mt-4">
-          <label className="block text-gray-700">Comment</label>
+
+        {/* Comment Section */}
+        <div className="mb-6">
+          <label className="block text-gray-700 text-sm font-semibold mb-2">Your Feedback</label>
           <textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            className="mt-2 p-2 border rounded"
+            className="w-full p-3 border-2 border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-black"
+            rows="6"  // Make the comment section a bit larger
+            placeholder="How was your experience with our consultant?"
           ></textarea>
         </div>
-        <button
-          type="submit"
-          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Submit Rating
-        </button>
+
+        {/* Submit Button */}
+        <div className="flex justify-center">
+          <button
+            type="submit"
+            className="px-6 py-3 bg-black text-white font-semibold rounded-lg shadow-lg transition duration-300 hover:bg-gray-700"
+          >
+            Post
+          </button>
+        </div>
       </form>
     </div>
   );
