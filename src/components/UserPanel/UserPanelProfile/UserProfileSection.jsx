@@ -167,12 +167,12 @@ const UserProfileSection = () => {
                   <Image
                     src={imagePreview || profileData.photoFile || "/default-profile.png"} // Fallback image if no photo
                     alt="profile"
-                    width={60}
-                    height={60}
-                    className="w-full h-full object-cover rounded-full"
+                    width={20}
+                    height={25}
+                    className="w-16 h-16 object-cover rounded-full"
                   />
                   <label htmlFor="imageUpload" className="absolute bottom-0 right-0 bg-black text-white p-2 rounded-full cursor-pointer">
-                    <FaCloudUploadAlt className="w-6 h-6" />
+                    <FaCloudUploadAlt className="w-3 h-3" />
                   </label>
                   <input
                     id="imageUpload"
