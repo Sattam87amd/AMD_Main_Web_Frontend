@@ -300,7 +300,17 @@ const VideoCall = () => {
                         <span>Chat</span> {/* Text on the right */}
                       </button>
                     </>
-                  ) : booking.status === "completed" ? (
+                  ) : booking.status === "rejected" ?(
+                    <>
+                    <span className="text-red-500 text-sm font-medium">
+                        Rejected
+                      </span>
+                    </>
+                
+                
+                ):
+                  
+                  booking.status === "completed" ? (
                     <>
                       <button
                         className="px-4 py-1 text-white bg-blue-500 rounded"

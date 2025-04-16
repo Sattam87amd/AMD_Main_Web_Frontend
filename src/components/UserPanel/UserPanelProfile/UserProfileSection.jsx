@@ -30,7 +30,7 @@ const UserProfileSection = () => {
 
   // Get userId from the token
   useEffect(() => {
-    const userToken = localStorage.getItem("token");
+    const userToken = localStorage.getItem("userToken");
     if (userToken) {
       try {
         const decodedToken = JSON.parse(atob(userToken.split(".")[1]));
