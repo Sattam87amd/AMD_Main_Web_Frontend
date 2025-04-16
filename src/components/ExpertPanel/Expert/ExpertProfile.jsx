@@ -1,15 +1,38 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { FiShare2 } from "react-icons/fi";
 
-const ExpertProfile = ({ expertData }) => {
+const ExpertProfile = ({ expertId }) => {
+  const [expertData, setExpertData] = useState(null);
+
+  useEffect(() => {
+    const fetchExpertData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5070/api/expertauth/${expertId}`);
+        setExpertData(response.data.data);  // Assuming the response follows { data: expert }
+      } catch (error) {
+        console.error("Error fetching expert data:", error);
+      }
+    };
+
+    if (expertId) {
+      fetchExpertData();
+    }
+  }, [expertId]);
+
+  if (!expertData) {
+    return <div>Loading...</div>; // Show a loading message until the data is fetched
+  }
+
   return (
     <div className="flex-1 p-4 md:p-8 bg-white">
       {/* Header */}
       <div className="mt-6 flex flex-row md:flex-row items-center justify-between space-y-4 md:space-y-0">
         <div className="flex items-center space-x-4 md:space-x-6">
           <img
-            src="/guyhawkins.png"
+            src={expertData.photoFile || "/default-profile.png"} // Use a default if no photo
             alt="Expert Profile"
             className="w-16 h-16 md:w-40 md:h-36 rounded-3xl"
           />
@@ -17,7 +40,7 @@ const ExpertProfile = ({ expertData }) => {
             <h3 className="text-lg font-semibold text-[#434966]">
               {expertData?.firstName || ""} {expertData?.lastName || ""}
             </h3>
-            <p className="text-gray-500">{expertData?.expertise || ""}</p>
+            <p className="text-gray-500">{expertData?.areaOfExpertise || ""}</p>
             <p className="text-gray-500">{expertData?.country || ""}</p>
           </div>
         </div>
@@ -41,9 +64,7 @@ const ExpertProfile = ({ expertData }) => {
 
       {/* Verification Checkmark Section */}
       <div className="mt-8">
-        <h2 className="text-xl font-semibold text-black">
-          Verification Checkmark
-        </h2>
+        <h2 className="text-xl font-semibold text-black">Verification Checkmark</h2>
         <p className="text-[#0D70E5] mt-2 py-5">
           To be considered for verification, you need to do the following:
         </p>

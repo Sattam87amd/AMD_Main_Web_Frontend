@@ -1,7 +1,9 @@
 "use client"
-import BottomNav from '@/components/UserPanel/BottomNav/BottomNav';
+import UserMobileNavSearch from '@/components/UserPanel/Experts/UserMobileexpert/UserMobileNavSearch';
+// import BottomNav from '@/components/UserPanel/BottomNav/BottomNav';
 import Footer from '@/components/UserPanel/Layout/Footer';
 import Navtop from '@/components/UserPanel/NavTop/NavTopuser';
+import UserBottomNav from '@/components/UserPanel/UserBottomNav/UserBottomNav';
 import UserSidebar from '@/components/UserPanel/UseSideBar/UserSidebar';
 import UserVideoCall from '@/components/UserPanel/VideoCall/UserVideoCall';
 import { usePathname } from "next/navigation";
@@ -30,19 +32,22 @@ const page = () => {
   
         {/* Right Side Content with 2/3 width */}
         <div className="w-full md:w-[80%] p-4">
+          <UserMobileNavSearch/>
           <Navtop activeTab={activeTab}/>
           <UserVideoCall activeTab={activeTab}/>
          
   
           {/* Bottom Navigation - Visible only on mobile */}
           <div className="fixed bottom-0 left-0 right-0 md:hidden">
-            <BottomNav/>
+            <UserBottomNav/>
             
           </div>
         </div>
         
       </div>
+      <div className='hidden sm:block'> 
         <Footer />
+        </div>
       </>
     );
   };

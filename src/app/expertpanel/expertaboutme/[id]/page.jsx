@@ -13,6 +13,7 @@ import Footer from "@/components/Layout/Footer";
 import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 
 const ExpertDetail = () => {
   const [expert, setExpert] = useState(null);
@@ -132,6 +133,7 @@ const ExpertDetail = () => {
         </aside>
 
         <div className="w-full md:w-[80%] flex flex-col">
+          <MobileNavSearch/>  
         <div className="hidden md:block">
           <NavSearch />
         </div>

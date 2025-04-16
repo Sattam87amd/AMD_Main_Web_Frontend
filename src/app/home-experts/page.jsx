@@ -4,6 +4,7 @@ import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";
 import Homeexpert from "@/components/Experts/Homeexpert/homeexpert";
 import ExpertCategory from "@/components/ExpertCategory/ExpertCategory";
+import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
 // import LoginExpertCategory from "@/components/UserPanel/LoginExpertCategory/LoginExpertCategory";
 
 const Page = () => {
@@ -22,7 +23,7 @@ const Page = () => {
         <MobileNavSearch />
         <ExpertCategory/>
         <Homeexpert />
-        <Footer />
+        <BottomNav/>
       </div>
     </div>
   );

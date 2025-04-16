@@ -8,6 +8,7 @@ import EditExpertProfile from "@/components/ExpertPanel/Expert/EditExpertProfile
 import Footer from "@/components/Layout/Footer";
 import Navtop from "@/components/ExpertPanel/Navtop/navtop";
 import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
+import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 
 const Page = () => {
   const [expertData, setExpertData] = useState({
@@ -55,6 +56,7 @@ const Page = () => {
 
         {/* Right Side Content with 80% width */}
         <div className="md:w-[80%] p-4">
+          <MobileNavSearch/>
           <Navtop activeTab={activeTab} />
           {(!isMobile || showProfile) && <ExpertProfile expertData={expertData} />}
           <EditExpertProfile

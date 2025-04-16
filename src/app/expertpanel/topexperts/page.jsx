@@ -35,6 +35,7 @@ const Page = () => {
           {/* Mobile View - MobileNavSearch */}
           <div className="block md:hidden">
             <MobileNavSearch />
+            <BottomNav/>
             <div className="space-y-8 px-4">
             <LoginTopExpert/>
             </div>
@@ -46,7 +47,7 @@ const Page = () => {
       <div className="w-full hidden sm:block">
         <Footer/>
       </div>
-      <div><BottomNav/></div>
+      {/* <div><BottomNav/></div> */}
     </div>
   );
 };

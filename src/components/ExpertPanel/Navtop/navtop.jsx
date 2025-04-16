@@ -74,13 +74,13 @@ const Navtop = ({ activeTab }) => {
         <div className="flex items-center space-x-2 cursor-pointer">
           {/* Use Next.js Image component for profile picture */}
           {userData.photoFile ? (
-            <div className="relative w-8 h-8 rounded-full">
+            <div className="relative w-10 h-10 overflow-hidden">
               <Image
                 src={userData.photoFile} // Ensure this URL is valid and points to the image
                 alt="Profile"
-                width={32} // Set width (64px size for example)
-                height={32} // Set height (64px size for example)
-                className="rounded-full object-cover border border-gray-300"
+                width={100} // Set width (64px size for example)
+                height={100} // Set height (64px size for example)
+                className="rounded-full h-10"
               />
             </div>
           ) : (

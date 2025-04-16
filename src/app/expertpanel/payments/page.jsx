@@ -6,6 +6,7 @@ import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
 import Navtop from "@/components/ExpertPanel/Navtop/navtop";
 import PaymentLogin from "@/components/ExpertPanel/ExpertloginPayment/paymentlogin";
 import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
+import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 
 // Define Sidebar menu items with route mapping
 const menuItems = [
@@ -35,8 +36,13 @@ const Page = () => {
 
       {/* Right Side Content with 2/3 width */}
       <div className="w-full md:w-[80%] p-4">
+        <div className="w-[27rem]">
+        <MobileNavSearch/>
+        </div>
         <Navtop activeTab={activeTab} /> {/* Pass active tab dynamically */}
+        <div className="sm:block w-[25rem] md:w-full">
         <PaymentLogin />
+        </div>
 
         {/* Bottom Navigation - Visible only on mobile */}
         <div className="fixed bottom-0 left-0 right-0 md:hidden">

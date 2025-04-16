@@ -6,6 +6,7 @@ import Navtop from '@/components/ExpertPanel/Navtop/navtop';
 import ChatComponent from '@/components/ExpertPanel/ChatComponent/chatcomponent';
 import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
 import { usePathname } from 'next/navigation';
+import MobileNavSearch from '@/components/Layout/mobilenavsearch';
 
 const Page = () => {
 
@@ -28,6 +29,7 @@ const activeTab = activeMenu ? activeMenu.label : "Chats with Users";
 
       {/* Right Side Content with 2/3 width */}
       <div className="w-full md:w-[80%] p-4">
+        <MobileNavSearch/>
         <Navtop activeTab = {activeTab}/>
         <ChatComponent activeTab = {activeTab}/>
 

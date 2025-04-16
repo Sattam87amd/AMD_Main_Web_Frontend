@@ -6,7 +6,7 @@ import { FaInstagram, FaTwitter, FaFacebook } from "react-icons/fa";
 
 const Footer = () => {
   return (
-    <footer className="relative p-4 md:p-10 md:py-6 bg-[#EDECE8] w-full z-10">
+    <footer className="relative p-4 md:p-10 md:py-6 bg-[#EDECE8] w-full  z-10">
       <div className="w-full">
         <div className="md:flex md:justify-between md:items-start">
           {/* Left Section - AMD and Tagline */}

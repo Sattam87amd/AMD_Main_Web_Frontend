@@ -5,6 +5,7 @@ import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
 import VideoCall from "@/components/ExpertPanel/VideoCall/VideoCall";
 import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
 import { usePathname } from "next/navigation";
+import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 
 const Page = () => {
 
@@ -27,6 +28,7 @@ const activeTab = activeMenu ? activeMenu.label : "Video Call";
 
       {/* Right Side Content with 2/3 width */}
       <div className="w-full md:w-[80%] p-4">
+      <MobileNavSearch/>
         <Navtop activeTab={activeTab}/>
         <VideoCall activeTab={activeTab}/>
 

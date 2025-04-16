@@ -192,43 +192,47 @@ const UserProfileSection = () => {
         {/* Profile Section */}
         {selectedSection === "Profile" && (
           <div className="mt-6">
-            <div className="flex flex-col md:flex-row items-center md:justify-between space-y-4 md:space-y-0">
-              <div className="flex items-center space-x-4 md:space-x-6 relative">
-                {/* Image with a cloud upload icon */}
-                <div className="relative">
-                  <Image
-                    src={imagePreview || profileData.photoFile || "/default-profile.png"} // Fallback image if no photo
-                    alt="profile"
-                    width={20}
-                    height={25}
-                    className="w-16 h-16 object-cover rounded-full"
-                  />
-                  <label htmlFor="imageUpload" className="absolute bottom-0 right-0 bg-black text-white p-2 rounded-full cursor-pointer">
-                    <FaCloudUploadAlt className="w-3 h-3" />
-                  </label>
-                  <input
-                    id="imageUpload"
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="hidden"
-                  />
-                </div>
+ <div className="flex flex-row items-center justify-between w-full space-y-0 space-x-4 md:w-[90%]">
+  <div className="flex items-center space-x-4 w-full md:w-auto">
+    {/* Image with a cloud upload icon */}
+    <div className="relative flex-shrink-0">
+      <Image
+        src={imagePreview || profileData.photoFile || "/default-profile.png"} // Fallback image if no photo
+        alt="profile"
+        width={60}
+        height={60}
+        className="w-full h-full object-cover rounded-full"
+      />
+      <label htmlFor="imageUpload" className="absolute bottom-0 right-0 bg-black text-white p-2 rounded-full cursor-pointer">
+        <FaCloudUploadAlt className="w-6 h-6" />
+      </label>
+      <input
+        id="imageUpload"
+        type="file"
+        accept="image/*"
+        onChange={handleImageChange}
+        className="hidden"
+      />
+    </div>
 
-                <div className="text-center md:text-left">
-                  <h3 className="text-lg font-semibold text-[#434966]">
-                    {profileData.firstName} {profileData.lastName}
-                  </h3>
-                  <p className="text-gray-500">India</p>
-                </div>
-              </div>
-              <button
-                className="border border-[#434966] px-4 md:px-5 py-2 text-[#434966] font-semibold rounded-lg flex items-center gap-2"
-                onClick={handleEditClick}
-              >
-                Edit <LuPencilLine className="text-black h-5 w-5" />
-              </button>
-            </div>
+    <div className="text-left flex-grow md:flex-shrink-0">
+      <h3 className="text-lg font-semibold text-[#434966]">
+        {profileData.firstName} {profileData.lastName}
+      </h3>
+      <p className="text-gray-500">India</p>
+    </div>
+  </div>
+
+  <button
+    className="border border-[#434966] px-4 md:px-5 py-2 text-[#434966] font-semibold rounded-lg flex items-center gap-2"
+    onClick={handleEditClick}
+  >
+    Edit <LuPencilLine className="text-black h-5 w-5" />
+  </button>
+</div>
+
+          
+
 
             {/* Success Message */}
             {successMessage && (
