@@ -279,9 +279,7 @@ const toggleLoginMethod = () => {
                         {formError && <p className="text-red-500 text-sm">{formError}</p>}
 
                         <button
-                            className={`w-full py-3 rounded-lg transition ${phone && otp.length === 4 && isValidPhoneNumber(phone)
-                                ? "bg-black text-white hover:bg-gray-800"
-                                : "bg-black text-white cursor-not-allowed"
+                            className={`w-full py-3 rounded-lg transition bg-black text-white hover:bg-gray-800"
                                 }`}
                             onClick={handleSubmit}
                             disabled={

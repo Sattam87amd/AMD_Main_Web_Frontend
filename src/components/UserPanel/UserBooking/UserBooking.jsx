@@ -38,7 +38,14 @@ const UserToExpertBooking = () => {
 
   const [sessionData, setSessionData] = useState(null);
   const [consultingExpert, setConsultingExpert] = useState(null);
-  const [bookingData, setBookingData]=useState(null)
+  const [bookingData, setBookingData]=useState({
+    firstName: '',
+    lastName: '',
+    mobileNumber: '',
+    email: '',
+    note: '',
+    promoCode: '',
+  })
   const [noteError, setNoteError] = useState(""); // Error message for note
   const [noteWordCount, setNoteWordCount] = useState(0); // Word count
   const [token, setToken] = useState(null); // Ensure localStorage access only on client
@@ -69,12 +76,12 @@ const UserToExpertBooking = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("bookingData", JSON.stringify(expertData));
-  }, [expertData]);
+    localStorage.setItem("bookingData", JSON.stringify(bookingData));
+  }, [bookingData]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setExpertData((prev) => ({
+    setBookingData((prev) => ({
       ...prev,
       [name]: type === "checkbox" ? checked : value,
     }));
@@ -104,7 +111,7 @@ const UserToExpertBooking = () => {
       sessionDate: sessionData?.sessionDate || "",
       sessionTime: sessionData?.sessionTime || "",
       duration: sessionData?.duration || "",
-      firstName: expertData?.firstName,
+      firstName: bookingData?.firstName,
       lastName: expertData?.lastName,
       email: expertData?.email,
       phone: expertData?.mobileNumber,
@@ -217,7 +224,7 @@ const UserToExpertBooking = () => {
                 <input
                   type="text"
                   name="firstName"
-                  value={expertData.firstName}
+                  value={bookingData.firstName}
                   onChange={handleInputChange}
                   className="w-full border rounded px-3 py-2 text-sm"
                 />
@@ -227,7 +234,7 @@ const UserToExpertBooking = () => {
                 <input
                   type="text"
                   name="lastName"
-                  value={expertData.lastName}
+                  value={bookingData.lastName}
                   onChange={handleInputChange}
                   className="w-full border rounded px-3 py-2 text-sm"
                 />
@@ -240,7 +247,7 @@ const UserToExpertBooking = () => {
                 <input
                   type="tel"
                   name="mobileNumber"
-                  value={expertData.mobileNumber}
+                  value={bookingData.mobileNumber}
                   onChange={handleInputChange}
                   className="w-full border rounded px-3 py-2 text-sm"
                 />
@@ -250,7 +257,7 @@ const UserToExpertBooking = () => {
                 <input
                   type="email"
                   name="email"
-                  value={expertData.email}
+                  value={bookingData.email}
                   onChange={handleInputChange}
                   className="w-full border rounded px-3 py-2 text-sm"
                 />
@@ -263,7 +270,7 @@ const UserToExpertBooking = () => {
                 <textarea
                   name="note"
                   placeholder="Write something about yourself in minimum 50 words..."
-                  value={expertData.note}
+                  value={bookingData.note}
                   onChange={handleInputChange}
                   className="w-full h-[120px] border flex justify-center items-center rounded px-3 py-2 text-sm"
                 />
@@ -282,7 +289,7 @@ const UserToExpertBooking = () => {
                 <input
                   type="text"
                   name="promoCode"
-                  value={expertData.promoCode}
+                  value={bookingData.promoCode}
                   onChange={handleInputChange}
                   className="w-full border rounded-l px-3 py-2 text-sm"
                   placeholder="Enter promo code"

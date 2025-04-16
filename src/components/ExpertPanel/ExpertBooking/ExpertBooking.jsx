@@ -44,6 +44,7 @@ const ExpertBooking = () => {
   const [sessionData, setSessionData] = useState(null);
   const [noteError, setNoteError] = useState(""); // Error message for note
   const [noteWordCount, setNoteWordCount] = useState(0); // Word count
+  const [bookingData, setBookingData] = useState("")
   const router = useRouter();
 
   useEffect(() => {
@@ -54,15 +55,15 @@ const ExpertBooking = () => {
   }, []);
 
   useEffect(() => {
-    const savedData = localStorage.getItem("bookingData");
-    if (savedData) {
-      setExpertData(JSON.parse(savedData));
+    const bookingData = localStorage.getItem("bookingData");
+    if (bookingData) {
+      setBookingData(JSON.parse(bookingData));
     }
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("bookingData", JSON.stringify(expertData));
-  }, [expertData]);
+  // useEffect(() => {
+  //   localStorage.setItem("bookingData", JSON.stringify(expertData));
+  // }, [expertData]);
 
   useEffect(() => {
     const storedSessionData = localStorage.getItem('sessionData');
@@ -99,11 +100,11 @@ const ExpertBooking = () => {
 
     const fullBookingData = {
       ...sessionData,
-      firstName: expertData.firstName,
-      lastName: expertData.lastName,
-      mobile: expertData.mobileNumber,
-      email: expertData.email,
-      note: expertData.note
+      firstName: bookingData.firstName,
+      lastName: bookingData.lastName,
+      mobile: bookingData.mobileNumber,
+      email: bookingData.email,
+      note: bookingData.note
     };
 
     try {
