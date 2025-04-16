@@ -44,7 +44,6 @@ const ExpertBooking = () => {
   const [sessionData, setSessionData] = useState(null);
   const [noteError, setNoteError] = useState(""); // Error message for note
   const [noteWordCount, setNoteWordCount] = useState(0); // Word count
-  const [bookingData, setBookingData] = useState("")
   const router = useRouter();
 
   useEffect(() => {
@@ -55,15 +54,15 @@ const ExpertBooking = () => {
   }, []);
 
   useEffect(() => {
-    const bookingData = localStorage.getItem("bookingData");
-    if (bookingData) {
-      setBookingData(JSON.parse(bookingData));
+    const savedData = localStorage.getItem("bookingData");
+    if (savedData) {
+      setExpertData(JSON.parse(savedData));
     }
   }, []);
 
-  // useEffect(() => {
-  //   localStorage.setItem("bookingData", JSON.stringify(expertData));
-  // }, [expertData]);
+  useEffect(() => {
+    localStorage.setItem("bookingData", JSON.stringify(expertData));
+  }, [expertData]);
 
   useEffect(() => {
     const storedSessionData = localStorage.getItem('sessionData');
@@ -100,11 +99,11 @@ const ExpertBooking = () => {
 
     const fullBookingData = {
       ...sessionData,
-      firstName: bookingData.firstName,
-      lastName: bookingData.lastName,
-      mobile: bookingData.mobileNumber,
-      email: bookingData.email,
-      note: bookingData.note
+      firstName: expertData.firstName,
+      lastName: expertData.lastName,
+      mobile: expertData.mobileNumber,
+      email: expertData.email,
+      note: expertData.note
     };
 
     try {
@@ -112,7 +111,7 @@ const ExpertBooking = () => {
       if (!token) throw new Error("No authentication token found");
 
       await axios.post(
-        "https://amd-api.code4bharat.com/api/session/experttoexpertsession",
+        "http://localhost:5070/api/session/experttoexpertsession",
         fullBookingData,
         {
           headers: {
