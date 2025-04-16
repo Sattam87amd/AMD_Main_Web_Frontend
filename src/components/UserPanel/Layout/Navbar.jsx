@@ -6,6 +6,7 @@ import { Gift, Menu, X, Search, User } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import SeacthExperts from "@/components/SearchExperts/SearchExperts";
+import GoogleTranslateButton from "@/components/GoogleTranslateButton";
 
 
 function Navbar() {
@@ -61,7 +62,7 @@ function Navbar() {
               </button>
               
             </Link>
-            <GoogleTranslate />
+            <GoogleTranslateButton />
             <Link href="/profile">
               <User className="h-6 w-6 text-black cursor-pointer hover:opacity-80" />
             </Link>
