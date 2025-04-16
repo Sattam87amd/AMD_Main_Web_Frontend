@@ -46,7 +46,7 @@ const VideoCall = () => {
         const combinedSessions = [
           ...(sessionsResponse?.data.expertSessions || []).map((session) => ({
             ...session,
-            sessionType: "ExpertToExpert",
+            sessionType: "Expert To Expert",
           })),
           ...(sessionsResponse?.data.userSessions || []).map((session) => ({
             ...session,

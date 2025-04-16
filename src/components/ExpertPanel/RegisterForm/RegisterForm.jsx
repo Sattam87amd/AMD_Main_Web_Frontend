@@ -155,6 +155,7 @@ function RegisterForm() {
       formData.append('areaOfExpertise', areaOfExpertise);
       formData.append('specificArea', specificArea);  // Will be used if 'Others' is selected
       formData.append('experience', experience);
+      formData.append('price', price);
   
       // Append certification and photo files if selected
       if (fileInputRefCertifications.current.files[0]) {
