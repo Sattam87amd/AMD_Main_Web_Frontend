@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import Image from "next/image"; // For optimized image handling
 import { FaUser, FaCloudUploadAlt, FaComments, FaTrashAlt, FaCheckCircle } from "react-icons/fa"; // Updated to use FaCloudUploadAlt
@@ -27,6 +28,7 @@ const UserProfileSection = () => {
   });
   const [userId, setUserId] = useState("");
   const [imagePreview, setImagePreview] = useState(null); // State for image preview
+  const router = useRouter();
 
   // Get userId from the token
   useEffect(() => {
@@ -112,6 +114,25 @@ const UserProfileSection = () => {
     setTimeout(() => setSuccessMessage(""), 3000);
   };
 
+  // Handle sign out: remove token and redirect to home page
+  const handleSignOut = () => {
+    localStorage.removeItem("userToken");
+    router.push("/");
+  };
+
+  // Menu items for sidebar
+  const menuItems = [
+    { name: "Profile", icon: FaUser },
+    { name: "Payment Methods", icon: FiDollarSign },
+    { name: "Do you have code?", icon: FaCloudUploadAlt },
+    { name: "Gift Card", icon: FaCloudUploadAlt },
+    { name: "Contact Us", icon: FaComments },
+    { name: "Payment History", icon: FiDollarSign },
+    { name: "Give us Feedback", icon: MdOutlineFeedback },
+    { name: "Sign Out", icon: BiLogOut },
+    { name: "Deactivate account", icon: FaTrashAlt },
+  ];
+
   return (
     <div className="flex flex-col md:flex-row border rounded-xl overflow-hidden bg-white m-4 md:m-8">
       {/* Sidebar */}
@@ -122,36 +143,47 @@ const UserProfileSection = () => {
         </h2>
 
         <nav className="space-y-6">
-          {[
-            { name: "Profile", icon: FaUser },
-            { name: "Payment Methods", icon: FiDollarSign },
-            { name: "Do you have code?", icon: FaCloudUploadAlt },
-            { name: "Gift Card", icon: FaCloudUploadAlt },
-            { name: "Contact Us", icon: FaComments },
-            { name: "Payment History", icon: FiDollarSign },
-            { name: "Give us Feedback", icon: MdOutlineFeedback },
-            { name: "Sign Out", icon: BiLogOut },
-            { name: "Deactivate account", icon: FaTrashAlt },
-          ].map((item) => (
-            <button
-              key={item.name}
-              onClick={() => setSelectedSection(item.name)}
-              className={`flex items-center gap-3 w-full text-left p-2 rounded-lg transition ${
-                selectedSection === item.name
-                  ? "bg-black text-white"
-                  : "hover:bg-gray-200 text-[#7E7E7E]"
-              }`}
-            >
-              <item.icon
-                className={
+          {menuItems.map((item) =>
+            item.name === "Sign Out" ? (
+              <button
+                key={item.name}
+                onClick={handleSignOut}
+                className={`flex items-center gap-3 w-full text-left p-2 rounded-lg transition ${
                   selectedSection === item.name
-                    ? "text-white"
-                    : "text-[#7E7E7E]"
-                }
-              />
-              {item.name}
-            </button>
-          ))}
+                    ? "bg-black text-white"
+                    : "hover:bg-gray-200 text-[#7E7E7E]"
+                }`}
+              >
+                <item.icon
+                  className={
+                    selectedSection === item.name
+                      ? "text-white"
+                      : "text-[#7E7E7E]"
+                  }
+                />
+                {item.name}
+              </button>
+            ) : (
+              <button
+                key={item.name}
+                onClick={() => setSelectedSection(item.name)}
+                className={`flex items-center gap-3 w-full text-left p-2 rounded-lg transition ${
+                  selectedSection === item.name
+                    ? "bg-black text-white"
+                    : "hover:bg-gray-200 text-[#7E7E7E]"
+                }`}
+              >
+                <item.icon
+                  className={
+                    selectedSection === item.name
+                      ? "text-white"
+                      : "text-[#7E7E7E]"
+                  }
+                />
+                {item.name}
+              </button>
+            )
+          )}
         </nav>
       </aside>
 
@@ -167,12 +199,12 @@ const UserProfileSection = () => {
                   <Image
                     src={imagePreview || profileData.photoFile || "/default-profile.png"} // Fallback image if no photo
                     alt="profile"
-                    width={60}
-                    height={60}
-                    className="w-full h-full object-cover rounded-full"
+                    width={20}
+                    height={25}
+                    className="w-16 h-16 object-cover rounded-full"
                   />
                   <label htmlFor="imageUpload" className="absolute bottom-0 right-0 bg-black text-white p-2 rounded-full cursor-pointer">
-                    <FaCloudUploadAlt className="w-6 h-6" />
+                    <FaCloudUploadAlt className="w-3 h-3" />
                   </label>
                   <input
                     id="imageUpload"
