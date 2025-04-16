@@ -60,7 +60,7 @@ const ProfileSection = () => {
       const fetchExpertDetails = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:5070/api/expertauth/${expertId}`
+            `https://amd-api.code4bharat.com/api/expertauth/${expertId}`
           );
           const {
             photoFile,
@@ -147,7 +147,7 @@ const ProfileSection = () => {
         {/* Profile Section */}
         {selectedSection === "Profile" && (
           <div className="mt-6">
-            <div className="flex flex-col md:flex-row items-center md:justify-between space-y-4 md:space-y-0">
+            <div className="flex items-center justify-between flex-wrap gap-4">
               <div className="flex items-center space-x-4 md:space-x-6">
                 {/* Only render the image if the photoFile is a valid URL */}
                 {profileData.photoFile ? (

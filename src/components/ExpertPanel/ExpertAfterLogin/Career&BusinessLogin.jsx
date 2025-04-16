@@ -16,7 +16,7 @@ const CareerBusinessHomeCardsLogin = () => {
     const fetchExperts = async () => {
       try {
         const area = "Career and Business";  // Or dynamically fetch based on user's selection
-        const response = await axios.get(`http://localhost:5070/api/expertauth/area/${area}`);
+        const response = await axios.get(`https://amd-api.code4bharat.com/api/expertauth/area/${area}`);
         setExpertData(response.data.data);
         setLoading(false);
       } catch (err) {
@@ -97,7 +97,7 @@ const CareerBusinessHomeCardsLogin = () => {
 
                 {/* Price Tag */}
                 <div className="absolute top-4 right-4 bg-[#F8F7F3] text-black px-4 py-2 rounded-2xl shadow-xl font-semibold">
-                <p>SAR  {expert.price || "$ 0"}</p>   {/* Default value in case price is missing */}
+                <p>SAR  {expert.price || "0"}</p>   {/* Default value in case price is missing */}
                 </div>
 
                 {/* Transparent Blur Card */}

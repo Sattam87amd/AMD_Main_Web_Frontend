@@ -13,6 +13,7 @@ import Footer from "@/components/Layout/Footer";
 import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 
 const ExpertDetail = () => {
   const [expert, setExpert] = useState(null);
@@ -58,7 +59,7 @@ const ExpertDetail = () => {
     if (expertId) {
       const fetchExpertData = async () => {
         try {
-          const response = await axios.get(`http://localhost:5070/api/expertauth/${expertId}`);
+          const response = await axios.get(`https://amd-api.code4bharat.com/api/expertauth/${expertId}`);
           setExpert(response.data.data);
           setLoading(false);
           localStorage.setItem("consultingExpertData", JSON.stringify(response.data.data));
@@ -132,6 +133,7 @@ const ExpertDetail = () => {
         </aside>
 
         <div className="w-full md:w-[80%] flex flex-col">
+          <MobileNavSearch/>  
         <div className="hidden md:block">
           <NavSearch />
         </div>

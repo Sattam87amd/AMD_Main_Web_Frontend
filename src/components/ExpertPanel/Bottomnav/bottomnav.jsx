@@ -19,7 +19,7 @@ const BottomNav = () => {
   ];
 
   return (
-    <div className=" w-full fixed bottom-0 left-0 right-0 bg-white shadow-lg p-2 flex justify-around items-center border-t sm:flex md:hidden">
+    <div className="fixed w-full flex justify-between items-center bottom-0 left-0 right-0 bg-white shadow-lg p-2 md:hidden">
       {navItems.map((item) => (
         <Link href={item.path} key={item.id} passHref>
           <div

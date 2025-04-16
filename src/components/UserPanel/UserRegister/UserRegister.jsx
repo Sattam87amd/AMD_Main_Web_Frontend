@@ -59,7 +59,7 @@ function UserRegisterPage() {
     setServerError("");
 
     try {
-      const response = await axios.post("http://localhost:5070/api/userauth/registeruser", {
+      const response = await axios.post("https://amd-api.code4bharat.com/api/userauth/registeruser", {
         phone, // Add phone from query params
         firstName: firstName,
         lastName: lastName, // Send lastName separately

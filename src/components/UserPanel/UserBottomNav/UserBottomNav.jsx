@@ -11,9 +11,9 @@ const UserBottomNav = () => {
   const [active, setActive] = useState(pathname || "profile"); // Default active based on current route
 
   const navItems = [
-    { label: "Search", icon: <Search />, id: "search", path: "/experts" },
+    { label: "Search", icon: <Search />, id: "search", path: "/userpanel/loginuserexpert" },
     { label: "Video", icon: <Video />, id: "video", path: "/userpanel/videocall" },
-    { label: "Profile", icon: <User />, id: "profile", path: "/userpanel/userloginprofile" },
+    { label: "Profile", icon: <User />, id: "profile", path: "/userpanel/userpanelprofile" },
   ];
 
   return (

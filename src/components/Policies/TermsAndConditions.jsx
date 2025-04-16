@@ -2,12 +2,12 @@ import React from 'react';
 
 export default function TermsAndConditions() {
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4 md:mt-24">
-      <div className="max-w-4xl w-full bg-white shadow-lg rounded-lg p-6 md:p-10">
-        <h1 className="text-4xl font-bold text-center mb-6" style={{ color: '#106EB5' }}>
+    <div className="flex justify-center items-start min-h-screen bg-gray-100 px-4 pt-8 pb-8">
+      <div className="max-w-4xl w-full bg-white shadow-lg rounded-lg p-6 md:p-10 mt-20">
+        <h1 className="text-4xl md:text-5xl font-bold text-center mb-6">
           Terms and Conditions
         </h1>
-        <div className="space-y-6 text-gray-700 text-lg">
+        <div className="space-y-8 text-gray-700 text-lg">
           <p>
             Welcome to <strong>AMD</strong>. By accessing or using our website 
             (<a href="https://amd.code4bharat.com/" className="text-blue-500 hover:underline">
@@ -42,15 +42,6 @@ export default function TermsAndConditions() {
               be governed by the laws of India and subject to the jurisdiction of Mumbai courts.
             </li>
           </ol>
-          {/* <p>
-            For further details, please refer to the complete terms and conditions at&nbsp;
-            <a
-              href="#"
-              className="text-blue-500 hover:underline"
-            >
-              [Terms & Conditions link]
-            </a>.
-          </p> */}
         </div>
       </div>
     </div>
