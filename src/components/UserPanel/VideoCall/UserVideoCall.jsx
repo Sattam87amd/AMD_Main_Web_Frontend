@@ -22,7 +22,7 @@ const UserVideoCall = () => {
         if (token) {
           // Fetch bookings data
           const bookingsResponse = await axios.get(
-            "http://localhost:5070/api/session/Userbookings",
+            "https://amd-api.code4bharat.com/api/session/Userbookings",
             {
               headers: {
                 Authorization: `Bearer ${token}`,

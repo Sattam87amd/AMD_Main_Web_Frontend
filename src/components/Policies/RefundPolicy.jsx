@@ -2,12 +2,12 @@ import React from 'react';
 
 export default function RefundPolicy() {
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4 md:mt-12">
-      <div className="max-w-4xl w-full bg-white shadow-lg rounded-lg p-6 md:p-10">
-        <h1 className="text-4xl font-bold text-center mb-6" style={{ color: '#106EB5' }}>
+    <div className="flex justify-center items-start min-h-screen bg-gray-100 px-4 pt-8 pb-8">
+      <div className="max-w-4xl w-full bg-white shadow-lg rounded-lg p-6 md:p-10 mt-20">
+        <h1 className="text-4xl md:text-5xl font-bold text-center mb-6">
           Refund Policy
         </h1>
-        <div className="space-y-6 text-gray-700 text-lg">
+        <div className="space-y-8 text-gray-700 text-lg">
           <p>
             At <strong>AMD</strong>, we strive to ensure your satisfaction. However, we understand that circumstances may change, and we are here to assist you with a fair refund process:
           </p>
