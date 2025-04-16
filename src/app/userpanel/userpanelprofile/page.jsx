@@ -7,6 +7,8 @@ import Navtop from '@/components/UserPanel/NavTop/NavTopuser';
 import BottomNav from '@/components/UserPanel/BottomNav/BottomNav';
 import UserSidebar from '@/components/UserPanel/UseSideBar/UserSidebar';
 import Footer from '@/components/UserPanel/Layout/Footer';
+import UserBottomNav from '@/components/UserPanel/UserBottomNav/UserBottomNav';
+import UserMobileNavSearch from '@/components/UserPanel/Experts/UserMobileexpert/UserMobileNavSearch';
 
 
 const Page = () => {
@@ -33,16 +35,18 @@ const Page = () => {
 
         {/* Main Content */}
         <div className="md:w-[80%] p-4  ">
+          <UserMobileNavSearch/>
           <Navtop activeTab={activeTab} />
           <UserProfileSection />
         </div>
 
         {/* Bottom Navigation for Mobile */}
         <div className="fixed bottom-0 left-0 right-0 md:hidden">
-          <BottomNav />
+          {/* <BottomNav /> */}
+          <UserBottomNav/>
         </div>
       </div>
-      <div className="md:mt-3.5">
+      <div className="md:mt-3.5 hidden sm:block">
         <Footer />
       </div>
     </>

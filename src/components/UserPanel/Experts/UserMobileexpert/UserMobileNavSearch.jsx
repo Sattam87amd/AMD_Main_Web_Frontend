@@ -2,8 +2,11 @@
 
 import React, { useState } from "react";
 import { FaSearch, FaGift, FaUser, FaFilter, FaArrowLeft } from "react-icons/fa";
+import { RiArrowLeftSLine } from "react-icons/ri"
+import { useRouter } from "next/navigation"; 
 
 const UserMobileNavSearch = () => {
+  const router = useRouter();
   const [showFilter, setShowFilter] = useState(false);
   const [activeBrand, setActiveBrand] = useState(null);
   const [activeFeature, setActiveFeature] = useState(null);
@@ -29,7 +32,11 @@ const UserMobileNavSearch = () => {
       {/* Navbar */}
       <nav className="flex items-center justify-between mb-4">
         {/* Left - Brand Name */}
-        <div className="text-2xl font-bold text-black">AMD</div>
+        <div className="text-2xl font-bold text-black flex items-center"
+          ><RiArrowLeftSLine className="mr-2  text-black" 
+          onClick={() => router.back()}
+          />AMD
+          </div>
 
         {/* Right - Icons */}
         <div className="flex items-center space-x-4 relative">

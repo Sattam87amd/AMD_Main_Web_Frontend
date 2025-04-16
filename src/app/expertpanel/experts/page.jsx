@@ -10,6 +10,7 @@ import WellnessHomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/We
 import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
 import Threepara from "@/components/Experts/Threepara/threepara";
 import Footer from "@/components/Layout/Footer";
+import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";
 
 const Page = () => {
@@ -28,6 +29,7 @@ const Page = () => {
         <div className= "w-full md:w-[80%]">
           {/* Desktop View - NavSearch */}
           <div className="">
+        <MobileNavSearch/> 
             <NavSearch />
             <LoginExpertCategory />
             <div className="space-y-8 px-4 md:px-8">
@@ -46,7 +48,11 @@ const Page = () => {
       <div className="w-full hidden sm:block">
         <Footer />
       </div>
-      <div><BottomNav/></div>
+
+      <div>
+        <BottomNav/>
+        </div>
+
     </div>
   );
 };

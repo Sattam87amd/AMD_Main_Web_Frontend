@@ -3,6 +3,8 @@
 import React, { useState } from "react";
 import { FaSearch, FaGift, FaUser, FaFilter, FaArrowLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation"; // Import useRouter for navigation
+import { RiArrowLeftSLine } from "react-icons/ri";
+// import { useNavigate } from "react-router-dom";
 
 const MobileNavSearch = () => {
   const [showFilter, setShowFilter] = useState(false);
@@ -31,7 +33,11 @@ const MobileNavSearch = () => {
       {/* Navbar */}
       <nav className="flex items-center justify-between mb-4">
         {/* Left - Brand Name */}
-        <div className="text-2xl font-bold text-black">AMD</div>
+          <div className="text-2xl font-bold text-black flex items-center"
+          ><RiArrowLeftSLine className="mr-2  text-black" 
+          onClick={() => router.back()}
+          />AMD
+          </div>
 
         {/* Right - Icons */}
         <div className="flex items-center space-x-4 relative">
@@ -40,12 +46,14 @@ const MobileNavSearch = () => {
             className={`text-xl cursor-pointer ${showFilter ? "text-black" : "text-gray-600"}`}
             onClick={toggleFilter}
           />
-          <FaGift className="text-xl text-gray-600 cursor-pointer" />
-          <FaUser className="text-xl text-gray-600 cursor-pointer" />
+          <FaGift className="text-xl text-gray-600 cursor-pointer" 
+          onClick={() => router.push("/giftsession")} />
+          <FaUser className="text-xl text-gray-600 cursor-pointer" 
+          onClick={() => router.push("/userlogin")}/>
 
           {/* Filter Dropdown */}
           {showFilter && (
-            <div className="absolute right-0 mt-2 w-80 bg-white shadow-xl rounded-xl p-4 z-50 mt-72">
+            <div className="absolute right-0 mt-2 w-80 bg-white shadow-xl rounded-xl p-4 z-50 ">
               {/* Header - Back & Save */}
               <div className="flex items-center justify-between mb-4">
                 <button className="flex items-center space-x-2" onClick={toggleFilter}>
@@ -98,12 +106,12 @@ const MobileNavSearch = () => {
       </nav>
 
       {/* Headline */}
-      <h1 className="text-xl font-bold text-black mb-4">
+      {/* <h1 className="text-xl font-bold text-black mb-4">
         Find The Right Expert In Seconds!
-      </h1>
+      </h1> */}
 
       {/* Categories Section */}
-      <div className="flex overflow-x-auto space-x-4 py-2">
+      {/* <div className="flex overflow-x-auto space-x-4 py-2">
         {categories.map((category, index) => (
           <div
             key={index}
@@ -120,7 +128,7 @@ const MobileNavSearch = () => {
             </div>
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };

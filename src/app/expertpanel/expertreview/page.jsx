@@ -6,6 +6,7 @@ import Sidebar from '@/components/ExpertPanel/SideBar/SideBar';
 import Navtop from '@/components/ExpertPanel/Navtop/navtop';
 import ExpertReview from '@/components/ExpertPanel/Expertreview/expertreview';
 import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
+import MobileNavSearch from '@/components/Layout/mobilenavsearch';
 
 const Page = () => {
   const pathname = usePathname(); // Get current route
@@ -20,8 +21,13 @@ const Page = () => {
 
       {/* Right Side Content with 2/3 width */}
       <div className="w-full md:w-[80%] p-4">
+        <div className="w-[27rem]">
+        <MobileNavSearch/>
+        </div>
         <Navtop activeTab={activeTab} />
+        <div className="sm:block w-[25rem] md:w-full">
         <ExpertReview />
+        </div>
 
         {/* Bottom Navigation - Visible only on mobile */}
         <div className="fixed bottom-0 left-0 right-0 md:hidden">

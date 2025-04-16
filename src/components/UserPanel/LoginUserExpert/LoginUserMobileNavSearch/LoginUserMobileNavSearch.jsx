@@ -2,6 +2,9 @@
 
 import React, { useState } from "react";
 import { FaSearch, FaGift, FaUser, FaFilter, FaArrowLeft } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import { RiArrowLeftSLine } from "react-icons/ri"
+
 
 const LoginUserMobileNavSearch = () => {
   const [showFilter, setShowFilter] = useState(false);
@@ -32,7 +35,9 @@ const LoginUserMobileNavSearch = () => {
       {/* Navbar */}
       <nav className="flex items-center justify-between mb-4">
         {/* Left - Brand Name */}
-        <div className="text-2xl font-bold text-black">AMD</div>
+        <div className="text-2xl font-bold text-black flex items-center"
+        ><RiArrowLeftSLine className="mr-2" onClick={() => navigate.back()} />
+AMD</div>
 
         {/* Right - Icons */}
         <div className="flex items-center space-x-4 relative">
@@ -43,8 +48,10 @@ const LoginUserMobileNavSearch = () => {
             }`}
             onClick={toggleFilter}
           />
-          <FaGift className="text-xl text-gray-600 cursor-pointer" />
-          <FaUser className="text-xl text-gray-600 cursor-pointer" />
+          <FaGift className="text-xl text-gray-600 cursor-pointer" 
+          onClick={() => router.push("/userpanel/usergiftsession")}/>
+          <FaUser className="text-xl text-gray-600 cursor-pointer" 
+          onClick={() => router.push("/userpanel/userprofile")}/>
 
           {/* Filter Dropdown */}
           {showFilter && (
