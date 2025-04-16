@@ -2,12 +2,12 @@ import React from 'react';
 
 export default function PrivacyPolicy() {
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100 px-4 mt-24">
-      <div className="max-w-4xl w-full bg-white shadow-lg rounded-lg p-6 md:p-10">
-        <h1 className="text-4xl font-bold text-center mb-6" style={{ color: '#106EB5' }}>
-          Privacy Policy
+    <div className="flex justify-center items-start min-h-screen bg-gray-100 px-4 pt-8 pb-8">
+      <div className="max-w-4xl w-full bg-white shadow-lg rounded-lg p-6 md:p-10 mt-20">
+        <h1 className="text-4xl md:text-5xl font-bold text-center mb-6">
+          Privacy & Policy
         </h1>
-        <div className="space-y-6 text-gray-700 text-lg">
+        <div className="space-y-8 text-gray-700 text-lg">
           <p>
             At <strong>AMD</strong>, we are committed to safeguarding your privacy. This policy explains how we
             collect, use, and protect your personal information to ensure a secure and transparent experience.

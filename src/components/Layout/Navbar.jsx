@@ -8,8 +8,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import SeacthExperts from "../SearchExperts/SearchExperts";  // Import SearchExperts component
 import GoogleTranslateButton from "../GoogleTranslateButton";
 
-
-
 function Navbar() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
@@ -41,20 +39,23 @@ function Navbar() {
             AMD
           </Link>
 
-          {/* Center Links */}
+          {/* Center Links for Desktop */}
           <div className="hidden md:flex justify-center flex-grow items-center space-x-12 text-[19px]">
             <Link href="/joinasexpert" className="text-black">
               Become an Expert
             </Link>
+            
+
             <Link href="/ourmission" className="text-black">
               About Us
             </Link>
-            <button onClick={toggleSearchPage} className="text-black hover:opacity-80">
-              <Search className="inline-block h-5 w-5" />
+            {/* Centered Search Icon on Desktop */}
+            <button onClick={toggleSearchPage} className="text-black hover:opacity-80 pb-1">
+              <Search className="inline-block h-5 w-5 " />
             </button>
           </div>
 
-          {/* Right Side Elements */}
+          {/* Right Side Elements for Desktop */}
           <div className="hidden md:flex items-center space-x-6">
             <Link href="/giftsession">
               <button className="flex items-center bg-black text-white font-medium rounded-lg text-[16px] px-4 py-2">
@@ -63,13 +64,6 @@ function Navbar() {
               </button>
             </Link>
             <GoogleTranslateButton />         
-          
-       
-
-            <Link href="/profile">
-              <User className="h-6 w-6 text-black cursor-pointer hover:opacity-80" />
-            </Link>
-
             <Link href="/userlogin">
               <button className="bg-white text-black font-medium rounded-lg text-[16px] px-4 py-2">
                 Sign Up
@@ -78,8 +72,18 @@ function Navbar() {
           </div>
 
           {/* Mobile Menu Button */}
-          <button onClick={toggleMenu} className="md:hidden text-black p-2">
-            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          <div className="md:hidden flex items-center space-x-4">
+            <button onClick={toggleMenu} className="text-black p-2">
+              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
+
+          {/* Search Icon - Visible only on mobile, outside the toggle menu */}
+          <button 
+            onClick={toggleSearchPage} 
+            className="md:hidden text-black p-2 absolute right-16 top-7"
+          >
+            <Search className="h-6 w-6" />
           </button>
         </div>
 
@@ -95,15 +99,6 @@ function Navbar() {
             <Link href="/ourmission" className="block text-black" onClick={closeMenu}>
               About Us
             </Link>
-            <button
-              onClick={() => {
-                toggleSearchPage();
-                closeMenu();
-              }}
-              className="block text-black"
-            >
-              <Search className="inline-block h-6 w-6" />
-            </button>
 
             <div className="flex flex-col space-y-2 mt-4">
               <button
@@ -113,14 +108,6 @@ function Navbar() {
                 Gift a Session
                 <Gift className="ml-2 h-5 w-5" />
               </button>
-
-              <button
-                onClick={() => router.push("/profile")}
-                className="flex items-center bg-white text-black border border-black font-medium rounded-lg text-[16px] px-4 py-2 w-full"
-              >
-                Profile
-              </button>
-
               <button
                 onClick={() => router.push("/userlogin")}
                 className="flex items-center bg-white text-black font-medium rounded-lg text-[16px] px-4 py-2 w-full"
