@@ -155,6 +155,7 @@ function RegisterForm() {
       formData.append('areaOfExpertise', areaOfExpertise);
       formData.append('specificArea', specificArea);  // Will be used if 'Others' is selected
       formData.append('experience', experience);
+      formData.append('price', price);
   
       // Append certification and photo files if selected
       if (fileInputRefCertifications.current.files[0]) {
@@ -167,7 +168,7 @@ function RegisterForm() {
       try {
         // API call to register the expert
         const response = await axios.post(
-          'http://localhost:5070/api/expertauth/register', 
+          'https://amd-api.code4bharat.com/api/expertauth/register', 
           formData,
           {
             headers: {

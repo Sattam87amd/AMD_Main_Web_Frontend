@@ -58,7 +58,7 @@ const ExpertDetail = () => {
     if (expertId) {
       const fetchExpertData = async () => {
         try {
-          const response = await axios.get(`http://localhost:5070/api/expertauth/${expertId}`);
+          const response = await axios.get(`https://amd-api.code4bharat.com/api/expertauth/${expertId}`);
           setExpert(response.data.data);
           setLoading(false);
           localStorage.setItem("expertData", JSON.stringify(response.data.data));
@@ -291,7 +291,7 @@ const ExpertDetail = () => {
                       </div>
                       <p className="text-2xl font-semibold">Get dedicated one-on-one expert guidance</p>
                       <div className="mt-4">
-                        <p className="text-xl font-semibold">Starting at $350</p>
+                        <p className="text-xl font-semibold">Starting at SAR {expert.price}</p>
                         <div className="flex items-center justify-start mt-2">
                           <div className="flex items-center">
                             {[...Array(5)].map((_, i) => (
@@ -326,7 +326,7 @@ const ExpertDetail = () => {
                       </div>
                       <p className="text-2xl font-semibold">Join a small group discussion with expert guidance</p>
                       <div className="mt-4">
-                        <p className="text-xl font-semibold">Starting at $150</p>
+                        <p className="text-xl font-semibold">Starting at SAR {expert.price}</p>
                         <div className="flex items-center justify-start mt-2">
                           <div className="flex items-center">
                             {[...Array(5)].map((_, i) => (

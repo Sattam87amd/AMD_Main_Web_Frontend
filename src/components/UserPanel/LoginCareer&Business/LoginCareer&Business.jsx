@@ -17,7 +17,7 @@ const LoginCareerBusiness = () => {
       try {
         const area = "Career and Business";
         const response = await axios.get(
-          `http://localhost:5070/api/expertauth/area/${area}`
+          `https://amd-api.code4bharat.com/api/expertauth/area/${area}`
         );
         setExpertData(response.data.data);
         setLoading(false);
@@ -86,7 +86,7 @@ const LoginCareerBusiness = () => {
       {/* Cards Section with Animation */}
       <div className="overflow-x-auto md:overflow-visible">
         <motion.div
-          className="flex md:grid md:grid-cols-5 gap-4 md:gap-64 px-4 md:px-0 overflow-x-scroll scrollbar-hide"
+          className="flex md:grid md:grid-cols-5 gap-4 md:gap-72 px-4 md:px-0 overflow-x-scroll scrollbar-hide"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}

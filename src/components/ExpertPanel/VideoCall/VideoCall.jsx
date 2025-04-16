@@ -28,7 +28,7 @@ const VideoCall = () => {
           setError("Token is required");
           return;
         }
-
+    
         const [bookingsResponse, sessionsResponse] = await Promise.all([
           axios.get("http://localhost:5070/api/session/mybookings", {
             headers: {
@@ -41,13 +41,19 @@ const VideoCall = () => {
             },
           }),
         ]);
-
-        // Combining expert and user sessions into one
+    
+        // Combine expert and user sessions with a session type
         const combinedSessions = [
-          ...(sessionsResponse?.data.expertSessions || []),
-          ...(sessionsResponse?.data.userSessions || []),
+          ...(sessionsResponse?.data.expertSessions || []).map((session) => ({
+            ...session,
+            sessionType: "Expert To Expert",
+          })),
+          ...(sessionsResponse?.data.userSessions || []).map((session) => ({
+            ...session,
+            sessionType: "User To Expert",
+          })),
         ];
-
+    
         setMyBookings(bookingsResponse?.data || []);
         setMySessions(combinedSessions);
       } catch (err) {
@@ -56,6 +62,7 @@ const VideoCall = () => {
         setLoading(false);
       }
     };
+    
 
     fetchSessions();
   }, []);
@@ -300,7 +307,17 @@ const VideoCall = () => {
                         <span>Chat</span> {/* Text on the right */}
                       </button>
                     </>
-                  ) : booking.status === "completed" ? (
+                  ) : booking.status === "rejected" ?(
+                    <>
+                    <span className="text-red-500 text-sm font-medium">
+                        Rejected
+                      </span>
+                    </>
+                
+                
+                ):
+                  
+                  booking.status === "completed" ? (
                     <>
                       <button
                         className="px-4 py-1 text-white bg-blue-500 rounded"
@@ -345,105 +362,103 @@ const VideoCall = () => {
       {activeTab === "sessions" && (
         <div className="space-y-4">
           {mySessions.length === 0 ? (
-            <div className="text-center text-gray-500">
-              No Upcoming Sessions
+  <div className="text-center text-gray-500">No Upcoming Sessions</div>
+) : (
+  mySessions.map((session) => (
+    <div
+      key={session._id}
+      className="p-4 border rounded-lg shadow-sm bg-white hover:shadow-xl transition-shadow duration-300"
+    >
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-4">
+          {/* Add session type display */}
+          <div className="text-center bg-gray-100 px-3 py-2 rounded-lg shadow-md">
+            <p className="text-xs text-gray-500">
+              {session.sessionType} {/* Display session type */}
+            </p>
+            <p className="text-lg font-bold">
+              {new Date(session.sessionDate).toLocaleDateString("en-US", {
+                weekday: "short",
+              })}
+            </p>
+          </div>
+          <div>
+            {/* Other session details */}
+            <div className="flex">
+              <CiClock2 className="mt-[3px] mr-1" />
+              <p className="text-sm text-gray-500 mr-5">
+                {session.sessionTime}
+              </p>
+              <p className="text-sm text-gray-500 mr-5">
+                {session.duration}
+              </p>
             </div>
-          ) : (
-            mySessions.map((session) => (
-              <div
-                key={session._id}
-                className="p-4 border rounded-lg shadow-sm bg-white hover:shadow-xl transition-shadow duration-300"
-              >
-                {/* Upper Section (Date & Time, Name) */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <div className="text-center bg-gray-100 px-3 py-2 rounded-lg shadow-md">
-                      <p className="text-xs text-gray-500">
-                        {new Date(session.sessionDate).toLocaleDateString(
-                          "en-US",
-                          {
-                            weekday: "short",
-                          }
-                        )}
-                      </p>
-                      <p className="text-lg font-bold">
-                        {new Date(session.sessionDate).toLocaleDateString(
-                          "en-US",
-                          {
-                            day: "numeric",
-                          }
-                        )}
-                      </p>
-                    </div>
-                    <div>
-                      <div className="flex">
-                        <CiClock2 className="mt-[3px] mr-1" />
-                        <p className="text-sm text-gray-500 mr-5">
-                          {session.sessionTime}
-                        </p>
-                        <p className="text-sm text-gray-500 mr-5">
-                          {session.duration}
-                        </p>
-                      </div>
-                      <p className="text-sm font-medium text-gray-700 mt-2">
-                        <FaUser className="inline mr-1" />
-                        {session.firstName} {session.lastName}
-                      </p>
-                    </div>
-                  </div>
+            <p className="text-sm font-medium text-gray-700 mt-2">
+              <FaUser className="inline mr-1" />
+              {session.firstName} {session.lastName}
+            </p>
+          </div>
+        </div>
 
-                  {/* Right Side (Accept/Decline Buttons or Status) */}
-                  <div className="flex items-center space-x-4">
-                    {session.status === "confirmed" ? (
-                      <>
-                        <span className="text-green-500 text-sm font-medium">
-                          Accepted
-                        </span>
-                        <button className="px-4 py-1 border rounded text-sm flex items-center space-x-2">
-                          <MessagesSquare className="w-5 h-5" />{" "}
-                          {/* Message icon on the left */}
-                          <span>Chat</span> {/* Text on the right */}
-                        </button>
-                        {session.zoomMeetingLink ? (
-                          <a
-                            href={session.zoomMeetingLink} // Direct link to the meeting
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <button className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600 flex items-center space-x-2">
-                              <Video className="w-5 h-5" />{" "}
-                              {/* Video icon on the left */}
-                              <span>Join</span> {/* Text on the right */}
-                            </button>
-                          </a>
-                        ) : (
-                          <span className="text-yellow-500 text-sm ml-2">
-                            Zoom link not ready
-                          </span>
-                        )}
-                      </>
-                    ) : session.status === "rejected" ? (
-                      <span className="text-red-500 text-sm font-medium">
-                        Rejected
-                      </span>
-                    ) : (
-                      <>
-                        <button
-                          className="px-4 py-2 bg-green-500 text-white rounded text-sm hover:bg-green-600 transition-all duration-200"
-                          onClick={() => handleAccept(session._id)}
-                        >
-                          Accept
-                        </button>
-                        <button
-                          className="px-4 py-2 bg-red-500 text-white rounded text-sm hover:bg-red-600 transition-all duration-200"
-                          onClick={() => handleDecline(session._id)}
-                        >
-                          Decline
-                        </button>
-                      </>
-                    )}
-                  </div>
-                </div>
+        {/* Accept/Decline/Status Logic */}
+        <div className="flex items-center space-x-4">
+          {session.status === "confirmed" ? (
+            <>
+              <span className="text-green-500 text-sm font-medium">
+                Accepted
+              </span>
+              <button className="px-4 py-1 border rounded text-sm flex items-center space-x-2">
+                <MessagesSquare className="w-5 h-5" />
+                <span>Chat</span>
+              </button>
+              {session.zoomMeetingLink ? (
+                <a
+                  href={session.zoomMeetingLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <button className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600 flex items-center space-x-2">
+                    <Video className="w-5 h-5" />
+                    <span>Join</span>
+                  </button>
+                </a>
+              ) : (
+                <span className="text-yellow-500 text-sm ml-2">
+                  Zoom link not ready
+                </span>
+              )}
+            </>
+          ) : session.status === "rejected" ? (
+            <>
+              <span className="text-red-500 text-sm font-medium">
+                Rejected
+              </span>
+            </>
+          ) : session.status === "Rating Submitted" ? (
+            <>
+              <span className="text-green-400 text-sm font-medium">
+                Rating Submitted
+              </span>
+            </>
+          ) : (
+            <>
+              <button
+                className="px-4 py-2 bg-green-500 text-white rounded text-sm hover:bg-green-600 transition-all duration-200"
+                onClick={() => handleAccept(session._id)}
+              >
+                Accept
+              </button>
+              <button
+                className="px-4 py-2 bg-red-500 text-white rounded text-sm hover:bg-red-600 transition-all duration-200"
+                onClick={() => handleDecline(session._id)}
+              >
+                Decline
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    
 
                 {/* Note Section (Below Date/Name) */}
                 {session.note && (
