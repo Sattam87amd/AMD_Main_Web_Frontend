@@ -400,17 +400,7 @@ const VideoCall = () => {
                     </span>
                   )}
                 </>
-              ) : session.status === "unconfirmed" ? (
-                <>
-                  <span className="text-yellow-500 text-sm font-medium">
-                    Unconfirmed
-                  </span>
-                  <button className="px-4 py-1 border rounded text-sm flex items-center space-x-2">
-                    <MessagesSquare className="w-5 h-5" />
-                    <span>Chat</span>
-                  </button>
-                </>
-              ) : session.status === "rejected" ? (
+              ) :  session.status === "rejected" ? (
                 <>
                   <span className="text-red-500 text-sm font-medium">
                     Rejected
@@ -428,7 +418,7 @@ const VideoCall = () => {
                     Rating Submitted
                   </span>
                 </>
-              ) : (
+              ) : session.status === "unconfirmed" ?(
                 <>
                   <button
                     className="px-4 py-2 bg-green-500 text-white rounded text-sm hover:bg-green-600 transition-all duration-200"
@@ -443,7 +433,7 @@ const VideoCall = () => {
                     Decline
                   </button>
                 </>
-              )}
+              ):null}
             </div>
           </div>
 
