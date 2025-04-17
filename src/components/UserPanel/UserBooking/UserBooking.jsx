@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { StarIcon, UserPlusIcon } from "lucide-react";
+import { FaStar } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 
@@ -99,9 +100,9 @@ const UserToExpertBooking = () => {
       return;
     }
 
-    if (noteWordCount < 50) {
-      setNoteError("Note must contain at least 50 words.");
-      alert("✍️ Your note must be at least 50 words.");
+    if (noteWordCount < 25) {
+      setNoteError("Note must contain at least 25 words.");
+      alert("✍️ Your note must be at least 25 words.");
       return;
     }
 
@@ -119,7 +120,7 @@ const UserToExpertBooking = () => {
 
     };
 
-    console.log("Booking Data:", fullBookingData);
+    // console.log("Booking Data:", fullBookingData);
 
     if (!consultingExpert?._id || !sessionData?.areaOfExpertise || !sessionData?.sessionDate || !sessionData?.sessionTime) {
       alert('Please fill in all required fields before submitting the booking.');
@@ -140,8 +141,9 @@ const UserToExpertBooking = () => {
         }
       );
 
-      console.log("Booking successful:", response.data);
+      // console.log("Booking successful:", response.data);
       alert("Session booked successfully!");
+      localStorage.removeItem("sessionData", "bookingData", "consultingExpertData")
       router.push('/userpanel/videocall');
     } catch (error) {
       console.error("Booking error:", error.response?.data || error.message);
@@ -173,12 +175,25 @@ const UserToExpertBooking = () => {
             </h1>
             <p className="text-gray-500 text-sm md:text-base">{consultingExpert?.designation || "Expert"}</p>
 
-            <div className="flex items-center gap-1 mt-2">
-              {[...Array(5)].map((_, i) => (
-                <StarIcon key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-              ))}
-              <span className="ml-1 text-sm font-semibold">{consultingExpert?.rating || 5.0}</span>
-            </div>
+           <div>
+                                     <p className="text-xl font-semibold">SAR {consultingExpert.price} • Session</p>
+                                     <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
+                                       {[...Array(5)].map((_, i) => {
+                                         const rating = consultingExpert.averageRating || 0; // Use 0 as a fallback if expert.rating is falsy (undefined, null, etc.)
+                                         
+                                         const isFilled = i < Math.floor(rating); // If the index is less than the rating
+                                         const isHalf = i === Math.floor(rating) && rating % 1 !== 0; // If the rating has a decimal and we are at the exact index
+                                         return (
+                                           <FaStar
+                                             key={i}
+                                             className={isFilled || isHalf ? "text-[#FFA629]" : "text-gray-300"} // Full or empty star color
+                                           />
+                                         );
+                                       })}
+                                     </div>
+           
+                                   </div>
+           
 
             <div className="mt-4">
               <p className="font-medium mb-2 text-gray-700">Sessions -</p>
@@ -269,7 +284,7 @@ const UserToExpertBooking = () => {
                 <label className="block text-sm mb-1">Note</label>
                 <textarea
                   name="note"
-                  placeholder="Write something about yourself in minimum 50 words..."
+                  placeholder="Write something about yourself in minimum 25 words..."
                   value={bookingData.note}
                   onChange={handleInputChange}
                   className="w-full h-[120px] border flex justify-center items-center rounded px-3 py-2 text-sm"

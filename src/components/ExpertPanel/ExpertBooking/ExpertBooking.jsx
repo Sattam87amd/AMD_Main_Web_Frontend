@@ -126,8 +126,8 @@ const ExpertBooking = () => {
         }
       );
 
-      console.log("Booking successful:", response.data);
-      
+      // console.log("Booking successful:", response.data);
+      localStorage.removeItem("sessionData", "bookingData", "expertData")
       // Show success message with a delay before redirection
       toast.success("Session booked successfully! Redirecting to video call...", {
         position: "bottom-center",
