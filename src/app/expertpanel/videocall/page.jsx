@@ -27,7 +27,7 @@ const activeTab = activeMenu ? activeMenu.label : "Video Call";
       </div>
 
       {/* Right Side Content with 2/3 width */}
-      <div className="w-full md:w-[80%] p-4">
+      <div className="w-full md:w-[80%] md:p-4">
       <MobileNavSearch/>
         <Navtop activeTab={activeTab}/>
         <VideoCall activeTab={activeTab}/>

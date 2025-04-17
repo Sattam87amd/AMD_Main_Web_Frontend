@@ -261,8 +261,20 @@ const ExpertDetail = () => {
                         <div>
                           <p className="text-xl font-semibold">SAR {expert.price} • Session</p>
                           <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
-                            {[...Array(5)].map((_, i) => <FaStar key={i} />)}
+                            {[...Array(5)].map((_, i) => {
+                              const rating = expert.rating || 0; // Use 0 as a fallback if expert.rating is falsy (undefined, null, etc.)
+                              
+                              const isFilled = i < Math.floor(rating); // If the index is less than the rating
+                              const isHalf = i === Math.floor(rating) && rating % 1 !== 0; // If the rating has a decimal and we are at the exact index
+                              return (
+                                <FaStar
+                                  key={i}
+                                  className={isFilled || isHalf ? "text-[#FFA629]" : "text-gray-300"} // Full or empty star color
+                                />
+                              );
+                            })}
                           </div>
+
                         </div>
                         <button
                           className="py-3 px-12 bg-black text-white rounded-md hover:bg-gray-900 transition"
@@ -293,11 +305,21 @@ const ExpertDetail = () => {
                       <div className="mt-4">
                         <p className="text-xl font-semibold">Starting at SAR {expert.price}</p>
                         <div className="flex items-center justify-start mt-2">
-                          <div className="flex items-center">
-                            {[...Array(5)].map((_, i) => (
-                              <FaStar key={i} className="text-[#FFA629]" />
-                            ))}
-                          </div>
+                        <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
+  {[...Array(5)].map((_, i) => {
+    const rating = expert.rating || 0; // Use 0 as a fallback if expert.rating is falsy (undefined, null, etc.)
+    
+    const isFilled = i < Math.floor(rating); // If the index is less than the rating
+    const isHalf = i === Math.floor(rating) && rating % 1 !== 0; // If the rating has a decimal and we are at the exact index
+    return (
+      <FaStar
+        key={i}
+        className={isFilled || isHalf ? "text-[#FFA629]" : "text-gray-300"} // Full or empty star color
+      />
+    );
+  })}
+</div>
+
                         </div>
                       </div>
                       <div className="flex items-center justify-center mt-4 gap-8">

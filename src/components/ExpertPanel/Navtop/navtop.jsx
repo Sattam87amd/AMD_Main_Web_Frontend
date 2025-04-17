@@ -53,7 +53,7 @@ const Navtop = ({ activeTab }) => {
       {/* Left Section */}
       <div>
         <p className="text-gray-500 text-sm">Hi, {userData.firstName || "Loading..."}</p>
-        <h1 className="text-2xl font-bold">{activeTab}</h1>
+        <h1 className="text-2xl font-bold ">{activeTab}</h1>
       </div>
 
       {/* Right Section */}
