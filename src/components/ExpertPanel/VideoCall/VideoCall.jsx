@@ -260,8 +260,8 @@ const VideoCall = () => {
                 </div>
 
                 {/* Right Side (Session Type, Status & Zoom Join) */}
-                <div className="flex items-center space-x-4">
-                  <div className="text-sm text-gray-500">
+                <div className=" space-x-4">
+                  <div className="flex items-center space-x-4 text-sm text-gray-500">
                     {booking.status === "confirmed" ? (
                       <>
                         <span className="text-green-500 text-sm font-medium">
