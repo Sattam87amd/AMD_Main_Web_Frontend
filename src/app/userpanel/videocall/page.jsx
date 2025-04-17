@@ -31,8 +31,10 @@ const page = () => {
         </div>
   
         {/* Right Side Content with 2/3 width */}
-        <div className="w-full md:w-[80%] p-4">
+        <div className="w-full md:w-[80%] md:p-4">
+          <div className='md:hidden '>
           <UserMobileNavSearch/>
+          </div>
           <Navtop activeTab={activeTab}/>
           <UserVideoCall activeTab={activeTab}/>
          
