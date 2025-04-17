@@ -12,15 +12,12 @@ const UserVideoCall = () => {
   const [myBookings, setMyBookings] = useState([]);
   const [mySessions, setMySessions] = useState([]);
 
-  // Fetch data from API (replace with actual API endpoints)
-  // Fetch data from API (replace with actual API endpoints)
   useEffect(() => {
     const fetchBookingsAndSessions = async () => {
       try {
         const token = localStorage.getItem("userToken");
 
         if (token) {
-          // Fetch bookings data
           const bookingsResponse = await axios.get(
             "http://localhost:5070/api/session/Userbookings",
             {
@@ -30,9 +27,6 @@ const UserVideoCall = () => {
             }
           );
           setMyBookings(bookingsResponse.data);
-
-          
-          
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -41,84 +35,92 @@ const UserVideoCall = () => {
 
     fetchBookingsAndSessions();
   }, []);
-  
 
   return (
-    <div className="w-full max-w-8xl mx-left py-10 px-4 mt-20 ">
+    <div className="w-full max-w-8xl mx-left py-10 px-4 ">
+      {/* Tabs */}
+      <div className="flex space-x-2 mb-6">
+        <button
+          className={`px-4 py-2 text-sm font-medium rounded ${
+            activeTab === "bookings" ? "bg-black text-white" : "bg-gray-200"
+          }`}
+          onClick={() => setActiveTab("bookings")}
+        >
+          My Bookings
+        </button>
+      </div>
+
       {/* Bookings Tab */}
       {activeTab === "bookings" && (
         <div className="space-y-4">
-          {myBookings.map((booking) => (
-            <div
-              key={booking._id}
-              className="flex items-center justify-between p-4 border rounded-lg shadow-sm"
-            >
-              {/* Left Side (Date & Details) */}
-              <div className="flex items-center space-x-4">
-                <div className="text-center bg-gray-100 px-3 py-2 rounded-lg shadow-md">
-                  <p className="text-xs text-gray-500">
-                    {new Date(booking.sessionDate).toLocaleDateString("en-US", {
-                      weekday: "short",
-                    })}
-                  </p>
-                  <p className="text-lg font-bold">
-                    {new Date(booking.sessionDate).toLocaleDateString("en-US", {
-                      day: "numeric",
-                    })}
-                  </p>
-                </div>
-                <div>
+          {myBookings.length === 0 ? (
+            <p className="text-left text-black text-lg ">No bookings found</p>
+          ) : (
+            myBookings.map((booking) => (
+              <div
+                key={booking._id}
+                className="flex items-center justify-between p-4 border rounded-lg shadow-sm"
+              >
+                {/* Left Side */}
+                <div className="flex items-center space-x-4">
+                  <div className="text-center bg-gray-100 px-3 py-2 rounded-lg shadow-md">
+                    <p className="text-xs text-gray-500">
+                      {new Date(booking.sessionDate).toLocaleDateString("en-US", {
+                        weekday: "short",
+                      })}
+                    </p>
+                    <p className="text-lg font-bold">
+                      {new Date(booking.sessionDate).toLocaleDateString("en-US", {
+                        day: "numeric",
+                      })}
+                    </p>
+                  </div>
                   <div>
-                    <div className="flex ">
-                      <div>
-                        <CiClock2 className="mt-[3px] mr-1" />
-                      </div>
+                    <div className="flex">
+                      <CiClock2 className="mt-[3px] mr-1" />
                       <p className="text-sm text-gray-500 mr-5">
                         {booking.sessionTime}
                       </p>
-                      <p className="text-sm text-gray-500">
-                        {booking.duration}
+                      <p className="text-sm text-gray-500">{booking.duration}</p>
+                    </div>
+                    {/* Details */}
+                    <div className="mt-3">
+                      <p className="text-sm font-medium text-gray-700">
+                        <FaUser className="inline mr-1" />
+                        Client: {booking.firstName} {booking.lastName}
+                      </p>
+                      <p className="text-sm font-medium text-gray-700 mt-1">
+                        <FaUserTie className="inline mr-1" />
+                        Expert: {booking?.expertId?.firstName} {booking?.expertId?.lastName}
                       </p>
                     </div>
                   </div>
-                  {/* User and Consultant Details */}
-                  <div className="mt-3">
-                    <p className="text-sm font-medium text-gray-700">
-                      <FaUser className="inline mr-1" />
-                      Client: {booking.firstName} {booking.lastName}
-                    </p>
-                    <p className="text-sm font-medium text-gray-700 mt-1">
-                      <FaUserTie className="inline mr-1" />
-                      Expert: {booking?.expertId.firstName}{" "}
-                      {booking?.expertId.lastName}
-                    </p>
-                  </div>
+                </div>
+
+                {/* Right Side */}
+                <div className="flex items-center space-x-4">
+                  <span
+                    className={`px-3 py-1 text-xs font-medium rounded ${
+                      booking.status === "Confirmed"
+                        ? "text-green-500"
+                        : "text-red-500"
+                    }`}
+                  >
+                    {booking.status}
+                  </span>
+                  <button
+                    className={`px-4 py-1 border rounded text-sm ${
+                      booking.status === "Not Confirmed"
+                        ? "hidden"
+                        : "text-green-500"
+                    }`}
+                  >
+                    💬 Chat
+                  </button>
                 </div>
               </div>
-
-              {/* Right Side (Status & Chat) */}
-              <div className="flex items-center space-x-4">
-                <span
-                  className={`px-3 py-1 text-xs font-medium rounded ${
-                    booking.status === "Confirmed"
-                      ? "text-green-500"
-                      : "text-red-500"
-                  }`}
-                >
-                  {booking.status}
-                </span>
-                <button
-                  className={`px-4 py-1 border rounded text-sm ${
-                    booking.status === "Not Confirmed"
-                      ? "hidden"
-                      : "text-green-500"
-                  }`}
-                >
-                  💬 Chat
-                </button>
-              </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
       )}
     </div>

@@ -32,7 +32,7 @@ const Page = () => {
         <Sidebar />
       </div>
       {/* Main Content: full width on mobile, 80% on desktop */}
-      <div className="w-full md:w-[80%] p-4 pb-20">
+      <div className="w-[100%] md:w-[80%] md:p-4 pb-20">
         <MobileNavSearch/>
         <Navtop activeTab={activeTab} />
         <Dashboard activeTab={activeTab} />

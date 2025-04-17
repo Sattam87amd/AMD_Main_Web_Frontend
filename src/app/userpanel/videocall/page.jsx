@@ -31,7 +31,7 @@ const page = () => {
         </div>
   
         {/* Right Side Content with 2/3 width */}
-        <div className="w-full md:w-[80%] md:p-4">
+        <div className="w-[100%] md:w-[80%] md:p-4">
           <div className='md:hidden '>
           <UserMobileNavSearch/>
           </div>
