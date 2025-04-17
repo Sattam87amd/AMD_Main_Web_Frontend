@@ -39,7 +39,7 @@ const Dashboard = () => {
   return (
     <div className="w-full py-6 flex flex-col items-start">
       {/* Mobile Back Icon */}
-      <div className="block md:hidden mb-4">
+      {/* <div className="block md:hidden mb-4">
         <button
           onClick={() => router.back()}
           className="flex items-center text-blue-600 hover:text-blue-800"
@@ -55,7 +55,7 @@ const Dashboard = () => {
           </svg>
           <span className="ml-2"></span>
         </button>
-      </div>
+      </div> */}
 
       
       <p className="text-black text-lg md:text-2xl mt-1 pl-2 py-10">

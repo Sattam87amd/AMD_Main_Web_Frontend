@@ -6,6 +6,7 @@ import CouponUserCount from "@/components/ExpertPanel/Dashboard/CouponUserCount"
 import Navtop from "@/components/ExpertPanel/Navtop/navtop";
 import { usePathname } from "next/navigation";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
+import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
 
 const Page = () => {
   const pathname = usePathname();
@@ -33,6 +34,7 @@ const Page = () => {
       </div>
       {/* Main Content: full width on mobile, 80% on desktop */}
       <div className="w-[100%] md:w-[80%] md:p-4 pb-20">
+        <BottomNav/>
         <MobileNavSearch/>
         <Navtop activeTab={activeTab} />
         <Dashboard activeTab={activeTab} />
