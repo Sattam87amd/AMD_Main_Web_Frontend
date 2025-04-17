@@ -390,6 +390,7 @@ const ExpertDetail = () => {
               </div>
             </div>
           </div>
+          
           <WhatToExpectExpertPanel />
           <AboutMeReviews/> 
           <ExpertFeatureHighightsExpertPanel />

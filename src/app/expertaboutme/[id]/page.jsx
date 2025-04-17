@@ -13,6 +13,7 @@ import Footer from "@/components/Layout/Footer";
 import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 
 const ExpertDetail = () => {
   const [expert, setExpert] = useState(null);
@@ -131,6 +132,8 @@ const ExpertDetail = () => {
         <div className="hidden md:block">
           <NavSearch />
         </div>
+        <div className="md:hidden">
+          <MobileNavSearch/></div>
           <div className="min-h-screen bg-white py-10 px-4 md:px-10">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left Column: Expert Info (Unchanged) */}
@@ -352,6 +355,7 @@ const ExpertDetail = () => {
         </div>
       </div>
       <Footer />
+      <BottomNav/>
     </>
   );
 };
