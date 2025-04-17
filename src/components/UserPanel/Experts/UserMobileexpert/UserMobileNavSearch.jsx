@@ -115,12 +115,12 @@ const UserMobileNavSearch = () => {
       </nav>
 
       {/* Headline */}
-      <h1 className="text-xl font-bold text-black mb-4">
+      {/* <h1 className="text-xl font-bold text-black mb-4">
         Find The Right Expert In Seconds!
-      </h1>
+      </h1> */}
 
       {/* Categories Section */}
-      <div className="flex overflow-x-auto space-x-4 py-2">
+      {/* <div className="flex overflow-x-auto space-x-4 py-2">
         {categories.map((category, index) => (
           <div
             key={index}
@@ -136,7 +136,7 @@ const UserMobileNavSearch = () => {
             </div>
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };
