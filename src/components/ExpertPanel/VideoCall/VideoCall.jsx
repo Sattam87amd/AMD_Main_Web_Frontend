@@ -36,7 +36,7 @@ const VideoCall = () => {
         }
 
         const bookingsResponse = await axios.get(
-          "http://localhost:5070/api/session/mybookings",
+          "https://amd-api.code4bharat.com/api/session/mybookings",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -62,7 +62,7 @@ const VideoCall = () => {
         }
 
         const sessionsResponse = await axios.get(
-          "http://localhost:5070/api/session/getexpertsession",
+          "https://amd-api.code4bharat.com/api/session/getexpertsession",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -122,7 +122,7 @@ const VideoCall = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:5070/api/session/accept/${sessionId}`,
+        `https://amd-api.code4bharat.com/api/session/accept/${sessionId}`,
         {},
         {
           headers: {
@@ -152,7 +152,7 @@ const VideoCall = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:5070/api/session/decline/${sessionId}`,
+        `https://amd-api.code4bharat.com/api/session/decline/${sessionId}`,
         {},
         {
           headers: {
@@ -260,8 +260,8 @@ const VideoCall = () => {
                 </div>
 
                 {/* Right Side (Session Type, Status & Zoom Join) */}
-                <div className="flex items-center space-x-4">
-                  <div className="text-sm text-gray-500">
+                <div className=" space-x-4">
+                  <div className="flex items-center space-x-4 text-sm text-gray-500">
                     {booking.status === "confirmed" ? (
                       <>
                         <span className="text-green-500 text-sm font-medium">

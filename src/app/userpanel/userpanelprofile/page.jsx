@@ -36,6 +36,7 @@ const Page = () => {
         {/* Main Content */}
         <div className="md:w-[80%] md:p-4 w-[100%]  ">
           <UserMobileNavSearch/>
+
           <Navtop activeTab={activeTab} />
           <UserProfileSection />
         </div>

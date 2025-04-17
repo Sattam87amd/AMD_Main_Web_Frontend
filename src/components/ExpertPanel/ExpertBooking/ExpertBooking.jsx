@@ -116,7 +116,7 @@ const ExpertBooking = () => {
       if (!token) throw new Error("No authentication token found");
 
       const response = await axios.post(
-        "http://localhost:5070/api/session/experttoexpertsession",
+        "https://amd-api.code4bharat.com/api/session/experttoexpertsession",
         fullBookingData,
         {
           headers: {
@@ -126,8 +126,8 @@ const ExpertBooking = () => {
         }
       );
 
-      console.log("Booking successful:", response.data);
-      
+      // console.log("Booking successful:", response.data);
+      localStorage.removeItem("sessionData", "bookingData", "expertData")
       // Show success message with a delay before redirection
       toast.success("Session booked successfully! Redirecting to video call...", {
         position: "bottom-center",

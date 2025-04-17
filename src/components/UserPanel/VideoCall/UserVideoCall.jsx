@@ -19,7 +19,7 @@ const UserVideoCall = () => {
 
         if (token) {
           const bookingsResponse = await axios.get(
-            "http://localhost:5070/api/session/Userbookings",
+            "https://amd-api.code4bharat.com/api/session/Userbookings",
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -97,26 +97,64 @@ const UserVideoCall = () => {
                   </div>
                 </div>
 
-                {/* Right Side */}
+                {/* Right Side (Session Type, Status & Zoom Join) */}
                 <div className="flex items-center space-x-4">
-                  <span
-                    className={`px-3 py-1 text-xs font-medium rounded ${
-                      booking.status === "Confirmed"
-                        ? "text-green-500"
-                        : "text-red-500"
-                    }`}
-                  >
-                    {booking.status}
-                  </span>
-                  <button
-                    className={`px-4 py-1 border rounded text-sm ${
-                      booking.status === "Not Confirmed"
-                        ? "hidden"
-                        : "text-green-500"
-                    }`}
-                  >
-                    💬 Chat
-                  </button>
+                  <div className="text-sm text-gray-500">
+                    {booking.status === "confirmed" ? (
+                      <>
+                        <span className="text-green-500 text-sm font-medium">
+                          Confirmed
+                        </span>
+                        <button className="px-4 py-1 border rounded text-sm flex items-center space-x-2">
+                          <MessagesSquare className="w-5 h-5" />
+                          <span>Chat</span>
+                        </button>
+                        {booking.zoomMeetingLink ? (
+                          <a
+                            href={booking.zoomMeetingLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <button className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600 flex items-center space-x-2">
+                              <Video className="w-5 h-5" />
+                              <span>Join</span>
+                            </button>
+                          </a>
+                        ) : (
+                          <span className="text-yellow-500 text-sm ml-2">
+                            Zoom link not ready
+                          </span>
+                        )}
+                      </>
+                    ) : booking.status === "unconfirmed" ? (
+                      <>
+                        <span className="text-red-500 text-sm font-medium">
+                          Unconfirmed
+                        </span>
+                      </>
+                    ) : booking.status === "rejected" ? (
+                      <>
+                        <span className="text-red-500 text-sm font-medium">
+                          Rejected
+                        </span>
+                      </>
+                    ) : booking.status === "completed" ? (
+                      <>
+                        <button
+                          className="px-4 py-1 text-white bg-blue-500 rounded"
+                          onClick={() => handleRateClick(booking)}
+                        >
+                          Rate
+                        </button>
+                      </>
+                    ) : booking.status === "Rating Submitted" ? (
+                      <>
+                        <span className="text-green-700 text-sm font-medium">
+                          Rating Submitted
+                        </span>
+                      </>
+                    ) : null}
+                  </div>
                 </div>
               </div>
             ))
