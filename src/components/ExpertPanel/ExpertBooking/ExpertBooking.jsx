@@ -111,7 +111,7 @@ const ExpertBooking = () => {
       if (!token) throw new Error("No authentication token found");
 
       await axios.post(
-        "https://amd-api.code4bharat.com/api/session/experttoexpertsession",
+        "http://localhost:5070/api/session/experttoexpertsession",
         fullBookingData,
         {
           headers: {
