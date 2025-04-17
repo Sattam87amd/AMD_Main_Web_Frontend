@@ -434,14 +434,7 @@ const VideoCall = () => {
                 Rejected
               </span>
             </>
-          ) : session.status === "completed" ? (
-            <>
-              <span className="text-green-700 text-sm font-medium">
-                Session Completed
-              </span>
-            </>
-
-          ): session.status === "Rating Submitted" ? (
+          ) : session.status === "Rating Submitted" ? (
             <>
               <span className="text-green-400 text-sm font-medium">
                 Rating Submitted
