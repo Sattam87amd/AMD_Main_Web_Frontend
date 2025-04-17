@@ -97,7 +97,7 @@ const CareerBusinessBefore = () => {
 
                 {/* Price Tag */}
                 <div className="absolute top-4 right-4 bg-[#F8F7F3] text-black px-4 py-2 rounded-2xl shadow-xl font-semibold">
-                  {expert.price || "$ 0"}  {/* Default value in case price is missing */}
+                 SAR {expert.price || "0"}  {/* Default value in case price is missing */}
                 </div>
 
                 {/* Transparent Blur Card */}

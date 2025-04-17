@@ -280,7 +280,7 @@ const ExpertDetail = () => {
                       <p className="text-2xl font-semibold">Book a 1:1 Video consultation & get personalized advice</p>
 
                       <div className="mt-4">
-                        <p className="text-xl font-semibold">Starting at ${price}</p>
+                        <p className="text-xl font-semibold">Starting at SAR {expert.price}</p>
                         <div className="flex items-center justify-start">
                           <p className="text-[#7E7E7E] text-base font-semibold">
                             Next available - <span className="text-[#0D70E5]">4:30am on 3/25</span>
@@ -316,7 +316,7 @@ const ExpertDetail = () => {
                       <p className="text-2xl font-semibold">Book a 1:4 Video consultation & get personalized advice</p>
 
                       <div className="mt-4">
-                        <p className="text-xl font-semibold">Starting at ${price}</p>
+                        <p className="text-xl font-semibold">Starting at SAR {expert.price}</p>
                         <div className="flex items-center justify-start">
                           <p className="text-[#7E7E7E] text-base font-semibold">
                             Next available - <span className="text-[#0D70E5]">5:00pm on 3/25</span>
