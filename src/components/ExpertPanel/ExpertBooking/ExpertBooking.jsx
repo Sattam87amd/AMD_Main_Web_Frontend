@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { StarIcon, UserPlusIcon } from "lucide-react";
+import { UserPlusIcon } from "lucide-react";
+import { FaStar } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { ToastContainer, toast } from 'react-toastify';
@@ -125,8 +126,8 @@ const ExpertBooking = () => {
         }
       );
 
-      console.log("Booking successful:", response.data);
-      
+      // console.log("Booking successful:", response.data);
+      localStorage.removeItem("sessionData", "bookingData", "expertData")
       // Show success message with a delay before redirection
       toast.success("Session booked successfully! Redirecting to video call...", {
         position: "bottom-center",
@@ -172,12 +173,20 @@ const ExpertBooking = () => {
             </h1>
             <p className="text-gray-500 text-sm md:text-base">{consultingExpert?.designation || "Expert"}</p>
 
-            <div className="flex items-center gap-1 mt-2">
-              {[...Array(5)].map((_, i) => (
-                <StarIcon key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-              ))}
-              <span className="ml-1 text-sm font-semibold">{consultingExpert?.rating || 5.0}</span>
-            </div>
+    <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
+  {[...Array(5)].map((_, i) => {
+    const rating = consultingExpert.averageRating || 0; // Use 0 as a fallback if consultingExpert.averageRating.rating is falsy (undefined, null, etc.)
+    
+    const isFilled = i < Math.floor(rating); // If the index is less than the rating
+    const isHalf = i === Math.floor(rating) && rating % 1 !== 0; // If the rating has a decimal and we are at the exact index
+    return (
+      <FaStar
+        key={i}
+        className={isFilled || isHalf ? "text-[#FFA629]" : "text-gray-300"} // Full or empty star color
+      />
+    );
+  })}
+</div>
 
             <div className="mt-4">
               <p className="font-medium mb-2 text-gray-700">Sessions -</p>

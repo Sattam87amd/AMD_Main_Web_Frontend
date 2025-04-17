@@ -13,7 +13,7 @@ const VideoCall = () => {
   const [activeTab, setActiveTab] = useState("bookings");
 
   // Separate states for loading and errors for both tabs
-  const [mySessions, setMySessions] = useState([]); 
+  const [mySessions, setMySessions] = useState([]);
   const [myBookings, setMyBookings] = useState([]);
 
   // Loading and error states for each tab
@@ -22,8 +22,8 @@ const VideoCall = () => {
   const [errorBookings, setErrorBookings] = useState(null);
   const [errorSessions, setErrorSessions] = useState(null);
 
-  const [showRateComponent, setShowRateComponent] = useState(false); 
-  const [selectedBooking, setSelectedBooking] = useState(null); 
+  const [showRateComponent, setShowRateComponent] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState(null);
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -35,11 +35,14 @@ const VideoCall = () => {
           return;
         }
 
-        const bookingsResponse = await axios.get("http://localhost:5070/api/session/mybookings", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const bookingsResponse = await axios.get(
+          "http://localhost:5070/api/session/mybookings",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         setMyBookings(bookingsResponse?.data || []);
       } catch (err) {
@@ -58,11 +61,14 @@ const VideoCall = () => {
           return;
         }
 
-        const sessionsResponse = await axios.get("http://localhost:5070/api/session/getexpertsession", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const sessionsResponse = await axios.get(
+          "http://localhost:5070/api/session/getexpertsession",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         const combinedSessions = [
           ...(sessionsResponse?.data.expertSessions || []).map((session) => ({
@@ -71,7 +77,7 @@ const VideoCall = () => {
           })),
           ...(sessionsResponse?.data.userSessions || []).map((session) => ({
             ...session,
-            sessionType: "UserToExpert",
+            sessionType: "User To Expert",
           })),
         ];
 
@@ -204,30 +210,40 @@ const VideoCall = () => {
                 key={booking._id}
                 className="flex items-center justify-between p-4 border rounded-lg shadow-sm"
               >
-               {/* Left Side (Date & Details) */}
+                {/* Left Side (Date & Details) */}
                 <div className="flex items-center space-x-4">
                   <div className="text-center bg-gray-100 px-3 py-2 rounded-lg shadow-md">
                     <p className="text-xs text-gray-500">
-                      {new Date(booking.sessionDate).toLocaleDateString("en-US", {
-                        weekday: "short",
-                      })}
+                      {new Date(booking.sessionDate).toLocaleDateString(
+                        "en-US",
+                        {
+                          weekday: "short",
+                        }
+                      )}
                     </p>
                     <p className="text-lg font-bold">
-                      {new Date(booking.sessionDate).toLocaleDateString("en-US", {
-                        day: "numeric",
-                      })}
+                      {new Date(booking.sessionDate).toLocaleDateString(
+                        "en-US",
+                        {
+                          day: "numeric",
+                        }
+                      )}
                     </p>
                   </div>
                   <div>
-                    <div className="flex ">
-                      <div>
+                  <div className="flex">
                         <CiClock2 className="mt-[3px] mr-1" />
-                      </div>
-                      <p className="text-sm text-gray-500 mr-5">
-                        {booking.sessionTime}
+                        <p className="text-sm text-gray-500 mr-5">
+                          {booking.sessionTime}
+                        </p>
+                        <p className="text-sm text-gray-500 mr-5">
+                          {booking.duration}
+                        </p>
+                      {/* Session Type */}
+                      <p className="text-sm text-gray-500 bg-slate-200 px-3">
+                        {booking.sessionType}
                       </p>
-                      <p className="text-sm text-gray-500">{booking.duration}</p>
-                    </div>
+                      </div>
                     {/* User and Consultant Details */}
                     <div className="mt-3">
                       <p className="text-sm font-medium text-gray-700">
@@ -243,66 +259,64 @@ const VideoCall = () => {
                   </div>
                 </div>
 
-                {/* Right Side (Status & Zoom Join) */}
+                {/* Right Side (Session Type, Status & Zoom Join) */}
                 <div className="flex items-center space-x-4">
-                  {booking.status === "confirmed" ? (
-                    <>
-                      <span className="text-green-500 text-sm font-medium">
-                        Confirmed
-                      </span>
-                      <button className="px-4 py-1 border rounded text-sm flex items-center space-x-2">
-                        <MessagesSquare className="w-5 h-5" />
-                        <span>Chat</span>
-                      </button>
-                      {booking.zoomMeetingLink ? (
-                        <a
-                          href={booking.zoomMeetingLink}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          <button className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600 flex items-center space-x-2">
-                            <Video className="w-5 h-5" />
-                            <span>Join</span>
-                          </button>
-                        </a>
-                      ) : (
-                        <span className="text-yellow-500 text-sm ml-2">
-                          Zoom link not ready
+                  <div className="text-sm text-gray-500">
+                    {booking.status === "confirmed" ? (
+                      <>
+                        <span className="text-green-500 text-sm font-medium">
+                          Confirmed
                         </span>
-                      )}
-                    </>
-                  ) : booking.status === "unconfirmed" ? (
-                    <>
-                      <span className="text-red-500 text-sm font-medium">
-                        Unconfirmed
-                      </span>
-                      <button className="px-4 py-1 border rounded text-sm flex items-center space-x-2">
-                        <MessagesSquare className="w-5 h-5" />
-                        <span>Chat</span>
-                      </button>
-                    </>
-                  ) : booking.status === "rejected" ? (
-                    <>
-                      <span className="text-red-500 text-sm font-medium">
-                        Rejected
-                      </span>
-                    </>
-                  ) : booking.status === "completed" ? (
-                    <>
-                      <button
-                        className="px-4 py-1 text-white bg-blue-500 rounded"
-                        onClick={() => handleRateClick(booking)}
-                      >
-                        Rate
-                      </button>
-                    </>
-                  ) : booking.status === "Rating Submitted" ? (
-                    <>
-                      <span className="text-green-700 text-sm font-medium">
-                        Rating Submitted
-                      </span>
-                    </>
-                  ) : null}
+                        <button className="px-4 py-1 border rounded text-sm flex items-center space-x-2">
+                          <MessagesSquare className="w-5 h-5" />
+                          <span>Chat</span>
+                        </button>
+                        {booking.zoomMeetingLink ? (
+                          <a
+                            href={booking.zoomMeetingLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <button className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600 flex items-center space-x-2">
+                              <Video className="w-5 h-5" />
+                              <span>Join</span>
+                            </button>
+                          </a>
+                        ) : (
+                          <span className="text-yellow-500 text-sm ml-2">
+                            Zoom link not ready
+                          </span>
+                        )}
+                      </>
+                    ) : booking.status === "unconfirmed" ? (
+                      <>
+                        <span className="text-red-500 text-sm font-medium">
+                          Unconfirmed
+                        </span>
+                      </>
+                    ) : booking.status === "rejected" ? (
+                      <>
+                        <span className="text-red-500 text-sm font-medium">
+                          Rejected
+                        </span>
+                      </>
+                    ) : booking.status === "completed" ? (
+                      <>
+                        <button
+                          className="px-4 py-1 text-white bg-blue-500 rounded"
+                          onClick={() => handleRateClick(booking)}
+                        >
+                          Rate
+                        </button>
+                      </>
+                    ) : booking.status === "Rating Submitted" ? (
+                      <>
+                        <span className="text-green-700 text-sm font-medium">
+                          Rating Submitted
+                        </span>
+                      </>
+                    ) : null}
+                  </div>
                 </div>
               </div>
             ))
@@ -336,7 +350,9 @@ const VideoCall = () => {
           ) : errorSessions ? (
             <div className="text-center text-red-500">{errorSessions}</div>
           ) : mySessions.length === 0 ? (
-            <div className="text-center text-gray-500">No Upcoming Sessions</div>
+            <div className="text-center text-gray-500">
+              No Upcoming Sessions
+            </div>
           ) : (
             mySessions.map((session) => (
               <div
@@ -345,115 +361,142 @@ const VideoCall = () => {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
-                    {/* Add session type display */}
-              <div className="text-center bg-gray-100 px-3 py-2 rounded-lg shadow-md">
-                <p className="text-xs text-gray-500">
-                  {session.sessionType} {/* Display session type */}
-                </p>
-                <p className="text-lg font-bold">
-                  {new Date(session.sessionDate).toLocaleDateString("en-US", {
-                    weekday: "short",
-                  })}
-                </p>
-              </div>
-              <div>
-                {/* Other session details */}
-                <div className="flex">
-                  <CiClock2 className="mt-[3px] mr-1" />
-                  <p className="text-sm text-gray-500 mr-5">
-                    {session.sessionTime}
-                  </p>
-                  <p className="text-sm text-gray-500 mr-5">{session.duration}</p>
+                    {/* Add session date display */}
+                    <div className="text-center bg-gray-100 px-3 py-2 rounded-lg shadow-md">
+                      <p className="text-xs text-gray-500">
+                        {new Date(session.sessionDate).toLocaleDateString(
+                          "en-US",
+                          {
+                            weekday: "short",
+                          }
+                        )}
+                      </p>
+                      <p className="text-lg font-bold">
+                        {new Date(session.sessionDate).toLocaleDateString(
+                          "en-US",
+                          {
+                            day: "numeric",
+                          }
+                        )}
+                      </p>
+                    </div>
+                    <div>
+                      <div className="flex">
+                        <CiClock2 className="mt-[3px] mr-1" />
+                        <p className="text-sm text-gray-500 mr-5">
+                          {session.sessionTime}
+                        </p>
+                        <p className="text-sm text-gray-500 mr-5">
+                          {session.duration}
+                        </p>
+                      {/* Session Type */}
+                      <p className="text-sm text-gray-500 bg-slate-200 px-3">
+                        {session.sessionType}
+                      </p>
+                      </div>
+                      <p className="text-sm font-medium text-gray-700 mt-2">
+                        <FaUser className="inline mr-1" />
+                        {session.firstName} {session.lastName}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Accept/Decline/Status Logic */}
+                  <div className="flex items-center space-x-4">
+                    {session.status === "confirmed" ? (
+                      <>
+                        <span className="text-green-500 text-sm font-medium">
+                          Accepted
+                        </span>
+                        <button className="px-4 py-1 border rounded text-sm flex items-center space-x-2">
+                          <MessagesSquare className="w-5 h-5" />
+                          <span>Chat</span>
+                        </button>
+                        {session.zoomMeetingLink ? (
+                          <a
+                            href={session.zoomMeetingLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <button className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600 flex items-center space-x-2">
+                              <Video className="w-5 h-5" />
+                              <span>Join</span>
+                            </button>
+                          </a>
+                        ) : (
+                          <span className="text-yellow-500 text-sm ml-2">
+                            Zoom link not ready
+                          </span>
+                        )}
+                      </>
+                    ) : session.status === "unconfirmed" ? (
+                      <>
+                        <button
+                          className="px-4 py-2 bg-green-500 text-white rounded text-sm hover:bg-green-600 transition-all duration-200"
+                          onClick={() => handleAccept(session._id)}
+                        >
+                          Accept
+                        </button>
+                        <button
+                          className="px-4 py-2 bg-red-500 text-white rounded text-sm hover:bg-red-600 transition-all duration-200"
+                          onClick={() => handleDecline(session._id)}
+                        >
+                          Decline
+                        </button>
+                      </>
+                    ) : session.status === "rejected" ? (
+                      <>
+                        <span className="text-red-500 text-sm font-medium">
+                          Rejected
+                        </span>
+                      </>
+                    ) : session.status === "completed" ? (
+                      <>
+                        <span className="text-green-700 text-sm font-medium">
+                          Completed
+                        </span>
+                      </>
+                    ) : null}
+                  </div>
                 </div>
-                <p className="text-sm font-medium text-gray-700 mt-2">
-                  <FaUser className="inline mr-1" />
-                  {session.firstName} {session.lastName}
-                </p>
+
+                {/* Note Section */}
+                {session.note && (
+                  <div className="mt-4 max-w-[60%]">
+                    <p className="text-sm font-semibold text-gray-700 mb-1">
+                      Note:
+                    </p>
+                    <ul className="list-disc pl-5 text-sm text-gray-600">
+                      {session.note.split(".").map((sentence, index) => {
+                        const trimmed = sentence.trim();
+                        return trimmed ? <li key={index}>{trimmed}.</li> : null;
+                      })}
+                    </ul>
+                  </div>
+                )}
               </div>
-            </div>
-
-            {/* Accept/Decline/Status Logic */}
-            <div className="flex items-center space-x-4">
-              {session.status === "confirmed" ? (
-                <>
-                  <span className="text-green-500 text-sm font-medium">
-                    Accepted
-                  </span>
-                  <button className="px-4 py-1 border rounded text-sm flex items-center space-x-2">
-                    <MessagesSquare className="w-5 h-5" />
-                    <span>Chat</span>
-                  </button>
-                  {session.zoomMeetingLink ? (
-                    <a
-                      href={session.zoomMeetingLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <button className="px-4 py-1 text-sm rounded ml-2 bg-blue-500 text-white hover:bg-blue-600 flex items-center space-x-2">
-                        <Video className="w-5 h-5" />
-                        <span>Join</span>
-                      </button>
-                    </a>
-                  ) : (
-                    <span className="text-yellow-500 text-sm ml-2">
-                      Zoom link not ready
-                    </span>
-                  )}
-                </>
-              ) :  session.status === "rejected" ? (
-                <>
-                  <span className="text-red-500 text-sm font-medium">
-                    Rejected
-                  </span>
-                </>
-              ) : session.status === "completed" ? (
-                <>
-                  <span className="text-green-700 text-sm font-medium">
-                    Completed
-                  </span>
-                </>
-              ) : session.status === "Rating Submitted" ? (
-                <>
-                  <span className="text-green-700 text-sm font-medium">
-                    Rating Submitted
-                  </span>
-                </>
-              ) : session.status === "unconfirmed" ?(
-                <>
-                  <button
-                    className="px-4 py-2 bg-green-500 text-white rounded text-sm hover:bg-green-600 transition-all duration-200"
-                    onClick={() => handleAccept(session._id)}
-                  >
-                    Accept
-                  </button>
-                  <button
-                    className="px-4 py-2 bg-red-500 text-white rounded text-sm hover:bg-red-600 transition-all duration-200"
-                    onClick={() => handleDecline(session._id)}
-                  >
-                    Decline
-                  </button>
-                </>
-              ):null}
-            </div>
-          </div>
-
-          {/* Note Section */}
-          {session.note && (
-            <div className="mt-4">
-              <p className="text-sm font-semibold text-gray-700 mb-1">Note:</p>
-              <ul className="list-disc pl-5 text-sm text-gray-600">
-                {session.note.split(".").map((sentence, index) => {
-                  const trimmed = sentence.trim();
-                  return trimmed ? <li key={index}>{trimmed}.</li> : null;
-                })}
-              </ul>
-            </div>
+            ))
           )}
         </div>
-      ))
-    )}
-  </div>
-)}
+      )}
+
+      {/* Modal for Rate Component */}
+      {showRateComponent && selectedBooking && (
+        <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+            <button
+              onClick={closeModal}
+              className="absolute top-2 right-2 text-xl font-bold"
+            >
+              X
+            </button>
+            <Rate
+              booking={selectedBooking}
+              setShowRateComponent={setShowRateComponent}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
