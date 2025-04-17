@@ -28,7 +28,7 @@ const UserMobileNavSearch = () => {
   const toggleFilter = () => setShowFilter(!showFilter);
 
   return (
-    <div className="bg-[#F8F7F3]  p-4">
+    <div className="bg-[#F8F7F3]  p-4 md:hidden">
       {/* Navbar */}
       <nav className="flex items-center justify-between mb-4">
         {/* Left - Brand Name */}
@@ -47,8 +47,14 @@ const UserMobileNavSearch = () => {
             }`}
             onClick={toggleFilter}
           />
-          <FaGift className="text-xl text-gray-600 cursor-pointer" />
-          <FaUser className="text-xl text-gray-600 cursor-pointer" />
+          <FaGift
+    className="text-xl text-gray-600 cursor-pointer"
+    onClick={() => router.push("/userpanel/giftsession")}
+  />
+          <FaUser
+    className="text-xl text-gray-600 cursor-pointer"
+    onClick={() => router.push("/userlogin")}
+  />
 
           {/* Filter Dropdown */}
           {showFilter && (
