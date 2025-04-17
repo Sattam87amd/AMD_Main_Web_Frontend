@@ -5,6 +5,8 @@ import Image from "next/image";
 import { StarIcon, UserPlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ExpertBooking = () => {
   const [sessions] = useState([
@@ -41,6 +43,8 @@ const ExpertBooking = () => {
 
   const [sessionData, setSessionData] = useState(null);
   const [noteError, setNoteError] = useState(""); // ⛔ Note validation error state
+  const [isSubmitting, setIsSubmitting] = useState(false); // To track if the booking is in progress
+  const [wordCount, setWordCount] = useState(0); // To track word count
   const router = useRouter();
 
   useEffect(() => {
@@ -78,18 +82,19 @@ const ExpertBooking = () => {
     // Clear note error when editing note
     if (name === "note") {
       setNoteError("");
+      setWordCount(value.trim().split(/\s+/).length); // Update word count
     }
   };
 
   const handleBookingRequest = async () => {
     if (!sessionData) {
-      alert('No session data found.');
+      toast.error("No session data found.");
       return;
     }
 
     const noteWords = expertData.note.trim().split(/\s+/);
-    if (noteWords.length < 70) {
-      setNoteError("Note must contain at least 70 words.");
+    if (noteWords.length < 25) {
+      setNoteError("Note must contain at least 25 words.");
       return;
     }
 
@@ -105,6 +110,7 @@ const ExpertBooking = () => {
     };
 
     try {
+      setIsSubmitting(true); // Start animation (processing state)
       const token = localStorage.getItem("expertToken");
       if (!token) throw new Error("No authentication token found");
 
@@ -120,18 +126,33 @@ const ExpertBooking = () => {
       );
 
       console.log("Booking successful:", response.data);
-      alert("Session booked successfully!");
-      router.push('/expertpanel/videocall');
+      
+      // Show success message with a delay before redirection
+      toast.success("Session booked successfully! Redirecting to video call...", {
+        position: "bottom-center",
+        autoClose: 3000, // Show for 3 seconds
+      });
+
+      // Redirect after delay
+      setTimeout(() => {
+        router.push('/expertpanel/videocall');
+      }, 3000); // Redirect after 3 seconds
+
     } catch (error) {
       console.error("Booking error:", error.response?.data || error.message);
-      alert(`Booking failed: ${error.response?.data?.message || error.message}`);
+      toast.error(`Booking failed: ${error.response?.data?.message || error.message}`, {
+        position: "bottom-center",
+        autoClose: 5000,
+      });
+    } finally {
+      setIsSubmitting(false); // End animation (reset processing state)
     }
   };
 
   if (!consultingExpert) return <div>Loading...</div>;
 
   return (
-    <div className="w-full mx-8 mt-8 px-6 md:px-10 py-[6rem]">
+    <div className="w-full mx-8 md:mx-0 mt-8 px-6 py-[6rem] md:py-0">
       <div className="flex flex-col md:flex-row gap-10">
         {/* Left Section */}
         <div className="w-full md:w-1/2 flex flex-col items-center text-center md:text-left">
@@ -245,7 +266,7 @@ const ExpertBooking = () => {
               <label className="block text-sm mb-1">Note</label>
               <textarea
                 name="note"
-                placeholder="Write something about yourself in minimum 70 words..."
+                placeholder="Write something about yourself in minimum 25 words..."
                 value={expertData.note}
                 onChange={handleInputChange}
                 className="w-full h-[120px] border flex justify-center items-center rounded px-3 py-2 text-sm"
@@ -253,6 +274,7 @@ const ExpertBooking = () => {
               {noteError && (
                 <p className="text-red-500 text-xs mt-1">{noteError}</p>
               )}
+              <p className="text-xs text-gray-500 mt-2 text-end">Words: {wordCount}</p>
             </div>
           </div>
 
@@ -323,13 +345,28 @@ const ExpertBooking = () => {
           <div className="flex justify-center">
             <button
               onClick={handleBookingRequest}
-              className="w-32 bg-black text-white rounded-full px-8 py-3 text-sm font-medium"
+              className={`w-32 bg-black text-white rounded-full px-8 py-3 text-sm font-medium ${isSubmitting ? 'animate-pulse' : ''}`}
+              disabled={isSubmitting}
             >
-              Book
+              {isSubmitting ? "Processing..." : "Book"}
             </button>
           </div>
         </div>
       </div>
+
+
+      {/* Toastify container */}
+      <ToastContainer
+  position="bottom-right" // Change this from bottom-center to top-right
+  autoClose={5000} // Adjust auto-close timing as needed
+  hideProgressBar={false}
+  newestOnTop={false}
+  closeOnClick
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+/>
     </div>
   );
 };
