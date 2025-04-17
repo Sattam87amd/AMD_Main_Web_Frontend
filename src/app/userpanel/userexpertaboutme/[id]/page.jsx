@@ -20,7 +20,7 @@ const ExpertDetail = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedConsultation, setSelectedConsultation] = useState("1:1");
-  const [price, setPrice] = useState(350);
+  const [price, setPrice] = useState();
   const [showTimeSelection, setShowTimeSelection] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
@@ -259,7 +259,7 @@ const ExpertDetail = () => {
 
                       <div className="flex gap-10 py-10 items-center">
                         <div>
-                          <p className="text-xl font-semibold">${price} • Session</p>
+                          <p className="text-xl font-semibold">SAR {expert.price} • Session</p>
                           <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
                             {[...Array(5)].map((_, i) => <FaStar key={i} />)}
                           </div>

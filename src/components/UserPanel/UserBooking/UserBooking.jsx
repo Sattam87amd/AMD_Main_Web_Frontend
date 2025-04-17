@@ -27,14 +27,14 @@ const UserToExpertBooking = () => {
     },
   ]);
 
-  const [expertData, setExpertData] = useState({
-    firstName: '',
-    lastName: '',
-    mobileNumber: '',
-    email: '',
-    note: '',
-    promoCode: '',
-  });
+  // const [expertData, setExpertData] = useState({
+  //   firstName: '',
+  //   lastName: '',
+  //   mobileNumber: '',
+  //   email: '',
+  //   note: '',
+  //   promoCode: '',
+  // });
 
   const [sessionData, setSessionData] = useState(null);
   const [consultingExpert, setConsultingExpert] = useState(null);
@@ -112,9 +112,9 @@ const UserToExpertBooking = () => {
       sessionTime: sessionData?.sessionTime || "",
       duration: sessionData?.duration || "",
       firstName: bookingData?.firstName,
-      lastName: expertData?.lastName,
-      email: expertData?.email,
-      phone: expertData?.mobileNumber,
+      lastName: bookingData?.lastName,
+      email: bookingData?.email,
+      phone: bookingData?.mobileNumber,
       note:bookingData?.note,
 
     };
