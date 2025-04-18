@@ -36,7 +36,6 @@ const Page = () => {
           <div className="block md:hidden">
             <LoginUserMobileNavSearch />
             <div className="space-y-8 px-4">
-              <UserHomeexperts />
             </div>
           </div>
         </div>
