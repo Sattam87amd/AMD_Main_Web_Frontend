@@ -21,7 +21,7 @@ function UserLoginPage() {
     const [phone, setPhone] = useState("");
     const [otp, setOtp] = useState("");
     const [email, setEmail] = useState(""); // State for email
-    const [useEmail, setUseEmail] = useState(false); // Toggle between email and phone login
+    const [useEmail, setUseEmail] = useState(true); // Toggle between email and phone login
     const [phoneError, setPhoneError] = useState("");
     const [otpError, setOtpError] = useState("");
     const [formError, setFormError] = useState("");
