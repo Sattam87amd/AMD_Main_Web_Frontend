@@ -10,15 +10,8 @@ const ExpertProfile = ({ activeTab }) => {
 
   // Fetch expertId from localStorage
   useEffect(() => {
-    const fetchExpertData = async () => {
-      try {
-        const response = await axios.get(`https://amd-api.code4bharat.com/api/expertauth/${expertId}`);
-        setExpertData(response.data.data);  // Assuming the response follows { data: expert }
-      } catch (error) {
-        console.error("Error fetching expert data:", error);
-      }
-    };
-
+    const expertToken = localStorage.getItem('expertToken');  // Get the token from localStorage
+    
     if (expertToken) {
       try {
         // Assuming the expertToken contains the _id directly (if it's JWT)
