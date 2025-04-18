@@ -10,9 +10,10 @@ const ExpertProfile = ({ activeTab }) => {
 
   // Fetch expertId from localStorage
   useEffect(() => {
+    const expertToken = localStorage.getItem("expertToken");
     const fetchExpertData = async () => {
       try {
-        const response = await axios.get(`https://amd-api.code4bharat.com/api/expertauth/${expertId}`);
+        const response = await axios.get(`http://localhost:5070/api/expertauth/${expertId}`);
         setExpertData(response.data.data);  // Assuming the response follows { data: expert }
       } catch (error) {
         console.error("Error fetching expert data:", error);

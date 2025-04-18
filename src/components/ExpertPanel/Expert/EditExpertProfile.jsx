@@ -48,7 +48,8 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
       const fetchExpertData = async () => {
         try {
           const response = await axios.get(`http://localhost:5070/api/expertauth/${expertId}`);
-          setExpertData(response.data.data); // Assuming the response follows { data: expert }
+          setExpertData(response.data.data);
+          console.log(expertData) // Assuming the response follows { data: expert }
         } catch (error) {
           console.error("Error fetching expert data:", error);
         }
