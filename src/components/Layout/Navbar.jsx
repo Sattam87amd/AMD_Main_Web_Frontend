@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Gift, Menu, X, Search, User } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import SeacthExperts from "../SearchExperts/SearchExperts";  // Import SearchExperts component
+import SeacthExperts from "../SearchExperts/SearchExperts"; // Import SearchExperts component
 import GoogleTranslateButton from "../GoogleTranslateButton";
 
 function Navbar() {
@@ -35,7 +35,10 @@ function Navbar() {
       <nav className="fixed w-full z-20 top-0 h-[96px] md:h-24 bg-white shadow-md">
         <div className="relative flex items-center justify-between h-full px-6">
           {/* Logo */}
-          <Link href="/" className="text-3xl md:text-[40px] font-semibold text-black">
+          <Link
+            href="/"
+            className="text-3xl md:text-[40px] font-semibold text-black"
+          >
             AMD
           </Link>
 
@@ -44,13 +47,15 @@ function Navbar() {
             <Link href="/joinasexpert" className="text-black">
               Become an Expert
             </Link>
-            
 
             <Link href="/ourmission" className="text-black">
               About Us
             </Link>
             {/* Centered Search Icon on Desktop */}
-            <button onClick={toggleSearchPage} className="text-black hover:opacity-80 pb-1">
+            <button
+              onClick={toggleSearchPage}
+              className="text-black hover:opacity-80 pb-1"
+            >
               <Search className="inline-block h-5 w-5 " />
             </button>
           </div>
@@ -63,7 +68,7 @@ function Navbar() {
                 <Gift className="ml-2 h-5 w-5" />
               </button>
             </Link>
-            <GoogleTranslateButton />         
+            <GoogleTranslateButton />
             <Link href="/userlogin">
               <button className="bg-white text-black font-medium rounded-lg text-[16px] px-4 py-2">
                 Sign Up
@@ -74,13 +79,17 @@ function Navbar() {
           {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center space-x-4">
             <button onClick={toggleMenu} className="text-black p-2">
-              {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
             </button>
           </div>
 
           {/* Search Icon - Visible only on mobile, outside the toggle menu */}
-          <button 
-            onClick={toggleSearchPage} 
+          <button
+            onClick={toggleSearchPage}
             className="md:hidden text-black p-2 absolute right-16 top-7"
           >
             <Search className="h-6 w-6" />
@@ -93,10 +102,18 @@ function Navbar() {
             <Link href="/" className="block text-black" onClick={closeMenu}>
               Home
             </Link>
-            <Link href="/joinasexpert" className="block text-black" onClick={closeMenu}>
+            <Link
+              href="/joinasexpert"
+              className="block text-black"
+              onClick={closeMenu}
+            >
               Become an Expert
             </Link>
-            <Link href="/ourmission" className="block text-black" onClick={closeMenu}>
+            <Link
+              href="/ourmission"
+              className="block text-black"
+              onClick={closeMenu}
+            >
               About Us
             </Link>
 

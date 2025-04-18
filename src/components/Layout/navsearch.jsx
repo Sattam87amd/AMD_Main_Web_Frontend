@@ -10,12 +10,12 @@ import SearchExperts from "../SearchExperts/SearchExperts";
 
 const NavSearch = () => {
   const [showSearchPage, setShowSearchPage] = useState(false);
-  
+
   // Open Search Page
   const toggleSearchPage = () => {
     setShowSearchPage(true);
   };
-  
+
   // Close Search Page
   const closeSearchPage = () => {
     setShowSearchPage(false);
@@ -28,7 +28,12 @@ const NavSearch = () => {
         transition={{ duration: 0.6 }}
         className="flex items-center justify-between w-full mb-6"
       >
-        <div className="text-3xl font-bold text-black">AMD</div>
+        <Link
+          href="/"
+          className="text-3xl md:text-[40px] font-semibold text-black m-3"
+        >
+          AMD
+        </Link>
         <motion.div
           initial={{ scale: 0.8 }}
           animate={{ scale: 1 }}
@@ -50,12 +55,12 @@ const NavSearch = () => {
         <div className="flex items-center space-x-6">
           <motion.div whileHover={{ scale: 1.2 }}>
             <Link href="/giftsession">
-            <Gift className="w-10 h-10 text-black cursor-pointer" />
+              <Gift className="w-10 h-10 text-black cursor-pointer" />
             </Link>
           </motion.div>
           <motion.div whileHover={{ scale: 1.2 }}>
             <Link href="/userlogin">
-            <IoPersonOutline className="text-4xl text-black font-semibold cursor-pointer" />
+              <IoPersonOutline className="text-4xl text-black font-semibold cursor-pointer" />
             </Link>
           </motion.div>
         </div>
