@@ -9,6 +9,7 @@ import WellnessBefore from "@/components/ExpertBeforeLogin/WellnessBefore";
 import ExpertCategory from "@/components/ExpertCategory/ExpertCategory";
 import Threepara from "@/components/Experts/Threepara/threepara";
 import Footer from "@/components/Layout/Footer";
+import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";
 
 const Page = () => {
@@ -21,9 +22,10 @@ const Page = () => {
         <div className='w-full flex flex-col'>
           {/* Desktop View - NavSearch */}
           <div className="">
+            <MobileNavSearch/>
             <NavSearch />
             <ExpertCategory/>
-            <div className="space-y-8 px-4 md:px-8">
+            <div className="space-y-8 px-1 md:px-8">
               <ExpertsCardsBefore/>
               
              <WellnessBefore/>

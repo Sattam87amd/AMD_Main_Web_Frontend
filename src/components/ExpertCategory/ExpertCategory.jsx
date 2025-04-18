@@ -39,7 +39,7 @@ const ExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
     <div className="bg-[#F8F7F3] px-4 py-6">
       <div className="flex justify-between items-center mb-6">
         <motion.h1
-          className="text-2xl md:text-3xl font-semibold text-black"
+          className="text-base md:text-4xl font-semibold text-black"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
