@@ -5,6 +5,7 @@ import Image from "next/image";
 import { LuPencilLine } from "react-icons/lu";
 import { FiAtSign } from "react-icons/fi";
 import { FiChevronRight } from "react-icons/fi";
+import axios from "axios";
 
 // Importing the EnableCharity and WhatToExpect components for dynamic rendering
 import EnableCharity from "./EnableCharity";
@@ -17,11 +18,46 @@ import AvailableSessionLength from "./AvailableSessionLength";
 import VideoSessionPrices from "./VideoSessionPrices";
 
 const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
-  // -------------------------------------------------------------------
-  // 1) Detect screen size to toggle mobile vs. desktop layout
-  // -------------------------------------------------------------------
+  // State for mobile view
   const [isMobile, setIsMobile] = useState(false);
   const [showContent, setShowContent] = useState(false); // For mobile view
+  const [expertId, setExpertId] = useState(""); // Used to store expertId if needed
+  // const [isEditingProfile, setIsEditingProfile] = useState(false);
+  // const [showSavedProfile, setShowSavedProfile] = useState(false);
+  
+
+  useEffect(() => {
+    const expertToken = localStorage.getItem("expertToken");
+  
+    if (expertToken) {
+      try {
+        // Assuming the expertToken contains the _id directly (if it's JWT)
+        const decodedToken = JSON.parse(atob(expertToken.split(".")[1])); // Decode JWT token
+        const expertId = decodedToken._id;
+        setExpertId(expertId); // Set the expertId to state
+      } catch (error) {
+        console.error("Error parsing expertToken:", error);
+      }
+    } else {
+      alert("Expert token not found in localStorage");
+    }
+  }, []); // Runs once when the component mounts
+  
+  useEffect(() => {
+    if (expertId) {
+      const fetchExpertData = async () => {
+        try {
+          const response = await axios.get(`http://localhost:5070/api/expertauth/${expertId}`);
+          setExpertData(response.data.data); // Assuming the response follows { data: expert }
+        } catch (error) {
+          console.error("Error fetching expert data:", error);
+        }
+      };
+  
+      fetchExpertData();
+    }
+  }, [expertId]); // Runs when expertId changes
+  
 
   useEffect(() => {
     const handleResize = () => {
@@ -43,20 +79,20 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
 
   // For "Personal Information" card
   const [personalInfo, setPersonalInfo] = useState({
-    name: "Basim Thakur",
+    name: `${expertData.firstName}`,
     dateOfBirth: "20/07/2003",
     age: "21",
-    phoneNumber: "+91 9087654321",
-    email: "thakur@gmail.com",
-    bio: "Entrepreneur",
+    phoneNumber:`${expertData.phone}`,
+    email: `${expertData.email}`,
+    bio: `${expertData.areaOfExpertise}`,
   });
   const [isEditingPersonal, setIsEditingPersonal] = useState(false);
   const [showSavedPersonal, setShowSavedPersonal] = useState(false);
 
   // For "About Me" card
   const [aboutMe, setAboutMe] = useState({
-    description:
-      "Co-Founder Of Reddit. First Batch Of Y Combinator (Summer 2005) And Led The Company To A Sale To Condé Nast In 2006...",
+    description:`${expertData.experience}` ,
+      // "Co-Founder Of Reddit. First Batch Of Y Combinator (Summer 2005) And Led The Company To A Sale To Condé Nast In 2006...",
     advice: [
       "Startup Struggles",
       "Customer Retention/Service",
@@ -183,7 +219,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
       <div className="flex flex-row items-center justify-between">
         <div className="flex items-center space-x-4 md:space-x-6">
           <Image
-            src="/guyhawkins.png"
+            src={expertData?.photoFile || "/default-profile.png"} // Fallback to default image if photoFile is unavailable
             alt="Expert Profile"
             width={80}
             height={80}
@@ -210,7 +246,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
                 />
                 <input
                   type="text"
-                  value={expertData.expertise}
+                  value={expertData.areaOfExpertise || ""}
                   onChange={(e) =>
                     setExpertData({ ...expertData, expertise: e.target.value })
                   }
@@ -218,7 +254,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
                 />
                 <input
                   type="text"
-                  value={expertData.country}
+                  value={expertData.country || ""}
                   onChange={(e) =>
                     setExpertData({ ...expertData, country: e.target.value })
                   }
@@ -230,8 +266,8 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
                 <h3 className="text-lg font-semibold text-[#434966]">
                   {expertData.firstName} {expertData.lastName}
                 </h3>
-                <p className="text-gray-500">{expertData.expertise}</p>
-                <p className="text-gray-500">{expertData.country}</p>
+                <p className="text-gray-500">{expertData.areaOfExpertise}</p>
+                <p className="text-gray-500">India</p>
               </>
             )}
           </div>
@@ -261,6 +297,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
       )}
     </div>
   );
+  
 
   // -------------------------------------------------------------------
   // 8) Render: Personal Info Card (Editable)
@@ -319,6 +356,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
       </div>
     </div>
   );
+  
 
   // -------------------------------------------------------------------
   // 9) Render: About Me Card (Editable)
