@@ -5,6 +5,7 @@ import Image from "next/image";
 import { LuPencilLine } from "react-icons/lu";
 import { FiAtSign } from "react-icons/fi";
 import { FiChevronRight } from "react-icons/fi";
+import axios from "axios";
 
 // Importing the EnableCharity and WhatToExpect components for dynamic rendering
 import EnableCharity from "./EnableCharity";
@@ -17,11 +18,97 @@ import AvailableSessionLength from "./AvailableSessionLength";
 import VideoSessionPrices from "./VideoSessionPrices";
 
 const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
-  // -------------------------------------------------------------------
-  // 1) Detect screen size to toggle mobile vs. desktop layout
-  // -------------------------------------------------------------------
+  // State for mobile view
   const [isMobile, setIsMobile] = useState(false);
   const [showContent, setShowContent] = useState(false); // For mobile view
+  const [expertId, setExpertId] = useState(""); // Used to store expertId if needed
+  // const [isEditingProfile, setIsEditingProfile] = useState(false);
+  // const [showSavedProfile, setShowSavedProfile] = useState(false);
+  
+  // Initialize with safe default values to prevent undefined errors
+  const [localExpertData, setLocalExpertData] = useState({
+    firstName: "",
+    lastName: "",
+    areaOfExpertise: "",
+    email: "",
+    phone: "",
+    experience: "",
+    country: "",
+    photoFile: "/default-profile.png"
+  });
+
+  // Update localExpertData whenever expertData changes
+  useEffect(() => {
+    if (expertData && Object.keys(expertData).length > 0) {
+      setLocalExpertData({
+        firstName: expertData.firstName || "",
+        lastName: expertData.lastName || "",
+        areaOfExpertise: expertData.areaOfExpertise || "",
+        email: expertData.email || "",
+        phone: expertData.phone || "",
+        experience: expertData.experience || "",
+        country: expertData.country || "",
+        photoFile: expertData.photoFile || "/default-profile.png"
+      });
+      
+      // Update other state objects that depend on expertData
+      setPersonalInfo({
+        name: expertData.firstName || "",
+        dateOfBirth: "20/07/2003",
+        age: "21",
+        phoneNumber: expertData.phone || "",
+        email: expertData.email || "",
+        bio: expertData.areaOfExpertise || "",
+      });
+      
+      setAboutMe({
+        description: expertData.experience || "",
+        advice: [
+          "Startup Struggles",
+          "Customer Retention/Service",
+          "The Beauty Industry",
+          "Product Development",
+          "Branding & PR",
+        ],
+      });
+    }
+  }, [expertData]);
+
+  useEffect(() => {
+    const expertToken = localStorage.getItem("expertToken");
+  
+    if (expertToken) {
+      try {
+        // Assuming the expertToken contains the _id directly (if it's JWT)
+        const decodedToken = JSON.parse(atob(expertToken.split(".")[1])); // Decode JWT token
+        const expertId = decodedToken._id;
+        setExpertId(expertId); // Set the expertId to state
+      } catch (error) {
+        console.error("Error parsing expertToken:", error);
+      }
+    } else {
+      console.log("Expert token not found in localStorage");
+    }
+  }, []); // Runs once when the component mounts
+  
+  useEffect(() => {
+    if (expertId) {
+      const fetchExpertData = async () => {
+        try {
+          const response = await axios.get(`https://amd-api.code4bharat.com/api/expertauth/${expertId}`);
+          if (response.data && response.data.data) {
+            // Update both the parent component state and our local state
+            setExpertData(response.data.data);
+          }
+        } catch (error) {
+          console.error("Error fetching expert data:", error);
+        }
+      };
+  
+      fetchExpertData();
+    }
+  }, [expertId]); // Runs when expertId changes
+  
 
   useEffect(() => {
     const handleResize = () => {
@@ -43,20 +130,19 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
 
   // For "Personal Information" card
   const [personalInfo, setPersonalInfo] = useState({
-    name: "Basim Thakur",
+    name: "",
     dateOfBirth: "20/07/2003",
     age: "21",
-    phoneNumber: "+91 9087654321",
-    email: "thakur@gmail.com",
-    bio: "Entrepreneur",
+    phoneNumber: "",
+    email: "",
+    bio: "",
   });
   const [isEditingPersonal, setIsEditingPersonal] = useState(false);
   const [showSavedPersonal, setShowSavedPersonal] = useState(false);
 
   // For "About Me" card
   const [aboutMe, setAboutMe] = useState({
-    description:
-      "Co-Founder Of Reddit. First Batch Of Y Combinator (Summer 2005) And Led The Company To A Sale To Condé Nast In 2006...",
+    description: "",
     advice: [
       "Startup Struggles",
       "Customer Retention/Service",
@@ -117,6 +203,25 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
     if (isMobile) {
       setShowContent(true);
       setShowProfile(false); // Hide ExpertProfile on mobile when editing
+    }
+  };
+
+  // Function to save profile changes
+  const saveProfileChanges = async () => {
+    try {
+      // Save changes to API
+      await axios.put(`https://amd-api.code4bharat.com/api/expertauth/${expertId}`, localExpertData);
+      
+      // Update parent component's state
+      setExpertData(localExpertData);
+      
+      // Show saved confirmation
+      setIsEditingProfile(false);
+      setShowSavedProfile(true);
+      setTimeout(() => setShowSavedProfile(false), 2000);
+    } catch (error) {
+      console.error("Error saving profile:", error);
+      alert("Failed to save profile changes. Please try again.");
     }
   };
 
@@ -183,7 +288,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
       <div className="flex flex-row items-center justify-between">
         <div className="flex items-center space-x-4 md:space-x-6">
           <Image
-            src="/guyhawkins.png"
+            src={localExpertData.photoFile || "/default-profile.png"} 
             alt="Expert Profile"
             width={80}
             height={80}
@@ -194,33 +299,33 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
               <>
                 <input
                   type="text"
-                  value={expertData.firstName}
+                  value={localExpertData.firstName}
                   onChange={(e) =>
-                    setExpertData({ ...expertData, firstName: e.target.value })
+                    setLocalExpertData({ ...localExpertData, firstName: e.target.value })
                   }
                   className="text-lg font-semibold text-[#434966] border-b border-gray-300 focus:outline-none"
                 />
                 <input
                   type="text"
-                  value={expertData.lastName}
+                  value={localExpertData.lastName}
                   onChange={(e) =>
-                    setExpertData({ ...expertData, lastName: e.target.value })
+                    setLocalExpertData({ ...localExpertData, lastName: e.target.value })
                   }
                   className="text-lg font-semibold text-[#434966] border-b border-gray-300 focus:outline-none"
                 />
                 <input
                   type="text"
-                  value={expertData.expertise}
+                  value={localExpertData.areaOfExpertise}
                   onChange={(e) =>
-                    setExpertData({ ...expertData, expertise: e.target.value })
+                    setLocalExpertData({ ...localExpertData, areaOfExpertise: e.target.value })
                   }
                   className="text-sm text-gray-500 border-b border-gray-300 focus:outline-none"
                 />
                 <input
                   type="text"
-                  value={expertData.country}
+                  value={localExpertData.country}
                   onChange={(e) =>
-                    setExpertData({ ...expertData, country: e.target.value })
+                    setLocalExpertData({ ...localExpertData, country: e.target.value })
                   }
                   className="text-sm text-gray-500 border-b border-gray-300 focus:outline-none"
                 />
@@ -228,10 +333,10 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
             ) : (
               <>
                 <h3 className="text-lg font-semibold text-[#434966]">
-                  {expertData.firstName} {expertData.lastName}
+                  {localExpertData.firstName} {localExpertData.lastName}
                 </h3>
-                <p className="text-gray-500">{expertData.expertise}</p>
-                <p className="text-gray-500">{expertData.country}</p>
+                <p className="text-gray-500">{localExpertData.areaOfExpertise}</p>
+                <p className="text-gray-500">{localExpertData.country || "India"}</p>
               </>
             )}
           </div>
@@ -239,11 +344,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
         {isEditingProfile ? (
           <button
             className="border border-[#434966] px-4 py-2 text-white font-medium bg-black rounded-lg flex items-center gap-2"
-            onClick={() => {
-              setIsEditingProfile(false);
-              setShowSavedProfile(true);
-              setTimeout(() => setShowSavedProfile(false), 2000);
-            }}
+            onClick={saveProfileChanges}
           >
             Save
           </button>
@@ -261,6 +362,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
       )}
     </div>
   );
+  
 
   // -------------------------------------------------------------------
   // 8) Render: Personal Info Card (Editable)
@@ -305,20 +407,21 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
             {isEditingPersonal ? (
               <input
                 type="text"
-                value={value}
+                value={value || ""}
                 onChange={(e) =>
                   setPersonalInfo({ ...personalInfo, [key]: e.target.value })
                 }
                 className="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-black focus:border-black block w-full p-2.5"
               />
             ) : (
-              <p className="text-[#434966] font-semibold">{value}</p>
+              <p className="text-[#434966] font-semibold">{value || ""}</p>
             )}
           </div>
         ))}
       </div>
     </div>
   );
+  
 
   // -------------------------------------------------------------------
   // 9) Render: About Me Card (Editable)
@@ -353,7 +456,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
       {isEditingAboutMe ? (
         <>
           <textarea
-            value={aboutMe.description}
+            value={aboutMe.description || ""}
             onChange={(e) =>
               setAboutMe({ ...aboutMe, description: e.target.value })
             }
@@ -366,7 +469,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
             <input
               key={index}
               type="text"
-              value={item}
+              value={item || ""}
               onChange={(e) => {
                 const newAdvice = [...aboutMe.advice];
                 newAdvice[index] = e.target.value;
@@ -378,7 +481,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
         </>
       ) : (
         <>
-          <p className="text-[#434966]">{aboutMe.description}</p>
+          <p className="text-[#434966]">{aboutMe.description || ""}</p>
           <h3 className="mt-4 text-md font-semibold text-black">
             Things I Can Advise On:
           </h3>

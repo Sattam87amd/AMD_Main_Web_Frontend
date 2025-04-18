@@ -4,20 +4,40 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { FiShare2 } from "react-icons/fi";
 
-const ExpertProfile = ({ expertId }) => {
+const ExpertProfile = ({ activeTab }) => {
   const [expertData, setExpertData] = useState(null);
+  const [expertId, setExpertId] = useState("");
 
+  // Fetch expertId from localStorage
   useEffect(() => {
-    const fetchExpertData = async () => {
+    const expertToken = localStorage.getItem('expertToken');  // Get the token from localStorage
+    
+    if (expertToken) {
       try {
-        const response = await axios.get(`https://amd-api.code4bharat.com/api/expertauth/${expertId}`);
-        setExpertData(response.data.data);  // Assuming the response follows { data: expert }
+        // Assuming the expertToken contains the _id directly (if it's JWT)
+        const decodedToken = JSON.parse(atob(expertToken.split(".")[1])); // Decode JWT token
+        const expertId = decodedToken._id;
+        setExpertId(expertId); // Set the expertId to state
       } catch (error) {
-        console.error("Error fetching expert data:", error);
+        console.error("Error parsing expertToken:", error);
       }
-    };
+    } else {
+      alert("Expert token not found in localStorage");
+    }
+  }, []); // Runs once when the component mounts
 
+  // Fetch user data using expertId
+  useEffect(() => {
     if (expertId) {
+      const fetchExpertData = async () => {
+        try {
+          const response = await axios.get(`https://amd-api.code4bharat.com/api/expertauth/${expertId}`);
+          setExpertData(response.data.data);  // Assuming the response follows { data: expert }
+        } catch (error) {
+          console.error("Error fetching expert data:", error);
+        }
+      };
+
       fetchExpertData();
     }
   }, [expertId]);

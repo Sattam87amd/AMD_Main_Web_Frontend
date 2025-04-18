@@ -6,32 +6,34 @@ import { LuNotepadText } from "react-icons/lu";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { Inter } from "next/font/google";
+import axios from "axios";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios"
 
 const interFont = Inter({
     subsets: ["latin"],
     variable: "--font-inter",
 });
 
-function LoginPage() {
+
+function UserLoginPage() {
     const router = useRouter();
     const [phone, setPhone] = useState("");
     const [otp, setOtp] = useState("");
+    const [email, setEmail] = useState(""); // State for email
+    const [useEmail, setUseEmail] = useState(true); // Toggle between email and phone login
     const [phoneError, setPhoneError] = useState("");
     const [otpError, setOtpError] = useState("");
     const [formError, setFormError] = useState("");
-    const [useEmail, setUseEmail] = useState(true); // Step 1
-    const [email, setEmail] = useState("");
+    const [emailError, setEmailError] = useState(""); // State for email validation
 
-
-    // Toggle handler
-const toggleLoginMethod = () => {
+ // Toggle between phone and email login
+ const toggleLoginMethod = () => {
     setUseEmail(!useEmail);
     setPhone("");
     setEmail("");
     setPhoneError("");
+    setEmailError("");
     setFormError("");
 };
     const handlePhoneChange = (value) => {
@@ -47,7 +49,17 @@ const toggleLoginMethod = () => {
         }
         setFormError("");
     };
+    const handleEmailChange = (e) => {
+        const value = e.target.value;
+        setEmail(value);
 
+        if (!value || !value.includes("@")) {
+            setEmailError("Please enter a valid email.");
+        } else {
+            setEmailError("");
+        }
+        setFormError("");
+    };  
     const handleOtpChange = (e) => {
         const value = e.target.value.replace(/\D/g, "");
         if (value.length <= 4) {
@@ -60,54 +72,58 @@ const toggleLoginMethod = () => {
 
     const generateOtp = async () => {
         if (useEmail) {
-          if (!email || !email.includes("@")) {
-            setFormError("Please enter a valid email address.");
-            return;
-          }
-          try {
-            await axios.post("https://amd-api.code4bharat.com/api/expertauth/request-otp", { email });
-            alert("OTP sent to your email!");
-          } catch (error) {
-            console.log(error);
-            setFormError("Failed to send OTP. Please try again.");
-          }
+            if (!email || !email.includes("@")) {
+                setFormError("Please enter a valid email address.");
+                return;
+            }
+            try {
+                await axios.post("https://amd-api.code4bharat.com/api/userauth/request-otp", { email });
+                alert("OTP sent to your email!");
+            } catch (error) {
+                console.log(error);
+                setFormError("Failed to send OTP. Please try again.");
+            }
         } else {
-          if (!phone || !isValidPhoneNumber(phone)) {
-            setPhoneError("Please enter a valid phone number.");
-            return;
-          }
-          try {
-            await axios.post("https://amd-api.code4bharat.com/api/expertauth/request-otp", { phone });
-            alert("OTP sent to your phone!");
-          } catch (error) {
-            console.log(error);
-            setFormError("Failed to send OTP. Please try again.");
-          }
+            if (!phone || !isValidPhoneNumber(phone)) {
+                setPhoneError("Please enter a valid phone number.");
+                return;
+            }
+            try {
+                await axios.post("https://amd-api.code4bharat.com/api/userauth/request-otp", { phone });
+                alert("OTP sent to your phone!");
+            } catch (error) {
+                console.log(error);
+                setFormError("Failed to send OTP. Please try again.");
+            }
         }
-      };
-      
-      const handleSubmit = async () => {
+    };
+
+     const handleSubmit = async () => {
         if (!otp || otp.length !== 4) {
-          setFormError("Please enter a valid 4-digit OTP.");
-          return;
+            setFormError("Please enter a valid 4-digit OTP.");
+            return;
         }
-      
+
         try {
-          const payload = useEmail ? { email, otp } : { phone, otp };
-          const response = await axios.post("https://amd-api.code4bharat.com/api/expertauth/verify-otp", payload);
-      
-          if (response.data.data.isNewExpert) {
-            const identifier = useEmail ? `email=${encodeURIComponent(email)}` : `phone=${encodeURIComponent(phone)}`;
-            router.push(`/register?${identifier}`);
-          } else {
-            localStorage.setItem("expertToken", response.data.data.token);
-            router.push("/expertpanel/expertpanelprofile");
-          }
+            const payload = useEmail
+            ? { email, otp }
+            : { phone, otp };
+          
+            const response = await axios.post("https://amd-api.code4bharat.com/api/userauth/verify-otp", payload);
+
+            if (response.data.data.isNewUser) {
+                const identifier = useEmail ? `email=${encodeURIComponent(email)}` : `phone=${encodeURIComponent(phone)}`;
+                router.push(`/userpanel/register?${identifier}`);
+            } else {
+                localStorage.setItem('userToken', response.data.data.token);
+                router.push("/userpanel/loginuserexpert");
+            }
         } catch (error) {
-          setFormError(error.response?.data?.message || "OTP verification failed");
+            console.error("Error verifying OTP:", error);
+            setFormError("OTP verification failed.");
         }
-      };
-      
+    };
+    
     return (
         <div className={`min-h-screen flex ${interFont.variable}`}>
             <div className="hidden md:flex w-1/2 flex-col relative">
@@ -175,16 +191,19 @@ const toggleLoginMethod = () => {
                 </div>
 
                 <div className="w-full max-w-md p-8 -mt-20 md:-mt-0">
-                    <h1 className="text-3xl md:text-[40px] font-extrabold text-center">
-                        Login
+                    <h1 className="text-2xl md:text-[35px] font-bold text-center">
+                        Create an Account
                     </h1>
                     <p className="text-center text-[#878787] mt-1 md:mt-2">
                         or{" "}
                         <span className="text-[#EA2B2B] font-semibold underline">
-                            Sign up
+                            Login
                         </span>
                     </p>
+                    
+                   
 
+                   
                     <div className="mt-8 space-y-8">
                         <div>
                         {useEmail ? (
@@ -279,7 +298,9 @@ const toggleLoginMethod = () => {
                         {formError && <p className="text-red-500 text-sm">{formError}</p>}
 
                         <button
-                            className={`w-full py-3 rounded-lg transition bg-black text-white hover:bg-gray-800"
+                            className={`w-full py-3 rounded-lg transition ${phone && otp.length === 4 && isValidPhoneNumber(phone)
+                                ? "bg-black text-white hover:bg-gray-800"
+                                : "bg-black text-white cursor-not-allowed"
                                 }`}
                             onClick={handleSubmit}
                             disabled={
@@ -298,4 +319,4 @@ const toggleLoginMethod = () => {
     );
 }
 
-export default LoginPage;
+export default UserLoginPage;

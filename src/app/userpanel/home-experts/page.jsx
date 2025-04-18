@@ -1,12 +1,12 @@
 "use client";
 
-import ExpertCategory from "@/components/ExpertCategory/ExpertCategory";
+// import ExpertCategory from "@/components/ExpertCategory/ExpertCategory";
 import NavSearch from "@/components/Layout/navsearch";
 import Footer from "@/components/UserPanel/Layout/Footer";
 import LoginExpertCategory from "@/components/UserPanel/LoginExpertCategory/LoginExpertCategory";
 import LoginUserHomeexpert from "@/components/UserPanel/LoginUserExpert/LoginUserHomeexpert/LodinUserHomeexpert";
 import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
-import UserHomeexperts from "@/components/UserPanel/UserExpert-Home/UserExpert-Home";
+// import UserHomeexperts from "@/components/UserPanel/UserExpert-Home/UserExpert-Home";
 import UserSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
 
 

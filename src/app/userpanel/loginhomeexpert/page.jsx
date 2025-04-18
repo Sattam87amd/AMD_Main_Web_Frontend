@@ -5,10 +5,10 @@ import NavSearch from "@/components/Layout/navsearch";
 import Footer from "@/components/UserPanel/Layout/Footer";
 import LoginExpertCategory from "@/components/UserPanel/LoginExpertCategory/LoginExpertCategory";
 import LoginHomeexpert from "@/components/UserPanel/LoginHomeExpert/LoginHomeExpert";
-import LoginUserHomeexpert from "@/components/UserPanel/LoginUserExpert/LoginUserHomeexpert/LodinUserHomeexpert";
+// import LoginUserHomeexpert from "@/components/UserPanel/LoginUserExpert/LoginUserHomeexpert/LodinUserHomeexpert";
 import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/LoginUserMobileNavSearch/LoginUserMobileNavSearch";
 import UserBottomNav from "@/components/UserPanel/UserBottomNav/UserBottomNav";
-import UserHomeexperts from "@/components/UserPanel/UserExpert-Home/UserExpert-Home";
+// import UserHomeexperts from "@/components/UserPanel/UserExpert-Home/UserExpert-Home";
 import UserSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
 
 
@@ -38,7 +38,7 @@ const Page = () => {
           <div className="block md:hidden">
             <LoginUserMobileNavSearch />
             <div className="space-y-8 px-4">
-              <UserHomeexperts />
+            <LoginHomeexpert /> 
             </div>
           </div>
         </div>
