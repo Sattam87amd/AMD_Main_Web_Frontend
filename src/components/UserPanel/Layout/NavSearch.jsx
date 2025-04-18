@@ -4,12 +4,20 @@ import { IoPersonOutline } from "react-icons/io5"; // Updated profile icon
 import { Gift } from "lucide-react"; // Updated gift icon
 import { FaSearch } from "react-icons/fa"; // Search icon
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import SearchExperts from "@/components/SearchExperts/SearchExperts";
 
 const NavSearch = () => {
   const [showSearchPage, setShowSearchPage] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  // Check if user is logged in on component mount
+  useEffect(() => {
+    // Check for userToken in localStorage
+    const userToken = localStorage.getItem("userToken");
+    setIsLoggedIn(!!userToken);
+  }, []);
 
   // Open Search Page
   const toggleSearchPage = () => {
@@ -20,6 +28,7 @@ const NavSearch = () => {
   const closeSearchPage = () => {
     setShowSearchPage(false);
   };
+  
   return (
     <div className="hidden md:block bg-[#F8F7F3] px-4 py-4 relative">
       <motion.nav
@@ -59,7 +68,7 @@ const NavSearch = () => {
             </Link>
           </motion.div>
           <motion.div whileHover={{ scale: 1.2 }}>
-            <Link href="/userlogin">
+            <Link href={isLoggedIn ? "/userpanel/userpanelprofile" : "/userlogin"}>
               <IoPersonOutline className="text-4xl text-black font-semibold cursor-pointer" />
             </Link>
           </motion.div>
