@@ -45,7 +45,7 @@ const EnableCharity = () => {
       }
 
       const response = await axios.get(
-        "http://localhost:5070/api/expertauth/get-charity-settings", // Backend API endpoint
+        "https://amd-api.code4bharat.com/api/expertauth/get-charity-settings", // Backend API endpoint
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -84,7 +84,7 @@ const EnableCharity = () => {
 
     try {
       const response = await axios.put(
-        "http://localhost:5070/api/expertauth/update-charity", // Correct backend endpoint
+        "https://amd-api.code4bharat.com/api/expertauth/update-charity", // Correct backend endpoint
         {
           charityEnabled: isEnabled,
           charityPercentage: parseInt(charityData.percentage, 10),
