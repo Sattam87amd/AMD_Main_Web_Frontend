@@ -22,7 +22,7 @@ function LoginPage() {
     const [phoneError, setPhoneError] = useState("");
     const [otpError, setOtpError] = useState("");
     const [formError, setFormError] = useState("");
-    const [useEmail, setUseEmail] = useState(false); // Step 1
+    const [useEmail, setUseEmail] = useState(true); // Step 1
     const [email, setEmail] = useState("");
 
 
