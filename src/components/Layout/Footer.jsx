@@ -25,7 +25,6 @@ const Footer = () => {
 
           {/* Middle Section - Company and Support */}
           <div className="flex flex-col md:flex-row md:space-x-16 gap-10">
-
             {/* Company Section */}
             <div>
               <h2 className="mb-4 text-sm md:text-lg font-semibold text-black">
@@ -81,11 +80,6 @@ const Footer = () => {
                     Suggest a new topic or expert
                   </Link>
                 </li>
-                <li>
-                  <Link href="/terms" className="hover:underline">
-                    Terms & Conditions
-                  </Link>
-                </li>
               </ul>
             </div>
 
@@ -106,7 +100,10 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li className="mb-2">
-                  <Link href="/policies/termsandcondition" className="hover:underline">
+                  <Link
+                    href="/policies/termsandcondition"
+                    className="hover:underline"
+                  >
                     Terms & Conditions
                   </Link>
                 </li>
@@ -116,22 +113,34 @@ const Footer = () => {
                   </Link>
                 </li>
                 <li className="mb-2">
-                  <Link href="/policies/product-pricing" className="hover:underline">
+                  <Link
+                    href="/policies/product-pricing"
+                    className="hover:underline"
+                  >
                     Product Pricing
                   </Link>
                 </li>
                 <li className="mb-2">
-                  <Link href="/policies/cancellation-policy" className="hover:underline">
+                  <Link
+                    href="/policies/cancellation-policy"
+                    className="hover:underline"
+                  >
                     Cancelation Policy
                   </Link>
                 </li>
                 <li className="mb-2">
-                  <Link href="/policies/refund-policy" className="hover:underline">
+                  <Link
+                    href="/policies/refund-policy"
+                    className="hover:underline"
+                  >
                     Refund Policy
                   </Link>
                 </li>
                 <li>
-                  <Link href="/policies/shipping-policies" className="hover:underline">
+                  <Link
+                    href="/policies/shipping-policies"
+                    className="hover:underline"
+                  >
                     Shipping & Delivery Policy
                   </Link>
                 </li>

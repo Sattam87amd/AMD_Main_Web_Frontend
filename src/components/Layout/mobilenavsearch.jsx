@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { FaSearch, FaGift, FaUser, FaFilter, FaArrowLeft } from "react-icons/fa";
 import { useRouter } from "next/navigation"; // Import useRouter for navigation
 import { RiArrowLeftSLine } from "react-icons/ri";
+import { motion, AnimatePresence } from "framer-motion";
+import SearchExperts from "../SearchExperts/SearchExperts";
 // import { useNavigate } from "react-router-dom";
 
 const MobileNavSearch = () => {
@@ -25,6 +27,19 @@ const MobileNavSearch = () => {
     { title: "Wellness", image: "/wellness.png", link: "/wellnessexperts" },
   ];
 
+const [showSearchPage, setShowSearchPage] = useState(false);
+  
+  // Open Search Page
+  const toggleSearchPage = () => {
+    setShowSearchPage(true);
+  };
+  
+  // Close Search Page
+  const closeSearchPage = () => {
+    setShowSearchPage(false);
+  };
+
+
   // Toggle Filter
   const toggleFilter = () => setShowFilter(!showFilter);
 
@@ -41,7 +56,15 @@ const MobileNavSearch = () => {
 
         {/* Right - Icons */}
         <div className="flex items-center space-x-4 relative">
-          <FaSearch className="text-xl text-gray-600 cursor-pointer" />
+
+        <button 
+            onClick={toggleSearchPage} 
+            className="md:hidden text-black p-2 absolute right-24"
+          >
+            <FaSearch className="text-xl text-gray-600 cursor-pointer" />
+          </button>
+
+         
           <FaFilter
             className={`text-xl cursor-pointer ${showFilter ? "text-black" : "text-gray-600"}`}
             onClick={toggleFilter}
@@ -105,30 +128,22 @@ const MobileNavSearch = () => {
         </div>
       </nav>
 
-      {/* Headline */}
-      {/* <h1 className="text-xl font-bold text-black mb-4">
-        Find The Right Expert In Seconds!
-      </h1> */}
-
-      {/* Categories Section */}
-      {/* <div className="flex overflow-x-auto space-x-4 py-2">
-        {categories.map((category, index) => (
-          <div
-            key={index}
-            className="relative w-36 h-24 flex-shrink-0 rounded-xl overflow-hidden shadow-md cursor-pointer"
-            onClick={() => router.push(category.link)}
-          >
-            <img
-              src={category.image}
-              alt={category.title}
-              className="absolute inset-0 w-full h-full object-cover opacity-80"
-            />
-            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 rounded-xl">
-              <p className="text-white font-semibold">{category.title}</p>
-            </div>
-          </div>
-        ))}
-      </div> */}
+          {/* Search Page Transition */}
+    <AnimatePresence>
+    {showSearchPage && (
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 30 }}
+        transition={{ duration: 0.3 }}
+        className="fixed inset-0 bg-white z-50 overflow-auto"
+      >
+        {/* Pass close function to SearchExperts */}
+        <SearchExperts closeSearchPage={closeSearchPage} />
+      </motion.div>
+    )}
+  </AnimatePresence>
+    
     </div>
   );
 };
