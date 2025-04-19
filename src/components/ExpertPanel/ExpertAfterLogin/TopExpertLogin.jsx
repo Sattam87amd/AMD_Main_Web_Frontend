@@ -61,7 +61,7 @@ const ExpertsCardsLogin = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="bg-white p-6">
+    <div className="bg-white p-6 md:p-0">
       {/* Heading Section */}
       <div className="flex flex-col md:flex-row md:h-40 items-center mb-6 md:mb-0">
         <h1 className="text-3xl md:text-[60px] font-bold text-black">
@@ -84,7 +84,7 @@ const ExpertsCardsLogin = () => {
 
       {/* Cards Section */}
       <div className="overflow-x-auto md:overflow-visible">
-        <div className="flex md:grid md:grid-cols-5 gap-4 md:gap-x-72 px-4 md:px-0 overflow-x-scroll custom-scrollbar-hide">
+        <div className="flex gap-4 px-4 md:px-0 overflow-x-scroll custom-scrollbar-hide">
           {expertData.map((expert, index) => (
             <Link
               key={index}
