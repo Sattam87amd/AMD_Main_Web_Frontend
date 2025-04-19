@@ -59,7 +59,7 @@ const HomeCardsLogin = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="bg-white p-6">
+    <div className="bg-white p-6 md:p-0">
       {/* Heading Section */}
       <div className="flex flex-col md:flex-row md:h-40 items-center mb-6 md:mb-0">
         <h1 className="text-3xl md:text-[60px] font-bold text-black">HOME.</h1>
