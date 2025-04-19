@@ -202,9 +202,11 @@ const ExpertDetail = () => {
                     <div className="flex items-center gap-3">
                       {charityEnabled && (
                         <div className="flex items-center gap-1 bg-red-50 px-3 py-1.5 rounded-full">
-                          <span className="text-xs text-red-600 font-medium">
-                            {charityInfo.percentage}% to {charityInfo.name}
+                          <span className="flex text-xs text-red-600 font-medium">
+                            {charityInfo.percentage}% to Charity{charityInfo.name}
+                           
                           </span>
+                          
                           <HeartHandshake className="h-4 w-4 text-red-600" />
                         </div>
                       )}
