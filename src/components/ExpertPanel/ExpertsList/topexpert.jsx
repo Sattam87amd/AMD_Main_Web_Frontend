@@ -79,7 +79,7 @@ const LoginTopExpert = () => {
       {/* Cards Section with Motion for Animation */}
       <div className="overflow-x-auto md:overflow-visible">
         <motion.div
-          className="flex md:grid md:grid-cols-5 gap-4 md:gap-x-64 px-4 md:px-0 overflow-x-scroll scrollbar-hide"
+          className="flex md:grid md:grid-cols-5  md:gap-x-64 gap-4 px-4 md:px-0 overflow-x-scroll custom-scrollbar-hide"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
@@ -91,12 +91,12 @@ const LoginTopExpert = () => {
           {expertData.map((expert, index) => (
             <Link key={index} href={`/expertpanel/expertaboutme/${expert._id}`} passHref>
               <motion.div
-                className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg rounded-lg cursor-pointer"
+                className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg  cursor-pointer"
                 variants={{
                   hidden: { opacity: 0, y: 30 },
                   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
                 }}
-                whileHover={{ scale: 1.05 }}
+                // whileHover={{ scale: 1.05 }}
               >
                 {/* Expert Image */}
                 <img
@@ -111,7 +111,7 @@ const LoginTopExpert = () => {
                 </div>
 
                 {/* Info Box */}
-                <div className="absolute bottom-1 left-1 right-1 bg-white/80 backdrop-blur-md p-4 m-2 rounded-lg shadow-lg">
+                <div className="absolute bottom-1 left-1 right-1 bg-white/80 backdrop-blur-md p-4 m-2 shadow-lg">
                   <h2 className="text-lg font-semibold text-black flex items-center gap-1">
                     {expert.firstName}
                     <HiBadgeCheck className="w-5 h-5 text-yellow-500" />
