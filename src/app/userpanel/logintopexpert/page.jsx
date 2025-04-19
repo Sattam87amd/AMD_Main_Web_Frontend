@@ -25,7 +25,7 @@ const Page = () => {
           <div className="hidden md:block">
             <NavSearch/>
             <LoginExpertCategory/>
-            <div className="space-y-8 px-4 md:px-8">
+            <div className="space-y-8 px-4 pb-12 md:pb-0">
               <UserTopExpert/>
               
              

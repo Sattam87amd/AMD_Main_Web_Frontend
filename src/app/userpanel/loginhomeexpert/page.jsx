@@ -37,7 +37,7 @@ const Page = () => {
           {/* Mobile View - MobileNavSearch */}
           <div className="block md:hidden">
             <LoginUserMobileNavSearch />
-            <div className="space-y-8 px-4">
+            <div className="space-y-8 px-4 pb-12 md:pb-0">
             <LoginHomeexpert /> 
             </div>
           </div>

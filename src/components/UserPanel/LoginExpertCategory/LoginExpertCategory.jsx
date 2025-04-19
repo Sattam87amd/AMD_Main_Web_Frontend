@@ -30,6 +30,7 @@ const LoginExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
   };
 
   const handleFilterChange = (event) => {
+    // 3. Update the selected filter when a radio button is clicked
     setSelectedFilter(event.target.value);
   };
 
@@ -75,9 +76,9 @@ const LoginExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
                   id={option.value}
                   name="filter"
                   value={option.value}
-                  checked={selectedFilter === option.value}
-                  onChange={handleFilterChange}
-                  className="mr-2"
+                  checked={selectedFilter === option.value} // Check if this option is selected
+                  onChange={handleFilterChange} // Update selectedFilter when clicked
+                  className="mr-2 cursor-pointer" // Ensure it's clickable
                 />
                 <label htmlFor={option.value} className="text-gray-700">
                   {option.label}
