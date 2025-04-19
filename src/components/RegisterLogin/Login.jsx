@@ -65,7 +65,7 @@ const toggleLoginMethod = () => {
             return;
           }
           try {
-            await axios.post("https://amd-api.code4bharat.com/api/expertauth/request-otp", { email });
+            await axios.post("http://localhost:5070/api/expertauth/request-otp", { email });
             alert("OTP sent to your email!");
           } catch (error) {
             console.log(error);
@@ -77,7 +77,7 @@ const toggleLoginMethod = () => {
             return;
           }
           try {
-            await axios.post("https://amd-api.code4bharat.com/api/expertauth/request-otp", { phone });
+            await axios.post("http://localhost:5070/api/expertauth/request-otp", { phone });
             alert("OTP sent to your phone!");
           } catch (error) {
             console.log(error);
@@ -94,7 +94,7 @@ const toggleLoginMethod = () => {
       
         try {
           const payload = useEmail ? { email, otp } : { phone, otp };
-          const response = await axios.post("https://amd-api.code4bharat.com/api/expertauth/verify-otp", payload);
+          const response = await axios.post("http://localhost:5070/api/expertauth/verify-otp", payload);
       
           if (response.data.data.isNewExpert) {
             const identifier = useEmail ? `email=${encodeURIComponent(email)}` : `phone=${encodeURIComponent(phone)}`;

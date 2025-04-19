@@ -16,16 +16,21 @@ const LoginTopExpert = () => {
   useEffect(() => {
     const fetchExperts = async () => {
       try {
-        const area = "Home";
-        const response = await axios.get(`https://amd-api.code4bharat.com/api/expertauth/area/${area}`);
-        setExpertData(response.data.data);
+      
+        const response = await axios.get(`http://localhost:5070/api/expertauth/`);
+        
+        // Filter the experts where averageRating >= 4
+        const filteredExperts = response.data.data.filter(expert => expert.averageRating >= 4);
+        
+
+        setExpertData(filteredExperts);
         setLoading(false);
       } catch (err) {
         setError("Error fetching expert data");
         setLoading(false);
       }
     };
-
+    
     fetchExperts();
   }, []);
 

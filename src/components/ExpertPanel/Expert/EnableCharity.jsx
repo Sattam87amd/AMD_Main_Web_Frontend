@@ -14,7 +14,7 @@ const EnableCharity = () => {
 
   // Fetch expertId from localStorage and decode JWT token to get expertId
   useEffect(() => {
-    const expertToken = localStorage.getItem('expertToken');  // Get the token from localStorage
+    const expertToken = localStorage.getItem("expertToken");  // Get the token from localStorage
 
     if (expertToken) {
       try {
@@ -33,33 +33,35 @@ const EnableCharity = () => {
     }
   }, []);
 
-  // Fetch expert charity settings from the backend
   const fetchCharitySettings = async (expertId) => {
     try {
       setLoadingSessions(true);
       const token = localStorage.getItem("expertToken");
-
+  
       if (!token) {
         setErrorSessions("Token is required");
         return;
       }
-
+  
+      // Fetch expert details by ID, using the existing `getExpertById` route
       const response = await axios.get(
-        "https://amd-api.code4bharat.com/api/expertauth/get-charity-settings", // Backend API endpoint
+        `http://localhost:5070/api/expertauth/${expertId}`, // Backend API endpoint with expertId
         {
           headers: {
-            Authorization: `Bearer ${token}`,
-            expertid: expertId, // Send expertId in the request header
+            Authorization: `Bearer ${token}`, // Send token in the header for authorization
           },
         }
       );
-
+  
       if (response.data.success) {
+        // Extract charity-related details from the response data
         const { charityEnabled, charityPercentage, charityName } = response.data.data;
+  
+        // Update your state based on the fetched data
         setIsEnabled(charityEnabled);
         setCharityData({
-          name: charityName || "Charity",
-          percentage: `${charityPercentage}%` || "0%",
+          name: charityName || "Charity", // Fallback to 'Charity' if charityName is undefined
+          percentage: `${charityPercentage}%` || "0%", // Fallback to "0%" if charityPercentage is undefined
         });
       } else {
         setErrorSessions("Failed to fetch charity settings");
@@ -84,9 +86,9 @@ const EnableCharity = () => {
 
     try {
       const response = await axios.put(
-        "https://amd-api.code4bharat.com/api/expertauth/update-charity", // Correct backend endpoint
+        "http://localhost:5070/api/expertauth/update-charity", // Correct backend endpoint
         {
-          charityEnabled: isEnabled,
+          charityEnabled: isEnabled,  // This will be false if the toggle is off
           charityPercentage: parseInt(charityData.percentage, 10),
           charityName: charityData.name,
         },
@@ -125,7 +127,7 @@ const EnableCharity = () => {
             type="checkbox"
             className="sr-only peer"
             checked={isEnabled}
-            onChange={() => setIsEnabled(!isEnabled)}
+            onChange={() => setIsEnabled(!isEnabled)} // Update state based on toggle
           />
           <div
             className={`relative w-11 h-6 rounded-full transition ${
@@ -142,8 +144,8 @@ const EnableCharity = () => {
       </div>
 
       {/* Charity Form - Disabled when toggle is off */}
-      <div className={`${!isEnabled ? "opacity-50 pointer-events-none" : ""}`}>
-        <div className="mt-4">
+      <div className={`mt-4 ${!isEnabled ? "opacity-50" : ""}`}>
+        <div>
           <label className="block text-black text-sm font-semibold mb-3">
             Name of Charity
           </label>
@@ -159,7 +161,7 @@ const EnableCharity = () => {
           />
         </div>
 
-        <div className="mt-4">
+        <div>
           <label className="block text-black text-sm font-semibold mb-3">
             What % of proceeds would you like to donate?
           </label>
@@ -175,12 +177,11 @@ const EnableCharity = () => {
           />
         </div>
 
-        {/* Save Button */}
+        {/* Save Button - Always enabled now */}
         <div className="flex justify-center items-center mt-8 pt-20">
           <button
-            onClick={handleSave}
-            disabled={!isEnabled} // Disable button when toggle is off
-            className="w-44 bg-black text-white text-sm font-semibold py-2.5 rounded-2xl"
+            onClick={handleSave} // Always enabled, will send data based on `isEnabled`
+            className={`w-44 text-sm font-semibold py-2.5 rounded-2xl bg-black text-white`}
           >
             Save
           </button>
