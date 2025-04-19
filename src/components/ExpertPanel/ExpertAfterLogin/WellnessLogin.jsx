@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiBadgeCheck } from "react-icons/hi";
 import { HiChevronRight } from "react-icons/hi"; // Importing right arrow icon
+import { HeartHandshake } from "lucide-react";
 import axios from "axios";
 
 const WellnessHomeCardsLogin = () => {
@@ -82,7 +83,7 @@ const WellnessHomeCardsLogin = () => {
 
       {/* Cards Section - Horizontal Scroll on Small Screens, Grid on Medium+ */}
       <div className="overflow-x-auto md:overflow-visible">
-        <div className="flex md:grid md:grid-cols-5 gap-4 md:gap-72 px-4 md:px-0 overflow-x-scroll custom-scrollbar-hide">
+        <div className="flex md:grid md:grid-cols-5 gap-4 md:gap-x-72 px-4 md:px-0 overflow-x-scroll custom-scrollbar-hide">
           {expertData.map((expert, index) => (
             <Link
               key={index}
@@ -99,17 +100,32 @@ const WellnessHomeCardsLogin = () => {
 
                 {/* Price Tag */}
                 <div className="absolute top-4 right-4 bg-[#F8F7F3] text-black px-4 py-2 rounded-2xl shadow-xl font-semibold">
-                SAR  {expert.price || "0"}
+                  SAR {expert.price || "0"}
                   {/* Default value in case price is missing */}
                 </div>
 
                 {/* Transparent Blur Card */}
                 <div className="absolute bottom-1 left-1 right-1 bg-white/80 p-4 m-2">
-                  <h2 className="text-lg font-semibold text-black flex items-center gap-1">
-                    {expert.firstName}
-                    <HiBadgeCheck className="w-6 h-6 text-yellow-500" />
-                  </h2>
-                  <p className="text-xs text-black mt-1"> {truncateExperience(expert.experience)}</p>
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-lg font-semibold text-black flex items-center gap-1">
+                      {expert.firstName}
+                      <HiBadgeCheck className="w-6 h-6 text-yellow-500" />
+                    </h2>
+
+                    {/* Small charity indicator text (optional) */}
+                    {expert.charityEnabled && (
+                      <div className="flex items-center text-xs text-red-600 font-bold px-3 py-1.5 rounded-full">
+                        <span>
+                          {expert.charityPercentage || 0}% to Charity{" "}
+                        </span>
+                        <HeartHandshake className="w-3 h-3 ml-1" />
+                      </div>
+                    )}
+                  </div>
+
+                  <p className="text-xs text-black mt-1 line-clamp-3">
+                    {truncateExperience(expert.experience)}
+                  </p>
                 </div>
               </div>
             </Link>
