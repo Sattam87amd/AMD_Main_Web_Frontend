@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 
 const LoginExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
+  // Categories data with links and images
   const categories = [
     { title: "Top Experts", image: "/topexperts.png", link: "/userpanel/logintopexpert" },
     { title: "Home", image: "/home.png", link: "/userpanel/loginhomeexpert" },
@@ -13,6 +14,7 @@ const LoginExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
     { title: "Wellness", image: "/wellness.png", link: "/userpanel/loginwellnessexpert" },
   ];
 
+  // Filter options
   const filterOptions = [
     { label: "Recommended", value: "recommended" },
     { label: "Price High - Low", value: "price_high_low" },
@@ -23,21 +25,25 @@ const LoginExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
     { label: "Expert Language - English", value: "language_english" },
   ];
 
+  // State to toggle filter dropdown visibility
   const [showFilterBox, setShowFilterBox] = useState(false);
 
+  // Handle category click (navigate to respective page)
   const handleCategoryClick = (link) => {
     window.location.href = link;
   };
 
+  // Handle filter change (update selectedFilter)
   const handleFilterChange = (event) => {
-    // 3. Update the selected filter when a radio button is clicked
     setSelectedFilter(event.target.value);
   };
 
+  // Toggle filter dropdown visibility
   const toggleFilterBox = () => setShowFilterBox(!showFilterBox);
 
   return (
     <div className="bg-[#F8F7F3] px-4 py-6">
+      {/* Header section */}
       <div className="flex justify-between items-center mb-6">
         <motion.h1
           className="text-2xl md:text-3xl font-semibold text-black"
@@ -59,6 +65,7 @@ const LoginExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
         </motion.button>
       </div>
 
+      {/* Filter dropdown */}
       {showFilterBox && (
         <motion.div
           className="bg-white p-4 rounded-md shadow-lg w-64 absolute top-16 right-4 z-50"
@@ -76,9 +83,9 @@ const LoginExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
                   id={option.value}
                   name="filter"
                   value={option.value}
-                  checked={selectedFilter === option.value} // Check if this option is selected
-                  onChange={handleFilterChange} // Update selectedFilter when clicked
-                  className="mr-2 cursor-pointer" // Ensure it's clickable
+                  checked={selectedFilter === option.value}
+                  onChange={handleFilterChange}
+                  className="mr-2 cursor-pointer"
                 />
                 <label htmlFor={option.value} className="text-gray-700">
                   {option.label}
@@ -87,8 +94,8 @@ const LoginExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
             ))}
           </form>
           <div className="flex justify-end mt-4">
-            <button 
-              className="bg-black text-white px-4 py-2 rounded-lg" 
+            <button
+              className="bg-black text-white px-4 py-2 rounded-lg"
               onClick={toggleFilterBox}
             >
               Save
@@ -97,7 +104,7 @@ const LoginExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
         </motion.div>
       )}
 
-      {/* Apply the custom-scrollbar-hide class here */}
+      {/* Categories */}
       <motion.div
         className="overflow-x-auto md:overflow-x-auto md:ml-16 custom-scrollbar-hide"
         initial={{ opacity: 0 }}
