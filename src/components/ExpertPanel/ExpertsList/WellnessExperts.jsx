@@ -138,5 +138,5 @@ const WellnessLogin = () => {
     </div>
   );
 };
-
+  
 export default WellnessLogin;
