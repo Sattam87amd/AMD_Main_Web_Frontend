@@ -33,33 +33,35 @@ const EnableCharity = () => {
     }
   }, []);
 
-  // Fetch expert charity settings from the backend
   const fetchCharitySettings = async (expertId) => {
     try {
       setLoadingSessions(true);
       const token = localStorage.getItem("expertToken");
-
+  
       if (!token) {
         setErrorSessions("Token is required");
         return;
       }
-
+  
+      // Fetch expert details by ID, using the existing `getExpertById` route
       const response = await axios.get(
-        "https://amd-api.code4bharat.com/api/expertauth/get-charity-settings", // Backend API endpoint
+        `http://localhost:5070/api/expertauth/${expertId}`, // Backend API endpoint with expertId
         {
           headers: {
-            Authorization: `Bearer ${token}`,
-            expertid: expertId, // Send expertId in the request header
+            Authorization: `Bearer ${token}`, // Send token in the header for authorization
           },
         }
       );
-
+  
       if (response.data.success) {
+        // Extract charity-related details from the response data
         const { charityEnabled, charityPercentage, charityName } = response.data.data;
+  
+        // Update your state based on the fetched data
         setIsEnabled(charityEnabled);
         setCharityData({
-          name: charityName || "Charity",
-          percentage: `${charityPercentage}%` || "0%",
+          name: charityName || "Charity", // Fallback to 'Charity' if charityName is undefined
+          percentage: `${charityPercentage}%` || "0%", // Fallback to "0%" if charityPercentage is undefined
         });
       } else {
         setErrorSessions("Failed to fetch charity settings");
@@ -84,7 +86,7 @@ const EnableCharity = () => {
 
     try {
       const response = await axios.put(
-        "https://amd-api.code4bharat.com/api/expertauth/update-charity", // Correct backend endpoint
+        "http://localhost:5070/api/expertauth/update-charity", // Correct backend endpoint
         {
           charityEnabled: isEnabled,
           charityPercentage: parseInt(charityData.percentage, 10),
