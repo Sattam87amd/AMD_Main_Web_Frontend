@@ -12,13 +12,13 @@ const UserTopExpert = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Fetch experts by area of expertise (e.g., "Home")
+  // Fetch experts with rating 4 and above
   useEffect(() => {
     const fetchExperts = async () => {
       try {
-        const area = "Home";
-        const response = await axios.get(`http://localhost:5070/api/expertauth/area/${area}`);
-        setExpertData(response.data.data);
+        const response = await axios.get(`http://localhost:5070/api/expertauth/`);  // Get all experts
+        const filteredExperts = response.data.data.filter((expert) => expert.averageRating >= 4);  // Filter experts with rating >= 4
+        setExpertData(filteredExperts);
         setLoading(false);
       } catch (err) {
         setError("Error fetching expert data");
