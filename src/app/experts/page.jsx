@@ -1,4 +1,3 @@
-
 "use client";
 
 import CareerBusinessBefore from "@/components/ExpertBeforeLogin/Career&BusinessBefore";
@@ -13,30 +12,26 @@ import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";
 
 const Page = () => {
-  
   return (
     <div className="flex min-h-screen flex-col">
-      
+      {/* Main Content (Right Section - 80% Width) */}
+      <div className="w-full flex flex-col">
+        {/* Desktop View - NavSearch */}
+        <div className="">
+          <MobileNavSearch />
+          <NavSearch />
+          <ExpertCategory />
+          <div className="space-y-8 px-1 md:px-8">
+            <ExpertsCardsBefore />
 
-        {/* Main Content (Right Section - 80% Width) */}
-        <div className='w-full flex flex-col'>
-          {/* Desktop View - NavSearch */}
-          <div className="">
-            <MobileNavSearch/>
-            <NavSearch />
-            <ExpertCategory/>
-            <div className="space-y-8 px-1 md:px-8">
-              <ExpertsCardsBefore/>
-              
-             <WellnessBefore/>
-             <FashionBeautyBefore/>
-             <CareerBusinessBefore/>
-             <HomeExpertsBefore/>
-              <Threepara />
-            </div>
+            <WellnessBefore />
+            <FashionBeautyBefore />
+            <CareerBusinessBefore />
+            <HomeExpertsBefore />
+            <Threepara />
           </div>
         </div>
-      
+      </div>
 
       {/* Footer (Full Width) */}
       <div className="w-full ">

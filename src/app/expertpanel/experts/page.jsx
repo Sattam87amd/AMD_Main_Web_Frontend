@@ -32,7 +32,7 @@ const Page = () => {
         <MobileNavSearch/> 
             <NavSearch />
             <LoginExpertCategory />
-            <div className="space-y-8 px-4 md:px-8">
+            <div className="space-y-8 px-4 md:px-0">
               <ExpertsCardsLogin />
               <WellnessHomeCardsLogin />
               <FashionBeautyHomeCardsLogin />

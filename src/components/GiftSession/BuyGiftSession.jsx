@@ -129,7 +129,7 @@ function BuyGiftSession() {
 
   return (
     <div className="min-h-screen flex">
-      <div className="hidden md:flex w-1/2 flex-col relative fixed h-screen">
+      <div className="hidden md:flex w-1/2 flex-col relative h-screen">
         <div className="h-[35%] bg-[#EDECE8] flex items-center justify-center relative">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
             <Image src="/AMD_logo.png" alt="AMD Logo" width={190} height={190} />

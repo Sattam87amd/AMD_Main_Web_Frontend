@@ -7,6 +7,7 @@ import LoginUserMobileNavSearch from "@/components/UserPanel/LoginUserExpert/Log
 import NavSearch from "@/components/UserPanel/NavSearch/NavSearch";
 import UserBottomNav from "@/components/UserPanel/UserBottomNav/UserBottomNav";
 import UseSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
+import MobileNavSearch from "@/components/UserPanel/Layout/MobileNavSearch";
 
 
 const Page = () => {
@@ -25,7 +26,7 @@ const Page = () => {
           <div className="hidden md:block">
             <NavSearch/>
             <LoginExpertCategory/>
-            <div className="space-y-8 px-4 md:px-8">
+            <div className="space-y-8 px-4 pb-12 md:pb-0">
               <UserTopExpert/>
               
              
@@ -34,7 +35,7 @@ const Page = () => {
 
           {/* Mobile View - MobileNavSearch */}
           <div className="block md:hidden pb-12 md:pb-0">
-            <LoginUserMobileNavSearch />
+            <MobileNavSearch />
             <div className="space-y-8 px-4">
               <UserTopExpert />
             </div>

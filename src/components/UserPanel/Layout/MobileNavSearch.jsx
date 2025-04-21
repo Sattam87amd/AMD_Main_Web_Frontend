@@ -12,34 +12,20 @@ import { useRouter } from "next/navigation"; // Import useRouter for navigation
 import { RiArrowLeftSLine } from "react-icons/ri";
 import { motion, AnimatePresence } from "framer-motion";
 import SearchExperts from "@/components/SearchExperts/SearchExperts";
-// import { useNavigate } from "react-router-dom";
 
 const MobileNavSearch = () => {
   const [showFilter, setShowFilter] = useState(false);
-  const [activeBrand, setActiveBrand] = useState(null);
-  const [activeFeature, setActiveFeature] = useState(null);
+  const [selectedFilter, setSelectedFilter] = useState(null);
   const router = useRouter();
 
-  // Filter Data
-  const brands = [
-    "Name",
-    "Name",
-    "Name",
-    "Name",
-    "Name",
-    "Name",
-    "Name",
-    "Name",
-  ];
-  const features = [
-    "Name",
-    "Name",
-    "Name",
-    "Name",
-    "Name",
-    "Name",
-    "Name",
-    "Name",
+  const filterOptions = [
+    { label: "Recommended", value: "recommended" },
+    { label: "Price High - Low", value: "price_high_low" },
+    { label: "Price Low - High", value: "price_low_high" },
+    { label: "Highest Rating", value: "highest_rating" },
+    { label: "Most Reviewed", value: "most_reviewed" },
+    { label: "Expert Language - Arabic", value: "language_arabic" },
+    { label: "Expert Language - English", value: "language_english" },
   ];
 
   // Category Data with Links
@@ -73,6 +59,12 @@ const MobileNavSearch = () => {
 
   // Toggle Filter
   const toggleFilter = () => setShowFilter(!showFilter);
+
+  // Update selected filter
+  const handleFilterChange = (event) => {
+    setSelectedFilter(event.target.value);
+    // You can add additional logic here to filter your data based on the selected value
+  };
 
   return (
     <div className="bg-[#F8F7F3] p-4 md:hidden">
@@ -113,7 +105,7 @@ const MobileNavSearch = () => {
 
           {/* Filter Dropdown */}
           {showFilter && (
-            <div className="absolute right-0 mt-2 w-80 bg-white shadow-xl rounded-xl p-4 z-50 ">
+            <div className="absolute right-0 mt-2 w-80 bg-white shadow-xl pt-[20rem] rounded-xl p-4 z-50 ">
               {/* Header - Back & Save */}
               <div className="flex items-center justify-between mb-4">
                 <button
@@ -131,45 +123,28 @@ const MobileNavSearch = () => {
                 </button>
               </div>
 
-              {/* Brand Section */}
-              <div className="mb-4">
-                <h3 className="text-lg font-semibold mb-2">Brand</h3>
-                <div className="grid grid-cols-4 gap-2">
-                  {brands.map((name, index) => (
-                    <button
-                      key={index}
-                      className={`px-3 py-1 rounded-full ${
-                        activeBrand === index
-                          ? "bg-black text-white"
-                          : "bg-gray-300 text-black"
-                      }`}
-                      onClick={() => setActiveBrand(index)}
-                    >
-                      {name}
-                    </button>
+              {/* Filter Options Section */}
+              <form>
+                <h3 className="text-lg font-semibold mb-2">Filter By</h3>
+                <div className="grid grid-cols-1 gap-2">
+                  {filterOptions.map((option) => (
+                    <div key={option.value} className="flex items-center mb-2">
+                      <input
+                        type="radio"
+                        id={option.value}
+                        name="filter"
+                        value={option.value}
+                        checked={selectedFilter === option.value}
+                        onChange={handleFilterChange}
+                        className="mr-2"
+                      />
+                      <label htmlFor={option.value} className="text-gray-700">
+                        {option.label}
+                      </label>
+                    </div>
                   ))}
                 </div>
-              </div>
-
-              {/* Features Section */}
-              <div>
-                <h3 className="text-lg font-semibold mb-2">Features</h3>
-                <div className="grid grid-cols-4 gap-2">
-                  {features.map((name, index) => (
-                    <button
-                      key={index}
-                      className={`px-3 py-1 rounded-full ${
-                        activeFeature === index
-                          ? "bg-black text-white"
-                          : "bg-gray-300 text-black"
-                      }`}
-                      onClick={() => setActiveFeature(index)}
-                    >
-                      {name}
-                    </button>
-                  ))}
-                </div>
-              </div>
+              </form>
             </div>
           )}
         </div>

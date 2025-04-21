@@ -7,6 +7,7 @@ import UserBottomNav from '@/components/UserPanel/UserBottomNav/UserBottomNav';
 import UserSidebar from '@/components/UserPanel/UseSideBar/UserSidebar';
 import UserVideoCall from '@/components/UserPanel/VideoCall/UserVideoCall';
 import { usePathname } from "next/navigation";
+import MobileNavSearch from "@/components/UserPanel/Layout/MobileNavSearch";
 
 import React from 'react'
 
@@ -33,7 +34,7 @@ const page = () => {
         {/* Right Side Content with 2/3 width */}
         <div className="w-[100%] md:w-[80%] md:p-4">
           <div className='md:hidden '>
-          <UserMobileNavSearch/>
+          <MobileNavSearch/>
           </div>
           <Navtop activeTab={activeTab}/>
           <UserVideoCall activeTab={activeTab}/>
