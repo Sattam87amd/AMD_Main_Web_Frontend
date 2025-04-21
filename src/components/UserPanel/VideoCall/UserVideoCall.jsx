@@ -26,7 +26,7 @@ const UserVideoCall = () => {
         }
 
         const bookingsResponse = await axios.get(
-          "http://localhost:5070/api/session/Userbookings",
+          "http://amd-api.code4bharat.com/api/session/Userbookings",
           {
             headers: {
               Authorization: `Bearer ${token}`,
