@@ -32,7 +32,7 @@ const VideoCall = () => {
         }
 
         const bookingsResponse = await axios.get(
-          "http://localhost:5070/api/session/mybookings",
+          "https://amd-api.code4bharat.com/api/session/mybookings",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -58,7 +58,7 @@ const VideoCall = () => {
         }
 
         const sessionsResponse = await axios.get(
-          "http://localhost:5070/api/session/getexpertsession",
+          "https://amd-api.code4bharat.com/api/session/getexpertsession",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -118,7 +118,7 @@ const VideoCall = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:5070/api/session/accept/${sessionId}`,
+        `https://amd-api.code4bharat.com/api/session/accept/${sessionId}`,
         {},
         {
           headers: {
@@ -148,7 +148,7 @@ const VideoCall = () => {
       }
 
       const response = await axios.put(
-        `http://localhost:5070/api/session/decline/${sessionId}`,
+        `https://amd-api.code4bharat.com/api/session/decline/${sessionId}`,
         {},
         {
           headers: {

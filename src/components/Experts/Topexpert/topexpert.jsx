@@ -17,7 +17,7 @@ const LoginTopExpert = () => {
     const fetchExperts = async () => {
       try {
       
-        const response = await axios.get(`http://localhost:5070/api/expertauth/`);
+        const response = await axios.get(`https://amd-api.code4bharat.com/api/expertauth/`);
         
         // Filter the experts where averageRating >= 4
         const filteredExperts = response.data.data.filter(expert => expert.averageRating >= 4);
