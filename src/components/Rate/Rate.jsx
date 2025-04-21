@@ -24,7 +24,7 @@ const Rate = ({ booking, setShowRateComponent }) => {
     try {
       // Submit the rating
       const response = await axios.post(
-        'https://amd-api.code4bharat.com/api/ratings/',
+        'http://localhost:5070/api/ratings/',
         {
           expertId: booking.consultingExpertID._id,  
           raterId: booking.expertId._id,  
@@ -41,7 +41,7 @@ const Rate = ({ booking, setShowRateComponent }) => {
 
       // Update booking status after rating submission
       await axios.put(
-        `https://amd-api.code4bharat.com/api/ratings/update-status/${booking._id}`,
+        `http://localhost:5070/api/ratings/update-status/${booking._id}`,
         { status: 'Rating Submitted' },
         {
           headers: {
