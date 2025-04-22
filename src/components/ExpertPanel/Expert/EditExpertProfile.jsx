@@ -24,7 +24,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
   const [expertId, setExpertId] = useState(""); // Used to store expertId if needed
   // const [isEditingProfile, setIsEditingProfile] = useState(false);
   // const [showSavedProfile, setShowSavedProfile] = useState(false);
-  
+
   // Initialize with safe default values to prevent undefined errors
   const [localExpertData, setLocalExpertData] = useState({
     firstName: "",
@@ -50,25 +50,27 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
         country: expertData.country || "",
         photoFile: expertData.photoFile || "/default-profile.png"
       });
-      
+
       // Update other state objects that depend on expertData
+
+
       setPersonalInfo({
         name: expertData.firstName || "",
-        dateOfBirth: "20/07/2003",
-        age: "21",
+        dateOfBirth: expertData.dateOfBirth || "",
+        age: expertData.age || "",
         phoneNumber: expertData.phone || "",
         email: expertData.email || "",
         bio: expertData.areaOfExpertise || "",
       });
-      
+
       setAboutMe({
         description: expertData.experience || "",
-        advice: [
-          "Startup Struggles",
-          "Customer Retention/Service",
-          "The Beauty Industry",
-          "Product Development",
-          "Branding & PR",
+        advice:expertData.advice || [
+          "",
+          "",
+          "",
+          "",
+          "",
         ],
       });
     }
@@ -76,7 +78,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
 
   useEffect(() => {
     const expertToken = localStorage.getItem("expertToken");
-  
+
     if (expertToken) {
       try {
         // Assuming the expertToken contains the _id directly (if it's JWT)
@@ -90,7 +92,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
       console.log("Expert token not found in localStorage");
     }
   }, []); // Runs once when the component mounts
-  
+
   useEffect(() => {
     if (expertId) {
       const fetchExpertData = async () => {
@@ -104,11 +106,11 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
           console.error("Error fetching expert data:", error);
         }
       };
-  
+
       fetchExpertData();
     }
   }, [expertId]); // Runs when expertId changes
-  
+
 
   useEffect(() => {
     const handleResize = () => {
@@ -130,30 +132,42 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
 
   // For "Personal Information" card
   const [personalInfo, setPersonalInfo] = useState({
-    name: "",
-    dateOfBirth: "20/07/2003",
-    age: "21",
-    phoneNumber: "",
-    email: "",
-    bio: "",
+    name: expertData.firstName || "",
+    dateOfBirth: expertData.dateOfBirth || "",
+    age: expertData.age || "",
+    phoneNumber: expertData.phone || "",
+    email: expertData.email || "",
+    bio: expertData.areaOfExpertise || "",
   });
+
+  const formatDateToISO = (dateStr) => {
+    const [day, month, year] = dateStr.split("/");
+    return  `${year}-${month}-${day}`;
+  };
+
+  const formatDateToDisplay = (isoDate) => {
+    const [year, month, day] = isoDate.split("T")[0].split("-");
+    return `${day}/${month}/${year}`;
+  };
   const [isEditingPersonal, setIsEditingPersonal] = useState(false);
   const [showSavedPersonal, setShowSavedPersonal] = useState(false);
 
   // For "About Me" card
-  const [aboutMe, setAboutMe] = useState({
-    description: "",
-    advice: [
-      "Startup Struggles",
-      "Customer Retention/Service",
-      "The Beauty Industry",
-      "Product Development",
-      "Branding & PR",
-    ],
-  });
-  const [isEditingAboutMe, setIsEditingAboutMe] = useState(false);
-  const [showSavedAboutMe, setShowSavedAboutMe] = useState(false);
-
+  
+    const [aboutMe, setAboutMe] = useState({
+      description: "",
+      advice: [
+        "Startup Struggles",
+        "Customer Retention/Service",
+        "The Beauty Industry",
+        "Product Development",
+        "Branding & PR",
+      ],
+    });
+  
+    const [isEditingAboutMe, setIsEditingAboutMe] = useState(false);
+    const [showSavedAboutMe, setShowSavedAboutMe] = useState(false);
+    
   // Notifications toggle
   const [isEnabled, setIsEnabled] = useState(false);
 
@@ -211,10 +225,10 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
     try {
       // Save changes to API
       await axios.put(`http://localhost:5070/api/expertauth/${expertId}`, localExpertData);
-      
+
       // Update parent component's state
       setExpertData(localExpertData);
-      
+
       // Show saved confirmation
       setIsEditingProfile(false);
       setShowSavedProfile(true);
@@ -246,11 +260,10 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
             <button
               key={item.name}
               onClick={() => handleMenuClick(item.name)}
-              className={`flex items-center justify-between w-full text-left p-2 rounded-lg transition md:gap-3 ${
-                selectedSection === item.name
+              className={`flex items-center justify-between w-full text-left p-2 rounded-lg transition md:gap-3 ${selectedSection === item.name
                   ? "bg-black text-white"
                   : "hover:bg-gray-200 text-[#7A7D84]"
-              }`}
+                }`}
             >
               <span className="flex items-center gap-3">{item.name}</span>
               <FiChevronRight className="md:hidden text-gray-500" />
@@ -288,7 +301,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
       <div className="flex flex-row items-center justify-between">
         <div className="flex items-center space-x-4 md:space-x-6">
           <Image
-            src={localExpertData.photoFile || "/default-profile.png"} 
+            src={localExpertData.photoFile || "/default-profile.png"}
             alt="Expert Profile"
             width={80}
             height={80}
@@ -362,25 +375,91 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
       )}
     </div>
   );
-  
+
 
   // -------------------------------------------------------------------
   // 8) Render: Personal Info Card (Editable)
   // -------------------------------------------------------------------
+  const savePersonalChanges = async () => {
+    try {
+      const payload = {
+        firstName: personalInfo.name.split(" ")[0] || "",
+        lastName: personalInfo.name.split(" ")[1] || "",
+        dateOfBirth: formatDateToISO(personalInfo.dateOfBirth), // Ensure correct format for backend
+        phone: personalInfo.phoneNumber,
+        email: personalInfo.email,
+        areaOfExpertise: personalInfo.bio,
+      };
+
+      const { data } = await axios.put(
+        `http://localhost:5070/api/expertauth/${expertId}`,
+        payload
+      );
+
+      // Update frontend state
+      setExpertData(data);
+      setPersonalInfo((prev) => ({
+        ...prev,
+        age: data.age?.toString() || prev.age, // Ensure age is updated
+        dateOfBirth: data.dateOfBirth ? formatDateToDisplay(data.dateOfBirth) : prev.dateOfBirth,
+      }));
+
+      setShowSavedPersonal(true);
+      setIsEditingPersonal(false);
+      setTimeout(() => setShowSavedPersonal(false), 2000);
+    } catch (error) {
+      console.error("Error updating personal info:", error);
+      alert("Failed to save changes. " + (error.response?.data?.message || error.message));
+    }
+  };
+
+  const saveAboutMeChanges = async () => {
+    try {
+      const payload = {
+        aboutMe: aboutMe.description,
+        advice:  aboutMe.advice,
+      };
+      const { data } = await axios.put(
+        `http://localhost:5070/api/expertauth/${expertId}/experience`,
+        payload
+      );
+      if (data.success) {
+        // flip out of “editing” mode, show your “Saved!” message
+        setIsEditingAboutMe(false);
+        setShowSavedAboutMe(true);
+  
+        // push the new values back into both parent and local state:
+        setExpertData((prev) => ({
+          ...prev,
+          experience: data.data.experience,
+          advice:     data.data.advice,
+        }));
+        setLocalExpertData((prev) => ({
+          ...prev,
+          experience: data.data.experience,
+          advice:     data.data.advice,
+        }));
+  
+        // hide the “Saved!” after 2s
+        setTimeout(() => setShowSavedAboutMe(false), 2000);
+      }
+    } catch (err) {
+      console.error("Error updating About Me:", err);
+      alert("Failed to save your About Me. Please try again.");
+    }
+  };
+
+
   const renderPersonalInfoCard = () => (
     <div className="bg-white rounded-2xl p-6 border border-gray-300">
       <div className="flex flex-row items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-[#434966]">
           Personal Information
         </h3>
-        {isEditingPersonal ? (
+        {isEditingPersonal ? ( 
           <button
             className="border border-[#434966] px-4 py-2 text-white font-medium bg-black rounded-lg flex items-center gap-2"
-            onClick={() => {
-              setIsEditingPersonal(false);
-              setShowSavedPersonal(true);
-              setTimeout(() => setShowSavedPersonal(false), 2000);
-            }}
+            onClick={savePersonalChanges}
           >
             Save
           </button>
@@ -393,39 +472,75 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
           </button>
         )}
       </div>
+
       {showSavedPersonal && (
         <p className="text-green-500 mt-2 animate-pulse">Changes Saved!</p>
       )}
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {Object.entries(personalInfo).map(([key, value]) => (
-          <div key={key}>
-            <label className="block text-[#7A7D84] text-sm font-medium mb-1">
-              {key
-                .replace(/([A-Z])/g, " $1")
-                .replace(/^./, (str) => str.toUpperCase())}
-            </label>
-            {isEditingPersonal ? (
-              <input
-                type="text"
-                value={value || ""}
-                onChange={(e) =>
-                  setPersonalInfo({ ...personalInfo, [key]: e.target.value })
-                }
-                className="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-black focus:border-black block w-full p-2.5"
-              />
-            ) : (
-              <p className="text-[#434966] font-semibold">{value || ""}</p>
-            )}
-          </div>
-        ))}
+        {Object.entries(personalInfo).map(([key, value]) => {
+          const label = key
+            .replace(/([A-Z])/g, " $1")
+            .replace(/^./, (str) => str.toUpperCase());
+
+          // Custom handling for date input
+          if (key === "dateOfBirth") {
+            return (
+              <div key={key}>
+                <label className="block text-[#7A7D84] text-sm font-medium mb-1">
+                  {label}
+                </label>
+                {isEditingPersonal ? (
+                  <input
+                    type="date"
+                    value={formatDateToISO(value)} // input expects yyyy-mm-dd
+                    onChange={(e) =>
+                      setPersonalInfo({
+                        ...personalInfo,
+                        [key]: formatDateToDisplay(e.target.value), // store as dd/mm/yyyy
+                      })
+                    }
+                    className="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-black focus:border-black block w-full p-2.5"
+                  />
+                ) : (
+                  <p className="text-[#434966] font-semibold">{value.slice(0, 10) || ""}</p>
+                )}
+              </div>
+            );
+          }
+
+          return (
+            <div key={key}>
+              <label className="block text-[#7A7D84] text-sm font-medium mb-1">
+                {label}
+              </label>
+              {isEditingPersonal ? (
+                <input
+                  type="text"
+                  value={value || ""}
+                  onChange={(e) =>
+                    setPersonalInfo({ ...personalInfo, [key]: e.target.value })
+                  }
+                  className="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-black focus:border-black block w-full p-2.5"
+                />
+              ) : (
+                <p className="text-[#434966] font-semibold">{value || ""}</p>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
-  
+
 
   // -------------------------------------------------------------------
   // 9) Render: About Me Card (Editable)
   // -------------------------------------------------------------------
+
+
+
+  
   const renderAboutMeCard = () => (
     <div className="bg-white rounded-2xl p-6 border border-gray-300">
       <div className="flex flex-row items-center justify-between mb-4">
@@ -433,11 +548,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
         {isEditingAboutMe ? (
           <button
             className="border border-[#434966] px-4 py-2 text-white font-medium bg-black rounded-lg flex items-center gap-2"
-            onClick={() => {
-              setIsEditingAboutMe(false);
-              setShowSavedAboutMe(true);
-              setTimeout(() => setShowSavedAboutMe(false), 2000);
-            }}
+            onClick={saveAboutMeChanges}
           >
             Save
           </button>
@@ -517,14 +628,12 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
               onChange={() => setIsEnabled(!isEnabled)}
             />
             <div
-              className={`relative w-11 h-6 rounded-full transition ${
-                isEnabled ? "bg-black" : "bg-gray-200"
-              } peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-black`}
+              className={`relative w-11 h-6 rounded-full transition ${isEnabled ? "bg-black" : "bg-gray-200"
+                } peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-black`}
             >
               <div
-                className={`absolute top-[2px] left-[2px] bg-white border-gray-300 border w-5 h-5 rounded-full transition-all ${
-                  isEnabled ? "translate-x-full border-white" : ""
-                }`}
+                className={`absolute top-[2px] left-[2px] bg-white border-gray-300 border w-5 h-5 rounded-full transition-all ${isEnabled ? "translate-x-full border-white" : ""
+                  }`}
               ></div>
             </div>
           </label>
@@ -582,9 +691,9 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
       {selectedSection === "Edit example questions" && <EditExampleQuestions />}
       {selectedSection === "Connect my calendar" && <ConnectMyCalendar />}
       {selectedSection === "Set my preferred availability" && <PreferredAvailability />}
-      {selectedSection === "Group Sessions" && <GroupSession/>}
-      {selectedSection === "Available session lengths" && <AvailableSessionLength/>}
-      {selectedSection === "1:1 Video session prices" && <VideoSessionPrices/>}
+      {selectedSection === "Group Sessions" && <GroupSession />}
+      {selectedSection === "Available session lengths" && <AvailableSessionLength />}
+      {selectedSection === "1:1 Video session prices" && <VideoSessionPrices />}
     </div>
   );
 
@@ -646,14 +755,12 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
                   onChange={() => setRequestTimeEnabled(!requestTimeEnabled)}
                 />
                 <div
-                  className={`relative w-11 h-6 rounded-full transition ${
-                    requestTimeEnabled ? "bg-black" : "bg-gray-300"
-                  }`}
+                  className={`relative w-11 h-6 rounded-full transition ${requestTimeEnabled ? "bg-black" : "bg-gray-300"
+                    }`}
                 >
                   <div
-                    className={`absolute top-[2px] left-[2px] bg-white border-gray-300 border w-5 h-5 rounded-full transition-all ${
-                      requestTimeEnabled ? "translate-x-full border-white" : ""
-                    }`}
+                    className={`absolute top-[2px] left-[2px] bg-white border-gray-300 border w-5 h-5 rounded-full transition-all ${requestTimeEnabled ? "translate-x-full border-white" : ""
+                      }`}
                   ></div>
                 </div>
               </label>
@@ -681,16 +788,14 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
                   }
                 />
                 <div
-                  className={`relative w-11 h-6 rounded-full transition ${
-                    videoCallExtensionEnabled ? "bg-black" : "bg-gray-300"
-                  }`}
+                  className={`relative w-11 h-6 rounded-full transition ${videoCallExtensionEnabled ? "bg-black" : "bg-gray-300"
+                    }`}
                 >
                   <div
-                    className={`absolute top-[2px] left-[2px] bg-white border-gray-300 border w-5 h-5 rounded-full transition-all ${
-                      videoCallExtensionEnabled
+                    className={`absolute top-[2px] left-[2px] bg-white border-gray-300 border w-5 h-5 rounded-full transition-all ${videoCallExtensionEnabled
                         ? "translate-x-full border-white"
                         : ""
-                    }`}
+                      }`}
                   ></div>
                 </div>
               </label>
