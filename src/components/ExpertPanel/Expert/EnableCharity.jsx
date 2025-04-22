@@ -45,7 +45,7 @@ const EnableCharity = () => {
   
       // Fetch expert details by ID, using the existing `getExpertById` route
       const response = await axios.get(
-        `http://localhost:5070/api/expertauth/${expertId}`, // Backend API endpoint with expertId
+        `https://amd-api.code4bharat.com/api/expertauth/${expertId}`, // Backend API endpoint with expertId
         {
           headers: {
             Authorization: `Bearer ${token}`, // Send token in the header for authorization
@@ -86,7 +86,7 @@ const EnableCharity = () => {
 
     try {
       const response = await axios.put(
-        "http://localhost:5070/api/expertauth/update-charity", // Correct backend endpoint
+        "https://amd-api.code4bharat.com/api/expertauth/update-charity", // Correct backend endpoint
         {
           charityEnabled: isEnabled,  // This will be false if the toggle is off
           charityPercentage: parseInt(charityData.percentage, 10),
