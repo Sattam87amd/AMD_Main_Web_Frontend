@@ -12,7 +12,7 @@ const images = [
 
 const AchieveTheLook = () => {
   return (
-    <main className="bg-[#EDECE8] relative md:min-h-screen flex flex-col justify-center overflow-hidden">
+    <main className="bg-[#EDECE8] relative md:min-h-screen flex flex-col justify-center overflow-hidden ">
       <div className="w-full mx-auto px-4 md:px-1 py-10">
         {/* Heading */}
         <h1 className="text-center text-black uppercase text-2xl md:text-[40px] font-semiboldi mb-10 md:pb-16">

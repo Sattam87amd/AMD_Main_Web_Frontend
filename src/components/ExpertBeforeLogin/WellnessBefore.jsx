@@ -65,7 +65,7 @@ const WellnessBefore = () => {
         <h1 className="text-3xl md:text-[60px] font-bold text-black">
           WELLNESS
         </h1>
-        <p className="text-[#9C9C9C] md:pt-5 pl-5 md:text-2xl">
+        <p className="text-[#9C9C9C] md:pt-5 pl-5 md:text-2xl ">
           Connect with nutritionists, trainers, & more about living a healthier
           life
         </p>
