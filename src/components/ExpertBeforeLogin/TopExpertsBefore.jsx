@@ -17,7 +17,7 @@ const ExpertsCardsBefore = () => {
     const fetchExperts = async () => {
       try {
         const response = await axios.get(
-          `http://amd-api.code4bharat.com/api/expertauth/`
+          `https://amd-api.code4bharat.com/api/expertauth/`
         ); // Get all experts
         const filteredExperts = response.data.data.filter(
           (expert) => expert.averageRating >= 4

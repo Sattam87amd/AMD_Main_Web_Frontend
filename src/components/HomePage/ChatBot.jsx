@@ -19,7 +19,7 @@ function Chatbot() {
     setUserInput('');
 
     try {
-      const response = await fetch('http://amd-api.code4bharat.com/api/chatbot', {
+      const response = await fetch('https://amd-api.code4bharat.com/api/chatbot', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: userInput }),
