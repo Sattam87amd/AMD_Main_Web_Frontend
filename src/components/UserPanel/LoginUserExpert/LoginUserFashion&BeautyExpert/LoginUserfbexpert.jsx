@@ -18,7 +18,7 @@ const LoginUserFbexpert = () => {
       try {
         const area = "Style and Beauty"; // Or dynamically fetch based on user's selection
         const response = await axios.get(
-          `http://localhost:5070/api/expertauth/area/${area}`
+          `https://amd-api.code4bharat.com/api/expertauth/area/${area}`
         );
         setExpertData(response.data.data);
         setLoading(false);
