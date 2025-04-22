@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { HiBadgeCheck } from "react-icons/hi";
-import { HiChevronRight } from "react-icons/hi";
+import { HeartHandshake } from "lucide-react";
 import axios from "axios";
 import { motion } from "framer-motion";
 
-const LoginCareerBusiness = () => {
+const  LoginCareerBusiness = () => {
   const [expertData, setExpertData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -64,14 +64,12 @@ const LoginCareerBusiness = () => {
         transition={{ duration: 0.6 }}
         className="flex flex-col md:flex-row md:h-40 items-center mb-6"
       >
-       <div className="flex flex-col md:flex-row md:h-40 items-center mb-6 md:mb-0">
         <h1 className="text-5xl md:text-[60px] font-bold text-black">
-        CAREER AND BUSINESS
+          CAREER AND BUSINESS.
         </h1>
         <p className="text-[#9C9C9C] md:pt-5 pl-5 md:text-2xl">
-        Connect with CEOs, executives, coaches, and more
+          Connect with CEOs, executives, coaches, and more
         </p>
-      </div>
       </motion.div>
 
       {/* "See All" Button with Animation */}
@@ -118,16 +116,29 @@ const LoginCareerBusiness = () => {
 
                 {/* Price Badge */}
                 <div className="absolute top-4 right-4 bg-[#F8F7F3] text-black px-4 py-2 rounded-2xl shadow-xl font-semibold">
-                  {expert.price || "$ 0"}
+                 SAR {expert.price || "$ 0"}
                 </div>
 
-                {/* Info Box with Blur Effect */}
-                <div className="absolute bottom-1 left-1 right-1 bg-white/80 backdrop-blur-md p-4 m-2  shadow-lg">
-                  <h2 className="text-lg font-semibold text-black flex items-center gap-1">
-                    {expert.firstName}
-                    <HiBadgeCheck className="w-5 h-5 text-yellow-500" />
-                  </h2>
-                  <p className="text-xs text-gray-800 mt-1 line-clamp-3">
+                {/* Transparent Blur Card */}
+                <div className="absolute bottom-1 left-1 right-1 bg-white/80 p-4 m-2">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-lg font-semibold text-black flex items-center gap-1">
+                      {expert.firstName}
+                      <HiBadgeCheck className="w-6 h-6 text-yellow-500" />
+                    </h2>
+
+                    {/* Small charity indicator text (optional) */}
+                    {expert.charityEnabled && (
+                      <div className="flex items-center text-xs text-red-600 font-bold px-3 py-1.5 rounded-full">
+                        <span>
+                          {expert.charityPercentage || 0}% to Charity{" "}
+                        </span>
+                        <HeartHandshake className="w-3 h-3 ml-1" />
+                      </div>
+                    )}
+                  </div>
+
+                  <p className="text-xs text-black mt-1 line-clamp-3">
                     {truncateExperience(expert.experience)}
                   </p>
                 </div>
@@ -140,4 +151,4 @@ const LoginCareerBusiness = () => {
   );
 };
 
-export default LoginCareerBusiness;
+export default  LoginCareerBusiness;

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
-import { Gift } from "lucide-react";
+import { Gift, HeartHandshake } from "lucide-react";
 import Footer from "@/components/UserPanel/Layout/Footer";
 import UserWhatToExpect from "@/components/UserPanel/UserAboutMe/UserWhatToExpect";
 import UserAboutMeReviews from "@/components/UserPanel/UserAboutMe/UserAboutMeReviews";
@@ -12,9 +12,9 @@ import UserSimilarExperts from "@/components/UserPanel/UserAboutMe/UserSimilarEx
 import BottomNav from "@/components/UserPanel/BottomNav/BottomNav";
 import UserSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
 import UserNavSearch from "@/components/UserPanel/Layout/NavSearch";
+import UserMobileNavSearch from "@/components/UserPanel/Experts/UserMobileexpert/UserMobileNavSearch";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-
 const ExpertDetail = () => {
   const [expert, setExpert] = useState(null);
   const [error, setError] = useState(null);
@@ -26,8 +26,11 @@ const ExpertDetail = () => {
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
-  const [selectedTimes, setSelectedTimes] = useState([]);
-
+  const [charityEnabled, setCharityEnabled] = useState(false);
+  const [charityInfo, setCharityInfo] = useState({
+    name: "",
+    percentage: "",
+  });
 
   const router = useRouter();
 
@@ -38,12 +41,6 @@ const ExpertDetail = () => {
   const nextDate = new Date(today);
   nextDate.setDate(today.getDate() + 2);
 
-  const dateMap = {
-    today: today,
-    tomorrow: tomorrow,
-    nextDate: nextDate,
-  };
-
   const getFormattedDate = (date) => {
     return date.toLocaleDateString(undefined, {
       weekday: "long",
@@ -51,16 +48,23 @@ const ExpertDetail = () => {
       month: "short",
     });
   };
-
   const handleSeeMore = () => {
     setIsExpanded(!isExpanded);
+  };
+  const handleSeeTimeClick = () => {
+    setShowTimeSelection(true);
+  };
+
+  const dateMap = {
+    today: today,
+    tomorrow: tomorrow,
+    nextDate: nextDate,
   };
 
   useEffect(() => {
     const pathParts = window.location.pathname.split("/");
     const expertId = pathParts[pathParts.length - 1];
 
-    localStorage.setItem("expertId", expertId);
     if (expertId) {
       const fetchExpertData = async () => {
         try {
@@ -68,9 +72,19 @@ const ExpertDetail = () => {
             `http://localhost:5070/api/expertauth/${expertId}`
           );
           setExpert(response.data.data);
+
+          // Set charity info if available
+          if (response.data.data.charityEnabled) {
+            setCharityEnabled(response.data.data.charityEnabled);
+            setCharityInfo({
+              name: response.data.data.charityName || "",
+              percentage: response.data.data.charityPercentage || "",
+            });
+          }
+
           setLoading(false);
           localStorage.setItem(
-            "expertData",
+            "consultingExpertData",
             JSON.stringify(response.data.data)
           );
         } catch (err) {
@@ -87,51 +101,43 @@ const ExpertDetail = () => {
     setPrice(type === "1:4" ? 150 : 350);
   };
 
-  const handleSeeTimeClick = () => {
-    setShowTimeSelection(true);
+  const handleTimeSelection = (dayKey, time) => {
+    const date = dateMap[dayKey].toISOString().split("T")[0];
+    const formattedTime = time.replace(" AM", "").replace(" PM", "").trim();
+
+    setSelectedDate(date);
+    setSelectedTime(formattedTime);
   };
 
   const handleBookingRequest = async () => {
     try {
+      const token = localStorage.getItem("expertToken");
+      if (!token) throw new Error("No authentication token found");
+
       const sessionData = {
-        expertId: expert._id,
-        slots: selectedTimes,
+        consultingExpertId: expert._id,
+        sessionDate: selectedDate,
+        sessionTime: selectedTime,
         duration: selectedDuration,
         areaOfExpertise: "Home",
       };
 
+      // Store session data in localStorage
       localStorage.setItem("sessionData", JSON.stringify(sessionData));
-      alert("Click Ok to proceed");
-      router.push("/userpanel/userbooking");
+
+      // Redirect to the next page
+      router.push("/expertpanel/expertbooking"); // Assuming the second page is 'expertbookingdetails'
+
       setShowTimeSelection(false);
     } catch (error) {
-      console.error("Booking error:", error);
-      alert(`Booking failed: ${error.message}`);
+      console.error("Booking error:", error.response?.data || error.message);
+      alert(
+        `Booking failed: ${error.response?.data?.message || error.message}`
+      );
     }
   };
 
-  const handleTimeSelection = (dayKey, time) => {
-    const date = dateMap[dayKey].toISOString().split("T")[0];
-    const formattedTime = time.replace(" AM", "").replace(" PM", "").trim();
-    const slot = `${date}|${formattedTime}`;
-  
-    setSelectedTimes((prevTimes) => {
-      // If already selected, deselect
-      if (prevTimes.includes(slot)) {
-        return prevTimes.filter((s) => s !== slot);
-      }
-  
-      // Prevent selecting more than 5 slots
-      if (prevTimes.length >= 5) {
-        alert("You can only book a maximum of 5 time slots.");
-        return prevTimes;
-      }
-  
-      return [...prevTimes, slot];
-    });
-  };
-  
-
+  // Get the truncated experience text
   const experienceText = expert?.experience || "";
   const truncatedExperience =
     experienceText.slice(0, 200) + (experienceText.length > 200 ? "..." : "");
@@ -147,12 +153,13 @@ const ExpertDetail = () => {
         </aside>
 
         <div className="w-full md:w-[80%] flex flex-col">
+          <UserMobileNavSearch />
           <div className="hidden md:block">
             <UserNavSearch />
           </div>
           <div className="min-h-screen bg-white py-10 px-4 md:px-10">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Left Column: Expert Info */}
+              {/* Left Column: Expert Info (Unchanged) */}
               <div className="bg-[#F8F7F3] rounded-3xl p-12 shadow">
                 <img
                   src={expert?.photoFile || "/guyhawkins.png"}
@@ -166,29 +173,24 @@ const ExpertDetail = () => {
                   <p className="text-[#9C9C9C] mt-1">
                     {expert?.designation || "Tech Entrepreneur + Investor"}
                   </p>
-                  <div>
-                    <p className="text-xl font-semibold">
-                      SAR {expert.price} • Session
-                    </p>
-                    <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
-                      {[...Array(5)].map((_, i) => {
-                        const rating = expert.rating || 0; // Use 0 as a fallback if expert.rating is falsy (undefined, null, etc.)
+                  <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
+                    {[...Array(5)].map((_, i) => {
+                      const rating = expert.averageRating || 0; // Use 0 as a fallback if expert.averageRating is falsy (undefined, null, etc.)
 
-                        const isFilled = i < Math.floor(rating); // If the index is less than the rating
-                        const isHalf =
-                          i === Math.floor(rating) && rating % 1 !== 0; // If the rating has a decimal and we are at the exact index
-                        return (
-                          <FaStar
-                            key={i}
-                            className={
-                              isFilled || isHalf
-                                ? "text-[#FFA629]"
-                                : "text-gray-300"
-                            } // Full or empty star color
-                          />
-                        );
-                      })}
-                    </div>
+                      const isFilled = i < Math.floor(rating); // If the index is less than the rating
+                      const isHalf =
+                        i === Math.floor(rating) && rating % 1 !== 0; // If the rating has a decimal and we are at the exact index
+                      return (
+                        <FaStar
+                          key={i}
+                          className={
+                            isFilled || isHalf
+                              ? "text-[#FFA629]"
+                              : "text-gray-300"
+                          } // Full or empty star color
+                        />
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -197,7 +199,19 @@ const ExpertDetail = () => {
                     <h3 className="text-lg md:text-3xl font-semibold">
                       About Me
                     </h3>
-                    <FaInstagram className="text-xl text-gray-600 cursor-pointer hover:text-gray-900" />
+                    <div className="flex items-center gap-3">
+                      {charityEnabled && (
+                        <div className="flex items-center gap-1 bg-red-50 px-3 py-1.5 rounded-full">
+                          <span className="flex text-xs text-red-600 font-medium">
+                            {charityInfo.percentage}% to Charity{charityInfo.name}
+                           
+                          </span>
+                          
+                          <HeartHandshake className="h-4 w-4 text-red-600" />
+                        </div>
+                      )}
+                      <FaInstagram className="text-xl text-gray-600 cursor-pointer hover:text-gray-900" />
+                    </div>
                   </div>
                   <div className="mt-4">
                     <p className="text-sm md:text-xl text-black">
@@ -242,7 +256,7 @@ const ExpertDetail = () => {
                 </div>
               </div>
 
-              {/* Right Column: Video Consultation */}
+              {/* Right Column */}
               <div className="space-y-6">
                 {showTimeSelection ? (
                   <>
@@ -304,95 +318,97 @@ const ExpertDetail = () => {
                               "04:00 PM",
                             ].map((time) => (
                               <button
-                              key={time}
-                              className={`py-2 px-3 text-sm rounded-xl border transition cursor-pointer hover:bg-gray-100 ${
-                                selectedTimes.includes(
-                                  `${dateMap[dayKey].toISOString().split("T")[0]}|${time
-                                    .replace(" AM", "")
-                                    .replace(" PM", "")
-                                    .trim()}`
-                                )
-                                  ? "bg-black text-white"
-                                  : "bg-white text-black"
-                              }`}
-                              onClick={() => handleTimeSelection(dayKey, time)}
-                            >
-                              {time}
-                            </button>
-                            
+                                key={time}
+                                className={`py-2 px-3 text-sm ${
+                                  selectedDate ===
+                                    dateMap[dayKey]
+                                      .toISOString()
+                                      .split("T")[0] &&
+                                  selectedTime ===
+                                    time
+                                      .replace(" AM", "")
+                                      .replace(" PM", "")
+                                      .trim()
+                                    ? "bg-black text-white"
+                                    : "bg-white text-black"
+                                } rounded-xl border`}
+                                onClick={() =>
+                                  handleTimeSelection(dayKey, time)
+                                }
+                              >
+                                {time}
+                              </button>
                             ))}
                           </div>
                         </div>
                       ))}
 
-{/* Show how many slots are selected */}
-<p className="text-sm text-gray-600 mt-4">
-  Selected slots: {selectedTimes.length} / 5
-</p>
+                      <div className="flex gap-10 py-10 items-center">
+                        <div>
+                          <p className="text-xl font-semibold">
+                            SAR {expert.price} • Session
+                          </p>
+                          <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
+                            {[...Array(5)].map((_, i) => {
+                              const rating = expert.averageRating || 0; // Use 0 as a fallback if expert.averageRating is falsy (undefined, null, etc.)
 
-<div className="flex gap-10 py-10 items-center">
-  <div>
-    <p className="text-xl font-semibold">
-      SAR {expert.price} • Session
-    </p>
-    <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
-      {[...Array(5)].map((_, i) => {
-        const rating = expert.rating || 0;
-        const isFilled = i < Math.floor(rating);
-        const isHalf = i === Math.floor(rating) && rating % 1 !== 0;
-        return (
-          <FaStar
-            key={i}
-            className={isFilled || isHalf ? "text-[#FFA629]" : "text-gray-300"}
-          />
-        );
-      })}
-    </div>
-  </div>
-
-  <button
-    className="py-3 px-12 bg-black text-white rounded-md hover:bg-gray-900 transition"
-    onClick={handleBookingRequest}
-    disabled={!selectedDuration || selectedTimes.length === 0}
-  >
-    Request
-  </button>
-</div>
-
+                              const isFilled = i < Math.floor(rating); // If the index is less than the rating
+                              const isHalf =
+                                i === Math.floor(rating) && rating % 1 !== 0; // If the rating has a decimal and we are at the exact index
+                              return (
+                                <FaStar
+                                  key={i}
+                                  className={
+                                    isFilled || isHalf
+                                      ? "text-[#FFA629]"
+                                      : "text-gray-300"
+                                  } // Full or empty star color
+                                />
+                              );
+                            })}
+                          </div>
+                        </div>
+                        <button
+                          className="py-3 px-12 bg-black text-white rounded-md hover:bg-gray-900 transition"
+                          onClick={handleBookingRequest}
+                          disabled={
+                            !selectedDuration || !selectedDate || !selectedTime
+                          }
+                        >
+                          Request
+                        </button>
+                      </div>
                     </div>
                   </>
                 ) : (
-                  <div className="space-y-4">
-                    {/* 1:1 Consultation Card */}
-                    <div
-                      className={`bg-[#F8F7F3] p-6 rounded-xl cursor-pointer ${
-                        selectedConsultation === "1:1"
-                          ? "border-2 border-black"
-                          : ""
-                      }`}
-                      onClick={() => handleConsultationChange("1:1")}
-                    >
+                  <>
+                    {/* 1:1 Video Consultation */}
+                    <div className="bg-[#F8F7F3] p-6 rounded-xl">
                       <div className="bg-black text-white p-2 rounded-t-xl w-max">
                         <h3 className="text-2xl font-semibold">
-                          1:1 Video Call
+                          Book A Video Call
                         </h3>
                       </div>
                       <div className="text-2xl py-4">
                         <h2 className="font-semibold">
-                          Personalized 1:1 Session
+                          1:1 Video Consultation
                         </h2>
                       </div>
                       <p className="text-2xl font-semibold">
-                        Get dedicated one-on-one expert guidance
+                        Book a 1:1 Video consultation & get personalized advice
                       </p>
+
                       <div className="mt-4">
                         <p className="text-xl font-semibold">
                           Starting at SAR {expert.price}
                         </p>
-                        <div className="flex items-center justify-start mt-2">
-                          <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
+                        <div className="flex items-center justify-start">
+                          {/* <p className="text-[#7E7E7E] text-base font-semibold">
+                            Next available - <span className="text-[#0D70E5]">4:30am on 3/25</span>
+                          </p> */}
+                          <div className="flex items-center ml-2 mt-3 gap-5 text-[#FFA629]">
                             {[...Array(5)].map((_, i) => {
-                              const rating = expert.rating || 0; // Use 0 as a fallback if expert.rating is falsy (undefined, null, etc.)
+                              const rating = expert.averageRating || 0; // Use 0 as a fallback if expert.averageRating is falsy (undefined, null, etc.)
 
                               const isFilled = i < Math.floor(rating); // If the index is less than the rating
                               const isHalf =
@@ -411,8 +427,11 @@ const ExpertDetail = () => {
                           </div>
                         </div>
                       </div>
+
                       <div className="flex items-center justify-center mt-4 gap-8">
-                        <Gift className="h-8 w-8" />
+                        <div className="flex items-center">
+                          <Gift className="h-8 w-8" />
+                        </div>
                         <button
                           className="bg-[#0D70E5] text-white py-3 px-24 rounded-md hover:bg-[#0A58C2]"
                           onClick={handleSeeTimeClick}
@@ -422,40 +441,56 @@ const ExpertDetail = () => {
                       </div>
                     </div>
 
-                    {/* 1:4 Consultation Card */}
-                    <div
-                      className={`bg-[#F8F7F3] p-6 rounded-xl cursor-pointer ${
-                        selectedConsultation === "1:4"
-                          ? "border-2 border-black"
-                          : ""
-                      }`}
-                      onClick={() => handleConsultationChange("1:4")}
-                    >
+                    {/* 1:4 Video Consultation */}
+                    <div className="bg-[#F8F7F3] p-6 rounded-xl">
                       <div className="bg-black text-white p-2 rounded-t-xl w-max">
                         <h3 className="text-2xl font-semibold">
-                          1:4 Video Call
+                          Book A Video Call
                         </h3>
                       </div>
                       <div className="text-2xl py-4">
-                        <h2 className="font-semibold">Group Session (1:4)</h2>
+                        <h2 className="font-semibold">
+                          1:4 Video Consultation
+                        </h2>
                       </div>
                       <p className="text-2xl font-semibold">
-                        Join a small group discussion with expert guidance
+                        Book a 1:4 Video consultation & get personalized advice
                       </p>
+
                       <div className="mt-4">
                         <p className="text-xl font-semibold">
                           Starting at SAR {expert.price}
                         </p>
-                        <div className="flex items-center justify-start mt-2">
-                          <div className="flex items-center">
-                            {[...Array(5)].map((_, i) => (
-                              <FaStar key={i} className="text-[#FFA629]" />
-                            ))}
+                        <div className="flex items-center justify-start">
+                          {/* <p className="text-[#7E7E7E] text-base font-semibold">
+                            Next available - <span className="text-[#0D70E5]">5:00pm on 3/25</span>
+                          </p> */}
+                          <div className="flex items-center ml-2 mt-3 gap-5 text-[#FFA629]">
+                            {[...Array(5)].map((_, i) => {
+                              const rating = expert.averageRating || 0; // Use 0 as a fallback if expert.averageRating is falsy (undefined, null, etc.)
+
+                              const isFilled = i < Math.floor(rating); // If the index is less than the rating
+                              const isHalf =
+                                i === Math.floor(rating) && rating % 1 !== 0; // If the rating has a decimal and we are at the exact index
+                              return (
+                                <FaStar
+                                  key={i}
+                                  className={
+                                    isFilled || isHalf
+                                      ? "text-[#FFA629]"
+                                      : "text-gray-300"
+                                  } // Full or empty star color
+                                />
+                              );
+                            })}
                           </div>
                         </div>
                       </div>
+
                       <div className="flex items-center justify-center mt-4 gap-8">
-                        <Gift className="h-8 w-8" />
+                        <div className="flex items-center">
+                          <Gift className="h-8 w-8" />
+                        </div>
                         <button
                           className="bg-[#0D70E5] text-white py-3 px-24 rounded-md hover:bg-[#0A58C2]"
                           onClick={handleSeeTimeClick}
@@ -464,7 +499,7 @@ const ExpertDetail = () => {
                         </button>
                       </div>
                     </div>
-                  </div>
+                  </>
                 )}
               </div>
             </div>
