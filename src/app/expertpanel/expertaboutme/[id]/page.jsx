@@ -69,7 +69,7 @@ const ExpertDetail = () => {
       const fetchExpertData = async () => {
         try {
           const response = await axios.get(
-            `https://amd-api.code4bharat.com/api/expertauth/${expertId}`
+            `http://localhost:5070/api/expertauth/${expertId}`
           );
           setExpert(response.data.data);
 
