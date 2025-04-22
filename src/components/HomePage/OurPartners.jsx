@@ -13,7 +13,7 @@ const OurPartners = () => {
     <div className="bg-[#EDECE8] py-10 px-6 md:h-[500px]">
       <div className="md:pb-16">
         {/* Heading */}
-        <h1 className="text-center text-2xl md:my-5 md:text-[40px] font-medium uppercase text-black mb-6">
+        <h1 className="text-center text-2xl md:my-5 md:text-[40px] font-medium uppercase text-black mb-6 ">
           OUR PARTNERS Talkshow
         </h1>
       </div>

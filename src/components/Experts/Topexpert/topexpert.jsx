@@ -69,7 +69,7 @@ const LoginTopExpert = () => {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="flex flex-col md:flex-row md:h-40 items-center mb-6"
+        className="flex flex-col md:flex-row md:h-40 items-center mb-6 "
       >
         <h1 className="text-3xl md:text-[60px] font-bold text-black">
           Top Experts

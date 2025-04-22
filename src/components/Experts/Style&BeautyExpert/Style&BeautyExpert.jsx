@@ -21,7 +21,7 @@ const FashionBeautyHomeCardsLogin = () => {
         setExpertData(response.data.data);
         setLoading(false);
       } catch (err) {
-        setError("Error fetching expert data");
+        setError("Error fetching expert data ");
         setLoading(false);
       }
     };

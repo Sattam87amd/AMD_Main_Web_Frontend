@@ -15,7 +15,7 @@ const ConnectWithExpertCard = () => {
           <p className="text-lg text-black text-center leading-relaxed md:hidden">
             Our mission is to connect individuals with top experts across various industries, providing personalized advice and insights to help them achieve their goals.
           </p>
-          <p className="hidden md:block text-2xl md:text-3xl text-black font-medium text-justify leading-loose tracking-wide px-20">
+          <p className="hidden md:block text-2xl md:text-3xl text-black font-medium text-justify leading-loose tracking-wide px-20 ">
             Our Mission Is To Connect Individuals With Top 
             Experts Across Various Industries, Providing 
             Personalized Advice And Insights To Help 
