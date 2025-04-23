@@ -107,7 +107,7 @@ function Chatbot() {
           alignItems: 'center',
         }}
       >
-        <strong>AMD Assistant</strong>
+        <strong>Shourk Assistant</strong>
         <button
           onClick={toggleChat}
           style={{
@@ -134,7 +134,7 @@ function Chatbot() {
         {messages.map((msg, index) => (
           <div key={index} style={{ marginBottom: '12px' }}>
             <div style={{ fontWeight: 'bold', marginBottom: '4px', color: msg.sender === 'user' ? '#007bff' : '#111' }}>
-              {msg.sender === 'user' ? 'You' : 'AMD Bot'}
+              {msg.sender === 'user' ? 'You' : 'Shourk Bot'}
             </div>
             <div style={{ lineHeight: '1.5', fontSize: '15px' }}>{renderMarkdownBold(msg.text)}</div>
           </div>

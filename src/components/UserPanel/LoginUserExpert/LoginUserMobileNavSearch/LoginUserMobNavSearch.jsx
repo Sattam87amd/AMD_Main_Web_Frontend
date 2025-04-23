@@ -24,7 +24,7 @@ const LoginUserMobNavSearch = () => {
       {/* Navbar */}
       <nav className="flex items-center justify-between mb-4">
         {/* Left - Brand Name */}
-        <div className="text-2xl font-bold text-black">AMD</div>
+        <div className="text-2xl font-bold text-black">Shourk</div>
 
         {/* Right - Icons */}
         <div className="flex items-center space-x-4 relative">

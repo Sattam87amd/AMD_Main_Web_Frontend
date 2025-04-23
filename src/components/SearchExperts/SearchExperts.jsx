@@ -71,8 +71,8 @@ const SearchExperts = ({ closeSearchPage }) => {
         transition={{ duration: 0.6 }}
         className="flex items-center justify-center w-full mb-6 relative"
       >
-        {/* AMD Logo (Left Aligned) */}
-        <div className="hidden md:block absolute left-4 text-3xl font-bold text-black">AMD</div>
+        {/* Shourk Logo (Left Aligned) */}
+        <div className="hidden md:block absolute left-4 text-3xl font-bold text-black">Shourk</div>
 
         {/* Centered Search Bar & Close Button */}
         <div className="flex items-center justify-center gap-2 w-full max-w-3xl">

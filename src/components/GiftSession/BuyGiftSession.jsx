@@ -43,7 +43,7 @@ function BuyGiftSession() {
         </button>
 
         <div className="flex justify-center pt-8 mb-4">
-          <Image src="/AMD_logo.png" alt="AMD Logo" width={250} height={40} />
+          <Image src="/Shourk_logo.png" alt="Shourk Logo" width={250} height={40} />
         </div>
       </div>
 
@@ -132,7 +132,7 @@ function BuyGiftSession() {
       <div className="hidden md:flex w-1/2 flex-col relative h-screen">
         <div className="h-[35%] bg-[#EDECE8] flex items-center justify-center relative">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-            <Image src="/AMD_logo.png" alt="AMD Logo" width={190} height={190} />
+            <Image src="/Shourk_logo.png" alt="Shourk Logo" width={190} height={190} />
           </div>
 
           <div className="absolute top-full left-4 w-[355px] h-[78px] bg-black bg-opacity-50 backdrop-blur-[3px] rounded-xl flex items-center p-4 z-30 shadow-lg">

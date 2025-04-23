@@ -9,7 +9,7 @@ export default function PrivacyPolicy() {
         </h1>
         <div className="space-y-8 text-gray-700 text-lg">
           <p>
-            At <strong>AMD</strong>, we are committed to safeguarding your privacy. This policy explains how we
+            At <strong>Shourk</strong>, we are committed to safeguarding your privacy. This policy explains how we
             collect, use, and protect your personal information to ensure a secure and transparent experience.
           </p>
           <ul className="list-decimal list-inside space-y-4">
@@ -71,7 +71,7 @@ export default function PrivacyPolicy() {
             <li>
               <strong>Policy Updates:</strong>
               <p>
-                <strong>AMD</strong> reserves the right to update this privacy policy to reflect changes in our
+                <strong>Shourk</strong> reserves the right to update this privacy policy to reflect changes in our
                 practices or legal requirements.
               </p>
               <ul className="list-disc list-inside ml-4">
@@ -82,7 +82,7 @@ export default function PrivacyPolicy() {
           </ul>
           <p>
             If you have any questions or concerns about this policy, please feel free to contact us. At{' '}
-            <strong>AMD</strong>, your privacy and trust are of utmost importance to us.
+            <strong>Shourk</strong>, your privacy and trust are of utmost importance to us.
           </p>
         </div>
       </div>

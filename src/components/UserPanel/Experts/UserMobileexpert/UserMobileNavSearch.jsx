@@ -35,7 +35,7 @@ const UserMobileNavSearch = () => {
         <div className="text-2xl font-bold text-black flex items-center"
           ><RiArrowLeftSLine className="mr-2  text-black" 
           onClick={() => router.back()}
-          />AMD
+          />Shourk
           </div>
 
         {/* Right - Icons */}

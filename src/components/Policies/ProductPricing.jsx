@@ -9,7 +9,7 @@ export default function ProductPricing() {
         </h1>
         <div className="space-y-8 text-gray-700 text-lg">
           <p>
-            At <strong>AMD</strong>, our courses are designed to deliver maximum value at competitive prices.
+            At <strong>Shourk</strong>, our courses are designed to deliver maximum value at competitive prices.
           </p>
           <ol className="list-decimal list-inside space-y-4">
             <li>

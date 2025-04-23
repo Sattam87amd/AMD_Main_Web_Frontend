@@ -9,7 +9,7 @@ export default function CancellationPolicy() {
         </h1>
         <div className="space-y-8 text-gray-700 text-lg">
           <p>
-            At <strong>AMD</strong>, we aim to provide a transparent and user-friendly cancellation process. You may cancel your course enrollment under the following conditions:
+            At <strong>Shourk</strong>, we aim to provide a transparent and user-friendly cancellation process. You may cancel your course enrollment under the following conditions:
           </p>
           <ol className="list-decimal list-inside space-y-4">
             <li>

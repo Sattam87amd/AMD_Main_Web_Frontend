@@ -9,9 +9,9 @@ export default function TermsAndConditions() {
         </h1>
         <div className="space-y-8 text-gray-700 text-lg">
           <p>
-            Welcome to <strong>AMD</strong>. By accessing or using our website 
+            Welcome to <strong>Shourk</strong>. By accessing or using our website 
             (<a href="https://amd.code4bharat.com/" className="text-blue-500 hover:underline">
-              www.AMD.com
+              www.Shourk.com
             </a>), you agree to comply with the following terms and conditions:
           </p>
           <ol className="list-decimal list-inside space-y-4">
@@ -26,11 +26,11 @@ export default function TermsAndConditions() {
             </li>
             <li>
               <strong>Intellectual Property:</strong> All content, materials, and courses on our platform are owned
-              by <strong>AMD</strong> and protected by copyright laws. Unauthorized sharing, duplication, 
+              by <strong>Shourk</strong> and protected by copyright laws. Unauthorized sharing, duplication, 
               or distribution is strictly prohibited and may lead to legal action.
             </li>
             <li>
-              <strong>Service Modifications:</strong> <strong>AMD</strong> reserves the right to modify, suspend, 
+              <strong>Service Modifications:</strong> <strong>Shourk</strong> reserves the right to modify, suspend, 
               or discontinue any service or course without prior notice.
             </li>
             <li>

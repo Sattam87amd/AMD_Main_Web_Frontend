@@ -9,6 +9,9 @@ import { Inter } from "next/font/google";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios"
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const interFont = Inter({
     subsets: ["latin"],
@@ -66,7 +69,7 @@ const toggleLoginMethod = () => {
           }
           try {
             await axios.post("https://amd-api.code4bharat.com/api/expertauth/request-otp", { email });
-            alert("OTP sent to your email!");
+            toast.success("OTP sent to your email!");
           } catch (error) {
             console.log(error);
             setFormError("Failed to send OTP. Please try again.");
@@ -78,7 +81,7 @@ const toggleLoginMethod = () => {
           }
           try {
             await axios.post("https://amd-api.code4bharat.com/api/expertauth/request-otp", { phone });
-            alert("OTP sent to your phone!");
+            toast.success("OTP sent to your phone!");
           } catch (error) {
             console.log(error);
             setFormError("Failed to send OTP. Please try again.");
@@ -104,7 +107,8 @@ const toggleLoginMethod = () => {
             router.push("/expertpanel/expertpanelprofile");
           }
         } catch (error) {
-          setFormError(error.response?.data?.message || "OTP verification failed");
+            toast.error(error.response?.data?.message || "OTP verification failed");
+
         }
       };
       
@@ -114,8 +118,8 @@ const toggleLoginMethod = () => {
                 <div className="h-[35%] bg-[#EDECE8] flex items-center justify-center relative">
                     <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
                         <Image
-                            src="/AMD_logo.png"
-                            alt="AMD Logo"
+                            src="/Shourk_logo.png"
+                            alt="Shourk Logo"
                             width={190}
                             height={190}
                         />
@@ -167,7 +171,7 @@ const toggleLoginMethod = () => {
             <div className="w-full md:w-1/2 bg-white flex flex-col items-center justify-center relative">
                 <div className="absolute top-6 left-5 md:hidden">
                     <Image
-                        src="/AMD_mobile_logo.png"
+                        src="/Shourk_mobile_logo.png"
                         alt="Mobile Logo"
                         width={60}
                         height={40}
@@ -291,6 +295,8 @@ const toggleLoginMethod = () => {
                         >
                             Proceed
                         </button>
+                        <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+
                     </div>
                 </div>
             </div>

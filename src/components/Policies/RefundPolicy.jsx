@@ -9,7 +9,7 @@ export default function RefundPolicy() {
         </h1>
         <div className="space-y-8 text-gray-700 text-lg">
           <p>
-            At <strong>AMD</strong>, we strive to ensure your satisfaction. However, we understand that circumstances may change, and we are here to assist you with a fair refund process:
+            At <strong>Shourk</strong>, we strive to ensure your satisfaction. However, we understand that circumstances may change, and we are here to assist you with a fair refund process:
           </p>
           <ol className="list-decimal list-inside space-y-4">
             <li>

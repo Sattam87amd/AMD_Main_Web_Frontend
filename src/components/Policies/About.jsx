@@ -10,7 +10,7 @@ export default function About() {
         <div className="space-y-8 text-center">
           <section className="space-y-6">
             <h2 className="text-4xl font-semibold">
-              Welcome to AMD
+              Welcome to Shourk
             </h2>
             <p className="text-gray-700 text-xl">
               Empowering students with future-ready skills through innovative education solutions.
@@ -18,7 +18,7 @@ export default function About() {
           </section>
           <section className="space-y-6">
             <h2 className="text-3xl font-semibold">
-              Why Choose AMD?
+              Why Choose Shourk?
             </h2>
             <div className="text-left space-y-4">
               <h3 className="text-2xl font-semibold">
@@ -65,7 +65,7 @@ export default function About() {
               Join the Revolution
             </h2>
             <p className="text-gray-700 text-lg">
-              Become a part of the education transformation with AMD and take the first step towards a brighter,
+              Become a part of the education transformation with Shourk and take the first step towards a brighter,
               future-ready career.
             </p>
           </section>

@@ -13,9 +13,9 @@ const UserFooter = () => {
 >>>>>>> ee9e21b29f3d7a1a114ad1e8ca7698f64fd09a32
       <div className="w-full">
         <div className="md:flex md:justify-between md:items-start">
-          {/* Left Section - AMD and Tagline */}
+          {/* Left Section - Shourk and Tagline */}
           <div className="mb-6 md:mb-0">
-            <h1 className="text-3xl md:text-4xl font-bold text-black">AMD</h1>
+            <h1 className="text-3xl md:text-4xl font-bold text-black">Shourk</h1>
             <p className="mt-2 text-black text-base md:text-2xl md:py-4 leading-relaxed">
               Book the most in-demand experts <br />
               & get advice over a video call.
@@ -117,7 +117,7 @@ const UserFooter = () => {
         {/* Bottom Section */}
         <div className="flex flex-col sm:flex-row justify-between items-center">
           <span className="text-sm text-gray-500 text-center">
-            © AMD 2025. ALL RIGHTS RESERVED •
+            © Shourk 2025. ALL RIGHTS RESERVED •
             <Link href="/policy" className="hover:underline ml-1">
               Policy
             </Link>

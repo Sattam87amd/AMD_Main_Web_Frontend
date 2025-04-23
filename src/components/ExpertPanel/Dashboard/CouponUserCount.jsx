@@ -5,7 +5,7 @@ import CountUp from "react-countup";
 const CouponUserCount = () => {
   // Dummy data for coupons
   const coupons = [
-    { name: "FreeAMD", discount: 15, usedBy: 200 },
+    { name: "FreeShourk", discount: 15, usedBy: 200 },
     { name: "SaveBIG", discount: 20, usedBy: 350 },
   ];
 

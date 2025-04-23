@@ -1,13 +1,21 @@
 "use client";
 
 import { useState } from "react";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const DiscountCode = () => {
   const [code, setCode] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`Code submitted: ${code}`);
+
+    if (!code) {
+      toast.error("Please enter a discount code.");
+      return; // Prevent submission if code is empty
+    }
+
+    toast.success(`Code submitted: ${code}`);
     setCode(""); // Clear input after submission
   };
 
@@ -39,6 +47,9 @@ const DiscountCode = () => {
           </button>
         </div>
       </form>
+
+      {/* Toast Notifications */}
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
     </div>
   );
 };

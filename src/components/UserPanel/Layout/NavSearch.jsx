@@ -41,7 +41,7 @@ const NavSearch = () => {
           href="/"
           className="text-3xl md:text-[40px] font-semibold text-black m-3"
         >
-          AMD
+          Shourk
         </Link>
         <motion.div
           initial={{ scale: 0.8 }}
