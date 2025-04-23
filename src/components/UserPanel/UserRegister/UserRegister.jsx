@@ -4,10 +4,12 @@ import Image from "next/image";
 import { IoIosSearch } from "react-icons/io";
 import { LuNotepadText } from "react-icons/lu";
 import { Inter } from "next/font/google";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
 import axios from "axios";
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
+import "react-phone-number-input/style.css";
 
 const interFont = Inter({
   subsets: ["latin"],
@@ -20,12 +22,24 @@ function UserRegisterPage() {
   const [email, setEmail] = useState("");
   const [firstName, setfirstName] = useState("");
   const [lastName, setlastName] = useState("");
+  const [phone, setPhone] = useState(""); // Added state for phone number
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState("");
   const [loading, setLoading] = useState(false);
-  
-  // Get phone from query parameters
-  const phone = searchParams.get('phone');
+
+  // Get phone and email from query parameters (for initial values if needed)
+  const queryPhone = searchParams.get('phone');
+  const queryEmail = searchParams.get('email');
+
+  // Prefill phone or email from query parameters if they exist
+  useEffect(() => {
+    if (queryPhone) {
+      setPhone(queryPhone);
+    }
+    if (queryEmail) {
+      setEmail(queryEmail);
+    }
+  }, [queryPhone, queryEmail]);
 
   const handleValidation = () => {
     let tempErrors = {};
@@ -47,6 +61,9 @@ function UserRegisterPage() {
     } else if (!/^[A-Za-z]+$/.test(lastName)) {
       tempErrors.lastName = "Last name can only contain letters.";
     }
+    if (!phone || !isValidPhoneNumber(phone)) {
+      tempErrors.phone = "Valid phone number is required.";
+    }
 
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
@@ -59,23 +76,23 @@ function UserRegisterPage() {
     setServerError("");
 
     try {
-      const response = await axios.post("https://amd-api.code4bharat.com/api/userauth/registeruser", {
-        phone, // Add phone from query params
+      const response = await axios.post(" http://localhost:5070/api/userauth/registeruser", {
+        phone, // Add phone from state
         firstName: firstName,
         lastName: lastName, // Send lastName separately
         email,
       });
-      
+
       if (response.status === 201) {
         // alert('Successfully registered!');
         router.push("/userlogin");
-      }else {
+      } else {
         console.log('Unexpected status:', response.status);
       }
     } catch (error) {
       setServerError(error.response?.data?.message || "Registration failed. Try again.");
     } finally {
-      setLoading(false);  
+      setLoading(false);
     }
   };
 
@@ -138,17 +155,28 @@ function UserRegisterPage() {
         </div>
 
         <div className="w-full max-w-md p-8 -mt-20 md:-mt-0">
-      
-        <h1 className="text-[29px] md:text-[30px] font-extrabold text-center flex items-center justify-center gap-1">
-          <a href="/userlogin" className="text-black">
-            <IoIosArrowBack />
-             </a>
-          Please Enter Your Info
-        </h1>
-
+          <h1 className="text-[29px] md:text-[30px] font-extrabold text-center flex items-center justify-center gap-1">
+            <a href="/userlogin" className="text-black">
+              <IoIosArrowBack />
+            </a>
+            Please Enter Your Info
+          </h1>
 
           {/* Registration Form */}
           <div className="mt-8 space-y-8">
+
+            <div>
+              <label className="block text-sm font-medium">Phone Number</label>
+              <PhoneInput
+                international
+                defaultCountry="SA"
+                value={phone}
+                onChange={setPhone}
+                className="w-full px-4 py-3 border rounded-lg focus:outline-8 focus:border-black pl-4"
+              />
+              {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+            </div>
+
             <div>
               <label className="block text-sm font-medium">Email address</label>
               <input
@@ -195,20 +223,16 @@ function UserRegisterPage() {
               />
               {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
             </div>
-            <div>
-              
             <button
-              className={`w-full py-3 rounded-lg transition ${
-                email && firstName && lastName
+              className={`w-full py-3 rounded-lg transition ${email && firstName && lastName && isValidPhoneNumber(phone)
                   ? "bg-black text-white hover:bg-gray-800"
                   : "bg-black text-white cursor-not-allowed"
-              }`}
+                }`}
               onClick={handleSubmit}
-              disabled={!email || !firstName || !lastName}
+              disabled={!email || !firstName || !lastName || !isValidPhoneNumber(phone)}
             >
               Continue
             </button>
-            </div>
           </div>
         </div>
       </div>

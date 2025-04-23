@@ -86,7 +86,7 @@ const LoginUserFbexpert = () => {
           {expertData.map((expert, index) => (
             <Link
               key={index}
-              href={`userpanel/userexpertaboutme/${expert._id}`} // Dynamic URL with expert ID
+              href={`/userpanel/userexpertaboutme/${expert._id}`} // Dynamic URL with expert ID
               passHref
             >
               <div className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
