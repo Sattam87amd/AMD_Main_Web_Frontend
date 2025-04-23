@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const EnableCharity = () => {
   const [charityData, setCharityData] = useState({
@@ -29,7 +32,7 @@ const EnableCharity = () => {
         console.error("Error parsing expertToken:", error);
       }
     } else {
-      alert("Expert token not found in localStorage");
+      toast.error("Expert token not found in localStorage");
     }
   }, []);
 
@@ -102,11 +105,11 @@ const EnableCharity = () => {
       );
 
       if (response.data.success) {
-        alert("Charity settings updated successfully!");
+        toast.success("Charity settings updated successfully!");
       }
     } catch (error) {
       console.error("Error updating charity settings:", error);
-      alert("There was an error updating the charity settings.");
+      toast.error("There was an error updating the charity settings.");
     }
   };
 
@@ -185,6 +188,8 @@ const EnableCharity = () => {
           >
             Save
           </button>
+          <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+
         </div>
       </div>
     </div>

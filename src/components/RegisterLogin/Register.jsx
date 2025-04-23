@@ -62,10 +62,10 @@ function RegisterPage() {
   return (
     <div className={`min-h-screen flex ${interFont.variable}`}>
       <div className="hidden md:flex w-1/2 flex-col relative">
-        {/* Top Section with AMD Logo */}
+        {/* Top Section with Shourk Logo */}
         <div className="h-[35%] bg-[#EDECE8] flex items-center justify-center relative">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-            <Image src="/AMD_logo.png" alt="AMD Logo" width={190} height={190} />
+            <Image src="/Shourk_logo.png" alt="Shourk Logo" width={190} height={190} />
           </div>
           {/* Experts Card */}
           <div className="absolute top-full left-4 w-[355px] h-[78px] bg-black bg-opacity-50 backdrop-blur-[3px] rounded-xl flex items-center p-4 z-30 shadow-lg">

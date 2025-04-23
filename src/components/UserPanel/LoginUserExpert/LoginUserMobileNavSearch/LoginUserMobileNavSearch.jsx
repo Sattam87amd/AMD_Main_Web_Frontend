@@ -37,7 +37,7 @@ const LoginUserMobileNavSearch = () => {
         {/* Left - Brand Name */}
         <div className="text-2xl font-bold text-black flex items-center"
         ><RiArrowLeftSLine className="mr-2" onClick={() => navigate.back()} />
-AMD</div>
+Shourk</div>
 
         {/* Right - Icons */}
         <div className="flex items-center space-x-4 relative">

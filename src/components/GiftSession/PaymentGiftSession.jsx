@@ -25,7 +25,7 @@ const PaymentGiftSession = () => {
       <div className="hidden md:flex w-1/2 flex-col relative">
         <div className="h-[35%] bg-[#EDECE8] flex items-center justify-center relative">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-            <Image src="/AMD_logo.png" alt="AMD Logo" width={190} height={190} />
+            <Image src="/Shourk_logo.png" alt="Shourk Logo" width={190} height={190} />
           </div>
           <div className="absolute top-full left-4 w-[355px] h-[78px] bg-black bg-opacity-50 backdrop-blur-[3px] rounded-xl flex items-center p-4 z-30 shadow-lg">
             <IoIosSearch className="text-white text-[50px] mr-2" />
@@ -69,7 +69,7 @@ const PaymentGiftSession = () => {
       <div className="w-full md:w-1/2 flex items-start md:items-center justify-center relative">
         <div className="w-full p-4 md:p-6 md:pl-24">
           <div className="flex justify-center mb-6 md:hidden">
-            <Image src="/AMD_logo.png" alt="AMD Logo" width={250} height={40} />
+            <Image src="/Shourk_logo.png" alt="Shourk Logo" width={250} height={40} />
           </div>
 
           {/* Back Button */}

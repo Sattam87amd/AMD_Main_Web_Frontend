@@ -82,10 +82,10 @@ function UserRegisterPage() {
   return (
     <div className={`min-h-screen flex ${interFont.variable}`}>
       <div className="hidden md:flex w-1/2 flex-col relative">
-        {/* Top Section with AMD Logo */}
+        {/* Top Section with Shourk Logo */}
         <div className="h-[35%] bg-[#EDECE8] flex items-center justify-center relative">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-            <Image src="/AMD_logo.png" alt="AMD Logo" width={190} height={190} />
+            <Image src="/Shourk_logo.png" alt="Shourk Logo" width={190} height={190} />
           </div>
 
           {/* Experts Card */}
@@ -134,7 +134,7 @@ function UserRegisterPage() {
       <div className="w-full md:w-1/2 bg-white flex flex-col items-center justify-center relative">
         {/* Mobile Logo - Hidden on medium and larger screens */}
         <div className="absolute top-6 left-5 md:hidden">
-          <Image src="/AMD_mobile_logo.png" alt="Mobile Logo" width={60} height={40} />
+          <Image src="/Shourk_mobile_logo.png" alt="Mobile Logo" width={60} height={40} />
         </div>
 
         <div className="w-full max-w-md p-8 -mt-20 md:-mt-0">

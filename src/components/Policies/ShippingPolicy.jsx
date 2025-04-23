@@ -9,7 +9,7 @@ export default function ShippingPolicy() {
         </h1>
         <div className="space-y-8 text-gray-700 text-lg">
           <p>
-            At <strong>AMD</strong>, we ensure a seamless shipping and delivery
+            At <strong>Shourk</strong>, we ensure a seamless shipping and delivery
             process for any physical materials or certificates (if applicable).
             Our shipping policy is as follows:
           </p>

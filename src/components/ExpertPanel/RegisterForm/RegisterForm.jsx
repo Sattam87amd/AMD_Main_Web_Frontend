@@ -9,6 +9,9 @@ import { FiLink } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import axios from "axios";  // Import axios for making HTTP requests
 // const [price, setPrice] = useState('');
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 
 const interFont = Inter({
@@ -65,7 +68,7 @@ function RegisterForm() {
     setErrors(tempErrors);
     
     if (Object.keys(tempErrors).length !== 0) {
-      alert(Object.values(tempErrors).join("\n"));
+      toast.error(Object.values(tempErrors).join("\n"));
       return false;
     }
     return true;
@@ -131,13 +134,13 @@ function RegisterForm() {
     
     // Check if socialLink is empty before validating LinkedIn link
     if (!socialLink) {
-      alert("Please enter your LinkedIn link.");
+      toast.error("Please enter your LinkedIn link.");
       return; // Prevent form submission if socialLink is empty
     }
   
     // LinkedIn URL validation
     if (socialLink && !validateLinkedInLink(socialLink)) {
-      alert("Please enter a valid LinkedIn link.");
+      toast.error("Please enter a valid LinkedIn link.");
       return; // Prevent form submission if the link is not valid
     }
     
@@ -178,11 +181,11 @@ function RegisterForm() {
         );
   
         console.log('Expert registered successfully:', response.data);
-        alert("Expert registered successfully");
+        toast.success("Expert registered successfully");
         router.push('/expertlogin');  // Redirect to login after successful registration
       } catch (error) {
         console.error('Error during registration:', error);
-        alert('Error during registration. Please try again.');
+      toast.error('Error during registration. Please try again.');
       }
     }
   };
@@ -192,10 +195,10 @@ function RegisterForm() {
     <div className={`min-h-screen flex overflow-hidden ${interFont.variable}`}>
       {/* Left Side Section (Hidden on small screens, visible on md+) */}
       <div className="hidden md:flex w-1/2 flex-col relative">
-        {/* Top Section with AMD Logo */}
+        {/* Top Section with Shourk Logo */}
         <div className="h-[35%] bg-[#EDECE8] flex items-center justify-center relative">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-            <Image src="/AMD_logo.png" alt="AMD Logo" width={190} height={190} />
+            <Image src="/Shourk_logo.png" alt="Shourk Logo" width={190} height={190} />
           </div>
           {/* Experts Card */}
           <div className="absolute top-72 left-4 w-[355px] h-[78px] bg-black bg-opacity-50 backdrop-blur-[3px] rounded-xl flex items-center p-4 z-30 shadow-lg">
@@ -531,8 +534,28 @@ function RegisterForm() {
               >
                 Submit
               </button>
+              <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+
             </div>
           </form>
+          <>
+  {/* Your entire form JSX */}
+
+  {/* Add ToastContainer here */}
+  <ToastContainer
+    position="top-right"
+    autoClose={3000}
+    hideProgressBar={false}
+    newestOnTop={false}
+    closeOnClick
+    rtl={false}
+    pauseOnFocusLoss
+    draggable
+    pauseOnHover
+    theme="light"
+  />
+</>
+
         </div>
       </div>
     </div>

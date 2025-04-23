@@ -39,7 +39,7 @@ function Navbar() {
             href="/"
             className="text-3xl md:text-[40px] font-semibold text-black"
           >
-            AMD
+            Shourk
           </Link>
 
           {/* Center Links for Desktop */}

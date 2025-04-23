@@ -84,7 +84,7 @@ const MobileNavSearch = () => {
             className="mr-2  text-black"
             onClick={() => router.back()}
           />
-          AMD
+          Shourk
         </div>
 
         {/* Right - Icons */}

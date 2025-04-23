@@ -135,7 +135,7 @@ const UserProfile = () => {
           <div className="w-full p-4 md:p-6 md:pl-24">
             {/* Mobile Logo */}
             <div className="flex justify-center mb-6 md:hidden">
-              <Image src="/AMD_logo.png" alt="AMD Logo" width={250} height={40} />
+              <Image src="/Shourk_logo.png" alt="Shourk Logo" width={250} height={40} />
             </div>
 
             {/* Back Button */}

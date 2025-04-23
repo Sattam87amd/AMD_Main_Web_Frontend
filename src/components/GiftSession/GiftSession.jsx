@@ -38,7 +38,7 @@ function GiftSession() {
         </button>
 
         <div className="flex justify-center pt-8 mb-4">
-          <Image src="/AMD_logo.png" alt="AMD Logo" width={250} height={40} />
+          <Image src="/Shourk_logo.png" alt="Shourk Logo" width={250} height={40} />
         </div>
       </div>
 
@@ -101,10 +101,10 @@ function GiftSession() {
     <div className="min-h-screen flex">
       {/* Left Side: Image Section */}
       <div className="hidden md:flex w-1/2 flex-col relative">
-        {/* Top Section with AMD Logo */}
+        {/* Top Section with Shourk Logo */}
         <div className="h-[35%] bg-[#EDECE8] flex items-center justify-center relative">
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-            <Image src="/AMD_logo.png" alt="AMD Logo" width={190} height={190} />
+            <Image src="/Shourk_logo.png" alt="Shourk Logo" width={190} height={190} />
           </div>
 
           {/* Experts Card */}

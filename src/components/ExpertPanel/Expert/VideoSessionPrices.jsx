@@ -1,5 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const VideoSessionPrices = () => {
   // State for selected session lengths
@@ -11,8 +13,8 @@ const VideoSessionPrices = () => {
 
   // State for the coupon cards
   const [coupons, setCoupons] = useState([
-    { name: "FreeAMD", discountPercent: 15 },
-    { name: "FreeAMD", discountPercent: 15 },
+    { name: "FreeShourk", discountPercent: 15 },
+    { name: "FreeShourk", discountPercent: 15 },
   ]);
 
   // State for managing the discount modal
@@ -59,7 +61,7 @@ const VideoSessionPrices = () => {
       localStorage.setItem("session_prices", JSON.stringify(prices));
       localStorage.setItem("session_discounts", JSON.stringify(discounts));
       localStorage.setItem("session_coupons", JSON.stringify(coupons));
-      alert("Rates saved!");
+      toast.success("Rates saved!"); // Show success toast
     }
   };
 
@@ -80,6 +82,8 @@ const VideoSessionPrices = () => {
     if (typeof window !== "undefined") {
       localStorage.setItem("session_coupons", JSON.stringify(updatedCoupons));
     }
+
+    toast.success("Discount updated successfully!"); // Show success toast
   };
 
   return (
@@ -225,6 +229,9 @@ const VideoSessionPrices = () => {
           </div>
         </div>
       )}
+
+      {/* Toast Notifications */}
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
     </div>
   );
 };

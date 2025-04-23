@@ -37,7 +37,7 @@ function Navbar() {
         <div className="relative flex items-center justify-between h-full px-6">
           {/* Logo */}
           <Link href="/home" className="text-3xl md:text-[40px] font-semibold text-black">
-            AMD
+            Shourk
           </Link>
 
           {/* Center Links */}
