@@ -21,6 +21,13 @@ const VideoCall = () => {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [expandedNotes, setExpandedNotes] = useState({});
 
+  const [selectedDate, setSelectedDate] = useState("");  // Store selected date
+  const [selectedTime, setSelectedTime] = useState("");  // Store selected time
+
+  const [sessionState, setSessionState] = useState({});
+
+
+
   useEffect(() => {
     const fetchBookings = async () => {
       try {
@@ -109,6 +116,27 @@ const VideoCall = () => {
     return diff <= 2 && diff >= -duration;
   };
 
+  const handleDateChange = (sessionId, date) => {
+    setSessionState(prevState => ({
+      ...prevState,
+      [sessionId]: {
+        ...prevState[sessionId],
+        selectedDate: date,
+        selectedTime: "",  // Reset the time when the date changes
+      }
+    }));
+  };
+
+  const handleTimeChange = (sessionId, time) => {
+    setSessionState(prevState => ({
+      ...prevState,
+      [sessionId]: {
+        ...prevState[sessionId],
+        selectedTime: time,
+      }
+    }));
+  };
+
   const handleAccept = async (sessionId) => {
     try {
       const token = localStorage.getItem("expertToken");
@@ -139,6 +167,8 @@ const VideoCall = () => {
     }
   };
 
+
+
   const handleDecline = async (sessionId) => {
     try {
       const token = localStorage.getItem("expertToken");
@@ -168,19 +198,20 @@ const VideoCall = () => {
   };
 
   const toggleNoteExpand = (id) => {
-    setExpandedNotes(prev => ({
+    setExpandedNotes((prev) => ({
       ...prev,
-      [id]: !prev[id]
+      [id]: !prev[id],
     }));
   };
 
   // Note formatter for bullet points
   const formatNote = (note) => {
     if (!note) return [];
-    return note.split(".")
-      .map(sentence => sentence.trim())
-      .filter(sentence => sentence.length > 0)
-      .map(sentence => `${sentence}.`);
+    return note
+      .split(".")
+      .map((sentence) => sentence.trim())
+      .filter((sentence) => sentence.length > 0)
+      .map((sentence) => `${sentence}.`);
   };
 
   const groupByDate = (slotsArray) => {
@@ -194,6 +225,7 @@ const VideoCall = () => {
       return acc;
     }, {});
   };
+  
 
   // Check if note is long (more than 100 characters)
   const isNoteLong = (note) => note && note.length > 100;
@@ -228,11 +260,17 @@ const VideoCall = () => {
         {activeTab === "bookings" && (
           <div className="space-y-2 md:space-y-4">
             {loadingBookings ? (
-              <div className="text-xs md:text-base text-center">Loading bookings...</div>
+              <div className="text-xs md:text-base text-center">
+                Loading bookings...
+              </div>
             ) : errorBookings ? (
-              <div className="text-xs md:text-base text-center text-red-500">{errorBookings}</div>
+              <div className="text-xs md:text-base text-center text-red-500">
+                {errorBookings}
+              </div>
             ) : myBookings.length === 0 ? (
-              <div className="text-xs md:text-base text-center text-gray-500">No Bookings Yet</div>
+              <div className="text-xs md:text-base text-center text-gray-500">
+                No Bookings Yet
+              </div>
             ) : (
               myBookings.map((booking) => (
                 <div
@@ -246,10 +284,13 @@ const VideoCall = () => {
                       <div className="flex items-center gap-1">
                         <div className="bg-gray-100 px-1 py-1 rounded text-center">
                           <p className="text-xs text-gray-500">
-                            {new Date(booking.sessionDate).toLocaleDateString("en-US", {
-                              weekday: "short",
-                              day: "numeric",
-                            })}
+                            {new Date(booking.sessionDate).toLocaleDateString(
+                              "en-US",
+                              {
+                                weekday: "short",
+                                day: "numeric",
+                              }
+                            )}
                           </p>
                         </div>
                         <span className="text-xs bg-slate-200 px-2 py-1 rounded">
@@ -258,8 +299,12 @@ const VideoCall = () => {
                       </div>
                       <div className="flex items-center text-xs">
                         <CiClock2 className="text-xs mr-1" />
-                        <span className="text-gray-500">{booking.sessionTime}</span>
-                        <span className="ml-1 text-gray-500">({booking.duration})</span>
+                        <span className="text-gray-500">
+                          {booking.sessionTime}
+                        </span>
+                        <span className="ml-1 text-gray-500">
+                          ({booking.duration})
+                        </span>
                       </div>
                     </div>
 
@@ -309,7 +354,7 @@ const VideoCall = () => {
                             <MessagesSquare className="w-3 h-3" />
                             <span>Chat</span>
                           </button>
-                          
+
                           {booking.zoomMeetingLink ? (
                             <a
                               href={booking.zoomMeetingLink}
@@ -327,7 +372,7 @@ const VideoCall = () => {
                           )}
                         </>
                       )}
-                      
+
                       {booking.status === "completed" && (
                         <button
                           className="px-2 py-1 text-white bg-blue-500 rounded text-xs"
@@ -343,43 +388,51 @@ const VideoCall = () => {
                   <div className="hidden md:flex md:items-center md:w-full">
                     {/* Left Side (Date & Details) */}
                     <div className="flex items-center space-x-4 flex-grow">
-                    <div className="space-y-4">
-  <div className="text-center font-bold text-xl">
-    Bookings for {booking.firstName} {booking.lastName}
-  </div>
-  <div className="flex gap-4">
-  {Object.entries(groupByDate(booking.slots?.[0] || [])).map(([date, times]) => {
-      const parsedDate = new Date(date);
-      return (
-        <div key={date} className="bg-gray-100 px-3 py-2 rounded-lg shadow-md">
-          <p className="text-xs text-gray-500">
-            {!isNaN(parsedDate)
-              ? parsedDate.toLocaleDateString("en-US", {
-                  weekday: "short",
-                })
-              : "Invalid Date"}
-          </p>
-          <p className="text-lg font-bold">
-            {!isNaN(parsedDate)
-              ? parsedDate.toLocaleDateString("en-US", {
-                  day: "numeric",
-                  month: "short",
-                })
-              : "Invalid"}
-          </p>
+                      <div className="space-y-4">
+                        <div className="text-center font-bold text-xl">
+                          Bookings for {booking.firstName} {booking.lastName}
+                        </div>
+                        <div className="flex gap-4">
+                          {Object.entries(
+                            groupByDate(booking.slots?.[0] || [])
+                          ).map(([date, times]) => {
+                            const parsedDate = new Date(date);
+                            return (
+                              <div
+                                key={date}
+                                className="bg-gray-100 px-3 py-2 rounded-lg shadow-md"
+                              >
+                                <p className="text-xs text-gray-500">
+                                  {!isNaN(parsedDate)
+                                    ? parsedDate.toLocaleDateString("en-US", {
+                                        weekday: "short",
+                                      })
+                                    : "Invalid Date"}
+                                </p>
+                                <p className="text-lg font-bold">
+                                  {!isNaN(parsedDate)
+                                    ? parsedDate.toLocaleDateString("en-US", {
+                                        day: "numeric",
+                                        month: "short",
+                                      })
+                                    : "Invalid"}
+                                </p>
 
-          <div className="mt-2">
-            {times.map((time, index) => (
-              <p key={index} className="text-sm text-gray-700">
-                {time}
-              </p>
-            ))}
-          </div>
-        </div>
-      );
-    })}
-  </div>
-</div>
+                                <div className="mt-2">
+                                  {times.map((time, index) => (
+                                    <p
+                                      key={index}
+                                      className="text-sm text-gray-700"
+                                    >
+                                      {time}
+                                    </p>
+                                  ))}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
                       <div>
                         <div className="flex">
                           <CiClock2 className="mt-[3px] mr-1" />
@@ -469,9 +522,13 @@ const VideoCall = () => {
         {activeTab === "sessions" && (
           <div className="space-y-2 md:space-y-4">
             {loadingSessions ? (
-              <div className="text-xs md:text-base text-center">Loading sessions...</div>
+              <div className="text-xs md:text-base text-center">
+                Loading sessions...
+              </div>
             ) : errorSessions ? (
-              <div className="text-xs md:text-base text-center text-red-500">{errorSessions}</div>
+              <div className="text-xs md:text-base text-center text-red-500">
+                {errorSessions}
+              </div>
             ) : mySessions.length === 0 ? (
               <div className="text-xs md:text-base text-center text-gray-500">
                 No Upcoming Sessions
@@ -489,10 +546,13 @@ const VideoCall = () => {
                       <div className="flex items-center gap-1">
                         <div className="bg-gray-100 px-1 py-1 rounded text-center">
                           <p className="text-xs text-gray-500">
-                            {new Date(session.sessionDate).toLocaleDateString("en-US", {
-                              weekday: "short",
-                              day: "numeric",
-                            })}
+                            {new Date(session.sessionDate).toLocaleDateString(
+                              "en-US",
+                              {
+                                weekday: "short",
+                                day: "numeric",
+                              }
+                            )}
                           </p>
                         </div>
                         <span className="text-xs bg-slate-200 px-2 py-1 rounded">
@@ -501,8 +561,12 @@ const VideoCall = () => {
                       </div>
                       <div className="flex items-center text-xs">
                         <CiClock2 className="text-xs mr-1" />
-                        <span className="text-gray-500">{session.sessionTime}</span>
-                        <span className="ml-1 text-gray-500">({session.duration})</span>
+                        <span className="text-gray-500">
+                          {session.sessionTime}
+                        </span>
+                        <span className="ml-1 text-gray-500">
+                          ({session.duration})
+                        </span>
                       </div>
                     </div>
 
@@ -543,7 +607,7 @@ const VideoCall = () => {
                             <MessagesSquare className="w-3 h-3" />
                             <span>Chat</span>
                           </button>
-                          
+
                           {session.zoomMeetingLink ? (
                             <a
                               href={session.zoomMeetingLink}
@@ -561,7 +625,7 @@ const VideoCall = () => {
                           )}
                         </>
                       )}
-                      
+
                       {session.status === "unconfirmed" && (
                         <>
                           <button
@@ -585,26 +649,37 @@ const VideoCall = () => {
                       <div className="mt-2 text-xs">
                         <div className="flex items-center justify-between">
                           <p className="font-semibold text-gray-700">Note:</p>
-                        {isNoteLong(session.note) && (
-                          <button 
-                            onClick={() => toggleNoteExpand(session._id)}
-                            className="text-blue-500 flex items-center"
-                          >
-                            {expandedNotes[session._id] ? (
-                              <>Show Less <ChevronUp className="w-3 h-3 ml-1" /></>
-                            ) : (
-                              <>Read More <ChevronDown className="w-3 h-3 ml-1" /></>
-                            )}
-                          </button>
-                        )}
+                          {isNoteLong(session.note) && (
+                            <button
+                              onClick={() => toggleNoteExpand(session._id)}
+                              className="text-blue-500 flex items-center"
+                            >
+                              {expandedNotes[session._id] ? (
+                                <>
+                                  Show Less{" "}
+                                  <ChevronUp className="w-3 h-3 ml-1" />
+                                </>
+                              ) : (
+                                <>
+                                  Read More{" "}
+                                  <ChevronDown className="w-3 h-3 ml-1" />
+                                </>
+                              )}
+                            </button>
+                          )}
                         </div>
-                        
-                        {isNoteLong(session.note) && !expandedNotes[session._id] ? (
-                          <p className="text-gray-600">{session.note.substring(0, 100)}...</p>
+
+                        {isNoteLong(session.note) &&
+                        !expandedNotes[session._id] ? (
+                          <p className="text-gray-600">
+                            {session.note.substring(0, 100)}...
+                          </p>
                         ) : (
                           <ul className="list-disc pl-4 text-gray-600 mt-1">
                             {formatNote(session.note).map((item, idx) => (
-                              <li key={idx} className="mb-1">{item}</li>
+                              <li key={idx} className="mb-1">
+                                {item}
+                              </li>
                             ))}
                           </ul>
                         )}
@@ -617,63 +692,93 @@ const VideoCall = () => {
                     <div className="flex items-center">
                       {/* Left Side - Session Info */}
                       <div className="flex items-center space-x-4 flex-grow">
-                      <div className="space-y-4">
-  <div className="text-center font-bold text-xl">
-    Bookings for {session.firstName} {session.lastName}
-  </div>
-  <div className="flex gap-4">
-  {Object.entries(groupByDate(session.slots?.[0] || [])).map(([date, times]) => {
-      const parsedDate = new Date(date);
-      return (
-        <div key={date} className="bg-gray-100 px-3 py-2 rounded-lg shadow-md">
-          <p className="text-xs text-gray-500">
-            {!isNaN(parsedDate)
-              ? parsedDate.toLocaleDateString("en-US", {
-                  weekday: "short",
-                })
-              : "Invalid Date"}
-          </p>
-          <p className="text-lg font-bold">
-            {!isNaN(parsedDate)
-              ? parsedDate.toLocaleDateString("en-US", {
-                  day: "numeric",
+  <div className="space-y-4">
+    {/* Date Dropdown */}
+    <div className="mb-4">
+      <label htmlFor="date" className="block text-sm font-semibold text-gray-700">
+        Select Date
+      </label>
+      <select
+        id="date"
+        className="mt-2 px-3 py-2 border rounded-md shadow-md w-full"
+        value={sessionState[session._id]?.selectedDate || ""}
+        onChange={(e) => handleDateChange(session._id, e.target.value)}
+      >
+        <option value="">Select a Date</option>
+        {Object.keys(groupByDate(session.slots?.[0] || []))
+          .map((date, index) => {
+            const parsedDate = new Date(date);
+            return (
+              <option key={index} value={date}>
+                {parsedDate.toLocaleDateString("en-US", {
+                  weekday: "short", 
+                  day: "numeric", 
                   month: "short",
-                })
-              : "Invalid"}
-          </p>
+                })}
+              </option>
+            );
+          })}
+      </select>
+    </div>
 
-          <div className="mt-2">
-            {times.map((time, index) => (
-              <p key={index} className="text-sm text-gray-700">
-                {time}
-              </p>
-            ))}
-          </div>
-        </div>
-      );
-    })}
+    {/* Time Dropdown */}
+    {sessionState[session._id]?.selectedDate && (
+      <div className="mb-4">
+        <label htmlFor="time" className="block text-sm font-semibold text-gray-700">
+          Select Time
+        </label>
+        <select
+          id="time"
+          className="mt-2 px-3 py-2 border rounded-md shadow-md w-full"
+          value={sessionState[session._id]?.selectedTime || ""}
+          onChange={(e) => handleTimeChange(session._id, e.target.value)}
+          disabled={!sessionState[session._id]?.selectedDate}
+        >
+          <option value="">Select a Time</option>
+          {Object.entries(groupByDate(session.slots?.[0] || []))
+            .filter(([date]) => date === sessionState[session._id]?.selectedDate)
+            .map(([date, times]) =>
+              times.map((time, index) => (
+                <option key={index} value={time}>
+                  {time}
+                </option>
+              ))
+            )}
+        </select>
+      </div>
+    )}
+
+    {/* Display selected date and time
+    {sessionState[session._id]?.selectedDate && sessionState[session._id]?.selectedTime && (
+      <div className="mt-4">
+        <p>
+          Selected:{" "}
+          {new Date(sessionState[session._id]?.selectedDate).toLocaleDateString("en-US", {
+            weekday: "long", 
+            day: "numeric", 
+            month: "short",
+          })}{" "}
+          at {sessionState[session._id]?.selectedTime}
+        </p>
+      </div>
+    )} */}
   </div>
 </div>
-                        <div>
-                          <div className="flex">
-                            <CiClock2 className="mt-[3px] mr-1" />
-                            <p className="text-sm text-gray-500 mr-5">
-                              {session.sessionTime}
-                            </p>
-                            <p className="text-sm text-gray-500 mr-5">
-                              {session.duration}
-                            </p>
-                            {/* Session Type */}
-                            <p className="text-sm text-gray-500 bg-slate-200 px-3">
-                              {session.sessionType}
-                            </p>
-                          </div>
-                          <p className="text-sm font-medium text-gray-700 mt-2">
-                            <FaUser className="inline mr-1" />
-                            {session.firstName} {session.lastName}
-                          </p>
-                        </div>
-                      </div>
+
+
+    <div>
+      <div className="flex">
+        <CiClock2 className="mt-[3px] mr-1" />
+        <p className="text-sm text-gray-500 mr-5">{session.sessionTime}</p>
+        <p className="text-sm text-gray-500 mr-5">{session.duration}</p>
+        {/* Session Type */}
+        <p className="text-sm text-gray-500 bg-slate-200 px-3">{session.sessionType}</p>
+      </div>
+      <p className="text-sm font-medium text-gray-700 mt-2">
+        <FaUser className="inline mr-1" />
+        {session.firstName} {session.lastName}
+      </p>
+    </div>
 
                       {/* Right Side - Status and Actions */}
                       <div className="flex items-center justify-end space-x-3 ml-auto">
@@ -738,7 +843,9 @@ const VideoCall = () => {
                         </p>
                         <ul className="list-disc pl-5 text-sm text-gray-600">
                           {formatNote(session.note).map((item, idx) => (
-                            <li key={idx} className="mb-1">{item}</li>
+                            <li key={idx} className="mb-1">
+                              {item}
+                            </li>
                           ))}
                         </ul>
                       </div>
