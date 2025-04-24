@@ -23,8 +23,7 @@ const ExpertDetail = () => {
   const [price, setPrice] = useState();
   const [showTimeSelection, setShowTimeSelection] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState("");
-  const [selectedDate, setSelectedDate] = useState("");
-  const [selectedTime, setSelectedTime] = useState("");
+  const [selectedTimes, setSelectedTimes] = useState([]);
   const [isExpanded, setIsExpanded] = useState(false);
   const [charityEnabled, setCharityEnabled] = useState(false);
   const [charityInfo, setCharityInfo] = useState({
@@ -104,10 +103,36 @@ const ExpertDetail = () => {
   const handleTimeSelection = (dayKey, time) => {
     const date = dateMap[dayKey].toISOString().split("T")[0];
     const formattedTime = time.replace(" AM", "").replace(" PM", "").trim();
-
-    setSelectedDate(date);
-    setSelectedTime(formattedTime);
+  
+    const slot = {
+      selectedDate: date,
+      selectedTime: formattedTime + (time.includes("AM") ? " AM" : " PM"),
+    };
+  
+    setSelectedTimes((prevTimes) => {
+      const exists = prevTimes.some(
+        (s) =>
+          s.selectedDate === slot.selectedDate &&
+          s.selectedTime === slot.selectedTime
+      );
+  
+      if (exists) {
+        return prevTimes.filter(
+          (s) =>
+            s.selectedDate !== slot.selectedDate ||
+            s.selectedTime !== slot.selectedTime
+        );
+      }
+  
+      if (prevTimes.length >= 5) {
+        alert("You can only book a maximum of 5 time slots.");
+        return prevTimes;
+      }
+  
+      return [...prevTimes, slot];
+    });
   };
+  
 
   const handleBookingRequest = async () => {
     try {
@@ -116,14 +141,12 @@ const ExpertDetail = () => {
 
       const sessionData = {
         consultingExpertId: expert._id,
-        sessionDate: selectedDate,
-        sessionTime: selectedTime,
+        slots: selectedTimes,
         duration: selectedDuration,
         areaOfExpertise: "Home",
       };
-
-      // Store session data in localStorage
       localStorage.setItem("sessionData", JSON.stringify(sessionData));
+      
 
       // Redirect to the next page
       router.push("/expertpanel/expertbooking"); // Assuming the second page is 'expertbookingdetails'
@@ -256,7 +279,7 @@ const ExpertDetail = () => {
                 </div>
               </div>
 
-              {/* Right Column */}
+              {/* Right Column: Video Consultation */}
               <div className="space-y-6">
                 {showTimeSelection ? (
                   <>
@@ -275,12 +298,7 @@ const ExpertDetail = () => {
                       </p>
 
                       <div className="grid grid-cols-2 gap-4 mb-4">
-                        {[
-                          "Quick - 15min",
-                          "Regular - 30min",
-                          "Extra - 45min",
-                          "All Access - 60min",
-                        ].map((duration) => (
+                        {[ "Quick - 15min", "Regular - 30min", "Extra - 45min", "All Access - 60min" ].map((duration) => (
                           <button
                             key={duration}
                             className={`py-2 px-4 ${
@@ -296,52 +314,53 @@ const ExpertDetail = () => {
                       </div>
 
                       {/* Time Slots */}
-                      {[
-                        ["Today", "today"],
-                        ["Tomorrow", "tomorrow"],
-                        ["Next Date", "nextDate"],
-                      ].map(([label, dayKey]) => (
-                        <div key={dayKey} className="mb-8">
-                          <h4 className="font-semibold py-4 text-xl">
-                            {`${label} (${getFormattedDate(dateMap[dayKey])})`}
-                          </h4>
-                          <div className="grid grid-cols-3 gap-3">
-                            {[
-                              "07:00 AM",
-                              "08:00 AM",
-                              "09:00 AM",
-                              "10:00 AM",
-                              "11:00 AM",
-                              "12:00 PM",
-                              "02:00 PM",
-                              "03:00 PM",
-                              "04:00 PM",
-                            ].map((time) => (
-                              <button
-                                key={time}
-                                className={`py-2 px-3 text-sm ${
-                                  selectedDate ===
-                                    dateMap[dayKey]
-                                      .toISOString()
-                                      .split("T")[0] &&
-                                  selectedTime ===
-                                    time
-                                      .replace(" AM", "")
-                                      .replace(" PM", "")
-                                      .trim()
-                                    ? "bg-black text-white"
-                                    : "bg-white text-black"
-                                } rounded-xl border`}
-                                onClick={() =>
-                                  handleTimeSelection(dayKey, time)
-                                }
-                              >
-                                {time}
-                              </button>
-                            ))}
+                      {[["Today", "today"], ["Tomorrow", "tomorrow"], ["Next Date", "nextDate"]].map(
+                        ([label, dayKey]) => (
+                          <div key={dayKey} className="mb-8">
+                            <h4 className="font-semibold py-4 text-xl">
+                              {`${label} (${getFormattedDate(dateMap[dayKey])})`}
+                            </h4>
+                            <div className="grid grid-cols-3 gap-3">
+                              {[
+                                "07:00 AM",
+                                "08:00 AM",
+                                "09:00 AM",
+                                "10:00 AM",
+                                "11:00 AM",
+                                "12:00 PM",
+                                "02:00 PM",
+                                "03:00 PM",
+                                "04:00 PM",
+                              ].map((time) => (
+                                <button
+                                  key={time}
+                                  className={`py-2 px-3 text-sm ${
+                                    selectedTimes.some(
+                                      (s) =>
+                                        s.selectedDate === dateMap[dayKey]
+                                          .toISOString()
+                                          .split("T")[0] &&
+                                        s.selectedTime ===
+                                          time.replace(" AM", "").replace(" PM", "").trim() +
+                                          (time.includes("AM") ? " AM" : " PM")
+                                    )
+                                      ? "bg-black text-white"
+                                      : "bg-white text-black"
+                                  } rounded-xl border`}
+                                  onClick={() => handleTimeSelection(dayKey, time)}
+                                >
+                                  {time}
+                                </button>
+                              ))}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        )
+                      )}
+
+                      {/* Show how many slots are selected */}
+                      <p className="text-sm text-gray-600 mt-4">
+                        Selected slots: {selectedTimes.length} / 5
+                      </p>
 
                       <div className="flex gap-10 py-10 items-center">
                         <div>
@@ -350,11 +369,10 @@ const ExpertDetail = () => {
                           </p>
                           <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
                             {[...Array(5)].map((_, i) => {
-                              const rating = expert.averageRating || 0; // Use 0 as a fallback if expert.averageRating is falsy (undefined, null, etc.)
-
-                              const isFilled = i < Math.floor(rating); // If the index is less than the rating
+                              const rating = expert.rating || 0;
+                              const isFilled = i < Math.floor(rating);
                               const isHalf =
-                                i === Math.floor(rating) && rating % 1 !== 0; // If the rating has a decimal and we are at the exact index
+                                i === Math.floor(rating) && rating % 1 !== 0;
                               return (
                                 <FaStar
                                   key={i}
@@ -362,18 +380,17 @@ const ExpertDetail = () => {
                                     isFilled || isHalf
                                       ? "text-[#FFA629]"
                                       : "text-gray-300"
-                                  } // Full or empty star color
+                                  }
                                 />
                               );
                             })}
                           </div>
                         </div>
+
                         <button
                           className="py-3 px-12 bg-black text-white rounded-md hover:bg-gray-900 transition"
                           onClick={handleBookingRequest}
-                          disabled={
-                            !selectedDuration || !selectedDate || !selectedTime
-                          }
+                          disabled={!selectedDuration || selectedTimes.length === 0}
                         >
                           Request
                         </button>

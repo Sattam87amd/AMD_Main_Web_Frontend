@@ -92,31 +92,34 @@ const ExpertBooking = () => {
       toast.error("No session data found.");
       return;
     }
-
+  
     const noteWords = expertData.note.trim().split(/\s+/);
     if (noteWords.length < 25) {
       setNoteError("Note must contain at least 25 words.");
       return;
     }
-
+  
     setNoteError(""); // Clear any previous error if passed
-
+  
     const fullBookingData = {
       ...sessionData,
       firstName: expertData.firstName,
       lastName: expertData.lastName,
       mobile: expertData.mobileNumber,
       email: expertData.email,
-      note: expertData.note
+      note: expertData.note,
+      bookingType: expertData.bookingType,
+      inviteFriend: expertData.inviteFriend,
+      promoCode: expertData.promoCode
     };
-
+  
     try {
-      setIsSubmitting(true); // Start animation (processing state)
+      setIsSubmitting(true); // Start processing state
       const token = localStorage.getItem("expertToken");
       if (!token) throw new Error("No authentication token found");
-
+  
       const response = await axios.post(
-        "https://amd-api.code4bharat.com/api/session/experttoexpertsession",
+        "http://localhost:5070/api/session/experttoexpertsession",
         fullBookingData,
         {
           headers: {
@@ -125,31 +128,36 @@ const ExpertBooking = () => {
           },
         }
       );
-
-      // console.log("Booking successful:", response.data);
-      localStorage.removeItem("sessionData", "bookingData", "expertData")
+  
       // Show success message with a delay before redirection
       toast.success("Session booked successfully! Redirecting to video call...", {
         position: "bottom-center",
-        autoClose: 3000, // Show for 3 seconds
+        autoClose: 3000,
       });
-
-      // Redirect after delay
+  
+      // Redirect after a brief delay
       setTimeout(() => {
         router.push('/expertpanel/videocall');
-      }, 3000); // Redirect after 3 seconds
-
+      }, 3000); 
+  
+      // Clean up localStorage
+      localStorage.removeItem("sessionData", "bookingData", "expertData");
+  
     } catch (error) {
+      // Improved error logging
       console.error("Booking error:", error.response?.data || error.message);
+      
+      // Display the error response using toast
       toast.error(`Booking failed: ${error.response?.data?.message || error.message}`, {
         position: "bottom-center",
         autoClose: 5000,
       });
     } finally {
-      setIsSubmitting(false); // End animation (reset processing state)
+      setIsSubmitting(false); // Reset the processing state
     }
   };
-
+  
+  
   if (!consultingExpert) return <div>Loading...</div>;
 
   return (

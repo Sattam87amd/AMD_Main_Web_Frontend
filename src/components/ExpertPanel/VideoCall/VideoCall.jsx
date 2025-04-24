@@ -183,6 +183,18 @@ const VideoCall = () => {
       .map(sentence => `${sentence}.`);
   };
 
+  const groupByDate = (slotsArray) => {
+    const slots = Array.isArray(slotsArray) ? slotsArray : [];
+    return slots.reduce((acc, slot) => {
+      const date = slot.selectedDate;
+      if (!date) return acc;
+  
+      if (!acc[date]) acc[date] = [];
+      acc[date].push(slot.selectedTime);
+      return acc;
+    }, {});
+  };
+
   // Check if note is long (more than 100 characters)
   const isNoteLong = (note) => note && note.length > 100;
 
@@ -331,18 +343,43 @@ const VideoCall = () => {
                   <div className="hidden md:flex md:items-center md:w-full">
                     {/* Left Side (Date & Details) */}
                     <div className="flex items-center space-x-4 flex-grow">
-                      <div className="text-center bg-gray-100 px-3 py-2 rounded-lg shadow-md">
-                        <p className="text-xs text-gray-500">
-                          {new Date(booking.sessionDate).toLocaleDateString("en-US", {
-                            weekday: "short",
-                          })}
-                        </p>
-                        <p className="text-lg font-bold">
-                          {new Date(booking.sessionDate).toLocaleDateString("en-US", {
-                            day: "numeric",
-                          })}
-                        </p>
-                      </div>
+                    <div className="space-y-4">
+  <div className="text-center font-bold text-xl">
+    Bookings for {booking.firstName} {booking.lastName}
+  </div>
+  <div className="flex gap-4">
+  {Object.entries(groupByDate(booking.slots?.[0] || [])).map(([date, times]) => {
+      const parsedDate = new Date(date);
+      return (
+        <div key={date} className="bg-gray-100 px-3 py-2 rounded-lg shadow-md">
+          <p className="text-xs text-gray-500">
+            {!isNaN(parsedDate)
+              ? parsedDate.toLocaleDateString("en-US", {
+                  weekday: "short",
+                })
+              : "Invalid Date"}
+          </p>
+          <p className="text-lg font-bold">
+            {!isNaN(parsedDate)
+              ? parsedDate.toLocaleDateString("en-US", {
+                  day: "numeric",
+                  month: "short",
+                })
+              : "Invalid"}
+          </p>
+
+          <div className="mt-2">
+            {times.map((time, index) => (
+              <p key={index} className="text-sm text-gray-700">
+                {time}
+              </p>
+            ))}
+          </div>
+        </div>
+      );
+    })}
+  </div>
+</div>
                       <div>
                         <div className="flex">
                           <CiClock2 className="mt-[3px] mr-1" />
@@ -580,18 +617,43 @@ const VideoCall = () => {
                     <div className="flex items-center">
                       {/* Left Side - Session Info */}
                       <div className="flex items-center space-x-4 flex-grow">
-                        <div className="text-center bg-gray-100 px-3 py-2 rounded-lg shadow-md">
-                          <p className="text-xs text-gray-500">
-                            {new Date(session.sessionDate).toLocaleDateString("en-US", {
-                              weekday: "short",
-                            })}
-                          </p>
-                          <p className="text-lg font-bold">
-                            {new Date(session.sessionDate).toLocaleDateString("en-US", {
-                              day: "numeric",
-                            })}
-                          </p>
-                        </div>
+                      <div className="space-y-4">
+  <div className="text-center font-bold text-xl">
+    Bookings for {session.firstName} {session.lastName}
+  </div>
+  <div className="flex gap-4">
+  {Object.entries(groupByDate(session.slots?.[0] || [])).map(([date, times]) => {
+      const parsedDate = new Date(date);
+      return (
+        <div key={date} className="bg-gray-100 px-3 py-2 rounded-lg shadow-md">
+          <p className="text-xs text-gray-500">
+            {!isNaN(parsedDate)
+              ? parsedDate.toLocaleDateString("en-US", {
+                  weekday: "short",
+                })
+              : "Invalid Date"}
+          </p>
+          <p className="text-lg font-bold">
+            {!isNaN(parsedDate)
+              ? parsedDate.toLocaleDateString("en-US", {
+                  day: "numeric",
+                  month: "short",
+                })
+              : "Invalid"}
+          </p>
+
+          <div className="mt-2">
+            {times.map((time, index) => (
+              <p key={index} className="text-sm text-gray-700">
+                {time}
+              </p>
+            ))}
+          </div>
+        </div>
+      );
+    })}
+  </div>
+</div>
                         <div>
                           <div className="flex">
                             <CiClock2 className="mt-[3px] mr-1" />
