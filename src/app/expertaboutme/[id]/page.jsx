@@ -438,64 +438,7 @@ const ExpertDetail = () => {
                       </div>
                     </div>
 
-                    {/* 1:4 Video Consultation */}
-                    <div className="bg-[#F8F7F3] p-6 rounded-xl">
-                      <div className="bg-black text-white p-2 rounded-t-xl w-max">
-                        <h3 className="text-2xl font-semibold">
-                          Book A Video Call
-                        </h3>
-                      </div>
-                      <div className="text-2xl py-4">
-                        <h2 className="font-semibold">
-                          1:4 Video Consultation
-                        </h2>
-                      </div>
-                      <p className="text-2xl font-semibold">
-                        Book a 1:4 Video consultation & get personalized advice
-                      </p>
 
-                      <div className="mt-4">
-                        <p className="text-xl font-semibold">
-                          Starting at SAR {expert.price}
-                        </p>
-                        <div className="flex items-center justify-start">
-                          {/* <p className="text-[#7E7E7E] text-base font-semibold">
-                            Next available - <span className="text-[#0D70E5]">5:00pm on 3/25</span>
-                          </p> */}
-                          <div className="flex items-center ml-2 mt-3 gap-5 text-[#FFA629]">
-                            {[...Array(5)].map((_, i) => {
-                              const rating = expert.averageRating || 0; // Use 0 as a fallback if expert.averageRating is falsy (undefined, null, etc.)
-
-                              const isFilled = i < Math.floor(rating); // If the index is less than the rating
-                              const isHalf =
-                                i === Math.floor(rating) && rating % 1 !== 0; // If the rating has a decimal and we are at the exact index
-                              return (
-                                <FaStar
-                                  key={i}
-                                  className={
-                                    isFilled || isHalf
-                                      ? "text-[#FFA629]"
-                                      : "text-gray-300"
-                                  } // Full or empty star color
-                                />
-                              );
-                            })}
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex items-center justify-center mt-4 gap-8">
-                        <div className="flex items-center">
-                          <Gift className="h-8 w-8" />
-                        </div>
-                        <button
-                          className="bg-[#0D70E5] text-white py-3 px-24 rounded-md hover:bg-[#0A58C2]"
-                          onClick={handleSeeTimeClick}
-                        >
-                          See Time
-                        </button>
-                      </div>
-                    </div>
                   </>
                 )}
               </div>

@@ -159,6 +159,8 @@ function RegisterForm() {
       formData.append('specificArea', specificArea);  // Will be used if 'Others' is selected
       formData.append('experience', experience);
       formData.append('price', Number(price));
+
+ 
   
       // Append certification and photo files if selected
       if (fileInputRefCertifications.current.files[0]) {
@@ -171,7 +173,7 @@ function RegisterForm() {
       try {
         // API call to register the expert
         const response = await axios.post(
-          'https://amd-api.code4bharat.com/api/expertauth/register', 
+          'http://localhost:5070/api/expertauth/register', 
           formData,
           {
             headers: {
@@ -430,7 +432,8 @@ function RegisterForm() {
       type="number"
       value={price}
       onChange={(e) => {
-        setPrice(Number(e.target.value));
+        setPrice(e.target.value);
+        console.log(price)
         // setErrors((prev) => ({ ...prev, price: "" }));  // Clear any previous price errors
       }}
       className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
