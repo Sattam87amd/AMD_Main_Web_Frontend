@@ -184,7 +184,7 @@ const toggleLoginMethod = () => {
                     </h1>
                     <p className="text-center text-[#878787] mt-1 md:mt-2">
                         or{" "}
-                        <span className="text-[#EA2B2B] font-semibold underline">
+                        <span className="text-black font-semibold">
                             Sign up
                         </span>
                     </p>
@@ -300,7 +300,7 @@ const toggleLoginMethod = () => {
                     </div>
                 </div>
             </div>
-        // </div>
+         </div>
     );
 }
 

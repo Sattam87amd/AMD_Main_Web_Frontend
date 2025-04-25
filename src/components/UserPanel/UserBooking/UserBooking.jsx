@@ -73,9 +73,9 @@ const UserToExpertBooking = () => {
 
     const fullBookingData = {
       expertId: consultingExpert?._id,
-      areaOfExpertise: sessionData?.areaOfExpertise || 'Home',
-      slots: sessionData?.slots || "",
-      duration: sessionData?.duration || '',
+      areaOfExpertise: sessionData?.areaOfExpertise || "Home",
+      slots: sessionData?.slots || [],
+      duration: sessionData?.duration || "",
       firstName: bookingData?.firstName,
       lastName: bookingData?.lastName,
       email: bookingData?.email,

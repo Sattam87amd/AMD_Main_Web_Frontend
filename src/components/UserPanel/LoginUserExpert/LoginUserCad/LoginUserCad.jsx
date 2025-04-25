@@ -82,25 +82,24 @@ const LoginUserCab = () => {
 
       {/* Cards Section - Horizontal Scroll on Small Screens, Grid on Medium+ */}
       <div className="overflow-x-auto md:overflow-visible">
-        <div className="flex md:grid md:grid-cols-5 gap-4 md:gap-x-72 px-4 md:px-0 overflow-x-scroll scrollbar-hide">
+        <div className="flex gap-4 px-4 md:px-0 overflow-x-scroll custom-scrollbar-hide">
           {expertData.map((expert, index) => (
             <Link
               key={index}
-              href={`/userpanel/userexpertaboutme/${expert._id}`} // Dynamic URL with expert ID
+              href={`/userpanel/userexpertaboutme/${expert._id}`}
               passHref
             >
               <div className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
                 {/* Background Image */}
                 <img
-                  src={expert.photoFile || "/aaliyaabadi.png"} // Ensure there's a fallback image
-                  alt={expert.photoFile}
+                  src={expert.photoFile || "/aaliyaabadi.png"}
+                  alt={expert.firstName}
                   className="w-full h-full object-cover"
                 />
 
                 {/* Price Tag */}
                 <div className="absolute top-4 right-4 bg-[#F8F7F3] text-black px-4 py-2 rounded-2xl shadow-xl font-semibold">
-                  SAR {expert.price || "0"}{" "}
-                  {/* Default value in case price is missing */}
+                  SAR {expert.price || "0"}
                 </div>
 
                 {/* Transparent Blur Card */}

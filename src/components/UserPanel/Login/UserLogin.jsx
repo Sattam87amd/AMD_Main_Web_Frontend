@@ -205,7 +205,7 @@ function UserLoginPage() {
           </h1>
           <p className="text-center text-[#878787] mt-1 md:mt-2">
             or{" "}
-            <span className="text-[#EA2B2B] font-semibold underline">
+            <span className="text-black font-semibold">
               Login
             </span>
           </p>
@@ -307,7 +307,7 @@ function UserLoginPage() {
               className={`w-full py-3 rounded-lg transition ${
                 phone && otp.length === 4 && isValidPhoneNumber(phone)
                   ? "bg-black text-white hover:bg-gray-800"
-                  : "bg-black text-white cursor-not-allowed"
+                  : "bg-black text-white"
               }`}
               onClick={handleSubmit}
               disabled={
@@ -326,7 +326,7 @@ function UserLoginPage() {
           </div>
         </div>
       </div>
-      //{" "}
+      {" "}
     </div>
   );
 }

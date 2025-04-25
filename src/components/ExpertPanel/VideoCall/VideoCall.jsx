@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { CiClock2 } from "react-icons/ci";
 import { MessagesSquare, Video, ChevronDown, ChevronUp } from "lucide-react";
-import { FaUser, FaUserTie } from "react-icons/fa";
+import { FaBook, FaMobile, FaUser, FaUserTie } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Rate from "@/components/Rate/Rate.jsx";
@@ -25,8 +25,6 @@ const VideoCall = () => {
   const [selectedTime, setSelectedTime] = useState("");  // Store selected time
 
   const [sessionState, setSessionState] = useState({});
-
-
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -84,7 +82,13 @@ const VideoCall = () => {
           })),
         ];
 
-        setMySessions(combinedSessions);
+        // pull the first slot’s date/time into top-level fields
+        const normalized = combinedSessions.map((s) => ({
+          ...s,
+          sessionDate: s.slots?.[0]?.selectedDate,
+          sessionTime: s.slots?.[0]?.selectedTime,
+        }));
+        setMySessions(normalized);
       } catch (err) {
         setErrorSessions("No sessions found.");
       } finally {
@@ -105,16 +109,47 @@ const VideoCall = () => {
     setShowRateComponent(false);
     setSelectedBooking(null);
   };
+  const isJoinEnabled = (slots, duration) => {
+    // Ensure that slots contain at least one slot
+    if (!slots || !Array.isArray(slots) || slots.length === 0) {
+      console.error("No slots available");
+      return false; // If no slots, return false
+    }
 
-  const isJoinEnabled = (sessionDate, sessionTime, duration) => {
-    const [hours, minutes] = sessionTime.split(":").map(Number);
-    const sessionDateTime = new Date(sessionDate);
-    sessionDateTime.setHours(hours, minutes, 0, 0);
+    // Log slots for debugging purposes
+    console.log("Slots:", slots);
+
+    // Get the first slot's date and time (you may choose to handle multiple slots differently)
+    const { selectedDate, selectedTime } = slots[0]; // Assuming slots[0] contains the required date and time
+    console.log("Selected Date:", selectedDate, "Selected Time:", selectedTime);
+
+    if (!selectedDate || !selectedTime) {
+      console.error("Missing date or time in the slot");
+      return false; // Return false if date or time is missing
+    }
+
+    // Handle the time format (e.g., "10:00 am" or "10:00 pm")
+    const [time, period] = selectedTime.split(" "); // Split into time and AM/PM period
+    const [hours, minutes] = time.split(":"); // Split the time into hours and minutes
+
+    let hour = parseInt(hours);
+
+    // Convert the hour to 24-hour format
+    if (period.toLowerCase() === 'pm' && hour < 12) {
+      hour += 12; // Convert PM times to 24-hour format
+    } else if (period.toLowerCase() === 'am' && hour === 12) {
+      hour = 0; // Handle 12 AM as 00:00 in 24-hour format
+    }
+
+    // Create a new Date object with the selected date and the converted time
+    const sessionDateTime = new Date(selectedDate);
+    sessionDateTime.setHours(hour, parseInt(minutes), 0, 0); // Set the hours and minutes in the Date object
 
     const now = new Date();
     const diff = (sessionDateTime - now) / 60000; // Difference in minutes
     return diff <= 2 && diff >= -duration;
   };
+
 
   const handleDateChange = (sessionId, date) => {
     setSessionState(prevState => ({
@@ -138,6 +173,14 @@ const VideoCall = () => {
   };
 
   const handleAccept = async (sessionId) => {
+    // Get the selected date and time from sessionState for the given sessionId
+    const { selectedDate, selectedTime } = sessionState[sessionId] || {};
+
+    if (!selectedDate || !selectedTime) {
+      toast.error("Please select both a date and a time before accepting.");
+      return;
+    }
+
     try {
       const token = localStorage.getItem("expertToken");
       if (!token) {
@@ -145,9 +188,12 @@ const VideoCall = () => {
         return;
       }
 
+      // Log the selectedDate and selectedTime for debugging
+      console.log(selectedDate, selectedTime);
+
       const response = await axios.put(
-        `https://amd-api.code4bharat.com/api/session/accept/${sessionId}`,
-        {},
+        `http://localhost:5070/api/session/accept`,
+        { id: sessionId, selectedDate, selectedTime },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -155,18 +201,20 @@ const VideoCall = () => {
         }
       );
 
+      // Update the session status to "confirmed"
       const updatedSessions = mySessions.map((session) =>
         session._id === sessionId
           ? { ...session, status: "confirmed" }
           : session
       );
       setMySessions(updatedSessions);
+
       toast.success(response.data.message);
     } catch (err) {
       toast.error("Failed to accept the session");
+      console.log(err);
     }
   };
-
 
 
   const handleDecline = async (sessionId) => {
@@ -204,14 +252,21 @@ const VideoCall = () => {
     }));
   };
 
-  // Note formatter for bullet points
   const formatNote = (note) => {
     if (!note) return [];
-    return note
-      .split(".")
-      .map((sentence) => sentence.trim())
-      .filter((sentence) => sentence.length > 0)
-      .map((sentence) => `${sentence}.`);
+
+    try {
+      // Make sure note is a string before calling split
+      const noteStr = String(note);
+      return noteStr
+        .split(".")
+        .map((sentence) => sentence.trim())
+        .filter((sentence) => sentence.length > 0)
+        .map((sentence) => `${sentence}.`);
+    } catch (error) {
+      console.error("Error formatting note:", error);
+      return [];
+    }
   };
 
   const groupByDate = (slotsArray) => {
@@ -219,35 +274,60 @@ const VideoCall = () => {
     return slots.reduce((acc, slot) => {
       const date = slot.selectedDate;
       if (!date) return acc;
-  
+
       if (!acc[date]) acc[date] = [];
       acc[date].push(slot.selectedTime);
       return acc;
     }, {});
   };
-  
 
   // Check if note is long (more than 100 characters)
   const isNoteLong = (note) => note && note.length > 100;
 
-  return (
-    <div className="w-full mx-auto py-4 px-2 mt-2 md:max-w-6xl md:py-10 md:px-4">
-      <ToastContainer />
+  // Helper function to get status styles
+  const getStatusStyle = (status) => {
+    switch (status) {
+      case "confirmed":
+        return "text-green-500";
+      case "unconfirmed":
+        return "text-yellow-500";
+      case "rejected":
+        return "text-red-500";
+      case "completed":
+        return "text-green-700";
+      case "Rating Submitted":
+        return "text-green-700";
+      default:
+        return "text-gray-500";
+    }
+  };
 
-      {/* Tabs */}
-      <div className="flex space-x-2 mb-3 md:mb-6">
+  return (
+    <div className="w-full mx-auto py-6 px-4 mt-2 md:max-w-6xl md:py-10 md:px-8 bg-gray-50 min-h-screen">
+      <ToastContainer position="top-right" autoClose={3000} />
+
+      {/* Page Header */}
+      <div className="mb-8 text-center">
+        <h1 className="text-2xl md:text-3xl font-bold text-gray-800">My Video Consultations</h1>
+        <p className="text-gray-600 mt-2">Manage your upcoming and past consultation sessions</p>
+      </div>
+
+      {/* Tabs with Shadow and Animation */}
+      <div className="flex justify-center space-x-4 mb-6 md:mb-10 bg-white rounded-lg p-2 shadow-md">
         <button
-          className={`px-3 py-1 text-xs md:px-4 md:py-2 md:text-sm font-medium rounded ${
-            activeTab === "bookings" ? "bg-black text-white" : "bg-gray-200"
-          }`}
+          className={`px-5 py-2 text-sm md:text-base font-medium rounded-md transition-all duration-300 ${activeTab === "bookings"
+            ? "bg-blue-500 text-white shadow-md transform scale-105"
+            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}
           onClick={() => setActiveTab("bookings")}
         >
           My Bookings
         </button>
         <button
-          className={`px-3 py-1 text-xs md:px-4 md:py-2 md:text-sm font-medium rounded ${
-            activeTab === "sessions" ? "bg-black text-white" : "bg-gray-200"
-          }`}
+          className={`px-5 py-2 text-sm md:text-base font-medium rounded-md transition-all duration-300 ${activeTab === "sessions"
+            ? "bg-blue-500 text-white shadow-md transform scale-105"
+            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}
           onClick={() => setActiveTab("sessions")}
         >
           My Sessions
@@ -255,36 +335,40 @@ const VideoCall = () => {
       </div>
 
       {/* Content Container */}
-      <div className="space-y-2 md:space-y-4 max-h-[calc(100vh-120px)] md:max-h-none">
+      <div className="space-y-4 md:space-y-6 max-h-[calc(100vh-220px)] md:max-h-none overflow-y-auto pb-10">
         {/* My Bookings Tab */}
         {activeTab === "bookings" && (
-          <div className="space-y-2 md:space-y-4">
+          <div className="space-y-4 md:space-y-6">
             {loadingBookings ? (
-              <div className="text-xs md:text-base text-center">
-                Loading bookings...
+              <div className="text-center p-10 bg-white rounded-lg shadow-md">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                <p className="text-gray-600">Loading your bookings...</p>
               </div>
             ) : errorBookings ? (
-              <div className="text-xs md:text-base text-center text-red-500">
-                {errorBookings}
+              <div className="text-center p-10 bg-white rounded-lg shadow-md">
+                <div className="text-red-500 text-lg mb-2">⚠️</div>
+                <p className="text-red-500">{errorBookings}</p>
               </div>
             ) : myBookings.length === 0 ? (
-              <div className="text-xs md:text-base text-center text-gray-500">
-                No Bookings Yet
+              <div className="text-center p-10 bg-white rounded-lg shadow-md">
+                <div className="text-4xl mb-4">📅</div>
+                <p className="text-gray-500 text-lg">No Bookings Yet</p>
+                <p className="text-gray-400 mt-2">Your upcoming bookings will appear here</p>
               </div>
             ) : (
               myBookings.map((booking) => (
                 <div
                   key={booking._id}
-                  className="flex flex-col p-2 md:flex-row md:items-center md:justify-between md:p-4 border rounded-lg shadow-sm"
+                  className="bg-white p-4 md:p-6 border rounded-lg shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1"
                 >
                   {/* Mobile: Compact layout */}
                   <div className="md:hidden w-full">
                     {/* Header with Session Type and Date */}
-                    <div className="flex justify-between items-center mb-1">
-                      <div className="flex items-center gap-1">
-                        <div className="bg-gray-100 px-1 py-1 rounded text-center">
+                    <div className="flex justify-between items-center mb-3">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-blue-50 px-3 py-2 rounded-md text-center">
                           <p className="text-xs text-gray-500">
-                            {new Date(booking.sessionDate).toLocaleDateString(
+                            {new Date(booking.slots.sessionDate).toLocaleDateString(
                               "en-US",
                               {
                                 weekday: "short",
@@ -293,14 +377,14 @@ const VideoCall = () => {
                             )}
                           </p>
                         </div>
-                        <span className="text-xs bg-slate-200 px-2 py-1 rounded">
+                        <span className="text-xs bg-gray-100 px-3 py-1 rounded-full text-gray-700 font-medium">
                           {booking.sessionType}
                         </span>
                       </div>
-                      <div className="flex items-center text-xs">
-                        <CiClock2 className="text-xs mr-1" />
-                        <span className="text-gray-500">
-                          {booking.sessionTime}
+                      <div className="flex items-center text-xs bg-gray-50 px-2 py-1 rounded-md">
+                        <CiClock2 className="text-sm mr-1 text-blue-500" />
+                        <span className="text-gray-700 font-medium">
+                          {booking.slots.sessionTime}
                         </span>
                         <span className="ml-1 text-gray-500">
                           ({booking.duration})
@@ -309,49 +393,70 @@ const VideoCall = () => {
                     </div>
 
                     {/* Names and Status */}
-                    <div className="flex justify-between items-center mb-1">
+                    <div className="flex justify-between items-center mb-3 bg-gray-50 p-2 rounded-md">
                       <div className="text-xs">
-                        <p className="text-gray-700">
-                          <FaUser className="inline mr-1" size={10} />
-                          {booking.firstName} {booking.lastName}
+                        <p className="text-gray-700 mb-1">
+                          <FaUser className="inline mr-1 text-blue-500" size={12} />
+                          <span className="font-medium">Client:</span> {booking.firstName} {booking.lastName}
                         </p>
                         <p className="text-gray-700">
-                          <FaUserTie className="inline mr-1" size={10} />
-                          {booking.consultingExpertID.firstName}{" "}
+                          <FaUserTie className="inline mr-1 text-blue-500" size={12} />
+                          <span className="font-medium">Expert:</span> {booking.consultingExpertID.firstName}{" "}
                           {booking.consultingExpertID.lastName}
                         </p>
                       </div>
                       <div>
-                        {booking.status === "confirmed" ? (
-                          <span className="text-green-500 text-xs font-medium">
-                            Confirmed
-                          </span>
-                        ) : booking.status === "unconfirmed" ? (
-                          <span className="text-red-500 text-xs font-medium">
-                            Unconfirmed
-                          </span>
-                        ) : booking.status === "rejected" ? (
-                          <span className="text-red-500 text-xs font-medium">
-                            Rejected
-                          </span>
-                        ) : booking.status === "completed" ? (
-                          <span className="text-green-700 text-xs font-medium">
-                            Completed
-                          </span>
-                        ) : booking.status === "Rating Submitted" ? (
-                          <span className="text-green-700 text-xs font-medium">
-                            Rating Submitted
-                          </span>
-                        ) : null}
+                        <span className={`${getStatusStyle(booking.status)} text-xs font-medium px-2 py-1 bg-gray-100 rounded-full`}>
+                          {booking.status === "confirmed"
+                            ? "Confirmed"
+                            : booking.status === "unconfirmed"
+                              ? "Unconfirmed"
+                              : booking.status === "rejected"
+                                ? "Rejected"
+                                : booking.status === "completed"
+                                  ? "Completed"
+                                  : booking.status === "Rating Submitted"
+                                    ? "Rating Submitted"
+                                    : booking.status}
+                        </span>
                       </div>
                     </div>
 
+                    {/* Dates and Times Section - Mobile */}
+                    <div className="mb-3">
+                      <h3 className="text-sm font-semibold mb-2">Available Slots:</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {Object.entries(groupByDate(booking.slots?.[0] || [])).map(([date, times]) => {
+                          const parsedDate = new Date(date);
+                          return (
+                            <div key={date} className="bg-gray-50 px-3 py-2 rounded-lg border border-gray-200">
+                              <p className="text-xs text-gray-500 font-medium">
+                                {!isNaN(parsedDate)
+                                  ? parsedDate.toLocaleDateString("en-US", {
+                                    weekday: "short",
+                                    day: "numeric",
+                                    month: "short",
+                                  })
+                                  : null}
+                              </p>
+                              <div className="mt-1 flex flex-wrap gap-1">
+                                {times.map((time, index) => (
+                                  <span key={index} className="text-xs bg-white px-2 py-1 rounded-md text-gray-700">
+                                    {time}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
                     {/* Action Buttons */}
-                    <div className="flex justify-end gap-1 mt-1">
+                    <div className="flex justify-end gap-2 mt-3">
                       {booking.status === "confirmed" && (
                         <>
-                          <button className="px-2 py-1 border rounded text-xs flex items-center gap-1">
-                            <MessagesSquare className="w-3 h-3" />
+                          <button className="px-3 py-2 border border-gray-300 rounded-md text-xs flex items-center gap-1 hover:bg-gray-50 transition-colors duration-200">
+                            <MessagesSquare className="w-3 h-3 text-blue-500" />
                             <span>Chat</span>
                           </button>
 
@@ -360,14 +465,14 @@ const VideoCall = () => {
                               href={booking.zoomMeetingLink}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="px-2 py-1 text-xs rounded bg-blue-500 text-white hover:bg-blue-600 flex items-center gap-1"
+                              className="px-3 py-2 text-xs rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-200 flex items-center gap-1"
                             >
                               <Video className="w-3 h-3" />
-                              <span>Join</span>
+                              <span>Join Meeting</span>
                             </a>
                           ) : (
-                            <span className="text-yellow-500 text-xs">
-                              Zoom link not ready
+                            <span className="text-yellow-500 text-xs px-3 py-2 bg-yellow-50 rounded-md">
+                              Zoom link coming soon
                             </span>
                           )}
                         </>
@@ -375,141 +480,150 @@ const VideoCall = () => {
 
                       {booking.status === "completed" && (
                         <button
-                          className="px-2 py-1 text-white bg-blue-500 rounded text-xs"
+                          className="px-3 py-2 text-white bg-blue-500 rounded-md text-xs hover:bg-blue-600 transition-colors duration-200"
                           onClick={() => handleRateClick(booking)}
                         >
-                          Rate
+                          Rate Session
                         </button>
                       )}
                     </div>
                   </div>
 
                   {/* Desktop: Modified layout with status and buttons on right */}
-                  <div className="hidden md:flex md:items-center md:w-full">
-                    {/* Left Side (Date & Details) */}
-                    <div className="flex items-center space-x-4 flex-grow">
-                      <div className="space-y-4">
-                        <div className="text-center font-bold text-xl">
-                          Bookings for {booking.firstName} {booking.lastName}
-                        </div>
-                        <div className="flex gap-4">
-                          {Object.entries(
-                            groupByDate(booking.slots?.[0] || [])
-                          ).map(([date, times]) => {
-                            const parsedDate = new Date(date);
-                            return (
-                              <div
-                                key={date}
-                                className="bg-gray-100 px-3 py-2 rounded-lg shadow-md"
-                              >
-                                <p className="text-xs text-gray-500">
-                                  {!isNaN(parsedDate)
-                                    ? parsedDate.toLocaleDateString("en-US", {
-                                        weekday: "short",
-                                      })
-                                    : "Invalid Date"}
-                                </p>
-                                <p className="text-lg font-bold">
-                                  {!isNaN(parsedDate)
-                                    ? parsedDate.toLocaleDateString("en-US", {
-                                        day: "numeric",
-                                        month: "short",
-                                      })
-                                    : "Invalid"}
-                                </p>
+                  <div className="hidden md:block">
+                    <div className="border-b pb-4 mb-4">
+                      <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                        Consultation with {booking.firstName} {booking.lastName}
+                      </h2>
 
-                                <div className="mt-2">
-                                  {times.map((time, index) => (
-                                    <p
-                                      key={index}
-                                      className="text-sm text-gray-700"
-                                    >
-                                      {time}
-                                    </p>
-                                  ))}
-                                </div>
-                              </div>
-                            );
-                          })}
+                      <div className="flex items-center gap-3 text-sm text-gray-600">
+                        <div className="flex items-center">
+                          <CiClock2 className="mr-1 text-blue-500" />
+                          {booking.sessionTime} ({booking.duration})
                         </div>
-                      </div>
-                      <div>
-                        <div className="flex">
-                          <CiClock2 className="mt-[3px] mr-1" />
-                          <p className="text-sm text-gray-500 mr-5">
-                            {booking.sessionTime}
-                          </p>
-                          <p className="text-sm text-gray-500 mr-5">
-                            {booking.duration}
-                          </p>
-                          {/* Session Type */}
-                          <p className="text-sm text-gray-500 bg-slate-200 px-3">
-                            {booking.sessionType}
-                          </p>
-                        </div>
-                        {/* User and Consultant Details */}
-                        <div className="mt-3">
-                          <p className="text-sm font-medium text-gray-700">
-                            <FaUser className="inline mr-1" />
-                            Client: {booking.firstName} {booking.lastName}
-                          </p>
-                          <p className="text-sm font-medium text-gray-700 mt-1">
-                            <FaUserTie className="inline mr-1" />
-                            Expert: {booking.consultingExpertID.firstName}{" "}
-                            {booking.consultingExpertID.lastName}
-                          </p>
-                        </div>
+                        <span className="bg-blue-50 px-3 py-1 rounded-full text-blue-600">
+                          {booking.sessionType}
+                        </span>
+                        <span className={`${getStatusStyle(booking.status)} px-3 py-1 rounded-full ${booking.status === "confirmed" ? "bg-green-50" : booking.status === "completed" ? "bg-green-50" : "bg-gray-100"}`}>
+                          {booking.status === "confirmed"
+                            ? "Confirmed"
+                            : booking.status === "unconfirmed"
+                              ? "Unconfirmed"
+                              : booking.status === "rejected"
+                                ? "Rejected"
+                                : booking.status === "completed"
+                                  ? "Completed"
+                                  : booking.status === "Rating Submitted"
+                                    ? "Rating Submitted"
+                                    : booking.status}
+                        </span>
                       </div>
                     </div>
 
-                    {/* Right Side (Status & Actions) - Now positioned correctly */}
-                    <div className="flex items-center justify-end space-x-3 ml-auto">
-                      {booking.status === "confirmed" ? (
-                        <>
-                          <span className="text-green-500 text-sm font-medium">
-                            Confirmed
-                          </span>
-                          <button className="px-4 py-1 border rounded text-sm flex items-center space-x-2">
-                            <MessagesSquare className="w-5 h-5" />
-                            <span>Chat</span>
-                          </button>
-                          {booking.zoomMeetingLink ? (
-                            <a
-                              href={booking.zoomMeetingLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <button className="px-4 py-1 text-sm rounded bg-blue-500 text-white hover:bg-blue-600 flex items-center space-x-2">
-                                <Video className="w-5 h-5" />
-                                <span>Join</span>
-                              </button>
-                            </a>
-                          ) : (
-                            <span className="text-yellow-500 text-sm">
-                              Zoom link not ready
-                            </span>
+                    <div className="grid grid-cols-12 gap-6">
+                      {/* Left Side - Details & Selected Slot */}
+                      <div className="col-span-8">
+                        <div className="flex items-start gap-8 mb-6">
+                          {/* People Details */}
+                          <div className="flex-1">
+                            <h3 className="text-sm font-semibold text-gray-700 mb-3">People</h3>
+                            <div className="bg-gray-50 p-3 rounded-lg">
+                              <p className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+                                <FaUser className="mr-2 text-blue-500" />
+                                <span className="text-gray-500 w-16">Client:</span>
+                                <span>{booking.firstName} {booking.lastName}</span>
+                              </p>
+                              <p className="text-sm font-medium text-gray-700 flex items-center">
+                                <FaUserTie className="mr-2 text-blue-500" />
+                                <span className="text-gray-500 w-16">Expert:</span>
+                                <span>{booking.consultingExpertID.firstName} {booking.consultingExpertID.lastName}</span>
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Available Time Slots */}
+                          <div className="flex-1">
+                            {booking.status === "unconfirmed"
+                              ? <h3 className="text-sm font-semibold text-gray-700 mb-3">Requested Slots</h3>
+                              : <h3 className="text-sm font-semibold text-gray-700 mb-3">Booked Slots</h3>
+                            }
+                            <div className="flex flex-wrap gap-3">
+                              {Object.entries(groupByDate(booking.slots?.[0] || [])).map(([date, times]) => {
+                                const parsedDate = new Date(date);
+                                return (
+                                  <div key={date} className="bg-gray-50 px-4 py-3 rounded-lg border border-gray-200">
+                                    <p className="text-sm font-medium text-gray-700">
+                                      {!isNaN(parsedDate)
+                                        ? parsedDate.toLocaleDateString("en-US", {
+                                          weekday: "short",
+                                          day: "numeric",
+                                          month: "short",
+                                        })
+                                        : "Invalid Date"}
+                                    </p>
+                                    <div className="mt-2 flex flex-wrap gap-2">
+                                      {times.map((time, index) => (
+                                        <span key={index} className="text-xs bg-white px-2 py-1 rounded-md text-gray-700">
+                                          {time}
+                                        </span>
+                                      ))}
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                      {/* Right Side - Actions */}
+                      <div className="col-span-4">
+                        <div className="bg-gray-50 p-4 rounded-lg flex flex-col gap-3">
+                          <h3 className="text-sm font-semibold text-gray-700 mb-2">Actions</h3>
+                          {booking.status === "unconfirmed" && (
+                            <>
+                              <p className="text-gray-400">Waiting for Confirmation</p>
+                            </>
                           )}
-                        </>
-                      ) : booking.status === "unconfirmed" ? (
-                        <span className="text-red-500 text-sm font-medium">
-                          Unconfirmed
-                        </span>
-                      ) : booking.status === "rejected" ? (
-                        <span className="text-red-500 text-sm font-medium">
-                          Rejected
-                        </span>
-                      ) : booking.status === "completed" ? (
-                        <button
-                          className="px-4 py-1 text-white bg-blue-500 rounded"
-                          onClick={() => handleRateClick(booking)}
-                        >
-                          Rate
-                        </button>
-                      ) : booking.status === "Rating Submitted" ? (
-                        <span className="text-green-700 text-sm font-medium">
-                          Rating Submitted
-                        </span>
-                      ) : null}
+
+                          {booking.status === "confirmed" && (
+                            <>
+                              <button className="w-full px-4 py-2 border border-gray-300 rounded-md text-sm flex items-center justify-center gap-2 hover:bg-gray-50 transition-all duration-200">
+                                <MessagesSquare className="w-4 h-4 text-blue-500" />
+                                <span>Chat with {booking.userID ? "Expert" : "Client"}</span>
+                              </button>
+
+                              {booking.zoomMeetingLink ? (
+                                <a
+                                  href={booking.zoomMeetingLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="w-full"
+                                >
+                                  <button className="w-full px-4 py-2 text-sm rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-all duration-200 flex items-center justify-center gap-2 transform hover:scale-105">
+                                    <Video className="w-4 h-4" />
+                                    <span>Join Zoom Meeting</span>
+                                  </button>
+                                </a>
+                              ) : (
+                                <div className="w-full px-4 py-2 bg-yellow-50 border border-yellow-200 rounded-md text-sm text-yellow-600 flex items-center justify-center gap-2">
+                                  <span>Zoom link coming soon</span>
+                                </div>
+                              )}
+                            </>
+                          )}
+
+                          {booking.status === "completed" && (
+                            <button
+                              className="w-full px-4 py-2 text-white bg-blue-500 rounded-md text-sm hover:bg-blue-600 transition-all duration-200 transform hover:scale-105"
+                              onClick={() => handleRateClick(booking)}
+                            >
+                              Rate This Session
+                            </button>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -518,33 +632,37 @@ const VideoCall = () => {
           </div>
         )}
 
-        {/* My Sessions Tab */}
+        {/* My Sessions Tab - For Experts to Accept/Decline */}
         {activeTab === "sessions" && (
-          <div className="space-y-2 md:space-y-4">
+          <div className="space-y-4 md:space-y-6">
             {loadingSessions ? (
-              <div className="text-xs md:text-base text-center">
-                Loading sessions...
+              <div className="text-center p-10 bg-white rounded-lg shadow-md">
+                <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mx-auto mb-4"></div>
+                <p className="text-gray-600">Loading your sessions...</p>
               </div>
             ) : errorSessions ? (
-              <div className="text-xs md:text-base text-center text-red-500">
-                {errorSessions}
+              <div className="text-center p-10 bg-white rounded-lg shadow-md">
+                <div className="text-red-500 text-lg mb-2">⚠️</div>
+                <p className="text-red-500">{errorSessions}</p>
               </div>
             ) : mySessions.length === 0 ? (
-              <div className="text-xs md:text-base text-center text-gray-500">
-                No Upcoming Sessions
+              <div className="text-center p-10 bg-white rounded-lg shadow-md">
+                <div className="text-4xl mb-4">🎥</div>
+                <p className="text-gray-500 text-lg">No Sessions Yet</p>
+                <p className="text-gray-400 mt-2">Your scheduled sessions will appear here</p>
               </div>
             ) : (
               mySessions.map((session) => (
                 <div
                   key={session._id}
-                  className="p-2 md:p-4 border rounded-lg shadow-sm bg-white hover:shadow-md md:hover:shadow-xl transition-shadow duration-300"
+                  className="bg-white p-4 md:p-6 border rounded-lg shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-1"
                 >
                   {/* Mobile: Compact layout */}
-                  <div className="md:hidden">
-                    {/* Header with Session Type and Date */}
-                    <div className="flex justify-between items-center mb-1">
-                      <div className="flex items-center gap-1">
-                        <div className="bg-gray-100 px-1 py-1 rounded text-center">
+                  <div className="md:hidden w-full">
+                    {/* Header with Session Type and Status */}
+                    <div className="flex justify-between items-center mb-3">
+                      <div className="flex items-center gap-2">
+                        <div className="bg-blue-50 px-3 py-2 rounded-md text-center">
                           <p className="text-xs text-gray-500">
                             {new Date(session.sessionDate).toLocaleDateString(
                               "en-US",
@@ -555,56 +673,164 @@ const VideoCall = () => {
                             )}
                           </p>
                         </div>
-                        <span className="text-xs bg-slate-200 px-2 py-1 rounded">
+                        <span className="text-xs bg-gray-100 px-3 py-1 rounded-full text-gray-700 font-medium">
                           {session.sessionType}
                         </span>
                       </div>
-                      <div className="flex items-center text-xs">
-                        <CiClock2 className="text-xs mr-1" />
-                        <span className="text-gray-500">
-                          {session.sessionTime}
-                        </span>
-                        <span className="ml-1 text-gray-500">
-                          ({session.duration})
-                        </span>
+                      <span className={`${getStatusStyle(session.status)} text-xs font-medium px-2 py-1 bg-gray-100 rounded-full`}>
+                        {session.status === "confirmed"
+                          ? "Confirmed"
+                          : session.status === "unconfirmed"
+                            ? "Pending"
+                            : session.status === "rejected"
+                              ? "Rejected"
+                              : session.status === "completed"
+                                ? "Completed"
+                                : session.status}
+                      </span>
+                    </div>
+
+                    {/* Time and Duration */}
+                    <div className="flex items-center text-xs mb-3 bg-gray-50 p-2 rounded-md">
+                      <CiClock2 className="text-sm mr-1 text-blue-500" />
+                      <span className="text-gray-700 font-medium">
+                        {session.sessionTime}
+                      </span>
+                      <span className="ml-1 text-gray-500">
+                        ({session.duration})
+                      </span>
+                    </div>
+
+                    {/* Names */}
+                    <div className="mb-3 bg-gray-50 p-2 rounded-md">
+                      <div className="text-xs">
+                        <p className="text-gray-700 mb-1">
+                          <FaUser className="inline mr-1 text-blue-500" size={12} />
+                          <span className="font-medium">Client:</span> {session?.firstName || "N/A"} {session?.lastName || ""}
+                        </p>
+                        {/* <p className="text-gray-700">
+                          <FaUserTie className="inline mr-1 text-blue-500" size={12} />
+                          <span className="font-medium">Expert:</span> {session.expertID?.firstName || "N/A"}{" "}
+                          {session.expertID?.lastName || ""}
+                        </p> */}
                       </div>
                     </div>
 
-                    {/* Names and Status */}
-                    <div className="flex justify-between items-center mb-1">
-                      <div className="text-xs">
-                        <p className="text-gray-700">
-                          <FaUser className="inline mr-1" size={10} />
-                          {session.firstName} {session.lastName}
-                        </p>
+                    {/* Session Notes - Mobile */}
+                    {session.sessionNotes && session.sessionNotes.length > 0 && (
+                      <div className="mb-3">
+                        <div
+                          className="bg-gray-50 p-3 rounded-md text-xs relative"
+                          onClick={() => toggleNoteExpand(session._id)}
+                        >
+                          <div className="flex justify-between items-center mb-1">
+                            <h3 className="font-medium text-gray-700">Session Notes</h3>
+                            {isNoteLong(session.sessionNotes) && (
+                              <button className="text-blue-500 focus:outline-none">
+                                {expandedNotes[session._id] ? (
+                                  <ChevronUp size={14} />
+                                ) : (
+                                  <ChevronDown size={14} />
+                                )}
+                              </button>
+                            )}
+                          </div>
+                          <div
+                            className={`${isNoteLong(session.sessionNotes) &&
+                              !expandedNotes[session._id]
+                              ? "line-clamp-2"
+                              : ""
+                              }`}
+                          >
+                            <ul className="list-disc pl-4 space-y-1 text-gray-600">
+                              {formatNote(session.sessionNotes).map(
+                                (note, idx) => (
+                                  <li key={idx}>{note}</li>
+                                )
+                              )}
+                            </ul>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        {session.status === "confirmed" ? (
-                          <span className="text-green-500 text-xs font-medium">
-                            Accepted
-                          </span>
-                        ) : session.status === "unconfirmed" ? (
-                          <span className="text-yellow-500 text-xs font-medium">
-                            Pending
-                          </span>
-                        ) : session.status === "rejected" ? (
-                          <span className="text-red-500 text-xs font-medium">
-                            Rejected
-                          </span>
-                        ) : session.status === "completed" ? (
-                          <span className="text-green-700 text-xs font-medium">
-                            Completed
-                          </span>
-                        ) : null}
+                    )}
+
+                    {/* Date and Time Selection - Mobile */}
+                    {session.status === "unconfirmed" && (
+                      <div className="mb-3">
+                        <div className="grid grid-cols-2 gap-2">
+                          <div>
+                            <label className="text-xs font-medium text-gray-700 block mb-1">Select Date</label>
+                            <select
+                              className="w-full text-xs border rounded-md p-2"
+                              value={sessionState[session._id]?.selectedDate || ""}
+                              onChange={(e) => handleDateChange(session._id, e.target.value)}
+                            >
+                              <option value="">Choose a date</option>
+                              {Object.keys(groupByDate(session.slots || [])).map((date, index) => {
+                                const parsedDate = new Date(date);
+                                return (
+                                  <option key={index} value={date}>
+                                    {!isNaN(parsedDate)
+                                      ? parsedDate.toLocaleDateString("en-US", {
+                                        weekday: "short",
+                                        day: "numeric",
+                                        month: "short",
+                                      })
+                                      : "Invalid Date"}
+                                  </option>
+                                );
+                              })}
+                            </select>
+                          </div>
+
+                          <div>
+                            <label className="text-xs font-medium text-gray-700 block mb-1">Select Time</label>
+                            <select
+                              className="w-full text-xs border rounded-md p-2"
+                              value={sessionState[session._id]?.selectedTime || ""}
+                              onChange={(e) => handleTimeChange(session._id, e.target.value)}
+                              disabled={!sessionState[session._id]?.selectedDate}
+                            >
+                              <option value="">Choose a time</option>
+                              {Object.entries(groupByDate(session.slots || []))
+                                .filter(([date]) => date === sessionState[session._id]?.selectedDate)
+                                .map(([date, times]) =>
+                                  times.map((time, index) => (
+                                    <option key={index} value={time}>
+                                      {time}
+                                    </option>
+                                  ))
+                                )}
+                            </select>
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    )}
 
                     {/* Action Buttons */}
-                    <div className="flex justify-end gap-1 mt-1">
+                    <div className="flex justify-end gap-2 mt-3">
+                      {session.status === "unconfirmed" && (
+                        <>
+                          <button
+                            className="px-3 py-2 border border-gray-300 rounded-md text-xs hover:bg-gray-50 transition-colors duration-200"
+                            onClick={() => handleDecline(session._id)}
+                          >
+                            Decline
+                          </button>
+                          <button
+                            className="px-3 py-2 bg-blue-500 text-white rounded-md text-xs hover:bg-blue-600 transition-colors duration-200"
+                            onClick={() => handleAccept(session._id)}
+                            disabled={!sessionState[session._id]?.selectedDate || !sessionState[session._id]?.selectedTime}
+                          >
+                            Accept
+                          </button>
+                        </>
+                      )}
+
                       {session.status === "confirmed" && (
                         <>
-                          <button className="px-2 py-1 border rounded text-xs flex items-center gap-1">
-                            <MessagesSquare className="w-3 h-3" />
+                          <button className="px-3 py-2 border border-gray-300 rounded-md text-xs flex items-center gap-1 hover:bg-gray-50 transition-colors duration-200">
+                            <MessagesSquare className="w-3 h-3 text-blue-500" />
                             <span>Chat</span>
                           </button>
 
@@ -613,244 +839,287 @@ const VideoCall = () => {
                               href={session.zoomMeetingLink}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="px-2 py-1 text-xs rounded bg-blue-500 text-white hover:bg-blue-600 flex items-center gap-1"
+                              className="px-3 py-2 text-xs rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-200 flex items-center gap-1"
+                              style={{
+                                opacity: isJoinEnabled(
+                                  session.slots,
+                                  parseInt(session.duration)
+                                )
+                                  ? 1
+                                  : 0.5,
+                                pointerEvents: isJoinEnabled(
+                                  session.slots,
+                                  parseInt(session.duration)
+                                )
+                                  ? "auto"
+                                  : "none",
+                              }}
                             >
                               <Video className="w-3 h-3" />
-                              <span>Join</span>
+                              <span>Join Meeting</span>
                             </a>
                           ) : (
-                            <span className="text-yellow-500 text-xs">
-                              Zoom link not ready
+                            <span className="text-yellow-500 text-xs px-3 py-2 bg-yellow-50 rounded-md">
+                              Zoom link coming soon
                             </span>
                           )}
                         </>
                       )}
+                    </div>
+                  </div>
 
-                      {session.status === "unconfirmed" && (
-                        <>
-                          <button
-                            className="px-2 py-1 bg-green-500 text-white rounded text-xs hover:bg-green-600 transition-all duration-200"
-                            onClick={() => handleAccept(session._id)}
-                          >
-                            Accept
-                          </button>
-                          <button
-                            className="px-2 py-1 bg-red-500 text-white rounded text-xs hover:bg-red-600 transition-all duration-200"
-                            onClick={() => handleDecline(session._id)}
-                          >
-                            Decline
-                          </button>
-                        </>
-                      )}
+                  {/* Desktop: Modified layout */}
+                  <div className="hidden md:block">
+                    <div className="border-b pb-4 mb-4">
+                      <div className="flex justify-between">
+                        <h2 className="text-xl font-semibold text-gray-800 mb-2">
+                          {session.sessionType === "Expert To Expert"
+                            ? `Consultation with Expert ${session.expertID?.firstName || "N/A"} ${session.expertID?.lastName || ""}`
+                            : `Consultation with ${session?.firstName || "N/A"} ${session?.lastName || ""}`}
+                        </h2>
+                        <span className={`${getStatusStyle(session.status)} px-3 py-1 h-fit rounded-full text-sm ${session.status === "confirmed" ? "bg-green-50" : session.status === "completed" ? "bg-green-50" : "bg-gray-100"}`}>
+                          {session.status === "confirmed"
+                            ? "Confirmed"
+                            : session.status === "unconfirmed"
+                              ? "Pending"
+                              : session.status === "rejected"
+                                ? "Rejected"
+                                : session.status === "completed"
+                                  ? "Completed"
+                                  : session.status}
+                        </span>
+                      </div>
+
+                      <div className="flex items-center gap-3 text-sm text-gray-600">
+                        <div className="flex items-center">
+                          <CiClock2 className="mr-1 text-blue-500" />
+                          {session.sessionTime || "To be confirmed"} ({session.duration})
+                        </div>
+                        <span className="bg-blue-50 px-3 py-1 rounded-full text-blue-600">
+                          {session.sessionType}
+                        </span>
+                        <span className="bg-gray-50 px-3 py-1 rounded-full text-gray-600">
+                          {new Date(session.sessionDate).toLocaleDateString("en-US", {
+                            weekday: "long",
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          })}
+                        </span>
+                      </div>
                     </div>
 
-                    {/* Note Section - Mobile with Bullet Points and Read More */}
-                    {session.note && (
-                      <div className="mt-2 text-xs">
-                        <div className="flex items-center justify-between">
-                          <p className="font-semibold text-gray-700">Note:</p>
-                          {isNoteLong(session.note) && (
-                            <button
-                              onClick={() => toggleNoteExpand(session._id)}
-                              className="text-blue-500 flex items-center"
-                            >
-                              {expandedNotes[session._id] ? (
-                                <>
-                                  Show Less{" "}
-                                  <ChevronUp className="w-3 h-3 ml-1" />
-                                </>
-                              ) : (
-                                <>
-                                  Read More{" "}
-                                  <ChevronDown className="w-3 h-3 ml-1" />
-                                </>
-                              )}
-                            </button>
+                    <div className="grid grid-cols-12 gap-6">
+                      {/* Left Side - Details */}
+                      <div className="col-span-8">
+                        <div className="flex items-start gap-8 mb-6">
+                          {/* People Details */}
+                          <div className="flex-1">
+                            <h3 className="text-sm font-semibold text-gray-700 mb-3">People</h3>
+                            <div className="bg-gray-50 p-3 rounded-lg">
+                              <p className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+                                <FaUser className="mr-2 text-blue-500" />
+                                <span className="text-gray-500 w-16">Client:</span>
+                                <span>{session?.firstName || "N/A"} {session?.lastName || ""}</span>
+                              </p>
+                              <p className="text-sm font-medium text-gray-700 flex items-center">
+                                <FaMobile className="mr-2 text-blue-500" />
+                                <span className="text-gray-500 w-16">Mobile:</span>
+                                <span>{session?.phone} </span>
+                              </p>
+
+                            </div>
+                            <div>
+                              <p className="text-sm font-medium text-gray-700 border-2 rounded-[5px] mt-4 justify-between p-2 flex">
+                                <FaBook className="mr-2 text-blue-500 text-lg" />
+                                <div className="flex flex-col">
+                                  <span className="text-gray-500 w-16">Note:</span>
+                                  <ul className="w-45 list-disc pl-5">
+                                    {session?.note &&
+                                      session?.note
+                                        .split(".")  // Split the note by periods
+                                        .map((sentence, index) => {
+                                          const trimmedSentence = sentence.trim();
+                                          if (trimmedSentence) {
+                                            return (
+                                              <li key={index} className="text-gray-700">
+                                                {trimmedSentence}.
+                                              </li>
+                                            );
+                                          }
+                                          return null;
+                                        })}
+                                  </ul>
+                                </div>
+                              </p>
+
+
+                            </div>
+                          </div>
+
+
+                          {/* Select Date and Time - Desktop */}
+                          {session.status === "unconfirmed" ? (
+                            <div className="flex-1">
+                              <h3 className="text-sm font-semibold text-gray-700 mb-3">Select Date & Time</h3>
+                              <div className="bg-gray-50 p-3 rounded-lg">
+                                <div className="grid grid-cols-2 gap-3">
+                                  <div>
+                                    <label className="text-sm font-medium text-gray-700 block mb-2">Date</label>
+                                    <select
+                                      id="date"
+                                      className="w-full text-sm border rounded-md p-2 outline-none cursor-pointer"
+                                      value={sessionState[session._id]?.selectedDate || ""}
+                                      onChange={(e) => handleDateChange(session._id, e.target.value)}
+                                    >
+                                      <option value="">Select a Date</option>
+                                      {Object.keys(groupByDate(session.slots?.[0] || []))
+                                        .map((date, index) => {
+                                          const parsedDate = new Date(date);
+                                          return (
+                                            <option key={index} value={date}>
+                                              {parsedDate.toLocaleDateString("en-US", {
+                                                weekday: "short",
+                                                day: "numeric",
+                                                month: "short",
+                                              })}
+                                            </option>
+                                          );
+                                        })}
+                                    </select>
+                                  </div>
+                                  <div>
+                                    <label className="text-sm font-medium text-gray-700 block mb-2">Time</label>
+                                    <select
+                                      id="time"
+                                      className="w-full text-sm border rounded-md p-2 outline-none cursor-pointer"
+                                      value={sessionState[session._id]?.selectedTime || ""}
+                                      onChange={(e) => handleTimeChange(session._id, e.target.value)}
+                                      disabled={!sessionState[session._id]?.selectedDate}
+                                    >
+                                      <option value="">Select a Time</option>
+                                      {Object.entries(groupByDate(session.slots?.[0] || []))
+                                        .filter(([date]) => date === sessionState[session._id]?.selectedDate)
+                                        .map(([date, times]) =>
+                                          times.map((time, index) => (
+                                            <option key={index} value={time}>
+                                              {time}
+                                            </option>
+                                          ))
+                                        )}
+                                    </select>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex-1">
+                              <h3 className="text-sm font-semibold text-gray-700 mb-3">Accepted Slot</h3>
+                              <div className="flex flex-wrap gap-3">
+                                {Object.entries(groupByDate(session.slots?.[0] || [])).map(([date, times]) => {
+                                  const parsedDate = new Date(date);
+                                  return (
+                                    <div key={date} className="bg-gray-50 px-4 py-3 rounded-lg border border-gray-200">
+                                      <p className="text-sm font-medium text-gray-700">
+                                        {!isNaN(parsedDate)
+                                          ? parsedDate.toLocaleDateString("en-US", {
+                                            weekday: "short",
+                                            day: "numeric",
+                                            month: "short",
+                                          })
+                                          : "Invalid Date"}
+                                      </p>
+                                      <div className="mt-2 flex flex-wrap gap-2">
+                                        {times.map((time, index) => (
+                                          <span key={index} className="text-xs bg-white px-2 py-1 rounded-md text-gray-700">
+                                            {time}
+                                          </span>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </div>
+                            </div>
                           )}
                         </div>
 
-                        {isNoteLong(session.note) &&
-                        !expandedNotes[session._id] ? (
-                          <p className="text-gray-600">
-                            {session.note.substring(0, 100)}...
-                          </p>
-                        ) : (
-                          <ul className="list-disc pl-4 text-gray-600 mt-1">
-                            {formatNote(session.note).map((item, idx) => (
-                              <li key={idx} className="mb-1">
-                                {item}
-                              </li>
-                            ))}
-                          </ul>
+                        {/* Session Notes - Desktop */}
+                        {session.sessionNotes && session.sessionNotes.length > 0 && (
+                          <div className="mt-4">
+                            <h3 className="text-sm font-semibold text-gray-700 mb-3">Session Notes</h3>
+                            <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                              <ul className="list-disc pl-5 space-y-2 text-sm text-gray-700">
+                                {formatNote(session.sessionNotes).map((note, idx) => (
+                                  <li key={idx}>{note}</li>
+                                ))}
+                              </ul>
+                            </div>
+                          </div>
                         )}
                       </div>
-                    )}
-                  </div>
 
-                  {/* Desktop: Modified layout with status and buttons on right */}
-                  <div className="hidden md:block">
-                    <div className="flex items-center">
-                      {/* Left Side - Session Info */}
-                      <div className="flex items-center space-x-4 flex-grow">
-  <div className="space-y-4">
-    {/* Date Dropdown */}
-    <div className="mb-4">
-      <label htmlFor="date" className="block text-sm font-semibold text-gray-700">
-        Select Date
-      </label>
-      <select
-        id="date"
-        className="mt-2 px-3 py-2 border rounded-md shadow-md w-full"
-        value={sessionState[session._id]?.selectedDate || ""}
-        onChange={(e) => handleDateChange(session._id, e.target.value)}
-      >
-        <option value="">Select a Date</option>
-        {Object.keys(groupByDate(session.slots?.[0] || []))
-          .map((date, index) => {
-            const parsedDate = new Date(date);
-            return (
-              <option key={index} value={date}>
-                {parsedDate.toLocaleDateString("en-US", {
-                  weekday: "short", 
-                  day: "numeric", 
-                  month: "short",
-                })}
-              </option>
-            );
-          })}
-      </select>
-    </div>
+                      {/* Right Side - Actions */}
+                      <div className="col-span-4">
+                        <div className="bg-gray-50 p-4 rounded-lg flex flex-col gap-3">
+                          <h3 className="text-sm font-semibold text-gray-700 mb-2">Actions</h3>
 
-    {/* Time Dropdown */}
-    {sessionState[session._id]?.selectedDate && (
-      <div className="mb-4">
-        <label htmlFor="time" className="block text-sm font-semibold text-gray-700">
-          Select Time
-        </label>
-        <select
-          id="time"
-          className="mt-2 px-3 py-2 border rounded-md shadow-md w-full"
-          value={sessionState[session._id]?.selectedTime || ""}
-          onChange={(e) => handleTimeChange(session._id, e.target.value)}
-          disabled={!sessionState[session._id]?.selectedDate}
-        >
-          <option value="">Select a Time</option>
-          {Object.entries(groupByDate(session.slots?.[0] || []))
-            .filter(([date]) => date === sessionState[session._id]?.selectedDate)
-            .map(([date, times]) =>
-              times.map((time, index) => (
-                <option key={index} value={time}>
-                  {time}
-                </option>
-              ))
-            )}
-        </select>
-      </div>
-    )}
-
-    {/* Display selected date and time
-    {sessionState[session._id]?.selectedDate && sessionState[session._id]?.selectedTime && (
-      <div className="mt-4">
-        <p>
-          Selected:{" "}
-          {new Date(sessionState[session._id]?.selectedDate).toLocaleDateString("en-US", {
-            weekday: "long", 
-            day: "numeric", 
-            month: "short",
-          })}{" "}
-          at {sessionState[session._id]?.selectedTime}
-        </p>
-      </div>
-    )} */}
-  </div>
-</div>
-
-
-    <div>
-      <div className="flex">
-        <CiClock2 className="mt-[3px] mr-1" />
-        <p className="text-sm text-gray-500 mr-5">{session.sessionTime}</p>
-        <p className="text-sm text-gray-500 mr-5">{session.duration}</p>
-        {/* Session Type */}
-        <p className="text-sm text-gray-500 bg-slate-200 px-3">{session.sessionType}</p>
-      </div>
-      <p className="text-sm font-medium text-gray-700 mt-2">
-        <FaUser className="inline mr-1" />
-        {session.firstName} {session.lastName}
-      </p>
-    </div>
-
-                      {/* Right Side - Status and Actions */}
-                      <div className="flex items-center justify-end space-x-3 ml-auto">
-                        {session.status === "confirmed" ? (
-                          <>
-                            <span className="text-green-500 text-sm font-medium">
-                              Accepted
-                            </span>
-                            <button className="px-4 py-1 border rounded text-sm flex items-center space-x-2">
-                              <MessagesSquare className="w-5 h-5" />
-                              <span>Chat</span>
-                            </button>
-                            {session.zoomMeetingLink ? (
-                              <a
-                                href={session.zoomMeetingLink}
-                                target="_blank"
-                                rel="noopener noreferrer"
+                          {session.status === "unconfirmed" && (
+                            <>
+                              <button
+                                className="w-full px-4 py-2 border border-gray-300 rounded-md text-sm hover:bg-gray-50 transition-all duration-200"
+                                onClick={() => handleDecline(session._id)}
                               >
-                                <button className="px-4 py-1 text-sm rounded bg-blue-500 text-white hover:bg-blue-600 flex items-center space-x-2">
-                                  <Video className="w-5 h-5" />
-                                  <span>Join</span>
-                                </button>
-                              </a>
-                            ) : (
-                              <span className="text-yellow-500 text-sm">
-                                Zoom link not ready
-                              </span>
-                            )}
-                          </>
-                        ) : session.status === "unconfirmed" ? (
-                          <>
-                            <button
-                              className="px-4 py-2 bg-green-500 text-white rounded text-sm hover:bg-green-600 transition-all duration-200"
-                              onClick={() => handleAccept(session._id)}
-                            >
-                              Accept
-                            </button>
-                            <button
-                              className="px-4 py-2 bg-red-500 text-white rounded text-sm hover:bg-red-600 transition-all duration-200"
-                              onClick={() => handleDecline(session._id)}
-                            >
-                              Decline
-                            </button>
-                          </>
-                        ) : session.status === "rejected" ? (
-                          <span className="text-red-500 text-sm font-medium">
-                            Rejected
-                          </span>
-                        ) : session.status === "completed" ? (
-                          <span className="text-green-700 text-sm font-medium">
-                            Completed
-                          </span>
-                        ) : null}
+                                Decline Request
+                              </button>
+                              <button
+                                className={`w-full px-4 py-2 text-white rounded-md text-sm transition-all duration-200 ${sessionState[session._id]?.selectedDate && sessionState[session._id]?.selectedTime
+                                  ? "bg-blue-500 hover:bg-blue-600"
+                                  : "bg-gray-300 cursor-not-allowed"
+                                  }`}
+                                onClick={() => {
+                                  // Only call handleAccept with sessionId, selectedDate, and selectedTime
+                                  handleAccept(session._id, sessionState[session._id]?.selectedDate, sessionState[session._id]?.selectedTime);
+                                }}
+                                disabled={!sessionState[session._id]?.selectedDate || !sessionState[session._id]?.selectedTime}
+                              >
+                                Accept Request
+                              </button>
+                            </>
+                          )}
+
+                          {session.status === "confirmed" && (
+                            <>
+                              <button className="w-full px-4 py-2 border border-gray-300 rounded-md text-sm flex items-center justify-center gap-2 hover:bg-gray-50 transition-all duration-200">
+                                <MessagesSquare className="w-4 h-4 text-blue-500" />
+                                <span>Chat with {session.expertID ? "Expert" : "Client"}</span>
+                              </button>
+
+                              {session.zoomMeetingLink ? (
+                                <a
+                                  href={session.zoomMeetingLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="w-full"
+                                >
+                                  <button className="w-full px-4 py-2 text-sm rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-all duration-200 flex items-center justify-center gap-2 transform hover:scale-105">
+                                    <Video className="w-4 h-4" />
+                                    <span>Join Zoom Meeting</span>
+                                  </button>
+                                </a>
+                              ) : (
+                                <div className="w-full px-4 py-2 bg-yellow-50 border border-yellow-200 rounded-md text-sm text-yellow-600 flex items-center justify-center gap-2">
+                                  <span>Zoom link coming soon</span>
+                                </div>
+                              )}
+                            </>
+                          )}
+                        </div>
                       </div>
                     </div>
 
-                    {/* Note Section for Desktop */}
-                    {session.note && (
-                      <div className="mt-4 max-w-[60%]">
-                        <p className="text-sm font-semibold text-gray-700 mb-1">
-                          Note:
-                        </p>
-                        <ul className="list-disc pl-5 text-sm text-gray-600">
-                          {formatNote(session.note).map((item, idx) => (
-                            <li key={idx} className="mb-1">
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
                   </div>
+
                 </div>
               ))
             )}
@@ -858,22 +1127,27 @@ const VideoCall = () => {
         )}
       </div>
 
-      {/* Modal for Rate Component */}
+      {/* Rating Modal */}
       {showRateComponent && selectedBooking && (
-        <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-4 md:p-6 rounded-lg shadow-lg w-64 md:w-96">
-            <button
-              onClick={closeModal}
-              className="absolute top-1 right-1 md:top-2 md:right-2 text-lg md:text-xl font-bold"
-            >
-              X
-            </button>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold">Rate Your Session</h2>
+              <button
+                className="text-gray-500 hover:text-gray-700"
+                onClick={closeModal}
+              >
+                ✕
+              </button>
+            </div>
             <Rate
-              booking={selectedBooking}
-              setShowRateComponent={setShowRateComponent}
+              sessionID={selectedBooking._id}
+              expertID={selectedBooking.consultingExpertID._id}
+              onClose={closeModal}
             />
           </div>
         </div>
+
       )}
     </div>
   );
