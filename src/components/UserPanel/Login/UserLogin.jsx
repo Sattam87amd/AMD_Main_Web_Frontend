@@ -11,6 +11,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Fullscreen } from "lucide-react";
 
 const interFont = Inter({
   subsets: ["latin"],
@@ -136,68 +137,29 @@ function UserLoginPage() {
 
   return (
     <div className={`min-h-screen flex ${interFont.variable}`}>
-      <div className="hidden md:flex w-1/2 flex-col relative">
-        <div className="h-[35%] bg-[#EDECE8] flex items-center justify-center relative">
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-            <Image
-              src="/Shourk_logo.png"
-              alt="Shourk Logo"
-              width={190}
-              height={190}
-            />
-          </div>
-
-          <div className="absolute top-full left-4 w-[355px] h-[78px] bg-black bg-opacity-50 backdrop-blur-[3px] rounded-xl flex items-center p-4 z-30 shadow-lg">
-            <IoIosSearch className="text-white text-[50px] mr-2" />
-            <div>
-              <h2 className="text-white font-light text-2xl">
-                Professional Experts
-              </h2>
-              <p className="text-white text-xs font-extralight">
-                Expert Guidance from the Best in the Industry
-              </p>
-            </div>
-          </div>
-        </div>
-
-        <div className="h-[65%] bg-[#F8F7F3] flex items-end justify-center relative">
-          <svg className="absolute top-0 left-0 w-full" viewBox="0 0 1440 320">
-            <path
-              fill="#EDECE8"
-              fillOpacity="1"
-              d="M1,160L120,133.3C240,107,480,53,720,53C960,53,1200,107,1320,133.3L1440,160V0H0Z"
-            ></path>
-          </svg>
+      {/* <div className="hidden md:flex w-1/2 flex-col relative"> */}
+        {/* <div className="h-[35%] bg-[#EDECE8] flex items-center justify-center relative"> */}
+        <div className=" relative hidden md:block">
           <Image
-            src="/ArabWomanLogin.svg"
+            src="/AwabWomen.png"
             alt="Arab Woman"
-            width={490}
-            height={600}
-            className="object-contain z-20"
+            height={0}
+            width={800}
+            className="object-cover"
           />
-
-          <div className="absolute bottom-14 right-8 w-[355px] h-[78px] bg-black bg-opacity-50 backdrop-blur-[3px] rounded-xl flex items-center p-4 z-30 shadow-lg">
-            <LuNotepadText className="text-white text-[50px] mr-2" />
-            <div>
-              <h2 className="text-white font-medium text-xl">
-                Book an appointment
-              </h2>
-              <p className="text-white text-lg font-extralight">
-                Call/text/video/inperson
-              </p>
-            </div>
-          </div>
         </div>
-      </div>
+
+          
+      {/* </div> */}
       <div className="w-full md:w-1/2 bg-white flex flex-col items-center justify-center relative">
-        <div className="absolute top-6 left-5 md:hidden">
+        {/* <div className="absolute top-6 left-5 md:hidden">
           <Image
-            src="/Shourk_mobile_logo.png"
+            src="/AwabWomen.png"
             alt="Mobile Logo"
             width={60}
             height={40}
           />
-        </div>
+        </div> */}
 
         <div className="w-full max-w-md p-8 -mt-20 md:-mt-0">
           <h1 className="text-2xl md:text-[35px] font-bold text-center">
