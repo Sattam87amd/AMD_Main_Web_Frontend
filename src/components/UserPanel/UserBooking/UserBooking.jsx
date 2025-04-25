@@ -134,15 +134,15 @@ const UserToExpertBooking = () => {
       <div className="flex flex-col md:flex-row gap-10">
         {/* Left Section */}
         <div className="w-full md:w-1/2 flex flex-col items-center text-center md:text-left">
-          <div className="w-32 h-38 md:w-[14rem] md:h-[16rem] rounded-lg overflow-hidden shadow-md">
+          <div className="relative aspect-[3/4] w-32 md:w-[14rem] rounded-lg overflow-hidden shadow-md">
             <Image
               src={consultingExpert?.photoFile || '/guyhawkins.png'}
               alt={`${consultingExpert?.firstName} ${consultingExpert?.lastName}`}
-              width={224}
-              height={224}
-              className="object-cover"
+              fill
+              className="object-cover object-top"
             />
           </div>
+
 
           <div className="mt-4 md:mt-6 bg-[#F8F7F3] px-4 md:p-6 rounded-lg shadow-md w-full">
             <h1 className="text-xl md:text-2xl font-bold">
