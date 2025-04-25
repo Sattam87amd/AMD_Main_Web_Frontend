@@ -10,26 +10,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const ExpertBooking = () => {
-  const [sessions] = useState([
-    {
-      day: "Thu",
-      date: "27 Feb",
-      timeSlots: [
-        { id: "thu-1", time: "08:00 AM-08:15 AM", selected: false },
-        { id: "thu-2", time: "08:20 AM-08:35 AM", selected: false },
-      ],
-    },
-    {
-      day: "Fri",
-      date: "28 Feb",
-      timeSlots: [
-        { id: "fri-1", time: "08:00 AM-08:15 AM", selected: false },
-        { id: "fri-2", time: "09:00 AM-09:15 AM", selected: false },
-        { id: "fri-3", time: "09:20 AM-09:35 AM", selected: false },
-      ],
-    },
-  ]);
-
   const [consultingExpert, setConsultingExpert] = useState(null);
   const [expertData, setExpertData] = useState({
     firstName: '',
@@ -92,15 +72,15 @@ const ExpertBooking = () => {
       toast.error("No session data found.");
       return;
     }
-  
+
     const noteWords = expertData.note.trim().split(/\s+/);
     if (noteWords.length < 25) {
       setNoteError("Note must contain at least 25 words.");
       return;
     }
-  
+
     setNoteError(""); // Clear any previous error if passed
-  
+
     const fullBookingData = {
       ...sessionData,
       firstName: expertData.firstName,
@@ -112,12 +92,12 @@ const ExpertBooking = () => {
       inviteFriend: expertData.inviteFriend,
       promoCode: expertData.promoCode
     };
-  
+
     try {
       setIsSubmitting(true); // Start processing state
       const token = localStorage.getItem("expertToken");
       if (!token) throw new Error("No authentication token found");
-  
+
       const response = await axios.post(
         "http://localhost:5070/api/session/experttoexpertsession",
         fullBookingData,
@@ -128,25 +108,25 @@ const ExpertBooking = () => {
           },
         }
       );
-  
+
       // Show success message with a delay before redirection
       toast.success("Session booked successfully! Redirecting to video call...", {
         position: "bottom-center",
         autoClose: 3000,
       });
-  
+
       // Redirect after a brief delay
       setTimeout(() => {
         router.push('/expertpanel/videocall');
-      }, 3000); 
-  
+      }, 3000);
+
       // Clean up localStorage
       localStorage.removeItem("sessionData", "bookingData", "expertData");
-  
+
     } catch (error) {
       // Improved error logging
       console.error("Booking error:", error.response?.data || error.message);
-      
+
       // Display the error response using toast
       toast.error(`Booking failed: ${error.response?.data?.message || error.message}`, {
         position: "bottom-center",
@@ -156,8 +136,18 @@ const ExpertBooking = () => {
       setIsSubmitting(false); // Reset the processing state
     }
   };
-  
-  
+
+  const groupByDate = (slots) => {
+    return slots.reduce((grouped, slot) => {
+      const date = slot.selectedDate;
+      if (!grouped[date]) {
+        grouped[date] = [];
+      }
+      grouped[date].push(slot);
+      return grouped;
+    }, {});
+  };
+
   if (!consultingExpert) return <div>Loading...</div>;
 
   return (
@@ -181,35 +171,34 @@ const ExpertBooking = () => {
             </h1>
             <p className="text-gray-500 text-sm md:text-base">{consultingExpert?.designation || "Expert"}</p>
 
-    <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
-  {[...Array(5)].map((_, i) => {
-    const rating = consultingExpert.averageRating || 0; // Use 0 as a fallback if consultingExpert.averageRating.rating is falsy (undefined, null, etc.)
-    
-    const isFilled = i < Math.floor(rating); // If the index is less than the rating
-    const isHalf = i === Math.floor(rating) && rating % 1 !== 0; // If the rating has a decimal and we are at the exact index
-    return (
-      <FaStar
-        key={i}
-        className={isFilled || isHalf ? "text-[#FFA629]" : "text-gray-300"} // Full or empty star color
-      />
-    );
-  })}
-</div>
+            <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
+              {[...Array(5)].map((_, i) => {
+                const rating = consultingExpert.averageRating || 0;
+                const isFilled = i < Math.floor(rating); 
+                const isHalf = i === Math.floor(rating) && rating % 1 !== 0; 
+                return (
+                  <FaStar
+                    key={i}
+                    className={isFilled || isHalf ? "text-[#FFA629]" : "text-gray-300"} 
+                  />
+                );
+              })}
+            </div>
 
             <div className="mt-4">
               <p className="font-medium mb-2 text-gray-700">Sessions -</p>
-              {sessions.map((session, idx) => (
+              {sessionData?.slots && Object.entries(groupByDate(sessionData.slots)).map(([date, slots], idx) => (
                 <div key={idx} className="mb-3">
                   <p className="text-sm font-medium text-gray-700">
-                    {session.day}, {session.date}
+                    {new Date(date).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}, {date}
                   </p>
                   <div className="flex flex-wrap gap-2 mt-1">
-                    {session.timeSlots.map((slot) => (
+                    {slots.map((slot) => (
                       <button
                         key={slot.id}
                         className="px-4 py-1 text-xs md:text-sm bg-gray-200 hover:bg-gray-300 rounded-md"
                       >
-                        {slot.time}
+                        {slot.selectedTime}
                       </button>
                     ))}
                   </div>
@@ -371,21 +360,20 @@ const ExpertBooking = () => {
         </div>
       </div>
 
-
       {/* Toastify container */}
       <ToastContainer
-  position="bottom-right" // Change this from bottom-center to top-right
-  autoClose={5000} // Adjust auto-close timing as needed
-  hideProgressBar={false}
-  newestOnTop={false}
-  closeOnClick
-  rtl={false}
-  pauseOnFocusLoss
-  draggable
-  pauseOnHover
-/>
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
-  );
+  );  
 };
 
 export default ExpertBooking;

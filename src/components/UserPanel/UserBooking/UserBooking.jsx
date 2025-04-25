@@ -1,42 +1,12 @@
 'use client';
 
-import { useState, useEffect } from "react";
-import Image from "next/image";
-import { StarIcon, UserPlusIcon } from "lucide-react";
-import { FaStar } from "react-icons/fa";
-import { useRouter } from "next/navigation";
-import axios from "axios";
+import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { FaStar } from 'react-icons/fa';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 const UserToExpertBooking = () => {
-  const [sessions] = useState([
-    {
-      day: "Thu",
-      date: "27 Feb",
-      timeSlots: [
-        { id: "thu-1", time: "08:00 AM-08:15 AM", selected: false },
-        { id: "thu-2", time: "08:20 AM-08:35 AM", selected: false },
-      ],
-    },
-    {
-      day: "Fri",
-      date: "28 Feb",
-      timeSlots: [
-        { id: "fri-1", time: "08:00 AM-08:15 AM", selected: false },
-        { id: "fri-2", time: "09:00 AM-09:15 AM", selected: false },
-        { id: "fri-3", time: "09:20 AM-09:35 AM", selected: false },
-      ],
-    },
-  ]);
-
-  // const [expertData, setExpertData] = useState({
-  //   firstName: '',
-  //   lastName: '',
-  //   mobileNumber: '',
-  //   email: '',
-  //   note: '',
-  //   promoCode: '',
-  // });
-
   const [sessionData, setSessionData] = useState(null);
   const [consultingExpert, setConsultingExpert] = useState(null);
   const [bookingData, setBookingData] = useState({
@@ -46,7 +16,7 @@ const UserToExpertBooking = () => {
     email: '',
     note: '',
     promoCode: '',
-  })
+  });
   const [noteError, setNoteError] = useState(""); // Error message for note
   const [noteWordCount, setNoteWordCount] = useState(0); // Word count
   const [token, setToken] = useState(null); // Ensure localStorage access only on client
@@ -54,43 +24,38 @@ const UserToExpertBooking = () => {
 
   // Wait until component is mounted
   useEffect(() => {
-    const expertData = localStorage.getItem("expertData");
+    const expertData = localStorage.getItem('expertData');
     if (expertData) {
       setConsultingExpert(JSON.parse(expertData));
     }
 
-    const bookingData = localStorage.getItem("bookingData");
-    if (bookingData) {
-      setBookingData(JSON.parse(bookingData));
-    }
-
-    const storedSessionData = localStorage.getItem("sessionData");
+    const storedSessionData = localStorage.getItem('sessionData');
     if (storedSessionData) {
       setSessionData(JSON.parse(storedSessionData));
     }
 
-    const userToken = localStorage.getItem("userToken");
+    const userToken = localStorage.getItem('userToken');
     if (!userToken) {
-      console.warn("⚠️ No user token found in localStorage.");
+      console.warn('⚠️ No user token found in localStorage.');
     }
     setToken(userToken);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("bookingData", JSON.stringify(bookingData));
+    localStorage.setItem('bookingData', JSON.stringify(bookingData));
   }, [bookingData]);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
     setBookingData((prev) => ({
       ...prev,
-      [name]: type === "checkbox" ? checked : value,
+      [name]: type === 'checkbox' ? checked : value,
     }));
 
-    if (name === "note") {
+    if (name === 'note') {
       const wordCount = value.trim().split(/\s+/).filter(Boolean).length;
       setNoteWordCount(wordCount);
-      setNoteError(""); // Clear error when user starts typing
+      setNoteError(''); // Clear error when user starts typing
     }
   };
 
@@ -101,8 +66,8 @@ const UserToExpertBooking = () => {
     }
 
     if (noteWordCount < 25) {
-      setNoteError("Note must contain at least 25 words.");
-      alert("✍️ Your note must be at least 25 words.");
+      setNoteError('Note must contain at least 25 words.');
+      alert('✍️ Your note must be at least 25 words.');
       return;
     }
 
@@ -116,40 +81,51 @@ const UserToExpertBooking = () => {
       email: bookingData?.email,
       phone: bookingData?.mobileNumber,
       note: bookingData?.note,
-
     };
 
-    // console.log("Booking Data:", fullBookingData);
-
-    if (!consultingExpert?._id || !sessionData?.areaOfExpertise || !sessionData?.slots) {
+    if (
+      !consultingExpert?._id ||
+      !sessionData?.areaOfExpertise ||
+      !sessionData.slots
+    ) {
       alert('Please fill in all required fields before submitting the booking.');
       return;
     }
 
     try {
-      if (!token) throw new Error("No authentication token found");
+      if (!token) throw new Error('No authentication token found');
 
       const response = await axios.post(
-        "https://amd-api.code4bharat.com/api/session/usertoexpertsession",
+        'https://amd-api.code4bharat.com/api/session/usertoexpertsession',
         fullBookingData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         }
       );
 
-      // console.log("Booking successful:", response.data);
-      alert("Session booked successfully!");
-      localStorage.removeItem("sessionData", "bookingData", "consultingExpertData")
+      alert('Session booked successfully!');
+      localStorage.removeItem('sessionData', 'bookingData', 'consultingExpertData');
       router.push('/userpanel/videocall');
     } catch (error) {
-      console.error("Booking error:", error.response?.data || error.message);
+      console.error('Booking error:', error.response?.data || error.message);
       alert(`Booking failed: ${error.response?.data?.message || error.message}`);
     }
   };
 
+  // Group time slots by date
+  const groupByDate = (slots) => {
+    return slots.reduce((grouped, slot) => {
+      const date = slot.selectedDate;
+      if (!grouped[date]) {
+        grouped[date] = [];
+      }
+      grouped[date].push(slot);
+      return grouped;
+    }, {});
+  };
 
   if (!consultingExpert) return <div>Loading...</div>;
 
@@ -160,7 +136,7 @@ const UserToExpertBooking = () => {
         <div className="w-full md:w-1/2 flex flex-col items-center text-center md:text-left">
           <div className="relative aspect-[3/4] w-32 md:w-[14rem] rounded-lg overflow-hidden shadow-md">
             <Image
-              src={consultingExpert?.photoFile || "/guyhawkins.png"}
+              src={consultingExpert?.photoFile || '/guyhawkins.png'}
               alt={`${consultingExpert?.firstName} ${consultingExpert?.lastName}`}
               fill
               className="object-cover object-top"
@@ -172,42 +148,39 @@ const UserToExpertBooking = () => {
             <h1 className="text-xl md:text-2xl font-bold">
               {consultingExpert?.firstName} {consultingExpert?.lastName}
             </h1>
-            <p className="text-gray-500 text-sm md:text-base">{consultingExpert?.designation || "Expert"}</p>
+            <p className="text-gray-500 text-sm md:text-base">{consultingExpert?.designation || 'Expert'}</p>
 
             <div>
               <p className="text-xl font-semibold">SAR {consultingExpert.price} • Session</p>
               <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
                 {[...Array(5)].map((_, i) => {
                   const rating = consultingExpert.averageRating || 0; // Use 0 as a fallback if expert.rating is falsy (undefined, null, etc.)
-
                   const isFilled = i < Math.floor(rating); // If the index is less than the rating
                   const isHalf = i === Math.floor(rating) && rating % 1 !== 0; // If the rating has a decimal and we are at the exact index
                   return (
                     <FaStar
                       key={i}
-                      className={isFilled || isHalf ? "text-[#FFA629]" : "text-gray-300"} // Full or empty star color
+                      className={isFilled || isHalf ? 'text-[#FFA629]' : 'text-gray-300'} // Full or empty star color
                     />
                   );
                 })}
               </div>
-
             </div>
-
 
             <div className="mt-4">
               <p className="font-medium mb-2 text-gray-700">Sessions -</p>
-              {sessions.map((session, idx) => (
+              {sessionData?.slots && Object.entries(groupByDate(sessionData?.slots)).map(([date, slots], idx) => (
                 <div key={idx} className="mb-3">
                   <p className="text-sm font-medium text-gray-700">
-                    {session.day}, {session.date}
+                    {new Date(date).toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}, {date}
                   </p>
                   <div className="flex flex-wrap gap-2 mt-1">
-                    {session.timeSlots.map((slot) => (
+                    {slots.map((slot) => (
                       <button
-                        key={slot.id}
+                        key={slot.selectedTime}
                         className="px-4 py-1 text-xs md:text-sm bg-gray-200 hover:bg-gray-300 rounded-md"
                       >
-                        {slot.time}
+                        {slot.selectedTime}
                       </button>
                     ))}
                   </div>
@@ -276,9 +249,8 @@ const UserToExpertBooking = () => {
                   className="w-full border rounded px-3 py-2 text-sm"
                 />
               </div>
-
             </div>
-            {/* Note Input with Word Count and Validation */}
+
             <div className="relative">
               <label className="block text-sm mb-1">Note</label>
               <textarea
@@ -294,24 +266,6 @@ const UserToExpertBooking = () => {
               {noteError && (
                 <p className="text-red-500 text-xs mt-1">{noteError}</p>
               )}
-            </div>
-          </div>
-
-          <div className="flex justify-center">
-            <div className="mb-6 md:w-1/2 rounded-lg">
-              <div className="flex">
-                <input
-                  type="text"
-                  name="promoCode"
-                  value={bookingData.promoCode}
-                  onChange={handleInputChange}
-                  className="w-full border rounded-l px-3 py-2 text-sm"
-                  placeholder="Enter promo code"
-                />
-                <button className="bg-black text-white px-4 py-2 text-sm rounded-r">
-                  Apply
-                </button>
-              </div>
             </div>
           </div>
 
