@@ -109,8 +109,7 @@ const UserToExpertBooking = () => {
     const fullBookingData = {
       expertId: consultingExpert?._id,
       areaOfExpertise: sessionData?.areaOfExpertise || "Home",
-      sessionDate: sessionData?.sessionDate || "",
-      sessionTime: sessionData?.sessionTime || "",
+      slots: sessionData?.slots || [],
       duration: sessionData?.duration || "",
       firstName: bookingData?.firstName,
       lastName: bookingData?.lastName,
@@ -122,12 +121,12 @@ const UserToExpertBooking = () => {
 
     // console.log("Booking Data:", fullBookingData);
 
-    if (!consultingExpert?._id || !sessionData?.areaOfExpertise || !sessionData?.sessionDate || !sessionData?.sessionTime) {
+    if (!consultingExpert?._id || !sessionData?.areaOfExpertise || !sessionData?.slots) {
       alert('Please fill in all required fields before submitting the booking.');
       return;
     }
 
-    try {
+    try { 
       if (!token) throw new Error("No authentication token found");
 
       const response = await axios.post(
