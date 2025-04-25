@@ -39,7 +39,7 @@ const UserToExpertBooking = () => {
 
   const [sessionData, setSessionData] = useState(null);
   const [consultingExpert, setConsultingExpert] = useState(null);
-  const [bookingData, setBookingData]=useState({
+  const [bookingData, setBookingData] = useState({
     firstName: '',
     lastName: '',
     mobileNumber: '',
@@ -115,7 +115,7 @@ const UserToExpertBooking = () => {
       lastName: bookingData?.lastName,
       email: bookingData?.email,
       phone: bookingData?.mobileNumber,
-      note:bookingData?.note,
+      note: bookingData?.note,
 
     };
 
@@ -126,7 +126,7 @@ const UserToExpertBooking = () => {
       return;
     }
 
-    try { 
+    try {
       if (!token) throw new Error("No authentication token found");
 
       const response = await axios.post(
@@ -158,15 +158,15 @@ const UserToExpertBooking = () => {
       <div className="flex flex-col md:flex-row gap-10">
         {/* Left Section */}
         <div className="w-full md:w-1/2 flex flex-col items-center text-center md:text-left">
-          <div className="w-32 h-38 md:w-[14rem] md:h-[16rem] rounded-lg overflow-hidden shadow-md">
+          <div className="relative aspect-[3/4] w-32 md:w-[14rem] rounded-lg overflow-hidden shadow-md">
             <Image
               src={consultingExpert?.photoFile || "/guyhawkins.png"}
               alt={`${consultingExpert?.firstName} ${consultingExpert?.lastName}`}
-              width={224}
-              height={224}
-              className="object-cover"
+              fill
+              className="object-cover object-top"
             />
           </div>
+
 
           <div className="mt-4 md:mt-6 bg-[#F8F7F3] px-4 md:p-6 rounded-lg shadow-md w-full">
             <h1 className="text-xl md:text-2xl font-bold">
@@ -174,25 +174,25 @@ const UserToExpertBooking = () => {
             </h1>
             <p className="text-gray-500 text-sm md:text-base">{consultingExpert?.designation || "Expert"}</p>
 
-           <div>
-                                     <p className="text-xl font-semibold">SAR {consultingExpert.price} • Session</p>
-                                     <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
-                                       {[...Array(5)].map((_, i) => {
-                                         const rating = consultingExpert.averageRating || 0; // Use 0 as a fallback if expert.rating is falsy (undefined, null, etc.)
-                                         
-                                         const isFilled = i < Math.floor(rating); // If the index is less than the rating
-                                         const isHalf = i === Math.floor(rating) && rating % 1 !== 0; // If the rating has a decimal and we are at the exact index
-                                         return (
-                                           <FaStar
-                                             key={i}
-                                             className={isFilled || isHalf ? "text-[#FFA629]" : "text-gray-300"} // Full or empty star color
-                                           />
-                                         );
-                                       })}
-                                     </div>
-           
-                                   </div>
-           
+            <div>
+              <p className="text-xl font-semibold">SAR {consultingExpert.price} • Session</p>
+              <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
+                {[...Array(5)].map((_, i) => {
+                  const rating = consultingExpert.averageRating || 0; // Use 0 as a fallback if expert.rating is falsy (undefined, null, etc.)
+
+                  const isFilled = i < Math.floor(rating); // If the index is less than the rating
+                  const isHalf = i === Math.floor(rating) && rating % 1 !== 0; // If the rating has a decimal and we are at the exact index
+                  return (
+                    <FaStar
+                      key={i}
+                      className={isFilled || isHalf ? "text-[#FFA629]" : "text-gray-300"} // Full or empty star color
+                    />
+                  );
+                })}
+              </div>
+
+            </div>
+
 
             <div className="mt-4">
               <p className="font-medium mb-2 text-gray-700">Sessions -</p>
@@ -278,23 +278,23 @@ const UserToExpertBooking = () => {
               </div>
 
             </div>
-              {/* Note Input with Word Count and Validation */}
-              <div className="relative">
-                <label className="block text-sm mb-1">Note</label>
-                <textarea
-                  name="note"
-                  placeholder="Write something about yourself in minimum 25 words..."
-                  value={bookingData.note}
-                  onChange={handleInputChange}
-                  className="w-full h-[120px] border flex justify-center items-center rounded px-3 py-2 text-sm"
-                />
-                <div className="absolute bottom-2 right-3 text-xs text-gray-500">
-                  {noteWordCount} word{noteWordCount !== 1 && 's'}
-                </div>
-                {noteError && (
-                  <p className="text-red-500 text-xs mt-1">{noteError}</p>
-                )}
+            {/* Note Input with Word Count and Validation */}
+            <div className="relative">
+              <label className="block text-sm mb-1">Note</label>
+              <textarea
+                name="note"
+                placeholder="Write something about yourself in minimum 25 words..."
+                value={bookingData.note}
+                onChange={handleInputChange}
+                className="w-full h-[120px] border flex justify-center items-center rounded px-3 py-2 text-sm"
+              />
+              <div className="absolute bottom-2 right-3 text-xs text-gray-500">
+                {noteWordCount} word{noteWordCount !== 1 && 's'}
               </div>
+              {noteError && (
+                <p className="text-red-500 text-xs mt-1">{noteError}</p>
+              )}
+            </div>
           </div>
 
           <div className="flex justify-center">
