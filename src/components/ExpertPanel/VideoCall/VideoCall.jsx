@@ -192,7 +192,7 @@ const VideoCall = () => {
       console.log(selectedDate, selectedTime);
 
       const response = await axios.put(
-        `http://localhost:5070/api/session/accept`,
+        `https://amd-api.code4bharat.com/api/session/accept`,
         { id: sessionId, selectedDate, selectedTime },
         {
           headers: {

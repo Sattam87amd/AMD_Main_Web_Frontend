@@ -173,7 +173,7 @@ function RegisterForm() {
       try {
         // API call to register the expert
         const response = await axios.post(
-          'http://localhost:5070/api/expertauth/register', 
+          'https://amd-api.code4bharat.com/api/expertauth/register', 
           formData,
           {
             headers: {

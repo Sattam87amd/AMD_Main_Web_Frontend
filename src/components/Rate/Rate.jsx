@@ -48,7 +48,7 @@ const Rate = ({ booking, setShowRateComponent }) => {
 
     try {
       await axios.post(
-        "http://localhost:5070/api/ratings/",
+        "https://amd-api.code4bharat.com/api/ratings/",
         {
           expertId,
           raterId,
@@ -64,7 +64,7 @@ const Rate = ({ booking, setShowRateComponent }) => {
       );
 
      await axios.put(
-  `http://localhost:5070/api/ratings/update-status/${booking._id}`,
+  `https://amd-api.code4bharat.com/api/ratings/update-status/${booking._id}`,
   {
     status: 'Rating Submitted',
     sessionType: isExpertToExpert ? 'expert-to-expert' : 'user-to-expert',
