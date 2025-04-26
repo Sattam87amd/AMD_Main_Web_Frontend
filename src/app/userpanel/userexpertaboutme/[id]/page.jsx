@@ -188,7 +188,7 @@ const ExpertDetail = () => {
                     </p>
                     <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
                       {[...Array(5)].map((_, i) => {
-                        const rating = expert.rating || 0; // Use 0 as a fallback if expert.rating is falsy (undefined, null, etc.)
+                        const rating = expert.averageRating || 0; // Use 0 as a fallback if expert.rating is falsy (undefined, null, etc.)
 
                         const isFilled = i < Math.floor(rating); // If the index is less than the rating
                         const isHalf =
@@ -358,7 +358,7 @@ const ExpertDetail = () => {
                           </p>
                           <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
                             {[...Array(5)].map((_, i) => {
-                              const rating = expert.rating || 0;
+                              const rating = expert.averageRating || 0;
                               const isFilled = i < Math.floor(rating);
                               const isHalf = i === Math.floor(rating) && rating % 1 !== 0;
                               return (
@@ -416,7 +416,7 @@ const ExpertDetail = () => {
                         <div className="flex items-center justify-start mt-2">
                           <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
                             {[...Array(5)].map((_, i) => {
-                              const rating = expert.rating || 0; // Use 0 as a fallback if expert.rating is falsy (undefined, null, etc.)
+                              const rating = expert.averageRating || 0; // Use 0 as a fallback if expert.rating is falsy (undefined, null, etc.)
 
                               const isFilled = i < Math.floor(rating); // If the index is less than the rating
                               const isHalf =

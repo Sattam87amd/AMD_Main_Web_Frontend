@@ -38,23 +38,30 @@ const Rate = ({ booking, setShowRateComponent }) => {
 
     const sessionType = isExpertToExpert ? "expert-to-expert" : "user-to-expert";
 
+    
+    const raterType = isExpertToExpert ? "Expert" : "User"; // 🎯 ADD THIS!
+
     console.log("Submitting Rating:", {
       expertId,
       raterId,
       sessionType,
       rating,
       comment,
+      raterType,
     });
+
+   
 
     try {
       await axios.post(
-        "https://amd-api.code4bharat.com/api/ratings/",
+        "https://amd.code4bharat.com/api/ratings/",
         {
           expertId,
           raterId,
           sessionType,
           rating,
           comment,
+          raterType,
         },
         {
           headers: {
@@ -64,7 +71,7 @@ const Rate = ({ booking, setShowRateComponent }) => {
       );
 
      await axios.put(
-  `https://amd-api.code4bharat.com/api/ratings/update-status/${booking._id}`,
+  `https://amd.code4bharat.com/api/ratings/update-status/${booking._id}`,
   {
     status: 'Rating Submitted',
     sessionType: isExpertToExpert ? 'expert-to-expert' : 'user-to-expert',
@@ -84,6 +91,7 @@ const Rate = ({ booking, setShowRateComponent }) => {
       console.error("Error submitting rating:", err);
       if (err.response) {
         toast.error(`Error: ${err.response.data.message || "Failed to submit rating"}`);
+        console.log(err.response.data)
       } else {
         toast.error(`Error: ${err.message}`);
       }
