@@ -44,7 +44,7 @@ const EnableCharity = () => {
       }
 
       const response = await axios.get(
-        `http://localhost:5070/api/expertauth/${expertId}`,
+        `https://amd-api.code4bharat.com/api/expertauth/${expertId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -81,7 +81,7 @@ const EnableCharity = () => {
 
     try {
       const response = await axios.put(
-        "http://localhost:5070/api/expertauth/update-charity",
+        "https://amd-api.code4bharat.com/api/expertauth/update-charity",
         {
           charityEnabled: isEnabled,
           charityPercentage: parseInt(charityData.percentage, 10),
