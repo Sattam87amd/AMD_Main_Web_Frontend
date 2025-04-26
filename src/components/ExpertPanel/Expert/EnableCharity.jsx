@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const EnableCharity = () => {
   const [charityData, setCharityData] = useState({
@@ -10,29 +9,26 @@ const EnableCharity = () => {
     percentage: "0%",
   });
 
-  const [isEnabled, setIsEnabled] = useState(false); // Toggle state
-  const [expertId, setExpertId] = useState(null); // To store expert's ID
+  const [isEnabled, setIsEnabled] = useState(false);
+  const [expertId, setExpertId] = useState(null);
   const [loadingSessions, setLoadingSessions] = useState(false);
   const [errorSessions, setErrorSessions] = useState("");
 
-  // Fetch expertId from localStorage and decode JWT token to get expertId
   useEffect(() => {
-    const expertToken = localStorage.getItem("expertToken");  // Get the token from localStorage
+    const expertToken = localStorage.getItem("expertToken");
 
     if (expertToken) {
       try {
-        // Decode JWT token to get the expert's _id (MongoDB ObjectId)
-        const decodedToken = JSON.parse(atob(expertToken.split(".")[1])); // Decode JWT token
+        const decodedToken = JSON.parse(atob(expertToken.split(".")[1]));
         const expertId = decodedToken._id;
-        setExpertId(expertId); // Set the expertId to state
-
-        // Fetch charity settings once expertId is set
+        setExpertId(expertId);
         fetchCharitySettings(expertId);
       } catch (error) {
         console.error("Error parsing expertToken:", error);
+        toast.error("Invalid expert token. Please login again!");
       }
     } else {
-      toast.error("Expert token not found in localStorage");
+      toast.error("Expert token not found. Please login again!");
     }
   }, []);
 
@@ -40,65 +36,61 @@ const EnableCharity = () => {
     try {
       setLoadingSessions(true);
       const token = localStorage.getItem("expertToken");
-  
+
       if (!token) {
         setErrorSessions("Token is required");
+        toast.error("Token missing. Please login again!");
         return;
       }
-  
-      // Fetch expert details by ID, using the existing `getExpertById` route
+
       const response = await axios.get(
-        `https://amd-api.code4bharat.com/api/expertauth/${expertId}`, // Backend API endpoint with expertId
+        `http://localhost:5070/api/expertauth/${expertId}`,
         {
           headers: {
-            Authorization: `Bearer ${token}`, // Send token in the header for authorization
+            Authorization: `Bearer ${token}`,
           },
         }
       );
-  
+
       if (response.data.success) {
-        // Extract charity-related details from the response data
         const { charityEnabled, charityPercentage, charityName } = response.data.data;
-  
-        // Update your state based on the fetched data
         setIsEnabled(charityEnabled);
         setCharityData({
-          name: charityName || "Charity", // Fallback to 'Charity' if charityName is undefined
-          percentage: `${charityPercentage}%` || "0%", // Fallback to "0%" if charityPercentage is undefined
+          name: charityName || "Charity",
+          percentage: `${charityPercentage}%` || "0%",
         });
+        // toast.success("Charity settings loaded!");
       } else {
         setErrorSessions("Failed to fetch charity settings");
+        toast.error("Failed to fetch charity settings.");
       }
     } catch (error) {
       console.error("Error fetching charity settings:", error);
       setErrorSessions("Error fetching charity settings");
+      toast.error("Error fetching charity settings.");
     } finally {
       setLoadingSessions(false);
     }
   };
 
-  // Function to handle save button click
   const handleSave = async () => {
-    console.log("Charity Data Saved:", charityData);
-    console.log("Charity Enabled:", isEnabled);
-
     if (!expertId) {
-      console.error("Expert ID not found.");
+      toast.error("Expert ID not found.");
       return;
     }
 
     try {
       const response = await axios.put(
-        "https://amd-api.code4bharat.com/api/expertauth/update-charity", // Correct backend endpoint
+        "http://localhost:5070/api/expertauth/update-charity",
         {
-          charityEnabled: isEnabled,  // This will be false if the toggle is off
+          charityEnabled: isEnabled,
           charityPercentage: parseInt(charityData.percentage, 10),
           charityName: charityData.name,
         },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('expertToken')}`,
-            expertid: expertId, // Send expertId to backend
+            expertid: expertId,
             "Content-Type": "application/json",
           },
         }
@@ -106,6 +98,8 @@ const EnableCharity = () => {
 
       if (response.data.success) {
         toast.success("Charity settings updated successfully!");
+      } else {
+        toast.error("Failed to update charity settings.");
       }
     } catch (error) {
       console.error("Error updating charity settings:", error);
@@ -115,8 +109,20 @@ const EnableCharity = () => {
 
   return (
     <div className="bg-white rounded-2xl p-1 space-y-6">
+      {/* Toast Container */}
+      <ToastContainer
+  position="top-right"         // Move it to the right side
+  autoClose={3000}              // Auto close in 3 seconds
+  hideProgressBar={false}
+  newestOnTop={true}
+  closeOnClick
+  pauseOnHover
+  draggable
+  theme="light"                 // <-- Light theme gives white background
+/>
+
       {loadingSessions && <div>Loading...</div>}
-      {errorSessions && <div>{errorSessions}</div>}
+      {errorSessions && <div className="text-red-600">{errorSessions}</div>}
 
       {/* Header with Toggle */}
       <div className="flex items-center justify-between">
@@ -130,7 +136,7 @@ const EnableCharity = () => {
             type="checkbox"
             className="sr-only peer"
             checked={isEnabled}
-            onChange={() => setIsEnabled(!isEnabled)} // Update state based on toggle
+            onChange={() => setIsEnabled(!isEnabled)}
           />
           <div
             className={`relative w-11 h-6 rounded-full transition ${
@@ -146,7 +152,7 @@ const EnableCharity = () => {
         </label>
       </div>
 
-      {/* Charity Form - Disabled when toggle is off */}
+      {/* Charity Form */}
       <div className={`mt-4 ${!isEnabled ? "opacity-50" : ""}`}>
         <div>
           <label className="block text-black text-sm font-semibold mb-3">
@@ -158,7 +164,7 @@ const EnableCharity = () => {
             onChange={(e) =>
               setCharityData({ ...charityData, name: e.target.value })
             }
-            disabled={!isEnabled} // Disable input when toggle is off
+            disabled={!isEnabled}
             className="bg-white border border-gray-300 text-gray-600 text-sm rounded-xl focus:ring-black focus:border-black block w-full p-2.5 py-4"
             placeholder="Charity"
           />
@@ -174,22 +180,20 @@ const EnableCharity = () => {
             onChange={(e) =>
               setCharityData({ ...charityData, percentage: e.target.value })
             }
-            disabled={!isEnabled} // Disable input when toggle is off
+            disabled={!isEnabled}
             className="bg-white border border-gray-300 text-gray-900 text-sm rounded-xl focus:ring-black focus:border-black block w-full p-2.5 py-4"
             placeholder="0%"
           />
         </div>
 
-        {/* Save Button - Always enabled now */}
+        {/* Save Button */}
         <div className="flex justify-center items-center mt-8 pt-20">
           <button
-            onClick={handleSave} // Always enabled, will send data based on `isEnabled`
+            onClick={handleSave}
             className={`w-44 text-sm font-semibold py-2.5 rounded-2xl bg-black text-white`}
           >
             Save
           </button>
-          <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
-
         </div>
       </div>
     </div>
