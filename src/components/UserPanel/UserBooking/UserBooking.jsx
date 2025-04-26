@@ -112,11 +112,13 @@ const UserToExpertBooking = () => {
       localStorage.removeItem('bookingData');
       localStorage.removeItem('consultingExpertData');
 
-      router.push('/userpanel/videocall');
+      
     } catch (error) {
       console.error('Booking error:', error.response?.data || error.message);
       toast.error(`Booking failed: ${error.response?.data?.message || error.message}`);
     }
+
+    router.push('/userpanel/videocall');
   };
 
   // Group time slots by date

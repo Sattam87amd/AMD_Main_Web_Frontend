@@ -38,12 +38,16 @@ const Rate = ({ booking, setShowRateComponent }) => {
 
     const sessionType = isExpertToExpert ? "expert-to-expert" : "user-to-expert";
 
+    
+    const raterType = isExpertToExpert ? "Expert" : "User"; // 🎯 ADD THIS!
+
     console.log("Submitting Rating:", {
       expertId,
       raterId,
       sessionType,
       rating,
       comment,
+      raterType,
     });
 
     try {
@@ -55,6 +59,7 @@ const Rate = ({ booking, setShowRateComponent }) => {
           sessionType,
           rating,
           comment,
+          raterType,
         },
         {
           headers: {
