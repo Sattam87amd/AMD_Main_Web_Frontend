@@ -121,7 +121,10 @@ const ExpertBooking = () => {
       }, 3000);
 
       // Clean up localStorage
-      localStorage.removeItem("sessionData", "bookingData", "expertData");
+      localStorage.removeItem('sessionData');
+      localStorage.removeItem('bookingData');
+      localStorage.removeItem('expertData');
+      
 
     } catch (error) {
       // Improved error logging

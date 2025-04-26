@@ -931,10 +931,9 @@ const VideoCall = () => {
                             </div>
                             <div>
                               <p className="text-sm font-medium text-gray-700 border-2 rounded-[5px] mt-4 justify-between p-2 flex">
-                                <FaBook className="mr-2 text-blue-500 text-lg" />
                                 <div className="flex flex-col">
                                   <span className="text-gray-500 w-16">Note:</span>
-                                  <ul className="w-45 list-disc pl-5">
+                                  <ul className="w-full list-disc pl-5">
                                     {session?.note &&
                                       session?.note
                                         .split(".")  // Split the note by periods
@@ -951,6 +950,7 @@ const VideoCall = () => {
                                         })}
                                   </ul>
                                 </div>
+                                
                               </p>
 
 
