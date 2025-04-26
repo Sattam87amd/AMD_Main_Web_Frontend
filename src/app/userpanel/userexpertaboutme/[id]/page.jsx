@@ -446,49 +446,7 @@ const ExpertDetail = () => {
                       </div>
                     </div>
 
-                    {/* 1:4 Consultation Card */}
-                    <div
-                      className={`bg-[#F8F7F3] p-6 rounded-xl cursor-pointer ${
-                        selectedConsultation === "1:4"
-                          ? "border-2 border-black"
-                          : ""
-                      }`}
-                      onClick={() => handleConsultationChange("1:4")}
-                    >
-                      <div className="bg-black text-white p-2 rounded-t-xl w-max">
-                        <h3 className="text-2xl font-semibold">
-                          1:4 Video Call
-                        </h3>
-                      </div>
-                      <div className="text-2xl py-4">
-                        <h2 className="font-semibold">Group Session (1:4)</h2>
-                      </div>
-                      <p className="text-2xl font-semibold">
-                        Join a small group discussion with expert guidance
-                      </p>
-                      <div className="mt-4">
-                        <p className="text-xl font-semibold">
-                          Starting at SAR {expert.price}
-                        </p>
-                        <div className="flex items-center justify-start mt-2">
-                          <div className="flex items-center">
-                            {[...Array(5)].map((_, i) => (
-                              <FaStar key={i} className="text-[#FFA629]" />
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center justify-center mt-4 gap-8">
-                        <Gift className="h-8 w-8" />
-                        <button
-                          className="bg-[#0D70E5] text-white py-3 px-24 rounded-md hover:bg-[#0A58C2]"
-                          onClick={handleSeeTimeClick}
-                        >
-                          See Time
-                        </button>
-                      </div>
                     </div>
-                  </div>
                 )}
               </div>
             </div>

@@ -192,7 +192,7 @@ const VideoCall = () => {
       console.log(selectedDate, selectedTime);
 
       const response = await axios.put(
-        `http://localhost:5070/api/session/accept`,
+        `https://amd-api.code4bharat.com/api/session/accept`,
         { id: sessionId, selectedDate, selectedTime },
         {
           headers: {
@@ -316,7 +316,7 @@ const VideoCall = () => {
       <div className="flex justify-center space-x-4 mb-6 md:mb-10 bg-white rounded-lg p-2 shadow-md">
         <button
           className={`px-5 py-2 text-sm md:text-base font-medium rounded-md transition-all duration-300 ${activeTab === "bookings"
-            ? "bg-blue-500 text-white shadow-md transform scale-105"
+            ? "bg-black text-white shadow-md transform scale-105"
             : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           onClick={() => setActiveTab("bookings")}
@@ -325,7 +325,7 @@ const VideoCall = () => {
         </button>
         <button
           className={`px-5 py-2 text-sm md:text-base font-medium rounded-md transition-all duration-300 ${activeTab === "sessions"
-            ? "bg-blue-500 text-white shadow-md transform scale-105"
+            ? "bg-black text-white shadow-md transform scale-105"
             : "bg-gray-100 text-gray-700 hover:bg-gray-200"
             }`}
           onClick={() => setActiveTab("sessions")}

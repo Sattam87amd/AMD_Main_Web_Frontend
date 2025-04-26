@@ -7,12 +7,15 @@ import { FaUser, FaUserTie } from "react-icons/fa";
 import { MessagesSquare, Video } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Rate from "@/components/Rate/Rate.jsx";
 
 const UserVideoCall = () => {
   const [activeTab, setActiveTab] = useState("bookings");
   const [myBookings, setMyBookings] = useState([]);
   const [loadingBookings, setLoadingBookings] = useState(true);
   const [errorBookings, setErrorBookings] = useState(null);
+  const [showRateComponent, setShowRateComponent]= useState(false)
+  const[selectedBooking, setSelectedBooking] = useState("")
 
   useEffect(() => {
     const fetchBookingsAndSessions = async () => {
@@ -441,6 +444,26 @@ const UserVideoCall = () => {
       )}
     </div>
   )}
+  {showRateComponent && selectedBooking && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+            <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-bold">Rate Your Session</h2>
+                <button
+                  className="text-gray-500 hover:text-gray-700"
+                  onClick={closeModal}
+                >
+                  ✕
+                </button>
+              </div>
+              <Rate
+                booking={selectedBooking}
+                setShowRateComponent={setShowRateComponent}
+              />
+            </div>
+          </div>
+  
+        )}
 </div>
 </div>)}
 
