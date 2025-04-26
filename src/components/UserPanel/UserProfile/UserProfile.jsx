@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { StarIcon, ArrowLeft, ShoppingBag, UserPlusIcon } from "lucide-react";
+import { toast } from "react-toastify";
 // import { useRouter } from 'next/navigation'
 
 const UserProfile = () => {
@@ -66,7 +67,7 @@ const UserProfile = () => {
   };
 
   const handleBuy = () => {
-    alert(`You selected ${selectedMethod} for payment.`);
+    toast.error(`You selected ${selectedMethod} for payment.`);
   };
   const router = useRouter()
   return (

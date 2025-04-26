@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "react-toastify";
 
 const UserDiscountCode = () => {
   const [code, setCode] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert(`Code submitted: ${code}`);
+    toast.success(`Code submitted: ${code}`);
     setCode(""); // Clear input after submission
   };
 

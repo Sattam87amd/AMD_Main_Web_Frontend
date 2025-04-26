@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { FiShare2 } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 const ExpertProfile = ({ activeTab }) => {
   const [expertData, setExpertData] = useState(null);
@@ -22,7 +23,7 @@ const ExpertProfile = ({ activeTab }) => {
         console.error("Error parsing expertToken:", error);
       }
     } else {
-      alert("Expert token not found in localStorage");
+      toast.error("Expert token not found in localStorage");
     }
   }, []); // Runs once when the component mounts
 

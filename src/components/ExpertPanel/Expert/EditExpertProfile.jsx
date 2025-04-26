@@ -16,6 +16,7 @@ import PreferredAvailability from "./PreferedAvailiblity";
 import GroupSession from "./GroupSession";
 import AvailableSessionLength from "./AvailableSessionLength";
 import VideoSessionPrices from "./VideoSessionPrices";
+import { toast } from "react-toastify";
 
 const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
   // State for mobile view
@@ -235,7 +236,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
       setTimeout(() => setShowSavedProfile(false), 2000);
     } catch (error) {
       console.error("Error saving profile:", error);
-      alert("Failed to save profile changes. Please try again.");
+      toast.error("Failed to save profile changes. Please try again.");
     }
   };
 
@@ -409,7 +410,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
       setTimeout(() => setShowSavedPersonal(false), 2000);
     } catch (error) {
       console.error("Error updating personal info:", error);
-      alert("Failed to save changes. " + (error.response?.data?.message || error.message));
+      toast.error("Failed to save changes. " + (error.response?.data?.message || error.message));
     }
   };
 
@@ -445,7 +446,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
       }
     } catch (err) {
       console.error("Error updating About Me:", err);
-      alert("Failed to save your About Me. Please try again.");
+      toast.error("Failed to save your About Me. Please try again.");
     }
   };
 

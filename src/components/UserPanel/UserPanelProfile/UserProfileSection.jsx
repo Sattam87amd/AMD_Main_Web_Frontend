@@ -14,6 +14,7 @@ import UserDiscountCode from "./UserDiscountCode";
 import UserPaymentMethods from "./UserPaymentMethods";
 import UserGiftCard from "./UserGiftCard";
 import UserPaymentHistory from "./UserPaymentHistory";
+import { toast } from "react-toastify";
 
 const UserProfileSection = () => {
   const [selectedSection, setSelectedSection] = useState("Profile");
@@ -42,7 +43,7 @@ const UserProfileSection = () => {
         console.error("Error Parsing Token", error);
       }
     } else {
-      alert("User Token not found. Please log in.");
+      toast.error("User Token not found. Please log in.");
     }
   }, []);
 
@@ -64,7 +65,7 @@ const UserProfileSection = () => {
           });
         } catch (error) {
           console.error("Error fetching user details:", error);
-          alert("Error fetching user details.");
+          toast.error("Error fetching user details.");
         }
       };
       fetchUserDetails();
@@ -93,7 +94,7 @@ const UserProfileSection = () => {
         })
         .catch((error) => {
           console.error("Error uploading image:", error);
-          alert("Error uploading image.");
+          toast.error("Error uploading image.");
         });
     }
   };

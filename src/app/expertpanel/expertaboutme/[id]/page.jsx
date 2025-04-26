@@ -125,7 +125,7 @@ const ExpertDetail = () => {
       }
   
       if (prevTimes.length >= 5) {
-        alert("You can only book a maximum of 5 time slots.");
+        toast.error("You can only book a maximum of 5 time slots.");
         return prevTimes;
       }
   
@@ -154,7 +154,7 @@ const ExpertDetail = () => {
       setShowTimeSelection(false);
     } catch (error) {
       console.error("Booking error:", error.response?.data || error.message);
-      alert(
+      toast.error(
         `Booking failed: ${error.response?.data?.message || error.message}`
       );
     }

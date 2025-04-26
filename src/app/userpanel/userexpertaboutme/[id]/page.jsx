@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
@@ -14,6 +14,7 @@ import UserSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
 import UserNavSearch from "@/components/UserPanel/Layout/NavSearch";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const ExpertDetail = () => {
   const [expert, setExpert] = useState(null);
@@ -27,7 +28,6 @@ const ExpertDetail = () => {
   const [selectedTime, setSelectedTime] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedTimes, setSelectedTimes] = useState([]);
-
 
   const router = useRouter();
 
@@ -99,27 +99,27 @@ const ExpertDetail = () => {
         duration: selectedDuration,
         areaOfExpertise: "Home",
       };
-  
+
       localStorage.setItem("sessionData", JSON.stringify(sessionData));
-      alert("Click Ok to proceed");
+      toast.error("Click Ok to proceed");
       router.push("/userpanel/userbooking");
       setShowTimeSelection(false);
     } catch (error) {
       console.error("Booking error:", error);
-      alert(`Booking failed: ${error.message}`);
+      toast.error(`Booking failed: ${error.message}`);
     }
   };
 
   const handleTimeSelection = (dayKey, time) => {
     const date = dateMap[dayKey].toISOString().split("T")[0];
     const formattedTime = time.replace(" AM", "").replace(" PM", "").trim();
-  
+
     // Create the key-value object for the slot
     const slot = {
       selectedDate: date,
       selectedTime: formattedTime + (time.includes("AM") ? " AM" : " PM"),
     };
-  
+
     setSelectedTimes((prevTimes) => {
       // Check if the slot is already selected
       const slotExists = prevTimes.some(
@@ -127,7 +127,7 @@ const ExpertDetail = () => {
           existingSlot.selectedDate === slot.selectedDate &&
           existingSlot.selectedTime === slot.selectedTime
       );
-  
+
       // If the slot is already selected, deselect it
       if (slotExists) {
         return prevTimes.filter(
@@ -136,18 +136,17 @@ const ExpertDetail = () => {
             existingSlot.selectedTime !== slot.selectedTime
         );
       }
-  
+
       // Prevent selecting more than 5 slots
       if (prevTimes.length >= 5) {
-        alert("You can only book a maximum of 5 time slots.");
+        toast.error("You can only book a maximum of 5 time slots.");
         return prevTimes;
       }
-  
+
       // Add the new slot to the selected times
       return [...prevTimes, slot];
     });
   };
-  
 
   const experienceText = expert?.experience || "";
   const truncatedExperience =
@@ -319,63 +318,71 @@ const ExpertDetail = () => {
                               "02:00 PM",
                               "03:00 PM",
                               "04:00 PM",
-                            ].map((time) => (
-                              <button
-                              key={time}
-                              className={`py-2 px-3 text-sm rounded-xl border transition cursor-pointer hover:bg-gray-100 ${
-                                selectedTimes.includes(
-                                  `${dateMap[dayKey].toISOString().split("T")[0]}|${time
-                                    .replace(" AM", "")
-                                    .replace(" PM", "")
-                                    .trim()}`
-                                )
-                                  ? "bg-black text-white"
-                                  : "bg-white text-black"
-                              }`}
-                              onClick={() => handleTimeSelection(dayKey, time)}
-                            >
-                              {time}
-                            </button>
-                            
-                            ))}
+                            ].map((time) => {
+                              const timeSlotKey = `${dateMap[dayKey]
+                                .toISOString()
+                                .split("T")[0]}|${time.replace(" AM", "").replace(
+                                " PM",
+                                ""
+                              )}`;
+                              const isSelected = selectedTimes.some(
+                                (slot) => slot.selectedDate === dateMap[dayKey].toISOString().split("T")[0] && slot.selectedTime === time
+                              );
+                              return (
+                                <button
+                                  key={time}
+                                  className={`py-2 px-3 text-sm rounded-xl border transition cursor-pointer hover:bg-gray-100 ${
+                                    isSelected
+                                      ? "bg-black text-white"
+                                      : "bg-white text-black"
+                                  }`}
+                                  onClick={() => handleTimeSelection(dayKey, time)}
+                                >
+                                  {time}
+                                </button>
+                              );
+                            })}
                           </div>
                         </div>
                       ))}
 
-{/* Show how many slots are selected */}
-<p className="text-sm text-gray-600 mt-4">
-  Selected slots: {selectedTimes.length} / 5
-</p>
+                      {/* Show how many slots are selected */}
+                      <p className="text-sm text-gray-600 mt-4">
+                        Selected slots: {selectedTimes.length} / 5
+                      </p>
 
-<div className="flex gap-10 py-10 items-center">
-  <div>
-    <p className="text-xl font-semibold">
-      SAR {expert.price} • Session
-    </p>
-    <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
-      {[...Array(5)].map((_, i) => {
-        const rating = expert.rating || 0;
-        const isFilled = i < Math.floor(rating);
-        const isHalf = i === Math.floor(rating) && rating % 1 !== 0;
-        return (
-          <FaStar
-            key={i}
-            className={isFilled || isHalf ? "text-[#FFA629]" : "text-gray-300"}
-          />
-        );
-      })}
-    </div>
-  </div>
+                      <div className="flex gap-10 py-10 items-center">
+                        <div>
+                          <p className="text-xl font-semibold">
+                            SAR {expert.price} • Session
+                          </p>
+                          <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
+                            {[...Array(5)].map((_, i) => {
+                              const rating = expert.rating || 0;
+                              const isFilled = i < Math.floor(rating);
+                              const isHalf = i === Math.floor(rating) && rating % 1 !== 0;
+                              return (
+                                <FaStar
+                                  key={i}
+                                  className={
+                                    isFilled || isHalf
+                                      ? "text-[#FFA629]"
+                                      : "text-gray-300"
+                                  }
+                                />
+                              );
+                            })}
+                          </div>
+                        </div>
 
-  <button
-    className="py-3 px-12 bg-black text-white rounded-md hover:bg-gray-900 transition"
-    onClick={handleBookingRequest}
-    disabled={!selectedDuration || selectedTimes.length === 0}
-  >
-    Request
-  </button>
-</div>
-
+                        <button
+                          className="py-3 px-12 bg-black text-white rounded-md hover:bg-gray-900 transition"
+                          onClick={handleBookingRequest}
+                          disabled={!selectedDuration || selectedTimes.length === 0}
+                        >
+                          Request
+                        </button>
+                      </div>
                     </div>
                   </>
                 ) : (

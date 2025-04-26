@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { FaStar } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const UserToExpertBooking = () => {
   const [sessionData, setSessionData] = useState(null);
@@ -61,13 +62,13 @@ const UserToExpertBooking = () => {
 
   const handleBookingRequest = async () => {
     if (!sessionData) {
-      alert('No session data found.');
+      toast.error('No session data found.');
       return;
     }
 
     if (noteWordCount < 25) {
       setNoteError('Note must contain at least 25 words.');
-      alert('✍️ Your note must be at least 25 words.');
+      toast.error('✍️ Your note must be at least 25 words.');
       return;
     }
 
@@ -88,7 +89,7 @@ const UserToExpertBooking = () => {
       !sessionData?.areaOfExpertise ||
       !sessionData.slots
     ) {
-      alert('Please fill in all required fields before submitting the booking.');
+      toast.error('Please fill in all required fields before submitting the booking.');
       return;
     }
 
@@ -106,12 +107,12 @@ const UserToExpertBooking = () => {
         }
       );
 
-      alert('Session booked successfully!');
+      toast.success('Session booked successfully!');
       localStorage.removeItem('sessionData', 'bookingData', 'consultingExpertData');
       router.push('/userpanel/videocall');
     } catch (error) {
       console.error('Booking error:', error.response?.data || error.message);
-      alert(`Booking failed: ${error.response?.data?.message || error.message}`);
+      toast.error(`Booking failed: ${error.response?.data?.message || error.message}`);
     }
   };
 

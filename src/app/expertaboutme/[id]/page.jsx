@@ -130,7 +130,7 @@ const ExpertDetail = () => {
       setShowTimeSelection(false);
     } catch (error) {
       console.error("Booking error:", error.response?.data || error.message);
-      alert(
+      toast.error(
         `Booking failed: ${error.response?.data?.message || error.message}`
       );
     }

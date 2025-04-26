@@ -20,6 +20,7 @@ import GiftCard from "./GiftCard";
 import BuyGiftCard from "./BuyGiftCard";
 import ExpertContactUs from "./ExpertContactUs";
 import PaymentHistory from "./PaymentHistory";
+import { toast } from "react-toastify";
 
 const ProfileSection = () => {
   const [selectedSection, setSelectedSection] = useState("Profile");
@@ -50,7 +51,7 @@ const ProfileSection = () => {
         console.error("Error parsing expertToken:", error);
       }
     } else {
-      alert("Expert token not found in localStorage");
+      toast.error("Expert token not found in localStorage");
     }
   }, []);
 
@@ -78,7 +79,7 @@ const ProfileSection = () => {
           });
         } catch (error) {
           console.error("Error fetching expert details:", error);
-          alert("Error fetching expert details");
+          toast.error("Error fetching expert details");
         }
       };
 

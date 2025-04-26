@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Image from "next/image"; // Import Image from Next.js
 import { FaBell, FaChevronDown } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const Navtop = ({ activeTab }) => {
   const [userData, setUserData] = useState({
@@ -27,7 +28,7 @@ const Navtop = ({ activeTab }) => {
         console.error("Error parsing expertToken:", error);
       }
     } else {
-      alert("Expert token not found in localStorage");
+      toast.error("Expert token not found in localStorage");
     }
   }, []); // Runs once when the component mounts
 
