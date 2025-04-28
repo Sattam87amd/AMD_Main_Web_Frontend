@@ -13,6 +13,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Fullscreen } from "lucide-react";
 
+
 const interFont = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -80,7 +81,7 @@ function UserLoginPage() {
       }
       try {
         await axios.post(
-          "https://amd-api.code4bharat.com/api/userauth/request-otp",
+          "http://localhost:5070/api/userauth/request-otp",
           { email }
         );
         toast.success("OTP sent to your email!");
@@ -95,7 +96,7 @@ function UserLoginPage() {
       }
       try {
         await axios.post(
-          "https://amd-api.code4bharat.com/api/userauth/request-otp",
+          "http://localhost:5070/api/userauth/request-otp",
           { phone }
         );
         toast.success("OTP sent to your email!");
@@ -116,7 +117,7 @@ function UserLoginPage() {
       const payload = useEmail ? { email, otp } : { phone, otp };
 
       const response = await axios.post(
-        "https://amd-api.code4bharat.com/api/userauth/verify-otp",
+        "http://localhost:5070/api/userauth/verify-otp",
         payload
       );
 
