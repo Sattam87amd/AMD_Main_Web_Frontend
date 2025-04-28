@@ -7,12 +7,10 @@ import { Inter } from "next/font/google";
 import { useState, useRef, useEffect } from "react";
 import { FiLink } from "react-icons/fi";
 import { useRouter } from "next/navigation";
-import axios from "axios";  // Import axios for making HTTP requests
+import axios from "axios"; // Import axios for making HTTP requests
 // const [price, setPrice] = useState('');
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const interFont = Inter({
   subsets: ["latin"],
@@ -31,17 +29,17 @@ function RegisterForm() {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [gender, setGender] = useState(""); 
+  const [gender, setGender] = useState("");
   const [mobile, setMobile] = useState("");
   const [socialLink, setSocialLink] = useState("");
   const [areaOfExpertise, setAreaOfExpertise] = useState("");
-  const [specificArea, setSpecificArea] = useState(""); 
+  const [specificArea, setSpecificArea] = useState("");
   const [experience, setExperience] = useState("");
   const [category, setCategory] = useState(""); // Category field
   const [errors, setErrors] = useState({});
-  const [certificationFileName, setCertificationFileName] = useState('');
-  const [photoFileName, setPhotoFileName] = useState('');
-  const [price, setPrice] = useState('');
+  const [certificationFileName, setCertificationFileName] = useState("");
+  const [photoFileName, setPhotoFileName] = useState("");
+  const [price, setPrice] = useState("");
 
   const fileInputRefCertifications = useRef(null);
   const fileInputRefPhotos = useRef(null);
@@ -66,7 +64,7 @@ function RegisterForm() {
     // if (!category) tempErrors.category = "Category is required.";
 
     setErrors(tempErrors);
-    
+
     if (Object.keys(tempErrors).length !== 0) {
       toast.error(Object.values(tempErrors).join("\n"));
       return false;
@@ -77,7 +75,7 @@ function RegisterForm() {
   const handleFileChangeCertifications = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const fileExtension = file.name.split('.').pop().toLowerCase();
+      const fileExtension = file.name.split(".").pop().toLowerCase();
       // Validate file size (10MB max)
       if (file.size > 10 * 1024 * 1024) {
         setErrors((prev) => ({
@@ -87,7 +85,7 @@ function RegisterForm() {
         document.getElementById("file-display-certifications").value = "";
       }
       // Validate file type (only allow PDF, JPG, JPEG, PNG)
-      else if (['pdf', 'jpg', 'jpeg', 'png'].includes(fileExtension)) {
+      else if (["pdf", "jpg", "jpeg", "png"].includes(fileExtension)) {
         setCertificationFileName(file.name);
         setErrors((prev) => ({ ...prev, file: "" }));
       } else {
@@ -99,11 +97,11 @@ function RegisterForm() {
       }
     }
   };
-  
+
   const handleFileChangePhotos = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const fileExtension = file.name.split('.').pop().toLowerCase();
+      const fileExtension = file.name.split(".").pop().toLowerCase();
       // Validate file size (10MB max)
       if (file.size > 10 * 1024 * 1024) {
         setErrors((prev) => ({
@@ -113,7 +111,7 @@ function RegisterForm() {
         document.getElementById("file-display-photos").value = "";
       }
       // Validate file type (only allow JPG, JPEG, PNG)
-      else if (['jpg', 'jpeg', 'png'].includes(fileExtension)) {
+      else if (["jpg", "jpeg", "png"].includes(fileExtension)) {
         setPhotoFileName(file.name);
         setErrors((prev) => ({ ...prev, file: "" }));
       } else {
@@ -125,138 +123,87 @@ function RegisterForm() {
       }
     }
   };
-  
 
   // Handle form submission and send data to backend
   // Handle form submission and send data to backend
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent page reload
-    
+
     // Check if socialLink is empty before validating LinkedIn link
     if (!socialLink) {
       toast.error("Please enter your LinkedIn link.");
       return; // Prevent form submission if socialLink is empty
     }
-  
+
     // LinkedIn URL validation
     if (socialLink && !validateLinkedInLink(socialLink)) {
       toast.error("Please enter a valid LinkedIn link.");
       return; // Prevent form submission if the link is not valid
     }
-    
+
     if (handleValidation()) {
       // Create a new FormData object to hold the form data and files
       const formData = new FormData();
-  
-      // Append form data
-      formData.append('email', email);
-      formData.append('firstName', firstName);
-      formData.append('lastName', lastName);
-      formData.append('gender', gender);
-      formData.append('phone', mobile);
-      formData.append('socialLink', socialLink);
-      formData.append('areaOfExpertise', areaOfExpertise);
-      formData.append('specificArea', specificArea);  // Will be used if 'Others' is selected
-      formData.append('experience', experience);
-      formData.append('price', Number(price));
 
- 
-  
+      // Append form data
+      formData.append("email", email);
+      formData.append("firstName", firstName);
+      formData.append("lastName", lastName);
+      formData.append("gender", gender);
+      formData.append("phone", mobile);
+      formData.append("socialLink", socialLink);
+      formData.append("areaOfExpertise", areaOfExpertise);
+      formData.append("specificArea", specificArea); // Will be used if 'Others' is selected
+      formData.append("experience", experience);
+      formData.append("price", Number(price));
+
       // Append certification and photo files if selected
       if (fileInputRefCertifications.current.files[0]) {
-        formData.append('certificationFile', fileInputRefCertifications.current.files[0]);
+        formData.append(
+          "certificationFile",
+          fileInputRefCertifications.current.files[0]
+        );
       }
       if (fileInputRefPhotos.current.files[0]) {
-        formData.append('photoFile', fileInputRefPhotos.current.files[0]);
+        formData.append("photoFile", fileInputRefPhotos.current.files[0]);
       }
-  
+
       try {
         // API call to register the expert
         const response = await axios.post(
-          'https://amd-api.code4bharat.com/api/expertauth/register', 
+          "http://localhost:5070/api/expertauth/register",
           formData,
           {
             headers: {
-              'Content-Type': 'multipart/form-data', // Ensure correct content type for file uploads
+              "Content-Type": "multipart/form-data", // Ensure correct content type for file uploads
             },
           }
         );
-  
-        console.log('Expert registered successfully:', response.data);
+
+        console.log("Expert registered successfully:", response.data);
         toast.success("Expert registered successfully");
-        router.push('/expertlogin');  // Redirect to login after successful registration
+        router.push("/expertlogin"); // Redirect to login after successful registration
       } catch (error) {
-        console.error('Error during registration:', error);
-      toast.error('Error during registration. Please try again.');
+        console.error("Error during registration:", error);
+        toast.error("Error during registration. Please try again.");
       }
     }
   };
-  
 
   return (
     <div className={`min-h-screen flex overflow-hidden ${interFont.variable}`}>
       {/* Left Side Section (Hidden on small screens, visible on md+) */}
       <div className="hidden md:flex w-1/2 flex-col relative">
-        {/* Top Section with Shourk Logo */}
-        {/* <div className="h-[35%] bg-[#EDECE8] flex items-center justify-center relative">
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-            <Image src="/Shourk_logo.png" alt="Shourk Logo" width={190} height={190} />
-          </div>
-          {/* Experts Card */}
-          {/* <div className="absolute top-72 left-4 w-[355px] h-[78px] bg-black bg-opacity-50 backdrop-blur-[3px] rounded-xl flex items-center p-4 z-30 shadow-lg">
-            <IoIosSearch className="text-white text-[50px] mr-2" /> */}
-            {/* <div>
-              <h2 className="text-white font-light text-2xl">
-                Professional Experts
-              </h2>
-              <p className="text-white text-xs font-extralight">
-                Expert Guidance from the Best in the Industry
-              </p>
-            </div> */}
-          {/* </div>
-        </div>  */}
-
-        {/* Bottom Section with Arab Woman Image */}
-        {/* <div className="h-[65%] bg-[#F8F7F3] flex items-end justify-center relative"> */}
-          {/* <div className="absolute top-0 left-0 w-full"> */}
-            {/* <svg viewBox="0 0 1440 320" xmlns="http://www.w3.org/2000/svg">
-              <path
-                fill="#EDECE8"
-                fillOpacity="1"
-                d="M0,192L120,165.3C240,139,480,85,720,85C960,85,1200,139,1320,165.3L1440,192V0H0Z"
-              ></path>
-            </svg> */}
-          {/* </div> */}
-          {/* <Image
-            src="/AwabWomen.png"
-            alt="Arab Woman"
-            width={490}
-            height={600}
-            className="object-contain z-20 absolute top-10" // Adjusted to position the image
-          /> */}
-          <div className="relative">
+        <div className="relative">
           <Image
             src="/AwabWomen.png"
             alt="Arab Woman"
             height={0}
-            width={800}
+            width={900}
             className="object-cover"
+            style={{ height: "980px" }}
           />
         </div>
-
-          {/* Appointment Card */}
-          {/* <div className="absolute bottom-14 right-8 w-[355px] h-[78px] bg-black bg-opacity-50 backdrop-blur-[3px] rounded-xl flex items-center p-4 z-30 shadow-lg">
-            <LuNotepadText className="text-white text-[50px] mr-2" />
-            <div>
-              <h2 className="text-white font-medium text-xl">
-              
-              </h2>
-              <p className="text-white text-lg font-extralight">
-                Call/text/video/inperson
-              </p>
-            </div>
-          </div> */}
-        {/* </div> */}
       </div>
 
       {/* Right Side Section with Form */}
@@ -375,76 +322,80 @@ function RegisterForm() {
                 <option value="Female">Female</option>
                 <option value="Prefer not to say">Prefer not to say</option>
               </select>
-              {errors.gender && <p className="text-red-500 text-xs mt-1">{errors.gender}</p>}
+              {errors.gender && (
+                <p className="text-red-500 text-xs mt-1">{errors.gender}</p>
+              )}
             </div>
 
-            {/* Social Media Link */} 
+            {/* Social Media Link */}
             <div className="mb-6">
-  <label className="block mb-2 text-sm font-medium text-gray-500">
-    Social Media Link
-  </label>
-  <div className="relative">
-    <input
-      type="text"
-      value={socialLink}
-      onChange={(e) => setSocialLink(e.target.value)}
-      className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
-      placeholder="Enter LinkedIn link"  // **Updated Placeholder**
-    />
-    <span className="absolute right-3 top-1/2 transform -translate-y-1/2">
-      <FiLink className="text-black" />
-    </span>
-  </div>
-</div>
-
+              <label className="block mb-2 text-sm font-medium text-gray-500">
+                Social Media Link
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={socialLink}
+                  onChange={(e) => setSocialLink(e.target.value)}
+                  className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
+                  placeholder="Enter LinkedIn link" // **Updated Placeholder**
+                />
+                <span className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                  <FiLink className="text-black" />
+                </span>
+              </div>
+            </div>
 
             {/* Area of Expertise and Price */}
-{/* Area of Expertise and Price */}
-<div className="mb-6 flex space-x-4">
-  <div className="w-1/2">
-    <label className="block mb-2 text-sm font-medium text-gray-500">
-      Area of Expertise
-    </label>
-    <select
-      value={areaOfExpertise}
-      onChange={(e) => {
-        setAreaOfExpertise(e.target.value);
-        if (e.target.value !== "Others") {
-          setSpecificArea("");
-        }
-      }}
-      className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
-    >
-      <option value="">Select Area</option>
-      <option value="Home">Home</option>
-      <option value="Career and Business">Career and Business</option>
-      <option value="Style and Beauty">Style and Beauty</option>
-      <option value="Wellness">Wellness</option>
-      <option value="Others">Others</option>
-    </select>
-  </div>
+            {/* Area of Expertise and Price */}
+            <div className="mb-6 flex space-x-4">
+              <div className="w-1/2">
+                <label className="block mb-2 text-sm font-medium text-gray-500">
+                  Area of Expertise
+                </label>
+                <select
+                  value={areaOfExpertise}
+                  onChange={(e) => {
+                    setAreaOfExpertise(e.target.value);
+                    if (e.target.value !== "Others") {
+                      setSpecificArea("");
+                    }
+                  }}
+                  className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
+                >
+                  <option value="">Select Area</option>
+                  <option value="Home">Home</option>
+                  <option value="Career and Business">
+                    Career and Business
+                  </option>
+                  <option value="Style and Beauty">Style and Beauty</option>
+                  <option value="Wellness">Wellness</option>
+                  <option value="Others">Others</option>
+                </select>
+              </div>
 
-  <div className="w-1/2">
-    <label className="block mb-2 text-sm font-medium text-gray-500">
-      Price (in Riyals)
-    </label>
-    <input
-      type="number"
-      value={price}
-      onChange={(e) => {
-        setPrice(e.target.value);
-        console.log(price)
-        // setErrors((prev) => ({ ...prev, price: "" }));  // Clear any previous price errors
-      }}
-      className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
-      placeholder="Enter price"
-    />
-    {price < 100 && price !== '' && (
-      <p className="text-red-500 text-xs mt-1">Price must be greater than 100 Riyals</p>
-    )}
-  </div>
-</div>
-
+              <div className="w-1/2">
+                <label className="block mb-2 text-sm font-medium text-gray-500">
+                  Price (in Riyals)
+                </label>
+                <input
+                  type="number"
+                  value={price}
+                  onChange={(e) => {
+                    setPrice(e.target.value);
+                    console.log(price);
+                    // setErrors((prev) => ({ ...prev, price: "" }));  // Clear any previous price errors
+                  }}
+                  className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full px-2.5 py-3"
+                  placeholder="Enter price"
+                />
+                {price < 100 && price !== "" && (
+                  <p className="text-red-500 text-xs mt-1">
+                    Price must be greater than 100 Riyals
+                  </p>
+                )}
+              </div>
+            </div>
 
             {/* Conditional Input for 'Others' */}
             {areaOfExpertise === "Others" && (
@@ -460,8 +411,10 @@ function RegisterForm() {
                 />
               </div>
             )}
-             <div className="mb-6">
-              <label className="block mb-2 text-sm font-medium text-gray-500">Professional Certifications</label>
+            <div className="mb-6">
+              <label className="block mb-2 text-sm font-medium text-gray-500">
+                Professional Certifications
+              </label>
               <div className="flex">
                 <input
                   type="file"
@@ -487,11 +440,15 @@ function RegisterForm() {
                   Upload
                 </button>
               </div>
-              {errors.file && <p className="text-[#CF1313] text-sm mt-1">{errors.file}</p>}
+              {errors.file && (
+                <p className="text-[#CF1313] text-sm mt-1">{errors.file}</p>
+              )}
             </div>
 
             <div className="mb-6">
-              <label className="block mb-2 text-sm font-medium text-gray-500">Professional Photos</label>
+              <label className="block mb-2 text-sm font-medium text-gray-500">
+                Professional Photos
+              </label>
               <div className="flex">
                 <input
                   type="file"
@@ -517,11 +474,10 @@ function RegisterForm() {
                   Upload
                 </button>
               </div>
-              {errors.file && <p className="text-[#CF1313] text-sm mt-1">{errors.file}</p>}
+              {errors.file && (
+                <p className="text-[#CF1313] text-sm mt-1">{errors.file}</p>
+              )}
             </div>
-            
-
-
 
             <div className="mb-6 relative">
               <label className="block mb-2 text-sm font-medium text-gray-500">
@@ -547,28 +503,30 @@ function RegisterForm() {
               >
                 Submit
               </button>
-              <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
-
+              <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+              />
             </div>
           </form>
           <>
-  {/* Your entire form JSX */}
+            {/* Your entire form JSX */}
 
-  {/* Add ToastContainer here */}
-  <ToastContainer
-    position="top-right"
-    autoClose={3000}
-    hideProgressBar={false}
-    newestOnTop={false}
-    closeOnClick
-    rtl={false}
-    pauseOnFocusLoss
-    draggable
-    pauseOnHover
-    theme="light"
-  />
-</>
-
+            {/* Add ToastContainer here */}
+            <ToastContainer
+              position="top-right"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="light"
+            />
+          </>
         </div>
       </div>
     </div>

@@ -14,7 +14,8 @@ import UserSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
 import UserNavSearch from "@/components/UserPanel/Layout/NavSearch";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ExpertDetail = () => {
   const [expert, setExpert] = useState(null);
@@ -65,7 +66,7 @@ const ExpertDetail = () => {
       const fetchExpertData = async () => {
         try {
           const response = await axios.get(
-            `https://amd-api.code4bharat.com/api/expertauth/${expertId}`
+            `http://localhost:5070/api/expertauth/${expertId}`
           );
           setExpert(response.data.data);
           setLoading(false);
@@ -158,6 +159,7 @@ const ExpertDetail = () => {
   return (
     <>
       <div className="flex min-h-screen">
+         <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
         <aside className="w-[20%] hidden md:block">
           <UserSidebar />
         </aside>

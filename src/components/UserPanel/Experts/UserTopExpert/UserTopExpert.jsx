@@ -29,7 +29,7 @@ const UserTopExpert = () => {
     const fetchExperts = async () => {
       try {
         const area = "Home";
-        const response = await axios.get(`https://amd-api.code4bharat.com/api/expertauth/area/${area}`);
+        const response = await axios.get(`http://localhost:5070/api/expertauth/area/${area}`);
         setExpertData(response.data.data);
         setLoading(false);
       } catch (err) {

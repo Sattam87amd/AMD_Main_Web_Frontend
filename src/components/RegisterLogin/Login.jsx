@@ -67,7 +67,7 @@ function LoginPage() {
       }
       try {
         await axios.post(
-          "https://amd-api.code4bharat.com/api/expertauth/request-otp",
+          "http://localhost:5070/api/expertauth/request-otp",
           { email }
         );
         toast.success("OTP sent to your email!");
@@ -82,7 +82,7 @@ function LoginPage() {
       }
       try {
         await axios.post(
-          "https://amd-api.code4bharat.com/api/expertauth/request-otp",
+          "http://localhost:5070/api/expertauth/request-otp",
           { phone }
         );
         toast.success("OTP sent to your phone!");
@@ -102,7 +102,7 @@ function LoginPage() {
     try {
       const payload = useEmail ? { email, otp } : { phone, otp };
       const response = await axios.post(
-        "https://amd-api.code4bharat.com/api/expertauth/verify-otp",
+        "http://localhost:5070/api/expertauth/verify-otp",
         payload
       );
 
@@ -194,15 +194,8 @@ function LoginPage() {
                   </p>
                 </>
               )}
-              {/* 
-                            <div className="relative">
-                                <PhoneInput
-                                    international
-                                    defaultCountry="SA"
-                                    value={phone}
-                                    onChange={handlePhoneChange}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-8 focus:border-black pl-4"
-                                /> */}
+      
+                           
             </div>
             {!useEmail && phoneError && (
               <p className="text-red-500 text-xs mt-1">{phoneError}</p>
