@@ -196,24 +196,21 @@ const UserProfileSection = () => {
  <div className="flex flex-row items-center justify-between w-full space-y-0 space-x-4 md:w-[90%]">
   <div className="flex items-center space-x-4 w-full md:w-auto">
     {/* Image with a cloud upload icon */}
-    <div className="relative flex-shrink-0">
+    <div className="w-[100px] h-[100px] rounded-full overflow-hidden relative">
       <Image
         src={imagePreview || profileData.photoFile || "/default-profile.png"} // Fallback image if no photo
         alt="profile"
-        width={60}
-        height={60}
-        className="w-full h-full object-cover rounded-full"
+        width={100}
+        height={100}
+        className="w-full h-full object-cover"
       />
-      <label htmlFor="imageUpload" className="absolute bottom-0 right-0 bg-black text-white p-2 rounded-full cursor-pointer">
-        <FaCloudUploadAlt className="w-6 h-6" />
+      <label
+        htmlFor="imageUpload"
+        className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 transition-opacity cursor-pointer"
+      >
+        <FaCloudUploadAlt className="w-8 h-8 text-white" />
       </label>
-      <input
-        id="imageUpload"
-        type="file"
-        accept="image/*"
-        onChange={handleImageChange}
-        className="hidden"
-      />
+      <input id="imageUpload" type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
     </div>
 
     <div className="text-left flex-grow md:flex-shrink-0">

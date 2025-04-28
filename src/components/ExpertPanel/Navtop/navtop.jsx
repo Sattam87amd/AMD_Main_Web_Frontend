@@ -81,7 +81,7 @@ const Navtop = ({ activeTab }) => {
                 alt="Profile"
                 width={100} // Set width (64px size for example)
                 height={100} // Set height (64px size for example)
-                className="rounded-full h-10"
+                className="w-full h-full object-cover rounded-full"
               />
             </div>
           ) : (
