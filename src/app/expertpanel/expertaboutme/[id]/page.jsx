@@ -14,6 +14,8 @@ import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ExpertDetail = () => {
   const [expert, setExpert] = useState(null);
@@ -171,6 +173,7 @@ const ExpertDetail = () => {
   return (
     <>
       <div className="flex min-h-screen">
+        <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
         <aside className="w-[20%] hidden md:block">
           <Sidebar />
         </aside>
