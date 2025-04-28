@@ -9,21 +9,19 @@ import Footer from "../Layout/Footer";
 
 const SearchExperts = ({ closeSearchPage }) => {
   const [search, setSearch] = useState("");
-  const [allExperts, setAllExperts] = useState([]); // All fetched experts
-  const [filteredExperts, setFilteredExperts] = useState([]); // Displayed experts
+  const [allExperts, setAllExperts] = useState([]);
+  const [filteredExperts, setFilteredExperts] = useState([]);
 
-  // Fetch experts from the API
   useEffect(() => {
     const fetchExperts = async () => {
       try {
-        const res = await fetch(`https://amd-api.code4bharat.com/api/expertauth/`); 
+        const res = await fetch(`https://amd-api.code4bharat.com/api/expertauth/`);
         const data = await res.json();
 
         if (res.ok) {
-          // Filter experts with averageRating >= 4 initially
           const initialExperts = data.data.filter((expert) => expert.averageRating >= 4);
-          setAllExperts(data.data); // Save all experts
-          setFilteredExperts(initialExperts); // Show only high-rated experts initially
+          setAllExperts(data.data);
+          setFilteredExperts(initialExperts);
         } else {
           console.error("Failed to fetch experts:", data.message);
         }
@@ -35,33 +33,30 @@ const SearchExperts = ({ closeSearchPage }) => {
     fetchExperts();
   }, []);
 
-  // Handle search input change
   const handleSearchChange = (e) => {
     const searchTerm = e.target.value.toLowerCase();
     setSearch(searchTerm);
 
     if (searchTerm === "") {
-      // No search term: only show experts with rating >= 4
       const topRated = allExperts.filter((expert) => expert.averageRating >= 4);
       setFilteredExperts(topRated);
     } else {
-      // Filter based on search across all experts
       const filtered = allExperts.filter((expert) =>
         `${expert.firstName} ${expert.lastName}`.toLowerCase().includes(searchTerm) ||
-        expert.experience.toLowerCase().includes(searchTerm)
+        expert.experience?.toLowerCase().includes(searchTerm)
       );
       setFilteredExperts(filtered);
     }
   };
 
   return (
-    <div className="bg-white p-0 relative min-h-screen px-1 mt-2">
+    <div className="bg-white p-0 relative min-h-screen px-1 mt-2 border-4">
       {/* Navigation */}
       <motion.nav
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
-        className="flex items-center justify-center w-full mb-6 relative"
+        className="flex items-center justify-center w-full mb-6 relative "
       >
         <div className="hidden md:block absolute left-4 text-3xl font-bold text-black">Shourk</div>
 
@@ -81,7 +76,7 @@ const SearchExperts = ({ closeSearchPage }) => {
           >
             <input
               type="text"
-              placeholder="Search"
+              placeholder="Search experts..."
               value={search}
               onChange={handleSearchChange}
               className="flex-grow outline-none text-gray-700 placeholder:text-gray-400 bg-transparent text-lg"
@@ -103,17 +98,21 @@ const SearchExperts = ({ closeSearchPage }) => {
           </div>
 
           <div className="overflow-x-auto md:overflow-visible">
-            <div className="flex gap-4 md:gap-10 px-4 md:px-0 overflow-x-scroll scrollbar-hide">
-              {filteredExperts.map((expert, i) => (
-                <Link key={expert._id} href={`/expertaboutme`} passHref>
+            <div className="flex gap-4 md:gap-10 px-4 md:px-0 overflow-x-scroll custom-scrollbar-hide scrollbar-hide">
+              {filteredExperts.map((expert) => (
+                <Link
+                  key={expert._id}
+                  href={`/expertaboutme/${expert._id}`} 
+                  passHref
+                >
                   <div className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden rounded-lg cursor-pointer">
                     <img
-                      src={expert.photoFile}
+                      src={expert.photoFile || "/default-profile.png"}
                       alt={`${expert.firstName} ${expert.lastName}`}
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute top-4 right-4 bg-[#F8F7F3] text-black px-4 py-2 rounded-2xl font-semibold">
-                      ${expert.price}
+                      SAR {expert.price || 0}
                     </div>
                     <div className="absolute bottom-1 left-1 right-1 bg-white/80 p-4 m-2 rounded-lg">
                       <h3 className="text-lg font-semibold text-black flex items-center gap-1">
@@ -121,7 +120,7 @@ const SearchExperts = ({ closeSearchPage }) => {
                         <HiBadgeCheck className="w-6 h-6 text-yellow-500" />
                       </h3>
                       <p className="text-xs text-black mt-1">
-                        {expert.experience.slice(0, 100)}...
+                        {expert.experience ? expert.experience.slice(0, 100) : "No description"}...
                       </p>
                     </div>
                   </div>

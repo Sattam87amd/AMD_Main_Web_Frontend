@@ -37,7 +37,7 @@ const UserToExpertBooking = () => {
 
     const userToken = localStorage.getItem('userToken');
     if (!userToken) {
-      console.warn('⚠️ No user token found in localStorage.');
+      router.push('/userlogin')
     }
     setToken(userToken);
   }, []);
@@ -108,12 +108,17 @@ const UserToExpertBooking = () => {
       );
 
       toast.success('Session booked successfully!');
-      localStorage.removeItem('sessionData', 'bookingData', 'consultingExpertData');
-      router.push('/userpanel/videocall');
+      localStorage.removeItem('sessionData');
+      localStorage.removeItem('bookingData');
+      localStorage.removeItem('consultingExpertData');
+
+      
     } catch (error) {
       console.error('Booking error:', error.response?.data || error.message);
       toast.error(`Booking failed: ${error.response?.data?.message || error.message}`);
     }
+
+    router.push('/userpanel/videocall');
   };
 
   // Group time slots by date
@@ -149,7 +154,7 @@ const UserToExpertBooking = () => {
             <h1 className="text-xl md:text-2xl font-bold">
               {consultingExpert?.firstName} {consultingExpert?.lastName}
             </h1>
-            <p className="text-gray-500 text-sm md:text-base">{consultingExpert?.designation || 'Expert'}</p>
+            <p className="text-gray-500 text-sm md:text-base">{consultingExpert?.areaOfExpertise || 'Expert'}</p>
 
             <div>
               <p className="text-xl font-semibold">SAR {consultingExpert.price} • Session</p>
