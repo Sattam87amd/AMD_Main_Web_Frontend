@@ -194,15 +194,8 @@ function LoginPage() {
                   </p>
                 </>
               )}
-              {/* 
-                            <div className="relative">
-                                <PhoneInput
-                                    international
-                                    defaultCountry="SA"
-                                    value={phone}
-                                    onChange={handlePhoneChange}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-8 focus:border-black pl-4"
-                                /> */}
+      
+                           
             </div>
             {!useEmail && phoneError && (
               <p className="text-red-500 text-xs mt-1">{phoneError}</p>

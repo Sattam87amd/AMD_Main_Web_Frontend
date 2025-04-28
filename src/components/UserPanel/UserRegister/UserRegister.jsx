@@ -28,8 +28,8 @@ function UserRegisterPage() {
   const [loading, setLoading] = useState(false);
 
   // Get phone and email from query parameters (for initial values if needed)
-  const queryPhone = searchParams.get('phone');
-  const queryEmail = searchParams.get('email');
+  const queryPhone = searchParams.get("phone");
+  const queryEmail = searchParams.get("email");
 
   // Prefill phone or email from query parameters if they exist
   useEffect(() => {
@@ -76,21 +76,26 @@ function UserRegisterPage() {
     setServerError("");
 
     try {
-      const response = await axios.post(" http://localhost:5070/api/userauth/registeruser", {
-        phone, // Add phone from state
-        firstName: firstName,
-        lastName: lastName, // Send lastName separately
-        email,
-      });
+      const response = await axios.post(
+        " http://localhost:5070/api/userauth/registeruser",
+        {
+          phone, // Add phone from state
+          firstName: firstName,
+          lastName: lastName, // Send lastName separately
+          email,
+        }
+      );
 
       if (response.status === 201) {
         // alert('Successfully registered!');
         router.push("/userlogin");
       } else {
-        console.log('Unexpected status:', response.status);
+        console.log("Unexpected status:", response.status);
       }
     } catch (error) {
-      setServerError(error.response?.data?.message || "Registration failed. Try again.");
+      setServerError(
+        error.response?.data?.message || "Registration failed. Try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -99,44 +104,16 @@ function UserRegisterPage() {
   return (
     <div className={`min-h-screen flex ${interFont.variable}`}>
       <div className="hidden md:flex w-1/2 flex-col relative">
-        {/* Top Section with Shourk Logo */}
-        {/* <div className="h-[35%] bg-[#EDECE8] flex items-center justify-center relative">
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-            <Image src="/Shourk_logo.png" alt="Shourk Logo" width={190} height={190} />
-          </div> */}
-
-          {/* Experts Card */}
-          {/* <div className="absolute top-full left-4 w-[355px] h-[78px] bg-black bg-opacity-50 backdrop-blur-[3px] rounded-xl flex items-center p-4 z-30 shadow-lg">
-            <IoIosSearch className="text-white text-[50px] mr-2" />
-            <div>
-              <h2 className="text-white font-light text-2xl">Professional Experts</h2>
-              <p className="text-white text-xs font-extralight">
-                Expert Guidance from the Best in the Industry
-              </p>
-            </div>
-          </div>
-        </div> */}
-
         {/* Bottom Section with Arab Woman Image */}
         <div className="relative">
-                  <Image
-                    src="/AwabWomen.png"
-                    alt="Arab Woman"
-                    height={0}
-                    width={1000}
-                    className="object-cover"
-                    style={{ height: '800px' }}
-                  />
-                
-
-          {/* Appointment Card */}
-          {/* <div className="absolute bottom-14 right-8 w-[355px] h-[78px] bg-black bg-opacity-50 backdrop-blur-[3px] rounded-xl flex items-center p-4 z-30 shadow-lg">
-            <LuNotepadText className="text-white text-[50px] mr-2" />
-            <div>
-              <h2 className="text-white font-medium text-xl">Book an appointment</h2>
-              <p className="text-white text-lg font-extralight">Call/text/video/inperson</p>
-            </div>
-          </div> */}
+          <Image
+            src="/AwabWomen.png"
+            alt="Arab Woman"
+            height={0}
+            width={1000}
+            className="object-cover"
+            style={{ height: "800px" }}
+          />
         </div>
       </div>
 
@@ -144,7 +121,12 @@ function UserRegisterPage() {
       <div className="w-full md:w-1/2 bg-white flex flex-col items-center justify-center relative">
         {/* Mobile Logo - Hidden on medium and larger screens */}
         <div className="absolute top-6 left-5 md:hidden">
-          <Image src="/Shourk_mobile_logo.png" alt="Mobile Logo" width={60} height={40} />
+          <Image
+            src="/Shourk_mobile_logo.png"
+            alt="Mobile Logo"
+            width={60}
+            height={40}
+          />
         </div>
 
         <div className="w-full max-w-md p-8 -mt-20 md:-mt-0">
@@ -157,7 +139,6 @@ function UserRegisterPage() {
 
           {/* Registration Form */}
           <div className="mt-8 space-y-8">
-
             <div>
               <label className="block text-sm font-medium">Phone Number</label>
               <PhoneInput
@@ -167,7 +148,9 @@ function UserRegisterPage() {
                 onChange={setPhone}
                 className="w-full px-4 py-3 border rounded-lg focus:outline-8 focus:border-black pl-4"
               />
-              {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+              {errors.phone && (
+                <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+              )}
             </div>
 
             <div>
@@ -182,7 +165,9 @@ function UserRegisterPage() {
                 placeholder="Enter your email address"
                 className="w-full px-4 py-3 border rounded-lg focus:outline-8 focus:border-black"
               />
-              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+              )}
             </div>
 
             <div>
@@ -198,7 +183,9 @@ function UserRegisterPage() {
                 placeholder="Enter your first name"
                 className="w-full px-4 py-3 border rounded-lg focus:outline-8 focus:border-black"
               />
-              {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
+              {errors.firstName && (
+                <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>
+              )}
             </div>
 
             <div>
@@ -214,15 +201,20 @@ function UserRegisterPage() {
                 placeholder="Enter your last name"
                 className="w-full px-4 py-3 border rounded-lg focus:outline-8 focus:border-black"
               />
-              {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
+              {errors.lastName && (
+                <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>
+              )}
             </div>
             <button
-              className={`w-full py-3 rounded-lg transition ${email && firstName && lastName && isValidPhoneNumber(phone)
+              className={`w-full py-3 rounded-lg transition ${
+                email && firstName && lastName && isValidPhoneNumber(phone)
                   ? "bg-black text-white hover:bg-gray-800"
                   : "bg-black text-white cursor-not-allowed"
-                }`}
+              }`}
               onClick={handleSubmit}
-              disabled={!email || !firstName || !lastName || !isValidPhoneNumber(phone)}
+              disabled={
+                !email || !firstName || !lastName || !isValidPhoneNumber(phone)
+              }
             >
               Continue
             </button>

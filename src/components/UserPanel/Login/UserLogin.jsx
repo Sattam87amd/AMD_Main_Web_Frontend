@@ -13,7 +13,6 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Fullscreen } from "lucide-react";
 
-
 const interFont = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -80,10 +79,9 @@ function UserLoginPage() {
         return;
       }
       try {
-        await axios.post(
-          "http://localhost:5070/api/userauth/request-otp",
-          { email }
-        );
+        await axios.post("http://localhost:5070/api/userauth/request-otp", {
+          email,
+        });
         toast.success("OTP sent to your email!");
       } catch (error) {
         console.log(error);
@@ -95,10 +93,9 @@ function UserLoginPage() {
         return;
       }
       try {
-        await axios.post(
-          "http://localhost:5070/api/userauth/request-otp",
-          { phone }
-        );
+        await axios.post("http://localhost:5070/api/userauth/request-otp", {
+          phone,
+        });
         toast.success("OTP sent to your email!");
       } catch (error) {
         console.log(error);
@@ -138,39 +135,23 @@ function UserLoginPage() {
 
   return (
     <div className={`min-h-screen flex ${interFont.variable}`}>
-      {/* <div className="hidden md:flex w-1/2 flex-col relative"> */}
-        {/* <div className="h-[35%] bg-[#EDECE8] flex items-center justify-center relative"> */}
-        <div className=" relative hidden md:block">
-          <Image
-            src="/AwabWomen.png"
-            alt="Arab Woman"
-            height={0}
-            width={800}
-            className="object-cover"
-          />
-        </div>
-
-          
+      <div className=" relative hidden md:block">
+        <Image
+          src="/AwabWomen.png"
+          alt="Arab Woman"
+          height={0}
+          width={800}
+          className="object-cover"
+        />
+      </div>
       {/* </div> */}
       <div className="w-full md:w-1/2 bg-white flex flex-col items-center justify-center relative">
-        {/* <div className="absolute top-6 left-5 md:hidden">
-          <Image
-            src="/AwabWomen.png"
-            alt="Mobile Logo"
-            width={60}
-            height={40}
-          />
-        </div> */}
-
         <div className="w-full max-w-md p-8 -mt-20 md:-mt-0">
           <h1 className="text-2xl md:text-[35px] font-bold text-center">
             Create an Account
           </h1>
           <p className="text-center text-[#878787] mt-1 md:mt-2">
-            or{" "}
-            <span className="text-black font-semibold">
-              Login
-            </span>
+            or <span className="text-black font-semibold">Login</span>
           </p>
 
           <div className="mt-8 space-y-8">
@@ -215,15 +196,6 @@ function UserLoginPage() {
                   </p>
                 </>
               )}
-              {/* 
-                            <div className="relative">
-                                <PhoneInput
-                                    international
-                                    defaultCountry="SA"
-                                    value={phone}
-                                    onChange={handlePhoneChange}
-                                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-8 focus:border-black pl-4"
-                                /> */}
             </div>
             {!useEmail && phoneError && (
               <p className="text-red-500 text-xs mt-1">{phoneError}</p>
@@ -288,8 +260,7 @@ function UserLoginPage() {
             />
           </div>
         </div>
-      </div>
-      {" "}
+      </div>{" "}
     </div>
   );
 }
