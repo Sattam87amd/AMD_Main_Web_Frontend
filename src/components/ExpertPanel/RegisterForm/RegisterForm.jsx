@@ -239,8 +239,9 @@ function RegisterForm() {
             src="/AwabWomen.png"
             alt="Arab Woman"
             height={0}
-            width={800}
+            width={900}
             className="object-cover"
+            style={{ height: '980px' }}
           />
         </div>
 
