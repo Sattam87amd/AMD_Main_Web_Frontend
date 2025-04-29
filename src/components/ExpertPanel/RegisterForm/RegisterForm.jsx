@@ -182,6 +182,7 @@ function RegisterForm() {
 
         console.log("Expert registered successfully:", response.data);
         toast.success("Expert registered successfully");
+        localStorage.removeItem("registerData"); // Clear localStorage after successful registration
         router.push("/expertlogin"); // Redirect to login after successful registration
       } catch (error) {
         console.error("Error during registration:", error);
@@ -380,6 +381,7 @@ function RegisterForm() {
                 </label>
                 <input
                   type="number"
+                  required="true"
                   value={price}
                   onChange={(e) => {
                     setPrice(e.target.value);

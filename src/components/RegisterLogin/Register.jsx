@@ -4,7 +4,7 @@ import Image from "next/image";
 import { IoIosSearch } from "react-icons/io";
 import { LuNotepadText } from "react-icons/lu";
 import { Inter } from "next/font/google";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // Import useRouter for navigation
 
 const interFont = Inter({
@@ -19,7 +19,12 @@ function RegisterPage() {
   const [lastName, setLastName] = useState("");
   const [gender, setGender] = useState("");  // New state for gender
   const [errors, setErrors] = useState({});
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("registerData")) || {};
 
+    setEmail(userData.email || "");
+    // Ensure gender is set here
+  }, []);
   // Validation for required fields
   const handleValidation = () => {
     let tempErrors = {};
@@ -62,17 +67,17 @@ function RegisterPage() {
   return (
     <div className={`min-h-screen flex ${interFont.variable}`}>
       <div className="hidden md:flex w-1/2 flex-col relative">
-   
-       
-         <div className=" relative hidden md:block">
-                  <Image
-                    src="/AwabWomen.png"
-                    alt="Arab Woman"
-                    height={0}
-                    width={800}
-                    className="object-cover"
-                  />
-                </div>
+
+
+        <div className=" relative hidden md:block">
+          <Image
+            src="/AwabWomen.png"
+            alt="Arab Woman"
+            height={0}
+            width={800}
+            className="object-cover"
+          />
+        </div>
       </div>
 
       {/* Right Section with Form */}
@@ -149,11 +154,10 @@ function RegisterPage() {
             </div>
 
             <button
-              className={`w-full py-3 rounded-lg transition ${
-                email && firstName && lastName && gender
+              className={`w-full py-3 rounded-lg transition ${email && firstName && lastName && gender
                   ? "bg-black text-white hover:bg-gray-800"
                   : "bg-gray-300 text-gray-600 cursor-not-allowed"
-              }`}
+                }`}
               onClick={handleSubmit}
               disabled={!email || !firstName || !lastName || !gender}
             >
