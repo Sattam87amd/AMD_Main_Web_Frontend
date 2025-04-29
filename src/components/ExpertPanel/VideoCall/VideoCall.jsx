@@ -493,7 +493,7 @@ const VideoCall = () => {
                   <div className="hidden md:block">
                     <div className="border-b pb-4 mb-4">
                       <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                        Consultation with {booking.firstName} {booking.lastName}
+                        Booking with {booking?.consultingExpertID?.firstName} {booking?.consultingExpertID?.lastName}
                       </h2>
 
                       <div className="flex items-center gap-3 text-sm text-gray-600">
