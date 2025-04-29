@@ -377,10 +377,6 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
     </div>
   );
 
-
-  // -------------------------------------------------------------------
-  // 8) Render: Personal Info Card (Editable)
-  // -------------------------------------------------------------------
   const savePersonalChanges = async () => {
     try {
       const payload = {
@@ -390,29 +386,91 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
         phone: personalInfo.phoneNumber,
         email: personalInfo.email,
         areaOfExpertise: personalInfo.bio,
-      };
-
-      const { data } = await axios.put(
-        `http://localhost:5070/api/expertauth/${expertId}`,
-        payload
-      );
-
-      // Update frontend state
-      setExpertData(data);
+      }
+  
+      const { data } = await axios.put(`http://localhost:5070/api/expertauth/${expertId}`, payload)
+  
+      // Update both expertData and localExpertData to ensure UI consistency
+      setExpertData((prevData) => ({
+        ...prevData,
+        firstName: personalInfo.name.split(" ")[0] || "",
+        lastName: personalInfo.name.split(" ")[1] || "",
+        dateOfBirth: formatDateToISO(personalInfo.dateOfBirth),
+        phone: personalInfo.phoneNumber,
+        email: personalInfo.email,
+        areaOfExpertise: personalInfo.bio,
+        age: data.age?.toString() || prevData.age,
+      }))
+  
+      setLocalExpertData((prevData) => ({
+        ...prevData,
+        firstName: personalInfo.name.split(" ")[0] || "",
+        lastName: personalInfo.name.split(" ")[1] || "",
+        dateOfBirth: formatDateToISO(personalInfo.dateOfBirth),
+        phone: personalInfo.phoneNumber,
+        email: personalInfo.email,
+        areaOfExpertise: personalInfo.bio,
+        age: data.age?.toString() || prevData.age, // <-- add this line
+      }))
+      
+  
+      // Update personalInfo state to reflect changes
       setPersonalInfo((prev) => ({
         ...prev,
-        age: data.age?.toString() || prev.age, // Ensure age is updated
+        name: `${data.firstName || ""} ${data.lastName || ""}`,
+        phoneNumber: data.phone || prev.phoneNumber,
+        email: data.email || prev.email,
+        bio: data.areaOfExpertise || prev.bio,
+        age: data.age?.toString() || prev.age,
         dateOfBirth: data.dateOfBirth ? formatDateToDisplay(data.dateOfBirth) : prev.dateOfBirth,
-      }));
-
-      setShowSavedPersonal(true);
-      setIsEditingPersonal(false);
-      setTimeout(() => setShowSavedPersonal(false), 2000);
+      }))
+      
+  
+      setShowSavedPersonal(true)
+      setIsEditingPersonal(false)
+      setTimeout(() => setShowSavedPersonal(false), 2000)
+  
+      toast.success("Personal information updated successfully!")
     } catch (error) {
-      console.error("Error updating personal info:", error);
-      toast.error("Failed to save changes. " + (error.response?.data?.message || error.message));
+      console.error("Error updating personal info:", error)
+      toast.error("Failed to save changes. " + (error.response?.data?.message || error.message))
     }
-  };
+  }
+  // -------------------------------------------------------------------
+  // 8) Render: Personal Info Card (Editable)
+  // -------------------------------------------------------------------
+  // const savePersonalChanges = async () => {
+  //   try {
+  //     const payload = {
+  //       firstName: personalInfo.name.split(" ")[0] || "",
+  //       lastName: personalInfo.name.split(" ")[1] || "",
+  //       dateOfBirth: formatDateToISO(personalInfo.dateOfBirth), // Ensure correct format for backend
+  //       phone: personalInfo.phoneNumber,
+  //       email: personalInfo.email,
+  //       areaOfExpertise: personalInfo.bio,
+  //     };
+
+  //     const { data } = await axios.put(
+  //       `http://localhost:5070/api/expertauth/${expertId}`,
+  //       payload
+  //     );
+
+  //     // Update frontend state
+  //     setExpertData(data);
+  //     setPersonalInfo((prev) => ({
+  //       ...prev,
+  //       age: data.age?.toString() || prev.age, // Ensure age is updated
+  //       dateOfBirth: data.dateOfBirth ? formatDateToDisplay(data.dateOfBirth) : prev.dateOfBirth,
+  //     }));
+
+  //     setShowSavedPersonal(true);
+  //     setIsEditingPersonal(false);
+  //     setTimeout(() => setShowSavedPersonal(false), 2000);
+  //   } catch (error) {
+  //     console.error("Error updating personal info:", error);
+  //     toast.error("Failed to save changes. " + (error.response?.data?.message || error.message));
+  //   }
+  // };
 
   const saveAboutMeChanges = async () => {
     try {
