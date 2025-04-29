@@ -323,7 +323,7 @@ setBookedSlots(flattenedSlots || []);
                   </h4>
                   <ul className="list-none mt-2 space-y-1">
                     {(
-                      expert?.strengths || [
+                      expert?.advice || [
                         "Startups",
                         "Investing",
                         "Company Culture",
@@ -333,13 +333,13 @@ setBookedSlots(flattenedSlots || []);
                         "Fundraising",
                         "Hiring & Managing",
                       ]
-                    ).map((strength, index) => (
+                    ).map((advice, index) => (
                       <li
                         key={index}
                         className="text-gray-700 flex items-center text-sm"
                       >
                         <span className="text-yellow-500 mr-2">✔</span>{" "}
-                        {strength}
+                        {advice}
                       </li>
                     ))}
                   </ul>
