@@ -9,7 +9,6 @@ import AboutMeReviews from '@/components/ExpertAboutMe/AboutMeReviews';
 import ExpertFeatureHighightsExpertPanel from '@/components/ExpertPanel/ExpertPanelAboutMe/ExpertFeatureHighightsExpertPanel';
 import SimilarExpertsExpertPanel from '@/components/ExpertPanel/ExpertPanelAboutMe/SimilarExpertsExpertPanel';
 import Footer from "@/components/Layout/Footer";
-import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
@@ -451,7 +450,6 @@ const ExpertDetail = () => {
         </div>
       </div>
       <Footer />
-      <BottomNav />
     </>
   );
 };
