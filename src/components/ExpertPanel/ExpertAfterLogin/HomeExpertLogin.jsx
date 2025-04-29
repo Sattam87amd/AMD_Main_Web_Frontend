@@ -84,9 +84,9 @@ const HomeCardsLogin = () => {
           {expertData.map((expert, index) => (
             <Link
               key={index}
-              href={`/userpanel/userexpertaboutme/${expert._id}`}
+              href={`/expertpanel/expertaboutme/${expert._id}`}
               passHref
-              onClick={() => localStorage.setItem("comingFromTopExpert", true)}
+              onClick={() => localStorage.setItem("comingFromTopExpert", false)}
             >
               <div className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
                 {/* Background Image */}
