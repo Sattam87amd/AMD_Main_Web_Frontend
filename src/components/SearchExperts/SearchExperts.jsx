@@ -5,6 +5,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { FaSearch, FaTimes } from "react-icons/fa";
 import { HiBadgeCheck } from "react-icons/hi";
+import { HeartHandshake } from "lucide-react";
 import Footer from "../Layout/Footer";
 
 const SearchExperts = ({ closeSearchPage }) => {
@@ -12,10 +13,11 @@ const SearchExperts = ({ closeSearchPage }) => {
   const [allExperts, setAllExperts] = useState([]);
   const [filteredExperts, setFilteredExperts] = useState([]);
 
+
   useEffect(() => {
     const fetchExperts = async () => {
       try {
-        const res = await fetch(`http://localhost:5070/api/expertauth/`); 
+        const res = await fetch(`http://localhost:5070/api/expertauth/`);
         const data = await res.json();
 
         if (res.ok) {
@@ -48,6 +50,32 @@ const SearchExperts = ({ closeSearchPage }) => {
       setFilteredExperts(filtered);
     }
   };
+
+  const truncateExperience = (text) => {
+    if (!text) return "";
+
+    // Find the first sentence (up to first period) within first 25 words
+    const words = text.split(/\s+/).filter((word) => word.length > 0);
+    const first25Words = words.slice(0, 25);
+
+    // Find the first period in these words
+    let firstSentence = [];
+    for (const word of first25Words) {
+      firstSentence.push(word);
+      if (word.includes(".")) {
+        break;
+      }
+    }
+
+    // If no period found, use first 25 words with ellipsis if needed
+    if (firstSentence.length === 25 && words.length > 25) {
+      return firstSentence.join(" ") + "...";
+    }
+
+    return firstSentence.join(" ");
+  };
+
+
 
   return (
     <div className="bg-white p-0 relative min-h-screen px-1 mt-2 border-4">
@@ -98,29 +126,47 @@ const SearchExperts = ({ closeSearchPage }) => {
           </div>
 
           <div className="overflow-x-auto md:overflow-visible">
-            <div className="flex gap-4 md:gap-10 px-4 md:px-0 overflow-x-scroll custom-scrollbar-hide scrollbar-hide">
+            <div className="flex gap-4 px-4 md:px-0 overflow-x-scroll custom-scrollbar-hide">
               {filteredExperts.map((expert) => (
                 <Link
                   key={expert._id}
-                  href={`/expertaboutme/${expert._id}`} 
+                  href={`/expertaboutme/${expert._id}`}
                   passHref
                 >
-                  <div className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden rounded-lg cursor-pointer">
+                  <div className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
+                    {/* Background Image */}
                     <img
-                      src={expert.photoFile || "/default-profile.png"}
-                      alt={`${expert.firstName} ${expert.lastName}`}
+                      src={expert.photoFile || "/aaliyaabadi.png"}
+                      alt={expert.firstName}
                       className="w-full h-full object-cover"
                     />
-                    <div className="absolute top-4 right-4 bg-[#F8F7F3] text-black px-4 py-2 rounded-2xl font-semibold">
-                      SAR {expert.price || 0}
+
+                    {/* Price Tag */}
+                    <div className="absolute top-4 right-4 bg-[#F8F7F3] text-black px-4 py-2 rounded-2xl shadow-xl font-semibold">
+                      SAR {expert.price || "0"}
                     </div>
-                    <div className="absolute bottom-1 left-1 right-1 bg-white/80 p-4 m-2 rounded-lg">
-                      <h3 className="text-lg font-semibold text-black flex items-center gap-1">
-                        {expert.firstName} {expert.lastName}
-                        <HiBadgeCheck className="w-6 h-6 text-yellow-500" />
-                      </h3>
-                      <p className="text-xs text-black mt-1">
-                        {expert.experience ? expert.experience.slice(0, 100) : "No description"}...
+
+                    {/* Transparent Blur Card */}
+                    <div className="absolute bottom-1 left-1 right-1 bg-white/80 p-4 m-2">
+                      <div className="flex items-center justify-between">
+                        <h2 className="text-lg font-semibold text-black flex items-center gap-1">
+                          {expert.firstName}
+                          <HiBadgeCheck className="w-6 h-6 text-yellow-500" />
+                        </h2>
+
+                        {/* Small charity indicator text (optional) */}
+                        {expert.charityEnabled && (
+                          <div className="flex items-center text-xs text-red-600 font-bold px-3 py-1.5 rounded-full">
+                            <span>
+                              {expert.charityPercentage || 0}% to Charity{" "}
+                            </span>
+                            <HeartHandshake className="w-3 h-3 ml-1" />
+                          </div>
+                        )}
+                      </div>
+
+                      <p className="text-xs text-black mt-1 line-clamp-3">
+                        {truncateExperience(expert.experience)}
                       </p>
                     </div>
                   </div>
@@ -141,3 +187,5 @@ const SearchExperts = ({ closeSearchPage }) => {
 };
 
 export default SearchExperts;
+
+
