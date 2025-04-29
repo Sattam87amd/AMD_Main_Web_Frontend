@@ -15,36 +15,46 @@ const Navtop = ({ activeTab }) => {
     profilePic: null,
   });
 
+  const [user, setUser] = useState(
+    {
+      name: "",
+      email: "",
+      profilePic: null,
+    }
+  );
+
   const [userId, setUserId] = useState("");
 
-  // // ✅ Get userId from token in localStorage
-  // useEffect(() => {
-  //   if (typeof window !== "undefined") {
-  //     const userToken = localStorage.getItem("token"); // Make sure you store it with this key
-  //     if (userToken) {
-  //       try {
-  //         const decodedToken = JSON.parse(atob(userToken.split(".")[1]));
-  //         setUserId(decodedToken._id);
-  //       } catch (error) {
-  //         console.error("Error decoding userToken:", error);
-  //       }
-  //     } else {
-  //       console.warn("User token not found in localStorage");
-  //       router.push("/"); // redirect if token not found
-  //     }
-  //   }
-  // }, [router]);
+  // ✅ Get userId from token in localStorage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const userToken = localStorage.getItem("userToken"); // Make sure you store it with this key
+      if (userToken) {
+        try {
+          const decodedToken = JSON.parse(atob(userToken.split(".")[1]));
+          setUserId(decodedToken._id);
+        } catch (error) {
+          console.error("Error decoding userToken:", error);
+        }
+      } else {
+        console.warn("User token not found in localStorage");
+        router.push("/"); // redirect if token not found
+      }
+    }
+  }, [router]);
 
   // ✅ Fetch user data from backend
   useEffect(() => {
     if (userId) {
       const fetchUserData = async () => {
         try {
-          const response = await axios.get(`https://amd-api.code4bharat.com/api/auth/user/${userId}`);
-          const { firstName, photoFile } = response.data.data.user;
+          const response = await axios.get(`http://localhost:5070/api/userauth/${userId}`);
+          setUser(response.data.user);
+          const { firstName, lastName, photoFile } = response.data.data;
+          setUser(response.data.data);
           setUserData({
-            name: firstName,
-            profilePic: photoFile || "/default-profile.png",
+            name: `${firstName} ${lastName}`,
+            profilePic: photoFile || "/default-profile.png", // replace with actual image URL if available
           });
         } catch (error) {
           console.error("Error fetching user data:", error);
@@ -76,15 +86,15 @@ const Navtop = ({ activeTab }) => {
         <Link href="/userpanel/userpanelprofile">
           <div className="flex items-center space-x-2 cursor-pointer">
             <div className="relative w-8 h-8 rounded-full">
-              {userData.profilePic && (
-                <Image
-                  src={userData.profilePic}
-                  alt="Profile"
-                  width={32}
-                  height={32}
-                  className="rounded-full object-cover border border-gray-300"
-                />
-              )}
+            {userData.profilePic && (
+  <Image
+    src={userData.profilePic}
+    alt="Profile"
+    width={32}
+    height={32}
+    className="rounded-full object-cover border border-gray-300"
+  />
+)}
             </div>
             <p className="text-sm font-semibold">{userData.name || "Loading..."}</p>
           </div>
