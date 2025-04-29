@@ -3,13 +3,17 @@ import React, { useState } from "react";
 import { CiFilter } from "react-icons/ci";
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { usePathname } from "next/navigation"; // required to get the current path
 
 const ExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
+  const pathname = usePathname(); // to determine active category
+  const [showFilterBox, setShowFilterBox] = useState(false);
+
   const categories = [
     { title: "Top Experts", image: "/topexperts.png", link: "/topexperts" },
     { title: "Home", image: "/home.png", link: "/home-experts" },
     { title: "Career & Business", image: "/career-business.png", link: "/career&businessexperts" },
-    { title: "Style & Beauty", image: "/style-beauty.png", link: "/style&beautyexperts" },
+    { title: "Fashion & Beauty", image: "/style-beauty.png", link: "/style&beautyexperts" },
     { title: "Wellness", image: "/wellness.png", link: "/wellnessexperts" },
   ];
 
@@ -23,12 +27,6 @@ const ExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
     { label: "Expert Language - English", value: "language_english" },
   ];
 
-  const [showFilterBox, setShowFilterBox] = useState(false);
-
-  const handleCategoryClick = (link) => {
-    window.location.href = link;
-  };
-
   const handleFilterChange = (event) => {
     setSelectedFilter(event.target.value);
   };
@@ -37,6 +35,7 @@ const ExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
 
   return (
     <div className="bg-[#F8F7F3] px-4 py-6">
+      {/* Heading and Filter Button */}
       <div className="flex justify-between items-center mb-6">
         <motion.h1
           className="text-base md:text-4xl font-semibold text-black"
@@ -58,6 +57,7 @@ const ExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
         </motion.button>
       </div>
 
+      {/* Filter Box */}
       {showFilterBox && (
         <motion.div
           className="bg-white p-4 rounded-md shadow-lg w-64 absolute top-16 right-4 z-50"
@@ -96,35 +96,36 @@ const ExpertCategory = ({ selectedFilter, setSelectedFilter }) => {
         </motion.div>
       )}
 
+      {/* Categories Section (Updated UI from provided snippet) */}
       <motion.div
         className="overflow-x-auto md:overflow-x-auto md:ml-16"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
-        <div className="flex gap-4 md:gap-x-32 md:px-4 md:pb-2 custom-scrollbar-hide">
+        <div className="flex gap-4 md:gap-x-32 md:px-4 md:pb-2 scrollbar-hide">
           {categories.map((category, index) => (
             <Link href={category.link} key={index} passHref>
-              <motion.div
-                onClick={() => handleCategoryClick(category.link)}
-                className={`relative flex-shrink-0 min-w-[130px] md:min-w-[200px] h-20 md:h-32 rounded-xl overflow-hidden shadow-md cursor-pointer ${
-                  selectedFilter === category.title ? "border-4 border-black rounded-xl" : ""
+              <div
+                className={`relative flex-shrink-0 min-w-[170px] md:min-w-[240px] h-24 md:h-36 rounded-3xl overflow-hidden shadow-md cursor-pointer p-1 ${
+                  pathname === category.link
+                    ? "border-4 border-black"
+                    : "border-transparent"
                 }`}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
               >
-                <div className="relative w-full h-full">
+                <div className="relative w-full h-full rounded-3xl overflow-hidden">
                   <img
                     src={category.image}
                     alt={category.title}
                     className="absolute inset-0 w-full h-full object-cover opacity-100 mix-blend-multiply"
                   />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                    <p className="text-white font-semibold md:text-lg">
+                      {category.title}
+                    </p>
+                  </div>
                 </div>
-                <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-40 rounded-xl">
-                  <p className="text-white font-semibold md:text-lg">{category.title}</p>
-                </div>
-              </motion.div>
+              </div>
             </Link>
           ))}
         </div>

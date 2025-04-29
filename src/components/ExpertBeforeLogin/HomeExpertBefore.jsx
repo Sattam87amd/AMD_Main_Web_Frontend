@@ -61,7 +61,7 @@ const HomeExpertsBefore = () => {
   return (
     <div className="bg-white p-6 md:p-1 ">
       {/* Heading Section */}
-      <div className="flex flex-col md:flex-row md:h-40 items-center mb-6 md:mb-0">
+      <div className="flex flex-col md:flex-row  md:h-40 items-center mb-6 md:mb-0">
         <h1 className="text-3xl md:text-[60px] font-bold text-black">HOME</h1>
         <p className="text-[#9C9C9C] md:pt-5 pl-5 md:text-2xl">
           Transform Your Space with Expert Interior Design Insights
@@ -80,7 +80,7 @@ const HomeExpertsBefore = () => {
 
       {/* Cards Section - Horizontal Scroll on Small Screens, Grid on Medium+ */}
       <div className="overflow-x-auto md:overflow-visible">
-        <div className="flex md:grid md:grid-cols-5 gap-4 md:gap-x-24 px-4 md:px-0 overflow-x-scroll custom-scrollbar-hide">
+        <div className="flex md:grid md:grid-cols-5 gap-4 md:gap-x-64 px-4 md:px-0 overflow-x-scroll custom-scrollbar-hide">
           {expertData.map((expert, index) => (
             <Link
               key={index}
