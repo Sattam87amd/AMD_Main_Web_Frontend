@@ -427,6 +427,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
       setTimeout(() => setShowSavedPersonal(false), 2000)
   
       toast.success("Personal information updated successfully!")
+      window.location.reload()
     } catch (error) {
       console.error("Error updating personal info:", error)
       toast.error("Failed to save changes. " + (error.response?.data?.message || error.message))
