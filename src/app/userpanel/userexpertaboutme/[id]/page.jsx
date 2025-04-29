@@ -29,6 +29,8 @@ const ExpertDetail = () => {
   const [selectedTime, setSelectedTime] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedTimes, setSelectedTimes] = useState([]);
+  const [bookedSlots, setBookedSlots] = useState([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);  
 
   const router = useRouter();
 
@@ -56,6 +58,54 @@ const ExpertDetail = () => {
   const handleSeeMore = () => {
     setIsExpanded(!isExpanded);
   };
+
+  useEffect(() => {
+    // Get expertId from URL path
+    const pathParts = window.location.pathname.split('/');
+    const expertId = pathParts[pathParts.length - 1];
+  
+    if (!expertId) {
+      console.error("No expertId found in URL");
+      return;
+    }
+  
+    const fetchBookedSlots = async () => {
+      setLoadingSlots(true);
+      try {
+        // Get token from localStorage
+        const userToken = localStorage.getItem('userToken');
+        
+        if (!userToken) {
+          toast.error('Please login to view availability');
+          return;
+        }
+  
+      // In your fetchBookedSlots function:
+      const response = await axios.get(
+     `http://localhost:5070/api/session/user-booked-slots/${expertId}`,
+     {
+        headers: {
+      'Authorization': `Bearer ${userToken}`
+     }
+  }
+);
+// Flatten the nested array structure
+const flattenedSlots = response.data.data.flat();
+setBookedSlots(flattenedSlots || []);
+      } catch (err) {
+        console.error("Error fetching booked slots:", err);
+        if (err.response?.status === 401) {
+          toast.error('Session expired. Please login again');
+          // Optionally redirect to login
+          // router.push('/login');
+        } else {
+          toast.error("Could not load availability data");
+        }
+      }
+    };
+    
+    fetchBookedSlots();
+  }, []); // Empty dependency array means this runs once on mount
 
   useEffect(() => {
     const pathParts = window.location.pathname.split("/");
@@ -147,6 +197,18 @@ const ExpertDetail = () => {
       // Add the new slot to the selected times
       return [...prevTimes, slot];
     });
+  };
+
+  const isSlotBooked = (dayKey, time) => {
+    const date = dateMap[dayKey].toISOString().split("T")[0];
+    // Ensure time format matches exactly what's coming from backend
+    const formattedTime = time; // Keep original format "07:00 AM"
+    
+    return bookedSlots.some(
+      slot => 
+        slot.selectedDate === date && 
+        slot.selectedTime === formattedTime
+    );
   };
 
   const experienceText = expert?.experience || "";
@@ -299,55 +361,48 @@ const ExpertDetail = () => {
                         ))}
                       </div>
 
-                      {/* Time Slots */}
-                      {[
-                        ["Today", "today"],
-                        ["Tomorrow", "tomorrow"],
-                        ["Next Date", "nextDate"],
-                      ].map(([label, dayKey]) => (
-                        <div key={dayKey} className="mb-8">
-                          <h4 className="font-semibold py-4 text-xl">
-                            {`${label} (${getFormattedDate(dateMap[dayKey])})`}
-                          </h4>
-                          <div className="grid grid-cols-3 gap-3">
-                            {[
-                              "07:00 AM",
-                              "08:00 AM",
-                              "09:00 AM",
-                              "10:00 AM",
-                              "11:00 AM",
-                              "12:00 PM",
-                              "02:00 PM",
-                              "03:00 PM",
-                              "04:00 PM",
-                            ].map((time) => {
-                              const timeSlotKey = `${dateMap[dayKey]
-                                .toISOString()
-                                .split("T")[0]}|${time.replace(" AM", "").replace(
-                                " PM",
-                                ""
-                              )}`;
-                              const isSelected = selectedTimes.some(
-                                (slot) => slot.selectedDate === dateMap[dayKey].toISOString().split("T")[0] && slot.selectedTime === time
-                              );
-                              return (
-                                <button
-                                  key={time}
-                                  className={`py-2 px-3 text-sm rounded-xl border transition cursor-pointer ${
-                                    isSelected
-                                      ? "bg-black text-white"
-                                      : "bg-white text-black"
-                                  }`}
-                                  onClick={() => handleTimeSelection(dayKey, time)}
-                                >
-                                  {time}
-                                </button>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      ))}
+                       {/* Time Slots */}
+{[["Today", "today"], ["Tomorrow", "tomorrow"], ["Next Date", "nextDate"]].map(
+  ([label, dayKey]) => {
+    const date = dateMap[dayKey].toISOString().split("T")[0];
+    
+    return (
+      <div key={dayKey} className="mb-8">
+        <h4 className="font-semibold py-4 text-xl">
+          {`${label} (${getFormattedDate(dateMap[dayKey])})`}
+        </h4>
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            "07:00 AM", "08:00 AM", "09:00 AM",
+            "10:00 AM", "11:00 AM", "12:00 PM",
+            "02:00 PM", "03:00 PM", "04:00 PM"
+          ].map((time) => {
+            const isBooked = isSlotBooked(dayKey, time);
+            const isSelected = selectedTimes.some(
+              s => s.selectedDate === date && s.selectedTime === time
+            );
 
+            return (
+              <button
+                key={time}
+                className={`py-2 px-3 text-sm ${
+                  isSelected ? "bg-black text-white" :
+                  isBooked ? "bg-gray-200 text-gray-500 cursor-not-allowed" :
+                  "bg-white text-black hover:bg-gray-100"
+                } rounded-xl border transition-colors`}
+                onClick={() => !isBooked && handleTimeSelection(dayKey, time)}
+                disabled={isBooked}
+              >
+                {time}
+                {isBooked && <span className="text-xs block">Booked</span>}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+)}
                       {/* Show how many slots are selected */}
                       <p className="text-sm text-gray-600 mt-4">
                         Selected slots: {selectedTimes.length} / 5
