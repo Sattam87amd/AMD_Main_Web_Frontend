@@ -17,7 +17,7 @@ const SearchExperts = ({ closeSearchPage }) => {
   useEffect(() => {
     const fetchExperts = async () => {
       try {
-        const res = await fetch(`http://localhost:5070/api/expertauth/`);
+        const res = await fetch(`https://amd-api.code4bharat.com/api/expertauth/`);
         const data = await res.json();
 
         if (res.ok) {

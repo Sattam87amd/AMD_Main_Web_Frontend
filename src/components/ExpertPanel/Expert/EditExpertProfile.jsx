@@ -94,7 +94,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
     if (expertId) {
       const fetchExpertData = async () => {
         try {
-          const response = await axios.get(`http://localhost:5070/api/expertauth/${expertId}`);
+          const response = await axios.get(`https://amd-api.code4bharat.com/api/expertauth/${expertId}`);
           if (response.data && response.data.data) {
             // Update both the parent component state and our local state
             setExpertData(response.data.data);
@@ -221,7 +221,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
   const saveProfileChanges = async () => {
     try {
       // Save changes to API
-      await axios.put(`http://localhost:5070/api/expertauth/${expertId}`, localExpertData);
+      await axios.put(`https://amd-api.code4bharat.com/api/expertauth/${expertId}`, localExpertData);
 
       // Update parent component's state
       setExpertData(localExpertData);
@@ -384,7 +384,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
         areaOfExpertise: personalInfo.bio,
       }
   
-      const { data } = await axios.put(`http://localhost:5070/api/expertauth/${expertId}`, payload)
+      const { data } = await axios.put(`https://amd-api.code4bharat.com/api/expertauth/${expertId}`, payload)
   
       // Update both expertData and localExpertData to ensure UI consistency
       setExpertData((prevData) => ({
@@ -448,7 +448,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
   //     };
 
   //     const { data } = await axios.put(
-  //       `http://localhost:5070/api/expertauth/${expertId}`,
+  //       `https://amd-api.code4bharat.com/api/expertauth/${expertId}`,
   //       payload
   //     );
 
@@ -478,7 +478,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
         advice: filteredAdvice,
       };
       const { data } = await axios.put(
-        `http://localhost:5070/api/expertauth/${expertId}/experience`,
+        `https://amd-api.code4bharat.com/api/expertauth/${expertId}/experience`,
         payload
       );
       if (data.success) {

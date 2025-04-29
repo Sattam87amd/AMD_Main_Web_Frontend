@@ -67,7 +67,7 @@ function LoginPage() {
       }
       try {
         await axios.post(
-          "http://localhost:5070/api/expertauth/request-otp",
+          "https://amd-api.code4bharat.com/api/expertauth/request-otp",
           { email }
         );
         toast.success("OTP sent to your email!");
@@ -84,7 +84,7 @@ function LoginPage() {
       }
       try {
         await axios.post(
-          "http://localhost:5070/api/expertauth/request-otp",
+          "https://amd-api.code4bharat.com/api/expertauth/request-otp",
           { phone }
         );
         toast.success("OTP sent to your phone!");
@@ -106,7 +106,7 @@ function LoginPage() {
     try {
       const payload = useEmail ? { email, otp } : { phone, otp };
       const response = await axios.post(
-        "http://localhost:5070/api/expertauth/verify-otp",
+        "https://amd-api.code4bharat.com/api/expertauth/verify-otp",
         payload
       );
 

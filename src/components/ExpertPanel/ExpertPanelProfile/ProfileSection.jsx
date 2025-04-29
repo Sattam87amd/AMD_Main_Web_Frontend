@@ -61,7 +61,7 @@ const ProfileSection = () => {
       const fetchExpertDetails = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:5070/api/expertauth/${expertId}`
+            `https://amd-api.code4bharat.com/api/expertauth/${expertId}`
           );
           const {
             photoFile,

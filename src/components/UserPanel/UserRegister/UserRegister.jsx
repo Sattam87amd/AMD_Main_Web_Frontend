@@ -77,7 +77,7 @@ function UserRegisterPage() {
 
     try {
       const response = await axios.post(
-        " http://localhost:5070/api/userauth/registeruser",
+        " https://amd-api.code4bharat.com/api/userauth/registeruser",
         {
           phone, // Add phone from state
           firstName: firstName,

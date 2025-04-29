@@ -30,7 +30,7 @@ const SimilarExpertsExpertPanel = () => {
   
         if (comingFromTopExpert) {
           // Fetch all Top Experts
-          response = await axios.get(`http://localhost:5070/api/expertauth/`);
+          response = await axios.get(`https://amd-api.code4bharat.com/api/expertauth/`);
           let filteredExperts = response.data.data.filter((exp) => exp.averageRating >= 4);
   
           // ⭐ Remove current expert
@@ -40,7 +40,7 @@ const SimilarExpertsExpertPanel = () => {
         } else {
           // Fetch experts based on area
           const area = currentExpert.areaOfExpertise;
-          response = await axios.get(`http://localhost:5070/api/expertauth/area/${area}`);
+          response = await axios.get(`https://amd-api.code4bharat.com/api/expertauth/area/${area}`);
           
           let filteredExperts = response.data.data.filter((exp) => exp._id !== currentExpert._id); // ⭐ Remove current expert
           

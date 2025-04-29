@@ -82,7 +82,7 @@ const ExpertDetail = () => {
   
       // In your fetchBookedSlots function:
       const response = await axios.get(
-     `http://localhost:5070/api/session/user-booked-slots/${expertId}`,
+     `https://amd-api.code4bharat.com/api/session/user-booked-slots/${expertId}`,
      {
         headers: {
       'Authorization': `Bearer ${userToken}`
@@ -116,7 +116,7 @@ setBookedSlots(flattenedSlots || []);
       const fetchExpertData = async () => {
         try {
           const response = await axios.get(
-            `http://localhost:5070/api/expertauth/${expertId}`
+            `https://amd-api.code4bharat.com/api/expertauth/${expertId}`
           );
           setExpert(response.data.data);
           setLoading(false);
