@@ -187,6 +187,7 @@ function RegisterForm() {
       } catch (error) {
         console.error("Error during registration:", error);
         toast.error("Error during registration. Please try again.");
+       
       }
     }
   };

@@ -85,7 +85,10 @@ function UserLoginPage() {
         toast.success("OTP sent to your email!");
       } catch (error) {
         console.log(error);
-        setFormError("Failed to send OTP. Please try again.");
+        if (error.response && error.response.status === 400) {
+          toast.error("Email already exists as an Expert. Please try another email.");
+        }
+        
       }
     } else {
       if (!phone || !isValidPhoneNumber(phone)) {
@@ -99,6 +102,9 @@ function UserLoginPage() {
         toast.success("OTP sent to your email!");
       } catch (error) {
         console.log(error);
+        if (error.response && error.response.status === 400) {
+          toast.error("Phone Number already exists as an Expert. Please try another number.");
+        }
         toast.error("Failed to send OTP. Please try again.");
       }
     }

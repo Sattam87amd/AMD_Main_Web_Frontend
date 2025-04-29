@@ -73,7 +73,9 @@ function LoginPage() {
         toast.success("OTP sent to your email!");
       } catch (error) {
         console.log(error);
-        setFormError("Failed to send OTP. Please try again.");
+        if (error.response && error.response.status === 400) {
+          toast.error("Email already exists as an User. Please try another email.");
+        }
       }
     } else {
       if (!phone || !isValidPhoneNumber(phone)) {
@@ -88,7 +90,9 @@ function LoginPage() {
         toast.success("OTP sent to your phone!");
       } catch (error) {
         console.log(error);
-        setFormError("Failed to send OTP. Please try again.");
+        if (error.response && error.response.status === 400) {
+          toast.error("Phone number already exists as an User. Please try another number.");
+        }
       }
     }
   };
