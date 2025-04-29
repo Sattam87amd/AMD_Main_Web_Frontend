@@ -102,7 +102,7 @@ const ExpertDetail = () => {
       };
 
       localStorage.setItem("sessionData", JSON.stringify(sessionData));
-      toast.error("Click Ok to proceed");
+      toast.success("Redirecting to booking page");
       router.push("/userpanel/userbooking");
       setShowTimeSelection(false);
     } catch (error) {
