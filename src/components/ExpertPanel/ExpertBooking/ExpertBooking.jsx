@@ -124,7 +124,10 @@ const ExpertBooking = () => {
       localStorage.removeItem('sessionData');
       localStorage.removeItem('bookingData');
       localStorage.removeItem('expertData');
-      
+      localStorage.removeItem('comingFromTopExpert');
+      localStorage.removeItem('preferred_availability');
+      localStorage.removeItem('preferred_region');
+      localStorage.removeItem('preferred_months');
 
     } catch (error) {
       // Improved error logging
