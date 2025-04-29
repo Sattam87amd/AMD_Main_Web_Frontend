@@ -86,15 +86,15 @@ const Navtop = ({ activeTab }) => {
         <Link href="/userpanel/userpanelprofile">
           <div className="flex items-center space-x-2 cursor-pointer">
             <div className="relative w-8 h-8 rounded-full">
-            {userData.profilePic && (
-  <Image
-    src={userData.profilePic}
-    alt="Profile"
-    width={32}
-    height={32}
-    className="rounded-full object-cover border border-gray-300"
-  />
-)}
+              {userData.profilePic && (
+                <Image
+                  src={userData.profilePic}
+                  alt="Profile"
+                  width={32}
+                  height={32}
+                  className="rounded-full object-cover border border-gray-300"
+                />
+              )}
             </div>
             <p className="text-sm font-semibold">{userData.name || "Loading..."}</p>
           </div>
