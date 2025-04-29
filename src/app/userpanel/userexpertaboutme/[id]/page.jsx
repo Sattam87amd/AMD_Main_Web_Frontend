@@ -333,7 +333,7 @@ const ExpertDetail = () => {
                               return (
                                 <button
                                   key={time}
-                                  className={`py-2 px-3 text-sm rounded-xl border transition cursor-pointer hover:bg-gray-100 ${
+                                  className={`py-2 px-3 text-sm rounded-xl border transition cursor-pointer ${
                                     isSelected
                                       ? "bg-black text-white"
                                       : "bg-white text-black"
