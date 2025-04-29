@@ -66,13 +66,9 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
 
       setAboutMe({
         description: expertData.experience || "",
-        advice:expertData.advice || [
-          "",
-          "",
-          "",
-          "",
-          "",
-        ],
+        advice: Array.isArray(expertData.advice) && expertData.advice.length > 0
+          ? expertData.advice
+          : ["", "", "", "", ""],
       });
     }
   }, [expertData]);
@@ -143,7 +139,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
 
   const formatDateToISO = (dateStr) => {
     const [day, month, year] = dateStr.split("/");
-    return  `${year}-${month}-${day}`;
+    return `${year}-${month}-${day}`;
   };
 
   const formatDateToDisplay = (isoDate) => {
@@ -154,21 +150,21 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
   const [showSavedPersonal, setShowSavedPersonal] = useState(false);
 
   // For "About Me" card
-  
-    const [aboutMe, setAboutMe] = useState({
-      description: "",
-      advice: [
-        "Startup Struggles",
-        "Customer Retention/Service",
-        "The Beauty Industry",
-        "Product Development",
-        "Branding & PR",
-      ],
-    });
-  
-    const [isEditingAboutMe, setIsEditingAboutMe] = useState(false);
-    const [showSavedAboutMe, setShowSavedAboutMe] = useState(false);
-    
+
+  const [aboutMe, setAboutMe] = useState({
+    description: "",
+    advice: [
+      "Startup Struggles",
+      "Customer Retention/Service",
+      "The Beauty Industry",
+      "Product Development",
+      "Branding & PR",
+    ],
+  });
+
+  const [isEditingAboutMe, setIsEditingAboutMe] = useState(false);
+  const [showSavedAboutMe, setShowSavedAboutMe] = useState(false);
+
   // Notifications toggle
   const [isEnabled, setIsEnabled] = useState(false);
 
@@ -262,8 +258,8 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
               key={item.name}
               onClick={() => handleMenuClick(item.name)}
               className={`flex items-center justify-between w-full text-left p-2 rounded-lg transition md:gap-3 ${selectedSection === item.name
-                  ? "bg-black text-white"
-                  : "hover:bg-gray-200 text-[#7A7D84]"
+                ? "bg-black text-white"
+                : "hover:bg-gray-200 text-[#7A7D84]"
                 }`}
             >
               <span className="flex items-center gap-3">{item.name}</span>
@@ -377,10 +373,6 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
     </div>
   );
 
-
-  // -------------------------------------------------------------------
-  // 8) Render: Personal Info Card (Editable)
-  // -------------------------------------------------------------------
   const savePersonalChanges = async () => {
     try {
       const payload = {
@@ -390,35 +382,100 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
         phone: personalInfo.phoneNumber,
         email: personalInfo.email,
         areaOfExpertise: personalInfo.bio,
-      };
-
-      const { data } = await axios.put(
-        `http://localhost:5070/api/expertauth/${expertId}`,
-        payload
-      );
-
-      // Update frontend state
-      setExpertData(data);
+      }
+  
+      const { data } = await axios.put(`http://localhost:5070/api/expertauth/${expertId}`, payload)
+  
+      // Update both expertData and localExpertData to ensure UI consistency
+      setExpertData((prevData) => ({
+        ...prevData,
+        firstName: personalInfo.name.split(" ")[0] || "",
+        lastName: personalInfo.name.split(" ")[1] || "",
+        dateOfBirth: formatDateToISO(personalInfo.dateOfBirth),
+        phone: personalInfo.phoneNumber,
+        email: personalInfo.email,
+        areaOfExpertise: personalInfo.bio,
+        age: data.age?.toString() || prevData.age,
+      }))
+  
+      setLocalExpertData((prevData) => ({
+        ...prevData,
+        firstName: personalInfo.name.split(" ")[0] || "",
+        lastName: personalInfo.name.split(" ")[1] || "",
+        dateOfBirth: formatDateToISO(personalInfo.dateOfBirth),
+        phone: personalInfo.phoneNumber,
+        email: personalInfo.email,
+        areaOfExpertise: personalInfo.bio,
+        age: data.age?.toString() || prevData.age, // <-- add this line
+      }))
+      
+  
+      // Update personalInfo state to reflect changes
       setPersonalInfo((prev) => ({
         ...prev,
-        age: data.age?.toString() || prev.age, // Ensure age is updated
+        name: `${data.firstName || ""} ${data.lastName || ""}`,
+        phoneNumber: data.phone || prev.phoneNumber,
+        email: data.email || prev.email,
+        bio: data.areaOfExpertise || prev.bio,
+        age: data.age?.toString() || prev.age,
         dateOfBirth: data.dateOfBirth ? formatDateToDisplay(data.dateOfBirth) : prev.dateOfBirth,
-      }));
-
-      setShowSavedPersonal(true);
-      setIsEditingPersonal(false);
-      setTimeout(() => setShowSavedPersonal(false), 2000);
+      }))
+      
+  
+      setShowSavedPersonal(true)
+      setIsEditingPersonal(false)
+      setTimeout(() => setShowSavedPersonal(false), 2000)
+  
+      toast.success("Personal information updated successfully!")
+      window.location.reload()
     } catch (error) {
-      console.error("Error updating personal info:", error);
-      toast.error("Failed to save changes. " + (error.response?.data?.message || error.message));
+      console.error("Error updating personal info:", error)
+      toast.error("Failed to save changes. " + (error.response?.data?.message || error.message))
     }
-  };
+  }
+  // -------------------------------------------------------------------
+  // 8) Render: Personal Info Card (Editable)
+  // -------------------------------------------------------------------
+  // const savePersonalChanges = async () => {
+  //   try {
+  //     const payload = {
+  //       firstName: personalInfo.name.split(" ")[0] || "",
+  //       lastName: personalInfo.name.split(" ")[1] || "",
+  //       dateOfBirth: formatDateToISO(personalInfo.dateOfBirth), // Ensure correct format for backend
+  //       phone: personalInfo.phoneNumber,
+  //       email: personalInfo.email,
+  //       areaOfExpertise: personalInfo.bio,
+  //     };
+
+  //     const { data } = await axios.put(
+  //       `http://localhost:5070/api/expertauth/${expertId}`,
+  //       payload
+  //     );
+
+  //     // Update frontend state
+  //     setExpertData(data);
+  //     setPersonalInfo((prev) => ({
+  //       ...prev,
+  //       age: data.age?.toString() || prev.age, // Ensure age is updated
+  //       dateOfBirth: data.dateOfBirth ? formatDateToDisplay(data.dateOfBirth) : prev.dateOfBirth,
+  //     }));
+
+  //     setShowSavedPersonal(true);
+  //     setIsEditingPersonal(false);
+  //     setTimeout(() => setShowSavedPersonal(false), 2000);
+  //   } catch (error) {
+  //     console.error("Error updating personal info:", error);
+  //     toast.error("Failed to save changes. " + (error.response?.data?.message || error.message));
+  //   }
+  // };
 
   const saveAboutMeChanges = async () => {
     try {
+      const filteredAdvice = aboutMe.advice.filter(item => item.trim() !== "");
+
       const payload = {
         aboutMe: aboutMe.description,
-        advice:  aboutMe.advice,
+        advice: filteredAdvice,
       };
       const { data } = await axios.put(
         `http://localhost:5070/api/expertauth/${expertId}/experience`,
@@ -428,19 +485,19 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
         // flip out of “editing” mode, show your “Saved!” message
         setIsEditingAboutMe(false);
         setShowSavedAboutMe(true);
-  
+
         // push the new values back into both parent and local state:
         setExpertData((prev) => ({
           ...prev,
           experience: data.data.experience,
-          advice:     data.data.advice,
+          advice: data.data.advice,
         }));
         setLocalExpertData((prev) => ({
           ...prev,
           experience: data.data.experience,
-          advice:     data.data.advice,
+          advice: data.data.advice,
         }));
-  
+
         // hide the “Saved!” after 2s
         setTimeout(() => setShowSavedAboutMe(false), 2000);
       }
@@ -457,7 +514,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
         <h3 className="text-lg font-semibold text-[#434966]">
           Personal Information
         </h3>
-        {isEditingPersonal ? ( 
+        {isEditingPersonal ? (
           <button
             className="border border-[#434966] px-4 py-2 text-white font-medium bg-black rounded-lg flex items-center gap-2"
             onClick={savePersonalChanges}
@@ -541,26 +598,28 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
 
 
 
-  
+
   const renderAboutMeCard = () => (
     <div className="bg-white rounded-2xl p-6 border border-gray-300">
       <div className="flex flex-row items-center justify-between mb-4">
         <h3 className="text-lg font-semibold text-black">About Me</h3>
-        {isEditingAboutMe ? (
-          <button
-            className="border border-[#434966] px-4 py-2 text-white font-medium bg-black rounded-lg flex items-center gap-2"
-            onClick={saveAboutMeChanges}
-          >
-            Save
-          </button>
-        ) : (
-          <button
-            className="border border-[#434966] px-4 py-2 text-[#434966] font-medium rounded-lg flex items-center gap-2"
-            onClick={() => setIsEditingAboutMe(true)}
-          >
-            Edit <LuPencilLine className="text-black h-5 w-5" />
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          {isEditingAboutMe ? (
+            <button
+              className="border border-[#434966] px-4 py-2 text-white font-medium bg-black rounded-lg flex items-center gap-2"
+              onClick={saveAboutMeChanges}
+            >
+              Save
+            </button>
+          ) : (
+            <button
+              className="border border-[#434966] px-4 py-2 text-[#434966] font-medium rounded-lg flex items-center gap-2"
+              onClick={() => setIsEditingAboutMe(true)}
+            >
+              Edit <LuPencilLine className="text-black h-5 w-5" />
+            </button>
+          )}
+        </div>
       </div>
       {showSavedAboutMe && (
         <p className="text-green-500 mt-2 animate-pulse">Changes Saved!</p>
@@ -578,18 +637,35 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
             Things I Can Advise On:
           </h3>
           {aboutMe.advice.map((item, index) => (
-            <input
-              key={index}
-              type="text"
-              value={item || ""}
-              onChange={(e) => {
-                const newAdvice = [...aboutMe.advice];
-                newAdvice[index] = e.target.value;
-                setAboutMe({ ...aboutMe, advice: newAdvice });
-              }}
-              className="w-full border border-gray-300 rounded-xl p-2.5 text-gray-900 focus:ring-black focus:border-black mt-2"
-            />
+            <div key={index} className="flex items-center gap-2 mt-2">
+              <input
+                type="text"
+                value={item || ""}
+                onChange={(e) => {
+                  const newAdvice = [...aboutMe.advice];
+                  newAdvice[index] = e.target.value;
+                  setAboutMe({ ...aboutMe, advice: newAdvice });
+                }}
+                className="w-full border border-gray-300 rounded-xl p-2.5 text-gray-900 focus:ring-black focus:border-black"
+              />
+              <button 
+                className="text-red-500"
+                onClick={() => {
+                  const newAdvice = [...aboutMe.advice];
+                  newAdvice.splice(index, 1);
+                  setAboutMe({ ...aboutMe, advice: newAdvice });
+                }}
+              >
+                ✕
+              </button>
+            </div>
           ))}
+          <button
+            className="mt-3 text-blue-600 flex items-center gap-1"
+            onClick={() => setAboutMe({ ...aboutMe, advice: [...aboutMe.advice, ""] })}
+          >
+            <span className="text-lg">+</span> Add another advice item
+          </button>
         </>
       ) : (
         <>
@@ -598,7 +674,7 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
             Things I Can Advise On:
           </h3>
           <ul className="text-[#434966]">
-            {aboutMe.advice.map((item, index) => (
+            {aboutMe.advice.filter(item => item.trim() !== "").map((item, index) => (
               <li key={index}>- {item}</li>
             ))}
           </ul>
@@ -606,7 +682,6 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
       )}
     </div>
   );
-
   // -------------------------------------------------------------------
   // 10) Combined "Edit Profile" Content
   // -------------------------------------------------------------------
@@ -794,8 +869,8 @@ const EditExpertProfile = ({ expertData, setExpertData, setShowProfile }) => {
                 >
                   <div
                     className={`absolute top-[2px] left-[2px] bg-white border-gray-300 border w-5 h-5 rounded-full transition-all ${videoCallExtensionEnabled
-                        ? "translate-x-full border-white"
-                        : ""
+                      ? "translate-x-full border-white"
+                      : ""
                       }`}
                   ></div>
                 </div>

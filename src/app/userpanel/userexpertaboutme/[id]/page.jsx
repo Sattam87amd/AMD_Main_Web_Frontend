@@ -14,7 +14,8 @@ import UserSidebar from "@/components/UserPanel/UseSideBar/UserSidebar";
 import UserNavSearch from "@/components/UserPanel/Layout/NavSearch";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ExpertDetail = () => {
   const [expert, setExpert] = useState(null);
@@ -158,6 +159,7 @@ const ExpertDetail = () => {
   return (
     <>
       <div className="flex min-h-screen">
+         <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
         <aside className="w-[20%] hidden md:block">
           <UserSidebar />
         </aside>
@@ -331,7 +333,7 @@ const ExpertDetail = () => {
                               return (
                                 <button
                                   key={time}
-                                  className={`py-2 px-3 text-sm rounded-xl border transition cursor-pointer hover:bg-gray-100 ${
+                                  className={`py-2 px-3 text-sm rounded-xl border transition cursor-pointer ${
                                     isSelected
                                       ? "bg-black text-white"
                                       : "bg-white text-black"

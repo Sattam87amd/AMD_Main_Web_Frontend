@@ -11,7 +11,7 @@ const ExpertCategories = () => {
     { title: "Top Experts", image: "/topexperts.png", link: "/userpanel/logintopexpert" },
     { title: "Home", image: "/home.png", link: "/userpanel/loginhomeexpert" },
     { title: "Career & Business", image: "/career-business.png", link: "/userpanel/logincareer&business" },
-    { title: "Style & Beauty", image: "/style-beauty.png", link: "/userpanel/loginstylebeauty" },
+    { title: "Fashion & Beauty", image: "/style-beauty.png", link: "/userpanel/loginstylebeauty" },
     { title: "Wellness", image: "/wellness.png", link: "/userpanel/loginwellnessexpert" },
   ];
 

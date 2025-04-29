@@ -66,7 +66,7 @@ const FashionBeautyHomeCardsLogin = () => {
           FASHION & BEAUTY
         </h1>
         <p className="text-[#9C9C9C] md:pt-5 pl-5 md:text-2xl">
-          Access to the best has never been easier
+        Elevate Your Style with Expert Stylists, Makeup Artists, and Skincare Specialists.
         </p>
       </div>
 
@@ -88,6 +88,7 @@ const FashionBeautyHomeCardsLogin = () => {
               key={index}
               href={`/userpanel/userexpertaboutme/${expert._id}`}
               passHref
+              onClick={() => localStorage.setItem("comingFromTopExpert", true)}
             >
               <div className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
                 {/* Background Image */}
