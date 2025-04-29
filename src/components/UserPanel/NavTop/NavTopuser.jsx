@@ -48,7 +48,7 @@ const Navtop = ({ activeTab }) => {
     if (userId) {
       const fetchUserData = async () => {
         try {
-          const response = await axios.get(`http://localhost:5070/api/userauth/${userId}`);
+          const response = await axios.get(`https://amd-api.code4bharat.com/api/userauth/${userId}`);
           setUser(response.data.user);
           const { firstName, lastName, photoFile } = response.data.data;
           setUser(response.data.data);
