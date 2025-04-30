@@ -7,32 +7,93 @@ import { FaSearch, FaTimes } from "react-icons/fa";
 import { HiBadgeCheck } from "react-icons/hi";
 import { HeartHandshake } from "lucide-react";
 import Footer from "../Layout/Footer";
+import { jwtDecode } from "jwt-decode";
+import { usePathname} from "next/navigation";
+
+// Custom hook for authentication and redirection
+const useAuthRedirect = () => {
+  
+  const [role, setRole] = useState("");
+  const path = usePathname();
+ 
+  
+  useEffect(() => {
+    // Check if we're in the browser environment to avoid SSR issues
+    if (typeof window !== 'undefined') {
+      const userToken = localStorage.getItem("userToken");
+      const expertToken = localStorage.getItem("expertToken");
+      
+      // Make sure router is ready before checking paths
+     
+      
+      // If expertToken exists and user is in expert panel path
+      if (expertToken && path.startsWith("/expertpanel")) {
+        try {
+          const decoded = jwtDecode(expertToken);
+          setRole(decoded.role);
+          console.log("Expert Role:", decoded.role);
+          // You can add role-based redirection here if needed
+        } catch (err) {
+          console.error("Invalid expert token");
+          // Optionally redirect to login on invalid token
+          // router.push("/login");
+        }
+        return; // Stop here to prioritize expert token
+      }
+      
+      // If userToken exists (and not in expert panel)
+      if (userToken) {
+        try {
+          const decoded = jwtDecode(userToken);
+          setRole(decoded.role);
+          console.log("User Role:", decoded.role);
+          // Redirect logic for user if needed
+        } catch (err) {
+          console.error("Invalid user token");
+          // Optionally redirect to login on invalid token
+          // router.push("/login");
+        }
+      } else if (!userToken && !expertToken) {
+        // No tokens found - handle unauthenticated user
+        console.log("No authentication tokens found");
+        
+      }
+    }
+  }, [path]);
+  
+  return { role };
+};
 
 const SearchExperts = ({ closeSearchPage }) => {
   const [search, setSearch] = useState("");
   const [allExperts, setAllExperts] = useState([]);
   const [filteredExperts, setFilteredExperts] = useState([]);
-
+  
+  // Use the custom auth hook instead of separate useEffect
+  const { role } = useAuthRedirect();
 
   useEffect(() => {
-    const fetchExperts = async () => {
-      try {
-        const res = await fetch(`https://amd-api.code4bharat.com/api/expertauth/`);
-        const data = await res.json();
+    // Only fetch if we're in the browser to avoid SSR issues
+    if (typeof window !== 'undefined') {
+      const fetchExperts = async () => {
+        try {
+          const res = await fetch(`https://amd-api.code4bharat.com/api/expertauth/`);
+          const data = await res.json();
 
-        if (res.ok) {
-          const initialExperts = data.data.filter((expert) => expert.averageRating >= 4);
-          setAllExperts(data.data);
-          setFilteredExperts(initialExperts);
-        } else {
-          console.error("Failed to fetch experts:", data.message);
+          if (res.ok) {
+            const initialExperts = data.data.filter((expert) => expert.averageRating >= 4);
+            setAllExperts(data.data);
+            setFilteredExperts(initialExperts);
+          } else {
+            console.error("Failed to fetch experts:", data.message);
+          }
+        } catch (error) {
+          console.error("Error fetching experts:", error);
         }
-      } catch (error) {
-        console.error("Error fetching experts:", error);
-      }
-    };
+      };
 
-    fetchExperts();
+      fetchExperts();
+    }
   }, []);
 
   const handleSearchChange = (e) => {
@@ -74,8 +135,6 @@ const SearchExperts = ({ closeSearchPage }) => {
 
     return firstSentence.join(" ");
   };
-
-
 
   return (
     <div className="bg-white p-0 relative min-h-screen px-1 mt-2 border-4">
@@ -130,10 +189,16 @@ const SearchExperts = ({ closeSearchPage }) => {
               {filteredExperts.map((expert) => (
                 <Link
                   key={expert._id}
-                  href={`/expertaboutme/${expert._id}`}
+                  href={
+                    role === "expert"
+                      ? `/expertpanel/expertaboutme/${expert._id}`
+                      :role=== "user"
+                      ? `/userpanel/userexpertaboutme/${expert._id}`
+                      : `/expertaboutme/${expert._id}`
+                  }
                   passHref
                 >
-                  <div className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
+                  <div className="relative w-[280px] h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
                     {/* Background Image */}
                     <img
                       src={expert.photoFile || "/aaliyaabadi.png"}
@@ -187,5 +252,3 @@ const SearchExperts = ({ closeSearchPage }) => {
 };
 
 export default SearchExperts;
-
-

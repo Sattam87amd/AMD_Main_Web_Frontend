@@ -80,14 +80,14 @@ const HomeExpertsBefore = () => {
 
       {/* Cards Section - Horizontal Scroll on Small Screens, Grid on Medium+ */}
       <div className="overflow-x-auto md:overflow-visible">
-        <div className="flex md:grid md:grid-cols-5 gap-4 md:gap-x-64 px-4 md:px-0 overflow-x-scroll custom-scrollbar-hide">
+        <div className="flex gap-4 px-4 md:px-0 overflow-x-scroll custom-scrollbar-hide">
           {expertData.map((expert, index) => (
             <Link
               key={index}
               href={`/expertaboutme/${expert._id}`} // Dynamic URL with expert ID
               passHref
             >
-              <div className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
+              <div className="relative w-[280px] h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
                 {/* Background Image */}
                 <img
                   src={expert.photoFile || "/aaliyaabadi.png"} // Ensure there's a fallback image

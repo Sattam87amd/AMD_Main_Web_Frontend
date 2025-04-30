@@ -92,7 +92,7 @@ const LoginUserTopExpert = () => {
               passHref
               onClick={() => localStorage.setItem("comingFromTopExpert", true)}
             >
-              <div className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
+              <div className="relative w-[280px] h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
                 {/* Background Image */}
                 <img
                   src={expert.photoFile || "/aaliyaabadi.png"}

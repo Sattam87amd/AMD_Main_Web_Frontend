@@ -87,7 +87,7 @@ const ExpertsCardsBefore = () => {
         <div className="flex gap-4 px-4 md:px-0 overflow-x-scroll custom-scrollbar-hide">
           {expertData.map((expert, index) => (
             <Link key={index} href={`/expertaboutme/${expert._id}`} passHref>
-              <div className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
+              <div className="relative w-[280px] h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
                 {/* Background Image */}
                 <img
                   src={expert.photoFile || "/aaliyaabadi.png"}
