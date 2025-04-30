@@ -59,7 +59,7 @@ const LoginUserCab = () => {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="bg-white p-6 md:p-0">
+    <div className="bg-white p-6 md:p-1 ">
       {/* Heading Section */}
       <div className="flex flex-col md:flex-row md:h-40 items-center mb-6 md:mb-0">
         <h1 className="text-5xl md:text-[60px] font-bold text-black">
@@ -72,7 +72,7 @@ const LoginUserCab = () => {
 
       {/* "See All" Button */}
       <div className="flex justify-start mb-6">
-        <Link href="/userpanel/logincareer&business" passHref>
+        <Link href="/career&businessexperts" passHref>
           <button className="flex items-center text-xl font-semibold text-black">
             See All
             <HiChevronRight className="ml-2 w-5 h-5" />
@@ -82,25 +82,25 @@ const LoginUserCab = () => {
 
       {/* Cards Section - Horizontal Scroll on Small Screens, Grid on Medium+ */}
       <div className="overflow-x-auto md:overflow-visible">
-        <div className="flex gap-4 px-4 md:px-0 overflow-x-scroll custom-scrollbar-hide">
+        <div className="flex md:grid md:grid-cols-5 gap-4 md:gap-x-72 px-4 md:px-0 overflow-x-scroll custom-scrollbar-hide">
           {expertData.map((expert, index) => (
             <Link
               key={index}
-              href={`/userpanel/userexpertaboutme/${expert._id}`}
+              href={`/expertaboutme/${expert._id}`} // Dynamic URL with expert ID
               passHref
-              onClick={() => localStorage.setItem("comingFromTopExpert", false)}
             >
               <div className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
                 {/* Background Image */}
                 <img
-                  src={expert.photoFile || "/aaliyaabadi.png"}
-                  alt={expert.firstName}
+                  src={expert.photoFile || "/aaliyaabadi.png"} // Ensure there's a fallback image
+                  alt={expert.photoFile}
                   className="w-full h-full object-cover"
                 />
 
                 {/* Price Tag */}
                 <div className="absolute top-4 right-4 bg-[#F8F7F3] text-black px-4 py-2 rounded-2xl shadow-xl font-semibold">
-                  SAR {expert.price || "0"}
+                  SAR {expert.price || "0"}{" "}
+                  {/* Default value in case price is missing */}
                 </div>
 
                 {/* Transparent Blur Card */}
