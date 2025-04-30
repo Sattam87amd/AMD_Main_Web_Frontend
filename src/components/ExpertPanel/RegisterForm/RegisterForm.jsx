@@ -192,6 +192,12 @@ function RegisterForm() {
     }
   };
 
+  const handleKeyDown=(e)=>{
+    if (e.key==="Enter"){
+      handleSubmit(e);
+    }
+  };
+
   return (
     <div className={`min-h-screen flex overflow-hidden ${interFont.variable}`}>
       {/* Left Side Section (Hidden on small screens, visible on md+) */}
@@ -215,7 +221,7 @@ function RegisterForm() {
             Please Enter Your Info
           </h1>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
             {/* First Name */}
             <div className="grid gap-6 mb-6 md:grid-cols-2">
               <div>

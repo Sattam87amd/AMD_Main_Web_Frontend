@@ -5,7 +5,7 @@ import { IoIosSearch } from "react-icons/io";
 import { LuNotepadText } from "react-icons/lu";
 import { Inter } from "next/font/google";
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // Import useRouter for navigation
+import { useRouter } from "next/navigation";
 
 const interFont = Inter({
   subsets: ["latin"],
@@ -17,15 +17,18 @@ function RegisterPage() {
   const [email, setEmail] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [gender, setGender] = useState("");  // New state for gender
+  const [gender, setGender] = useState("");
   const [errors, setErrors] = useState({});
-  useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem("registerData")) || {};
 
-    setEmail(userData.email || "");
-    // Ensure gender is set here
+  // ✅ Prefill email from query string or localStorage
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const emailFromQuery = queryParams.get("email");
+    const userData = JSON.parse(localStorage.getItem("registerData")) || {};
+    setEmail(emailFromQuery || userData.email || "");
   }, []);
-  // Validation for required fields
+
+  // ✅ Form validation
   const handleValidation = () => {
     let tempErrors = {};
 
@@ -55,21 +58,24 @@ function RegisterPage() {
     return Object.keys(tempErrors).length === 0;
   };
 
-  // Handle form submission - Now routes to /expertpanel/registerform
-  const handleSubmit = () => {
+  // ✅ Submit and redirect
+  const handleSubmit = (e) => {
+    if (e) e.preventDefault(); // Important: prevent page reload on form submit
+
     if (handleValidation()) {
-      // Save data to localStorage
-      localStorage.setItem("registerData", JSON.stringify({ firstName, lastName, email, gender }));
-      router.push("/expertpanel/registerform"); // Navigate to the register form
+      localStorage.setItem(
+        "registerData",
+        JSON.stringify({ firstName, lastName, email, gender })
+      );
+      router.push("/expertpanel/registerform");
     }
   };
 
   return (
     <div className={`min-h-screen flex ${interFont.variable}`}>
+      {/* Left Image Section */}
       <div className="hidden md:flex w-1/2 flex-col relative">
-
-
-        <div className=" relative hidden md:block">
+        <div className="relative hidden md:block">
           <Image
             src="/AwabWomen.png"
             alt="Arab Woman"
@@ -80,13 +86,16 @@ function RegisterPage() {
         </div>
       </div>
 
-      {/* Right Section with Form */}
+      {/* Right Form Section */}
       <div className="w-full md:w-1/2 bg-white flex flex-col items-center justify-center relative">
         <div className="w-full max-w-md p-8 -mt-20 md:-mt-0">
-          <h1 className="text-[29px] md:text-[35px] font-extrabold text-center">Please Enter Your Info</h1>
+          <h1 className="text-[29px] md:text-[35px] font-extrabold text-center">
+            Please Enter Your Info
+          </h1>
 
-          {/* Registration Form */}
-          <div className="mt-8 space-y-8">
+          {/* ✅ Wrap in form */}
+          <form className="mt-8 space-y-8" onSubmit={handleSubmit}>
+            {/* Email */}
             <div>
               <label className="block text-sm font-medium">Email address</label>
               <input
@@ -99,42 +108,50 @@ function RegisterPage() {
                 placeholder="Enter your email address"
                 className="w-full px-4 py-3 border rounded-lg focus:outline-8 focus:border-black"
               />
-              {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+              {errors.email && (
+                <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+              )}
             </div>
 
+            {/* First Name */}
             <div>
               <label className="block text-sm font-medium">First Name</label>
               <input
                 type="text"
                 value={firstName}
                 onChange={(e) => {
-                  const value = e.target.value.replace(/[^A-Za-z]/g, ""); // Remove numbers and special characters
+                  const value = e.target.value.replace(/[^A-Za-z]/g, "");
                   setFirstName(value);
                   setErrors({ ...errors, firstName: "" });
                 }}
                 placeholder="Enter your first name"
                 className="w-full px-4 py-3 border rounded-lg focus:outline-8 focus:border-black"
               />
-              {errors.firstName && <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>}
+              {errors.firstName && (
+                <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>
+              )}
             </div>
 
+            {/* Last Name */}
             <div>
               <label className="block text-sm font-medium">Last Name</label>
               <input
                 type="text"
                 value={lastName}
                 onChange={(e) => {
-                  const value = e.target.value.replace(/[^A-Za-z]/g, ""); // Remove numbers and special characters
+                  const value = e.target.value.replace(/[^A-Za-z]/g, "");
                   setLastName(value);
                   setErrors({ ...errors, lastName: "" });
                 }}
                 placeholder="Enter your last name"
                 className="w-full px-4 py-3 border rounded-lg focus:outline-8 focus:border-black"
               />
-              {errors.lastName && <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>}
+              {errors.lastName && (
+                <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>
+              )}
             </div>
 
-            {/* Gender Dropdown */}
+            {/* Gender */}
             <div>
               <label className="block text-sm font-medium">Gender</label>
               <select
@@ -150,20 +167,24 @@ function RegisterPage() {
                 <option value="Female">Female</option>
                 <option value="Prefer not to Say">Prefer not to say</option>
               </select>
-              {errors.gender && <p className="text-red-500 text-xs mt-1">{errors.gender}</p>}
+              {errors.gender && (
+                <p className="text-red-500 text-xs mt-1">{errors.gender}</p>
+              )}
             </div>
 
+            {/* Submit Button */}
             <button
-              className={`w-full py-3 rounded-lg transition ${email && firstName && lastName && gender
+              type="submit"
+              className={`w-full py-3 rounded-lg transition ${
+                email && firstName && lastName && gender
                   ? "bg-black text-white hover:bg-gray-800"
                   : "bg-gray-300 text-gray-600 cursor-not-allowed"
-                }`}
-              onClick={handleSubmit}
+              }`}
               disabled={!email || !firstName || !lastName || !gender}
             >
               Continue
             </button>
-          </div>
+          </form>
         </div>
       </div>
     </div>

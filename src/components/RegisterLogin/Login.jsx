@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
 
 const interFont = Inter({
   subsets: ["latin"],
@@ -26,6 +27,38 @@ function LoginPage() {
   const [formError, setFormError] = useState("");
   const [useEmail, setUseEmail] = useState(true); // Step 1
   const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Enter") {
+        const activeElement = document.activeElement;
+  
+        const isEmailValid = useEmail && email.includes("@");
+        const isPhoneValid = !useEmail && phone && isValidPhoneNumber(phone);
+  
+        // If focused on email or phone input
+        if (
+          (useEmail && activeElement.type === "email") ||
+          (!useEmail && activeElement.tagName === "INPUT")
+        ) {
+          if (isEmailValid || isPhoneValid) {
+            generateOtp();
+          }
+        }
+  
+        // If focused on OTP input
+        if (activeElement.placeholder === "Enter OTP") {
+          if (otp.length === 4) {
+            handleSubmit();
+          }
+        }
+      }
+    };
+  
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [useEmail, email, phone, otp]);
+  
 
   // Toggle handler
   const toggleLoginMethod = () => {
