@@ -109,6 +109,10 @@ function LoginPage() {
         if (error.response && error.response.status === 400) {
           toast.error("Email already exists as an User. Please try another email.");
         }
+         // Handle specific error cases
+       if (error.response?.status === 403) {
+      toast.info("Please wait for admin approval before logging in");
+    }
       }
     } else {
       if (!phone || !isValidPhoneNumber(phone)) {
@@ -126,6 +130,10 @@ function LoginPage() {
         if (error.response && error.response.status === 400) {
           toast.error("Phone number already exists as an User. Please try another number.");
         }
+         // Handle specific error cases
+        if (error.response?.status === 403) {
+        toast.info("Please wait for admin approval before logging in");
+    }
       }
     }
   };
@@ -153,8 +161,14 @@ function LoginPage() {
         router.push("/expertpanel/expertpanelprofile");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "OTP verification failed");
+      // Handle specific error cases
+      if (error.response?.status === 403) {
+      toast.info("Your account is pending admin approval");
+      }
+      
     }
+    
+
   };
 
   return (
