@@ -220,7 +220,7 @@ const VideoSessionPrices = () => {
       
       // Using the same endpoint pattern as in EnableCharity component
       const response = await axios.put(
-        "http://localhost:5070/api/expertauth/update-price",
+        "https://amd-api.code4bharat.com/api/expertauth/update-price",
         {
           price: priceValue
         },
