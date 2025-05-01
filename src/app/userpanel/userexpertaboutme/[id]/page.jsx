@@ -30,6 +30,7 @@ const ExpertDetail = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedTimes, setSelectedTimes] = useState([]);
   const [bookedSlots, setBookedSlots] = useState([]);
+   const [selectedDurationMinutes, setSelectedDurationMinutes] = useState(15);
   const [loadingSlots, setLoadingSlots] = useState(false);  
 
   const router = useRouter();
@@ -138,9 +139,13 @@ setBookedSlots(flattenedSlots || []);
     setPrice(type === "1:4" ? 150 : 350);
   };
 
-  const handleSeeTimeClick = () => {
-    setShowTimeSelection(true);
-  };
+ // Modify your handleSeeTimeClick to set default duration:
+ const handleSeeTimeClick = () => {
+  setShowTimeSelection(true);
+  setSelectedDuration("Quick - 15min");
+  setSelectedDurationMinutes(15);
+};
+
 
   const handleBookingRequest = async () => {
     try {
@@ -247,9 +252,9 @@ setBookedSlots(flattenedSlots || []);
                     {expert?.designation || "Tech Entrepreneur + Investor"}
                   </p>
                   <div>
-                    <p className="text-xl font-semibold">
-                      SAR {expert.price} • Session
-                    </p>
+                  <p className="text-xl font-semibold">
+                            SAR {(expert.price * (selectedDurationMinutes / 15)).toFixed(2)} • Session
+                          </p>
                     <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
                       {[...Array(5)].map((_, i) => {
                         const rating = expert.averageRating || 0; // Use 0 as a fallback if expert.rating is falsy (undefined, null, etc.)
@@ -340,27 +345,30 @@ setBookedSlots(flattenedSlots || []);
                         Select duration and time slot:
                       </p>
 
-                      <div className="grid grid-cols-2 gap-4 mb-4">
-                        {[
-                          "Quick - 15min",
-                          "Regular - 30min",
-                          "Extra - 45min",
-                          "All Access - 60min",
-                        ].map((duration) => (
-                          <button
-                            key={duration}
-                            className={`py-2 px-4 ${
-                              selectedDuration === duration
-                                ? "bg-black text-white"
-                                : "bg-[#F8F7F3] text-black"
-                            } rounded-md shadow`}
-                            onClick={() => setSelectedDuration(duration)}
-                          >
-                            {duration}
-                          </button>
-                        ))}
-                      </div>
-
+                    {/* Duration Selection Section */}
+<div className="grid grid-cols-2 gap-4 mb-4">
+  {[
+    { label: "Quick - 15min", duration: 15 },
+    { label: "Regular - 30min", duration: 30 },
+    { label: "Extra - 45min", duration: 45 },
+    { label: "All Access - 60min", duration: 60 },
+  ].map(({ label, duration }) => (
+    <button
+      key={label}
+      className={`py-2 px-4 ${
+        selectedDuration === label
+          ? "bg-black text-white"
+          : "bg-[#F8F7F3] text-black"
+      } rounded-md shadow`}
+      onClick={() => {
+         setSelectedDuration(label);
+        setSelectedDurationMinutes(duration);
+      }}
+    >
+      {label}
+    </button>
+  ))}
+</div>
                        {/* Time Slots */}
 {[["Today", "today"], ["Tomorrow", "tomorrow"], ["Next Date", "nextDate"]].map(
   ([label, dayKey]) => {
@@ -410,8 +418,8 @@ setBookedSlots(flattenedSlots || []);
 
                       <div className="flex gap-10 py-10 items-center">
                         <div>
-                          <p className="text-xl font-semibold">
-                            SAR {expert.price} • Session
+                        <p className="text-xl font-semibold">
+                            SAR {(expert.price * (selectedDurationMinutes / 15)).toFixed(2)} • Session
                           </p>
                           <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
                             {[...Array(5)].map((_, i) => {
