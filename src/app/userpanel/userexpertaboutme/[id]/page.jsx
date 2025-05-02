@@ -154,6 +154,7 @@ setBookedSlots(flattenedSlots || []);
         slots: selectedTimes, // Store the slots as an array of objects with key-value pairs
         duration: selectedDuration,
         areaOfExpertise: "Home",
+        price: expert.price * (selectedDurationMinutes / 15),
       };
 
       localStorage.setItem("sessionData", JSON.stringify(sessionData));

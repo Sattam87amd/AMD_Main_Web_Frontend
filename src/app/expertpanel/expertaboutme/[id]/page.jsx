@@ -214,6 +214,7 @@ const ExpertDetail = () => {
         slots: selectedTimes,
         duration: selectedDuration,
         areaOfExpertise: "Home",
+        price:expert.price * (selectedDurationMinutes / 15),
       };
       localStorage.setItem("sessionData", JSON.stringify(sessionData));
 
