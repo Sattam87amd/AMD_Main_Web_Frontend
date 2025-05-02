@@ -106,13 +106,16 @@ function LoginPage() {
         toast.success("OTP sent to your email!");
       } catch (error) {
         console.log(error);
+       
         if (error.response && error.response.status === 400) {
           toast.error("Email already exists as an User. Please try another email.");
         }
+        
          // Handle specific error cases
        if (error.response?.status === 403) {
       toast.info("Please wait for admin approval before logging in");
     }
+    toast.error("OTP Invalid or Expired. Please try again.");
       }
     } else {
       if (!phone || !isValidPhoneNumber(phone)) {
@@ -126,6 +129,7 @@ function LoginPage() {
         );
         toast.success("OTP sent to your phone!");
       } catch (error) {
+        
         console.log(error);
         if (error.response && error.response.status === 400) {
           toast.error("Phone number already exists as an User. Please try another number.");
@@ -134,6 +138,9 @@ function LoginPage() {
         if (error.response?.status === 403) {
         toast.info("Please wait for admin approval before logging in");
     }
+      toast.error("OTP Invalid or Expired. Please try again.");
+
+      
       }
     }
   };
