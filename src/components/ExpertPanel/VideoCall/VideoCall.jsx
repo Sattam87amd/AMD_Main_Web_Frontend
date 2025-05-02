@@ -26,6 +26,21 @@ const VideoCall = () => {
 
   const [sessionState, setSessionState] = useState({});
 
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [cancellationReasons, setCancellationReasons] = useState([
+    { id: 1, reason: "Schedule conflict", checked: false },
+    { id: 2, reason: "Found alternative solution", checked: false },
+    { id: 3, reason: "Expert not suitable for my needs", checked: false },
+    { id: 4, reason: "Technical issues", checked: false },
+    { id: 5, reason: "Cost concerns", checked: false },
+    { id: 6, reason: "Other", checked: false },
+  ]);
+  const [otherReason, setOtherReason] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [sessionToCancel, setSessionToCancel] = useState(null);
+  const [loadingCancel, setLoadingCancel] = useState(false);
+
   useEffect(() => {
     const fetchBookings = async () => {
       try {
@@ -302,6 +317,95 @@ const VideoCall = () => {
     }
   };
 
+  // Open the cancellation modal
+  const handleCancelClick = (session) => {
+    setSessionToCancel(session);
+    setShowCancelModal(true);
+
+    // Reset states when opening modal
+    setCancellationReasons((prevReasons) =>
+      prevReasons.map((reason) => ({ ...reason, checked: false }))
+    );
+    setOtherReason("");
+    setTermsAccepted(false);
+  };
+
+  // Handle reason selection (only one reason can be selected)
+  const handleReasonChange = (id) => {
+    setCancellationReasons((prevReasons) =>
+      prevReasons.map((reason) =>
+        reason.id === id
+          ? { ...reason, checked: !reason.checked } // Toggle the selected reason
+          : { ...reason, checked: false } // Uncheck all other reasons
+      )
+    );
+  };
+
+  // Proceed to the terms modal
+  const handleNextStep = () => {
+    const hasSelectedReason = cancellationReasons.some((reason) => reason.checked);
+    const isOtherSelected = cancellationReasons.find((r) => r.id === 6)?.checked;
+
+    if (!hasSelectedReason) {
+      toast.error("Please select at least one reason for cancellation");
+      return;
+    }
+
+    if (isOtherSelected && !otherReason.trim()) {
+      toast.error("Please provide details for 'Other' reason");
+      return;
+    }
+
+    setShowCancelModal(false);
+    setShowTermsModal(true);
+  };
+
+  // Confirm cancellation
+  const handleCancelSession = async () => {
+    if (!termsAccepted) {
+      toast.error("Please accept the terms and conditions to proceed");
+      return;
+    }
+
+    try {
+      setLoadingCancel(true);
+      const token = localStorage.getItem("expertToken");
+      if (!token) {
+        toast.error("Token is required");
+        return;
+      }
+
+      const selectedReason = cancellationReasons.find((reason) => reason.checked);
+      const response = await axios.put(
+        `https://amd-api.code4bharat.com/api/session/cancel/${sessionToCancel._id}`,
+        {
+          reason: selectedReason.reason,
+          otherReason: selectedReason.id === 6 ? otherReason : undefined,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      // Update the session status to "cancelled"
+      const updatedSessions = mySessions.map((session) =>
+        session._id === sessionToCancel._id
+          ? { ...session, status: "cancelled" }
+          : session
+      );
+      setMySessions(updatedSessions);
+
+      toast.success(response.data.message);
+      setShowTermsModal(false);
+    } catch (err) {
+      toast.error("Failed to cancel the session");
+    } finally {
+      setLoadingCancel(false);
+    }
+  };
+
   return (
     <div className="w-full mx-auto py-6 px-4 mt-2 md:max-w-6xl md:py-10 md:px-8 bg-gray-50 min-h-screen">
       <ToastContainer position="top-right" autoClose={3000} />
@@ -475,6 +579,13 @@ const VideoCall = () => {
                               Zoom link coming soon
                             </span>
                           )}
+
+                          <button
+                            className="px-3 py-2 text-xs rounded-md bg-red-100 text-red-600 hover:bg-red-200 transition-colors duration-200 flex items-center gap-1"
+                            onClick={() => handleCancelClick(booking)}
+                          >
+                            <span>Cancel</span>
+                          </button>
                         </>
                       )}
 
@@ -611,6 +722,12 @@ const VideoCall = () => {
                                   <span>Zoom link coming soon</span>
                                 </div>
                               )}
+                              <button
+                                className="w-full px-4 py-2 text-xs rounded-md bg-red-100 text-red-600 hover:bg-red-200 transition-colors duration-200 flex items-center gap-1"
+                                onClick={() => handleCancelClick(booking)}
+                              >
+                                <span>Cancel</span>
+                              </button>
                             </>
                           )}
 
@@ -1102,7 +1219,21 @@ const VideoCall = () => {
                                   rel="noopener noreferrer"
                                   className="w-full"
                                 >
-                                  <button className="w-full px-4 py-2 text-sm rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-all duration-200 flex items-center justify-center gap-2 transform hover:scale-105">
+                                  <button className="w-full px-4 py-2 text-sm rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-all duration-200 flex items-center justify-center gap-2 transform hover:scale-105"
+                                    style={{
+                                      opacity: isJoinEnabled(
+                                        session.slots,
+                                        parseInt(session.duration)
+                                      )
+                                        ? 1
+                                        : 0.5,
+                                      pointerEvents: isJoinEnabled(
+                                        session.slots,
+                                        parseInt(session.duration)
+                                      )
+                                        ? "auto"
+                                        : "none",
+                                    }}>
                                     <Video className="w-4 h-4" />
                                     <span>Join Zoom Meeting</span>
                                   </button>
@@ -1112,6 +1243,12 @@ const VideoCall = () => {
                                   <span>Zoom link coming soon</span>
                                 </div>
                               )}
+                              <button
+                                className="w-full px-4 py-2 text-xs rounded-md bg-red-100 text-red-600 hover:bg-red-200 transition-colors duration-200 flex items-center gap-1"
+                                onClick={() => handleCancelClick(session)}
+                              >
+                                <span>Cancel</span>
+                              </button>
                             </>
                           )}
                         </div>
@@ -1148,6 +1285,138 @@ const VideoCall = () => {
           </div>
         </div>
 
+      )}
+
+      {/* Cancellation Modal */}
+      {showCancelModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold">Cancel Session</h2>
+              <button
+                className="text-gray-500 hover:text-gray-700"
+                onClick={() => setShowCancelModal(false)}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="mb-6">
+              <p className="text-gray-600 mb-4">Please select your reason(s) for cancellation:</p>
+              <div className="space-y-3">
+                {cancellationReasons.map((item) => (
+                  <div key={item.id} className="flex items-start">
+                    <input
+                      id={`reason-${item.id}`}
+                      type="checkbox"
+                      className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      checked={item.checked}
+                      onChange={() => handleReasonChange(item.id)}
+                    />
+                    <label htmlFor={`reason-${item.id}`} className="ml-2 block text-sm text-gray-700">
+                      {item.reason}
+                    </label>
+                  </div>
+                ))}
+              </div>
+
+              {cancellationReasons.find((r) => r.id === 6)?.checked && (
+                <div className="mt-4">
+                  <label htmlFor="other-reason" className="block text-sm font-medium text-gray-700 mb-1">
+                    Please specify your reason:
+                  </label>
+                  <textarea
+                    id="other-reason"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    rows="3"
+                    placeholder="Please provide details..."
+                    value={otherReason}
+                    onChange={(e) => setOtherReason(e.target.value)}
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="flex justify-end">
+              <button
+                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md mr-3 hover:bg-gray-300 transition-colors duration-200"
+                onClick={() => setShowCancelModal(false)}
+              >
+                Back
+              </button>
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200"
+                onClick={handleNextStep}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Terms Modal */}
+      {showTermsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold">Cancellation Terms</h2>
+              <button
+                className="text-gray-500 hover:text-gray-700"
+                onClick={() => setShowTermsModal(false)}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="mb-6">
+              <div className="bg-gray-50 p-4 rounded-md mb-6 max-h-60 overflow-y-auto">
+                <h3 className="font-medium text-gray-800 mb-2">Terms and Conditions for Cancellation</h3>
+                <p className="text-sm text-gray-600 mb-3">Please read the following terms carefully:</p>
+                <ol className="text-sm text-gray-600 list-decimal list-inside space-y-2">
+                  <li>Cancellations made within 24 hours of the scheduled session may be subject to a cancellation fee.</li>
+                  <li>If you cancel more than 24 hours before your scheduled session, you will receive a full refund.</li>
+                  <li>Expert's availability for rescheduling is not guaranteed after cancellation.</li>
+                  <li>Multiple cancellations may affect your ability to book future sessions.</li>
+                  <li>For emergency cancellations, please contact customer support directly.</li>
+                  <li>Refunds will be processed within 5-7 business days to the original payment method.</li>
+                  <li>We reserve the right to review each cancellation on a case-by-case basis.</li>
+                </ol>
+              </div>
+
+              <div className="mt-4">
+                <div className="flex items-start">
+                  <input
+                    id="accept-terms"
+                    type="checkbox"
+                    className="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                    checked={termsAccepted}
+                    onChange={() => setTermsAccepted(!termsAccepted)}
+                  />
+                  <label htmlFor="accept-terms" className="ml-2 block text-sm text-gray-700">
+                    I have read and agree to the cancellation terms and conditions
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end mt-6">
+              <button
+                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md mr-3 hover:bg-gray-300 transition-colors duration-200"
+                onClick={() => setShowTermsModal(false)}
+              >
+                Back
+              </button>
+              <button
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors duration-200"
+                onClick={handleCancelSession}
+                disabled={loadingCancel}
+              >
+                {loadingCancel ? "Cancelling..." : "Confirm Cancellation"}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
