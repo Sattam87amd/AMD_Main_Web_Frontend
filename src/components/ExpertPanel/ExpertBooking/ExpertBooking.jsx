@@ -160,20 +160,19 @@ const ExpertBooking = () => {
     }, {});
   };
 
-  if (!consultingExpert) return <div>Loading...</div>;  
+  if (!consultingExpert) return <div>Loading...</div>;
 
   return (
     <div className="w-full mx-8 md:mx-0 mt-8 px-6 py-[6rem] md:py-0">
       <div className="flex flex-col md:flex-row gap-10">
         {/* Left Section */}
         <div className="w-full md:w-1/2 flex flex-col items-center text-center md:text-left">
-          <div className="w-32 h-38 md:w-[14rem] md:h-[16rem] rounded-lg overflow-hidden shadow-md">
+          <div className="relative aspect-[3/4] w-32 md:w-[14rem] rounded-lg overflow-hidden shadow-md">
             <Image
-              src={consultingExpert?.photoFile || "/guyhawkins.png"}
+              src={consultingExpert?.photoFile || '/guyhawkins.png'}
               alt={`${consultingExpert?.firstName} ${consultingExpert?.lastName}`}
-              width={224}
-              height={224}
-              className="object-cover"
+              fill
+              className="object-cover object-top"
             />
           </div>
 
@@ -186,12 +185,12 @@ const ExpertBooking = () => {
             <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
               {[...Array(5)].map((_, i) => {
                 const rating = consultingExpert.averageRating || 0;
-                const isFilled = i < Math.floor(rating); 
-                const isHalf = i === Math.floor(rating) && rating % 1 !== 0; 
+                const isFilled = i < Math.floor(rating);
+                const isHalf = i === Math.floor(rating) && rating % 1 !== 0;
                 return (
                   <FaStar
                     key={i}
-                    className={isFilled || isHalf ? "text-[#FFA629]" : "text-gray-300"} 
+                    className={isFilled || isHalf ? "text-[#FFA629]" : "text-gray-300"}
                   />
                 );
               })}
@@ -385,7 +384,7 @@ const ExpertBooking = () => {
         pauseOnHover
       />
     </div>
-  );  
+  );
 };
 
 export default ExpertBooking;
