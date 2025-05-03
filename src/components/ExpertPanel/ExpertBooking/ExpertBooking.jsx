@@ -81,6 +81,18 @@ const ExpertBooking = () => {
 
     setNoteError(""); // Clear any previous error if passed
 
+    // // Calculate price based on session duration
+    // let price = 0;
+    // if (sessionData.duration === "Quick-15min") {
+    //   price = 99;
+    // } else if (sessionData.duration === "Standard-30min") {
+    //   price = 149;
+    // } else if (sessionData.duration === "Extended-45min") {
+    //   price = 199;
+    // } else {
+    //   price = 99; // Default price
+    // }
+
     const fullBookingData = {
       ...sessionData,
       firstName: expertData.firstName,
@@ -90,7 +102,7 @@ const ExpertBooking = () => {
       note: expertData.note,
       bookingType: expertData.bookingType,
       inviteFriend: expertData.inviteFriend,
-      promoCode: expertData.promoCode
+      promoCode: expertData.promoCode,
     };
 
     try {
@@ -109,25 +121,19 @@ const ExpertBooking = () => {
         }
       );
 
-      // Show success message with a delay before redirection
-      toast.success("Session booked successfully! Redirecting to video call...", {
+      // Store the session ID for later reference
+      localStorage.setItem('pendingSessionId', response.data.session._id);
+
+      // Show info message before redirecting to payment
+      toast.info("Redirecting to payment gateway...", {
         position: "bottom-center",
-        autoClose: 3000,
+        autoClose: 2000,
       });
 
-      // Redirect after a brief delay
+      // Redirect to the payment URL provided by TAP
       setTimeout(() => {
-        router.push('/expertpanel/videocall');
-      }, 3000);
-
-      // Clean up localStorage
-      localStorage.removeItem('sessionData');
-      localStorage.removeItem('bookingData');
-      localStorage.removeItem('expertData');
-      localStorage.removeItem('comingFromTopExpert');
-      localStorage.removeItem('preferred_availability');
-      localStorage.removeItem('preferred_region');
-      localStorage.removeItem('preferred_months');
+        window.location.href = response.data.paymentUrl;
+      }, 2000);
 
     } catch (error) {
       // Improved error logging
@@ -161,13 +167,12 @@ const ExpertBooking = () => {
       <div className="flex flex-col md:flex-row gap-10">
         {/* Left Section */}
         <div className="w-full md:w-1/2 flex flex-col items-center text-center md:text-left">
-          <div className="w-32 h-38 md:w-[14rem] md:h-[16rem] rounded-lg overflow-hidden shadow-md">
+          <div className="relative aspect-[3/4] w-32 md:w-[14rem] rounded-lg overflow-hidden shadow-md">
             <Image
-              src={consultingExpert?.photoFile || "/guyhawkins.png"}
+              src={consultingExpert?.photoFile || '/guyhawkins.png'}
               alt={`${consultingExpert?.firstName} ${consultingExpert?.lastName}`}
-              width={224}
-              height={224}
-              className="object-cover"
+              fill
+              className="object-cover object-top"
             />
           </div>
 
@@ -180,12 +185,12 @@ const ExpertBooking = () => {
             <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
               {[...Array(5)].map((_, i) => {
                 const rating = consultingExpert.averageRating || 0;
-                const isFilled = i < Math.floor(rating); 
-                const isHalf = i === Math.floor(rating) && rating % 1 !== 0; 
+                const isFilled = i < Math.floor(rating);
+                const isHalf = i === Math.floor(rating) && rating % 1 !== 0;
                 return (
                   <FaStar
                     key={i}
-                    className={isFilled || isHalf ? "text-[#FFA629]" : "text-gray-300"} 
+                    className={isFilled || isHalf ? "text-[#FFA629]" : "text-gray-300"}
                   />
                 );
               })}
@@ -224,9 +229,9 @@ const ExpertBooking = () => {
         {/* Right Section */}
         <div className="w-full h-1/2 md:w-1/2 p-6 relative">
           <div className="border rounded-lg p-6 relative mb-4 shadow-md">
-            <button className="absolute top-4 right-4 text-sm border rounded px-3 py-1 -translate-y-8 bg-white">
+            {/* <button className="absolute top-4 right-4 text-sm border rounded px-3 py-1 -translate-y-8 bg-white">
               Change
-            </button>
+            </button> */}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div>
@@ -290,7 +295,7 @@ const ExpertBooking = () => {
             </div>
           </div>
 
-          {/* Booking Type */}
+          {/* Booking Type
           <div className="flex items-center justify-center gap-6 mb-6 space-x-8 md:space-x-40">
             <label className="flex items-center">
               <input
@@ -314,9 +319,9 @@ const ExpertBooking = () => {
               />
               Group
             </label>
-          </div>
+          </div> */}
 
-          {/* Invite Friend */}
+          {/* Invite Friend
           {expertData.bookingType === "group" && (
             <div className="mb-6">
               <label className="block text-sm mb-1">Invite a Friend</label>
@@ -332,7 +337,7 @@ const ExpertBooking = () => {
                 <UserPlusIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Promo Code */}
           <div className="flex justify-center">
@@ -379,7 +384,7 @@ const ExpertBooking = () => {
         pauseOnHover
       />
     </div>
-  );  
+  );
 };
 
 export default ExpertBooking;

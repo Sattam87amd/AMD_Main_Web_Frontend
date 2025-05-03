@@ -5,7 +5,8 @@ import Image from 'next/image';
 import { FaStar } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const UserToExpertBooking = () => {
   const [sessionData, setSessionData] = useState(null);
@@ -21,6 +22,7 @@ const UserToExpertBooking = () => {
   const [noteError, setNoteError] = useState(""); // Error message for note
   const [noteWordCount, setNoteWordCount] = useState(0); // Word count
   const [token, setToken] = useState(null); // Ensure localStorage access only on client
+  const [isSubmitting, setIsSubmitting] = useState(false); // To track if booking is in progress
   const router = useRouter();
 
   // Wait until component is mounted
@@ -72,6 +74,9 @@ const UserToExpertBooking = () => {
       return;
     }
 
+    // Calculate price based on expert's pricing or session duration
+    let price = consultingExpert?.price || 99; // Default to expert's price or 99
+
     const fullBookingData = {
       expertId: consultingExpert?._id,
       areaOfExpertise: sessionData?.areaOfExpertise || "Home",
@@ -82,18 +87,23 @@ const UserToExpertBooking = () => {
       email: bookingData?.email,
       phone: bookingData?.mobileNumber,
       note: bookingData?.note,
+      price: price // Add price to the booking data
     };
 
     if (
       !consultingExpert?._id ||
       !sessionData?.areaOfExpertise ||
-      !sessionData.slots
+      !sessionData.slots ||
+      !bookingData.firstName ||
+      !bookingData.lastName ||
+      !bookingData.email
     ) {
       toast.error('Please fill in all required fields before submitting the booking.');
       return;
     }
 
     try {
+      setIsSubmitting(true); // Start processing state
       if (!token) throw new Error('No authentication token found');
 
       const response = await axios.post(
@@ -107,18 +117,26 @@ const UserToExpertBooking = () => {
         }
       );
 
-      toast.success('Session booked successfully!');
-      localStorage.removeItem('sessionData');
-      localStorage.removeItem('bookingData');
-      localStorage.removeItem('consultingExpertData');
+      // Store the session ID for later reference
+      localStorage.setItem('pendingSessionId', response.data.session._id);
+      
+      // Show info message before redirecting to payment
+      toast.info("Redirecting to payment gateway...", {
+        position: "bottom-center",
+        autoClose: 2000,
+      });
 
+      // Redirect to the payment URL provided by TAP
+      setTimeout(() => {
+        window.location.href = response.data.paymentUrl;
+      }, 2000);
       
     } catch (error) {
       console.error('Booking error:', error.response?.data || error.message);
       toast.error(`Booking failed: ${error.response?.data?.message || error.message}`);
+    } finally {
+      setIsSubmitting(false); // Reset the processing state
     }
-
-    router.push('/userpanel/videocall');
   };
 
   // Group time slots by date
@@ -149,7 +167,6 @@ const UserToExpertBooking = () => {
             />
           </div>
 
-
           <div className="mt-4 md:mt-6 bg-[#F8F7F3] px-4 md:p-6 rounded-lg shadow-md w-full">
             <h1 className="text-xl md:text-2xl font-bold">
               {consultingExpert?.firstName} {consultingExpert?.lastName}
@@ -160,13 +177,13 @@ const UserToExpertBooking = () => {
               <p className="text-xl font-semibold">SAR {consultingExpert.price} • Session</p>
               <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
                 {[...Array(5)].map((_, i) => {
-                  const rating = consultingExpert.averageRating || 0; // Use 0 as a fallback if expert.rating is falsy (undefined, null, etc.)
-                  const isFilled = i < Math.floor(rating); // If the index is less than the rating
-                  const isHalf = i === Math.floor(rating) && rating % 1 !== 0; // If the rating has a decimal and we are at the exact index
+                  const rating = consultingExpert.averageRating || 0;
+                  const isFilled = i < Math.floor(rating);
+                  const isHalf = i === Math.floor(rating) && rating % 1 !== 0;
                   return (
                     <FaStar
                       key={i}
-                      className={isFilled || isHalf ? 'text-[#FFA629]' : 'text-gray-300'} // Full or empty star color
+                      className={isFilled || isHalf ? 'text-[#FFA629]' : 'text-gray-300'}
                     />
                   );
                 })}
@@ -207,9 +224,9 @@ const UserToExpertBooking = () => {
         {/* Right Section */}
         <div className="w-full h-1/2 md:w-1/2 p-6 relative">
           <div className="border rounded-lg p-6 relative mb-4 shadow-md">
-            <button className="absolute top-4 right-4 text-sm border rounded px-3 py-1 -translate-y-8 bg-white">
+            {/* <button className="absolute top-4 right-4 text-sm border rounded px-3 py-1 -translate-y-8 bg-white">
               Change
-            </button>
+            </button> */}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div>
@@ -275,16 +292,49 @@ const UserToExpertBooking = () => {
             </div>
           </div>
 
+          {/* Promo Code */}
+          <div className="flex justify-center">
+            <div className="mb-6 md:w-1/2 rounded-lg">
+              <div className="flex">
+                <input
+                  type="text"
+                  name="promoCode"
+                  value={bookingData.promoCode}
+                  onChange={handleInputChange}
+                  className="w-full border rounded-l px-3 py-2 text-sm"
+                  placeholder="Enter promo code"
+                />
+                <button className="bg-black text-white px-4 py-2 text-sm rounded-r">
+                  Apply
+                </button>
+              </div>
+            </div>
+          </div>
+
           <div className="flex justify-center">
             <button
               onClick={handleBookingRequest}
-              className="w-32 bg-black text-white rounded-full px-8 py-3 text-sm font-medium"
+              className={`w-32 bg-black text-white rounded-full px-8 py-3 text-sm font-medium ${isSubmitting ? 'animate-pulse' : ''}`}
+              disabled={isSubmitting}
             >
-              Book
+              {isSubmitting ? "Processing..." : "Book"}
             </button>
           </div>
         </div>
       </div>
+
+      {/* Toastify container */}
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };

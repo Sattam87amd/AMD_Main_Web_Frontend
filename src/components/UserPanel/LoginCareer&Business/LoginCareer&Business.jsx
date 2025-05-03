@@ -101,7 +101,7 @@ const LoginCareerBusiness = () => {
       >
         <div className="flex flex-col md:flex-row md:items-center">
           <h1 className="text-5xl md:text-[60px] font-bold text-black">
-            CAREER AND BUSINESS.
+            CAREER AND BUSINESS
           </h1>
           <p className="text-[#9C9C9C] md:pt-5 pl-5 md:text-2xl">
             Connect with CEOs, executives, coaches, and more
