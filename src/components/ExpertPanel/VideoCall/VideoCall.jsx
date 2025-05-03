@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { CiClock2 } from "react-icons/ci";
-import { MessagesSquare, Video, ChevronDown, ChevronUp } from "lucide-react";
+import { MessagesSquare, Video, ChevronDown, ChevronUp, XCircle } from "lucide-react";
 import { FaBook, FaMobile, FaUser, FaUserTie } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,8 +21,8 @@ const VideoCall = () => {
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [expandedNotes, setExpandedNotes] = useState({});
 
-  const [selectedDate, setSelectedDate] = useState("");  // Store selected date
-  const [selectedTime, setSelectedTime] = useState("");  // Store selected time
+  // const [selectedDate, setSelectedDate] = useState("");  // Store selected date
+  // const [selectedTime, setSelectedTime] = useState("");  // Store selected time
 
   const [sessionState, setSessionState] = useState({});
 
@@ -125,44 +125,55 @@ const VideoCall = () => {
     setSelectedBooking(null);
   };
   const isJoinEnabled = (slots, duration) => {
-    // Ensure that slots contain at least one slot
-    if (!slots || !Array.isArray(slots) || slots.length === 0) {
+    // Check for valid slots array with at least one slot
+    if (!Array.isArray(slots)) {
+      console.error("Invalid slots format");
+      return false;
+    }
+  
+    if (slots.length === 0) {
       console.error("No slots available");
-      return false; // If no slots, return false
+      return false;
     }
-
-    // Log slots for debugging purposes
-    console.log("Slots:", slots);
-
-    // Get the first slot's date and time (you may choose to handle multiple slots differently)
-    const { selectedDate, selectedTime } = slots[0]; // Assuming slots[0] contains the required date and time
-    console.log("Selected Date:", selectedDate, "Selected Time:", selectedTime);
-
-    if (!selectedDate || !selectedTime) {
-      console.error("Missing date or time in the slot");
-      return false; // Return false if date or time is missing
+  
+    // Get first valid slot with both date and time
+    const validSlot = slots.find(slot => 
+      slot.selectedDate && slot.selectedTime
+    );
+  
+    if (!validSlot) {
+      console.error("No valid slots found");
+      return false;
     }
-
-    // Handle the time format (e.g., "10:00 am" or "10:00 pm")
-    const [time, period] = selectedTime.split(" "); // Split into time and AM/PM period
-    const [hours, minutes] = time.split(":"); // Split the time into hours and minutes
-
-    let hour = parseInt(hours);
-
-    // Convert the hour to 24-hour format
-    if (period.toLowerCase() === 'pm' && hour < 12) {
-      hour += 12; // Convert PM times to 24-hour format
-    } else if (period.toLowerCase() === 'am' && hour === 12) {
-      hour = 0; // Handle 12 AM as 00:00 in 24-hour format
+  
+    // Parse session datetime
+    const sessionDateTime = new Date(
+      `${validSlot.selectedDate}T${convertTo24Hour(validSlot.selectedTime)}`
+    );
+  
+    if (isNaN(sessionDateTime)) {
+      console.error("Invalid date/time format");
+      return false;
     }
-
-    // Create a new Date object with the selected date and the converted time
-    const sessionDateTime = new Date(selectedDate);
-    sessionDateTime.setHours(hour, parseInt(minutes), 0, 0); // Set the hours and minutes in the Date object
-
+  
     const now = new Date();
-    const diff = (sessionDateTime - now) / 60000; // Difference in minutes
-    return diff <= 2 && diff >= -duration;
+    const diffMinutes = (sessionDateTime - now) / 60000;
+    return diffMinutes <= 2 && diffMinutes >= -duration;
+  };
+  
+  // Helper function to convert time to 24-hour format
+  const convertTo24Hour = (timeString) => {
+    const [time, period] = timeString.split(' ');
+    let [hours, minutes] = time.split(':');
+    
+    hours = parseInt(hours);
+    if (period.toLowerCase() === 'pm' && hours !== 12) {
+      hours += 12;
+    } else if (period.toLowerCase() === 'am' && hours === 12) {
+      hours = 0;
+    }
+    
+    return `${hours.toString().padStart(2, '0')}:${minutes}`;
   };
 
 
@@ -360,47 +371,62 @@ const VideoCall = () => {
     setShowTermsModal(true);
   };
 
-  // Confirm cancellation
   const handleCancelSession = async () => {
     if (!termsAccepted) {
       toast.error("Please accept the terms and conditions to proceed");
       return;
     }
-
+    
     try {
       setLoadingCancel(true);
+      
+      // Prepare cancellation data
+      const selectedReasons = cancellationReasons
+        .filter(reason => reason.checked)
+        .map(reason => reason.reason);
+      
+      const cancellationData = {
+        sessionId: sessionToCancel._id,
+        reasons: selectedReasons,
+        otherReason: cancellationReasons.find(r => r.id === 6)?.checked ? otherReason : ""
+      };
+      
       const token = localStorage.getItem("expertToken");
-      if (!token) {
-        toast.error("Token is required");
-        return;
-      }
-
-      const selectedReason = cancellationReasons.find((reason) => reason.checked);
-      const response = await axios.put(
-        `https://amd-api.code4bharat.com/api/session/cancel/${sessionToCancel._id}`,
-        {
-          reason: selectedReason.reason,
-          otherReason: selectedReason.id === 6 ? otherReason : undefined,
-        },
+      await axios.post(
+        "https://amd-api.code4bharat.com/api/cancelsession/cancel",
+        cancellationData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-
-      // Update the session status to "cancelled"
-      const updatedSessions = mySessions.map((session) =>
-        session._id === sessionToCancel._id
-          ? { ...session, status: "cancelled" }
-          : session
-      );
-      setMySessions(updatedSessions);
-
-      toast.success(response.data.message);
+      
+      // Update state for both bookings and sessions
+      if (activeTab === "bookings") {
+        setMyBookings(prevBookings => 
+          prevBookings.map(booking => 
+            booking._id === sessionToCancel._id 
+              ? { ...booking, status: "cancelled" } 
+              : booking
+          )
+        );
+      } else {
+        setMySessions(prevSessions => 
+          prevSessions.map(session => 
+            session._id === sessionToCancel._id 
+              ? { ...session, status: "cancelled" } 
+              : session
+          )
+        );
+      }
+      
       setShowTermsModal(false);
-    } catch (err) {
-      toast.error("Failed to cancel the session");
+      toast.success("Session cancelled successfully");
+      
+    } catch (error) {
+      console.error("Error cancelling session:", error);
+      toast.error("Failed to cancel session. Please try again.");
     } finally {
       setLoadingCancel(false);
     }
@@ -555,6 +581,7 @@ const VideoCall = () => {
                         })}
                       </div>
                     </div>
+
                     {/* Action Buttons */}
                     <div className="flex justify-end gap-2 mt-3">
                       {booking.status === "confirmed" && (
@@ -580,10 +607,12 @@ const VideoCall = () => {
                             </span>
                           )}
 
+                          {/* Cancel Button */}
                           <button
                             className="px-3 py-2 text-xs rounded-md bg-red-100 text-red-600 hover:bg-red-200 transition-colors duration-200 flex items-center gap-1"
                             onClick={() => handleCancelClick(booking)}
                           >
+                            <XCircle className="w-3 h-3" />
                             <span>Cancel</span>
                           </button>
                         </>
@@ -941,6 +970,7 @@ const VideoCall = () => {
                           >
                             Accept
                           </button>
+
                         </>
                       )}
 
@@ -1067,7 +1097,7 @@ const VideoCall = () => {
                                         })}
                                   </ul>
                                 </div>
-                                
+
                               </p>
 
 
@@ -1243,10 +1273,13 @@ const VideoCall = () => {
                                   <span>Zoom link coming soon</span>
                                 </div>
                               )}
+
+                              {/* Cancel Button */}
                               <button
-                                className="w-full px-4 py-2 text-xs rounded-md bg-red-100 text-red-600 hover:bg-red-200 transition-colors duration-200 flex items-center gap-1"
+                                className="px-3 py-2 text-xs rounded-md bg-red-100 text-red-600 hover:bg-red-200 transition-colors duration-200 flex justify-center items-center gap-1"
                                 onClick={() => handleCancelClick(session)}
                               >
+                                <XCircle className="w-3 h-3" />
                                 <span>Cancel</span>
                               </button>
                             </>
@@ -1368,6 +1401,8 @@ const VideoCall = () => {
                 ✕
               </button>
             </div>
+
+          //Terms & Conditions
 
             <div className="mb-6">
               <div className="bg-gray-50 p-4 rounded-md mb-6 max-h-60 overflow-y-auto">
