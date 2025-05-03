@@ -67,13 +67,13 @@ const LoginUserWellnessexpert = () => {
         </h1>
         <p className="text-[#9C9C9C] md:pt-5 pl-5 md:text-2xl ">
           Connect with nutritionists, trainers, & more about living a healthier
-          lif
+          life
         </p>
       </div>
 
       {/* "See All" Button */}
       <div className="flex justify-start mb-6">
-        <Link href="/wellnessexperts" passHref>
+        <Link href="/userpanel/loginwellnessexpert" passHref>
           <button className="flex items-center text-xl font-semibold text-black">
             See All
             <HiChevronRight className="ml-2 w-5 h-5" />

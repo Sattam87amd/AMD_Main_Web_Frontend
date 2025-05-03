@@ -97,12 +97,12 @@ const LoginStyleBeauty = () => {
         transition={{ duration: 0.6 }}
         className="flex justify-between items-center mb-6"
       >
-        <div className="flex flex-col md:flex-row md:items-center">
-          <h1 className="text-3xl md:text-[60px] font-bold text-black">
+       <div className="flex flex-col md:flex-row md:items-center">
+          <h1 className="text-5xl md:text-[60px] font-bold text-black">
             FASHION & BEAUTY
           </h1>
           <p className="text-[#9C9C9C] md:pt-5 pl-5 md:text-2xl">
-            Access to the best experts has never been easier
+          Elevate Your Style with Expert Stylists, Makeup Artists, and Skincare Specialists
           </p>
         </div>
 
