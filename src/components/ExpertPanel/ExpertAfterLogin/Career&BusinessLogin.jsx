@@ -72,7 +72,7 @@ const CareerBusinessHomeCardsLogin = () => {
 
       {/* "See All" Button */}
       <div className="flex justify-start mb-6">
-        <Link href="/career&businessexperts" passHref>
+        <Link href="/expertpanel/career&businessexperts" passHref>
           <button className="flex items-center text-xl font-semibold text-black">
             See All
             <HiChevronRight className="ml-2 w-5 h-5" />
@@ -86,7 +86,7 @@ const CareerBusinessHomeCardsLogin = () => {
           {expertData.map((expert, index) => (
             <Link
               key={index}
-              href={`/userpanel/expertaboutme/${expert._id}`} // Dynamic URL with expert ID
+              href={`/expertpanel/expertaboutme/${expert._id}`} // Dynamic URL with expert ID
               passHref
             >
               <div className="relative w-[280px] h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
