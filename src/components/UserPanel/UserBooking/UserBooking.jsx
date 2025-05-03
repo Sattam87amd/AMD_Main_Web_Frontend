@@ -224,9 +224,9 @@ const UserToExpertBooking = () => {
         {/* Right Section */}
         <div className="w-full h-1/2 md:w-1/2 p-6 relative">
           <div className="border rounded-lg p-6 relative mb-4 shadow-md">
-            <button className="absolute top-4 right-4 text-sm border rounded px-3 py-1 -translate-y-8 bg-white">
+            {/* <button className="absolute top-4 right-4 text-sm border rounded px-3 py-1 -translate-y-8 bg-white">
               Change
-            </button>
+            </button> */}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div>

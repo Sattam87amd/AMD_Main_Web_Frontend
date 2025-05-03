@@ -229,9 +229,9 @@ const ExpertBooking = () => {
         {/* Right Section */}
         <div className="w-full h-1/2 md:w-1/2 p-6 relative">
           <div className="border rounded-lg p-6 relative mb-4 shadow-md">
-            <button className="absolute top-4 right-4 text-sm border rounded px-3 py-1 -translate-y-8 bg-white">
+            {/* <button className="absolute top-4 right-4 text-sm border rounded px-3 py-1 -translate-y-8 bg-white">
               Change
-            </button>
+            </button> */}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div>
@@ -295,7 +295,7 @@ const ExpertBooking = () => {
             </div>
           </div>
 
-          {/* Booking Type */}
+          {/* Booking Type
           <div className="flex items-center justify-center gap-6 mb-6 space-x-8 md:space-x-40">
             <label className="flex items-center">
               <input
@@ -319,9 +319,9 @@ const ExpertBooking = () => {
               />
               Group
             </label>
-          </div>
+          </div> */}
 
-          {/* Invite Friend */}
+          {/* Invite Friend
           {expertData.bookingType === "group" && (
             <div className="mb-6">
               <label className="block text-sm mb-1">Invite a Friend</label>
@@ -337,7 +337,7 @@ const ExpertBooking = () => {
                 <UserPlusIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-500" />
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Promo Code */}
           <div className="flex justify-center">
