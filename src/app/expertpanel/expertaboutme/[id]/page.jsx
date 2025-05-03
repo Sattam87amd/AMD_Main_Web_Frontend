@@ -374,7 +374,7 @@ const ExpertDetail = () => {
                         {[
                           { label: "Quick - 15min", duration: 15 },
                           { label: "Regular - 30min", duration: 30 },
-                          { label: "Eura - 45min", duration: 45 },
+                          { label: "Extra - 45min", duration: 45 },
                           { label: "All Access - 60min", duration: 60 },
                         ].map(({ label, duration }) => (
                           <button
