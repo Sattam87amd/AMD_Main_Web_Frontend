@@ -189,23 +189,23 @@ const UserVideoCall = () => {
         .filter(reason => reason.checked)
         .map(reason => reason.reason);
       
-      const cancellationData = {
-        bookingId: bookingToCancel._id,
-        reasons: selectedReasons,
-        otherReason: cancellationReasons.find(r => r.id === 6)?.checked ? otherReason : ""
-      };
+        const cancellationData = {
+          sessionId: bookingToCancel._id, // ✅ match backend
+          reasons: selectedReasons,
+          otherReason: cancellationReasons.find(r => r.id === 6)?.checked ? otherReason : ""
+        };
       
       // TODO: Replace with actual API endpoint when backend is ready
-      // const token = localStorage.getItem("userToken");
-      // await axios.post(
-      //   "https://amd-api.code4bharat.com/api/session/cancel",
-      //   cancellationData,
-      //   {
-      //     headers: {
-      //       Authorization: `Bearer ${token}`,
-      //     },
-      //   }
-      // );
+      const token = localStorage.getItem("userToken");
+      await axios.post(
+        "http://localhost:5070/api/session/cancel",
+        cancellationData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       
       // Simulate API call for now
       await new Promise(resolve => setTimeout(resolve, 1000));

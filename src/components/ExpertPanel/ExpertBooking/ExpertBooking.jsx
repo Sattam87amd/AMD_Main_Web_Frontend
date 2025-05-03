@@ -81,6 +81,18 @@ const ExpertBooking = () => {
 
     setNoteError(""); // Clear any previous error if passed
 
+    // // Calculate price based on session duration
+    // let price = 0;
+    // if (sessionData.duration === "Quick-15min") {
+    //   price = 99;
+    // } else if (sessionData.duration === "Standard-30min") {
+    //   price = 149;
+    // } else if (sessionData.duration === "Extended-45min") {
+    //   price = 199;
+    // } else {
+    //   price = 99; // Default price
+    // }
+
     const fullBookingData = {
       ...sessionData,
       firstName: expertData.firstName,
@@ -90,7 +102,7 @@ const ExpertBooking = () => {
       note: expertData.note,
       bookingType: expertData.bookingType,
       inviteFriend: expertData.inviteFriend,
-      promoCode: expertData.promoCode
+      promoCode: expertData.promoCode,
     };
 
     try {
@@ -109,25 +121,19 @@ const ExpertBooking = () => {
         }
       );
 
-      // Show success message with a delay before redirection
-      toast.success("Session booked successfully! Redirecting to video call...", {
+      // Store the session ID for later reference
+      localStorage.setItem('pendingSessionId', response.data.session._id);
+
+      // Show info message before redirecting to payment
+      toast.info("Redirecting to payment gateway...", {
         position: "bottom-center",
-        autoClose: 3000,
+        autoClose: 2000,
       });
 
-      // Redirect after a brief delay
+      // Redirect to the payment URL provided by TAP
       setTimeout(() => {
-        router.push('/expertpanel/videocall');
-      }, 3000);
-
-      // Clean up localStorage
-      localStorage.removeItem('sessionData');
-      localStorage.removeItem('bookingData');
-      localStorage.removeItem('expertData');
-      localStorage.removeItem('comingFromTopExpert');
-      localStorage.removeItem('preferred_availability');
-      localStorage.removeItem('preferred_region');
-      localStorage.removeItem('preferred_months');
+        window.location.href = response.data.paymentUrl;
+      }, 2000);
 
     } catch (error) {
       // Improved error logging
@@ -154,7 +160,7 @@ const ExpertBooking = () => {
     }, {});
   };
 
-  if (!consultingExpert) return <div>Loading...</div>;
+  if (!consultingExpert) return <div>Loading...</div>;  
 
   return (
     <div className="w-full mx-8 md:mx-0 mt-8 px-6 py-[6rem] md:py-0">
