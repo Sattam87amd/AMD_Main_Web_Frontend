@@ -270,7 +270,7 @@ const UserVideoCall = () => {
       // TODO: Replace with actual API endpoint when backend is ready
       const token = localStorage.getItem("userToken");
       await axios.post(
-        "https://amd-api.code4bharat.com/api/session/cancel",
+        "https://amd-api.code4bharat.com/api/cancelsession/cancel",
         cancellationData,
         {
           headers: {
@@ -481,6 +481,17 @@ const UserVideoCall = () => {
                         </>
                       )}
 
+                      {/* Add cancel button for unconfirmed status */}
+                      {booking.status === "unconfirmed" && (
+                        <button
+                          className="px-3 py-2 text-xs rounded-md bg-red-100 text-red-600 hover:bg-red-200 transition-colors duration-200 flex items-center gap-1"
+                          onClick={() => handleCancelClick(booking)}
+                        >
+                          <XCircle className="w-3 h-3" />
+                          <span>Cancel</span>
+                        </button>
+                      )}
+
                       {booking.status === "completed" && (
                         <button
                           className="px-3 py-2 text-white bg-blue-500 rounded-md text-xs hover:bg-blue-600 transition-colors duration-200"
@@ -600,6 +611,14 @@ const UserVideoCall = () => {
                           {booking.status === "unconfirmed" && (
                             <>
                               <p className="text-gray-400">Waiting for Confirmation</p>
+                              {/* Add the cancel button for unconfirmed status */}
+                              <button
+                                className="w-full px-4 py-2 text-sm rounded-md bg-red-100 text-red-600 hover:bg-red-200 transition-all duration-200 flex items-center justify-center gap-2"
+                                onClick={() => handleCancelClick(booking)}
+                              >
+                                <XCircle className="w-4 h-4" />
+                                <span>Cancel Request</span>
+                              </button>
                             </>
                           )}
 
