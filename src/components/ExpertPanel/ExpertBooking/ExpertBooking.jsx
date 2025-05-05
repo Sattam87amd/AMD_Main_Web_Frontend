@@ -67,6 +67,15 @@ const ExpertBooking = () => {
     }
   };
 
+  // Store token in sessionStorage before redirecting to payment
+const storeTokenBeforePayment = () => {
+  const expertToken = localStorage.getItem("expertToken");
+  if (expertToken) {
+    // Save to sessionStorage which generally persists better through redirects
+    sessionStorage.setItem("tempExpertToken", expertToken);
+  }
+};
+
   const handleBookingRequest = async () => {
     if (!sessionData) {
       toast.error("No session data found.");
@@ -105,6 +114,9 @@ const ExpertBooking = () => {
       promoCode: expertData.promoCode,
     };
 
+    storeTokenBeforePayment();
+   
+
     try {
       setIsSubmitting(true); // Start processing state
       const token = localStorage.getItem("expertToken");
@@ -123,6 +135,9 @@ const ExpertBooking = () => {
 
       // Store the session ID for later reference
       localStorage.setItem('pendingSessionId', response.data.session._id);
+      localStorage.removeItem('sessionData'); // Clear session data after booking
+      localStorage.removeItem('consultingExpertData'); // Clear expert data after booking
+      localStorage.removeItem('bookingData'); // Clear booking data after booking
 
       // Show info message before redirecting to payment
       toast.info("Redirecting to payment gateway...", {

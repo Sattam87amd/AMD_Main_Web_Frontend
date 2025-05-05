@@ -40,6 +40,48 @@ const VideoCall = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [sessionToCancel, setSessionToCancel] = useState(null);
   const [loadingCancel, setLoadingCancel] = useState(false);
+// Add this at the beginning of your VideoCall component
+useEffect(() => {
+  const restoreToken = () => {
+    // First check if there's a token in localStorage
+    const expertToken = localStorage.getItem("expertToken");
+    
+    if (!expertToken) {
+      // If not in localStorage, try to get it from sessionStorage
+      const tempToken = sessionStorage.getItem("tempExpertToken");
+      if (tempToken) {
+        // If found in sessionStorage, restore it to localStorage
+        localStorage.setItem("expertToken", tempToken);
+        // Optionally clear sessionStorage
+        sessionStorage.removeItem("tempExpertToken");
+      } else {
+        // If still no token, try to get a fresh one
+        refreshExpertToken();
+      }
+    }
+  };
+  
+  // Function to get a fresh token using the refresh endpoint
+  const refreshExpertToken = async () => {
+    try {
+      const response = await axios.post(
+        "https://amd-api.code4bharat.com/api/expertauth/refresh-token"
+      );
+      
+      if (response.data && response.data.token) {
+        localStorage.setItem("expertToken", response.data.token);
+        console.log("Token refreshed successfully");
+      }
+    } catch (error) {
+      console.error("Error refreshing token:", error);
+      setErrorBookings("Authentication error. Please log in again.");
+      setErrorSessions("Authentication error. Please log in again.");
+    }
+  };
+  
+  restoreToken();
+}, []);
+
 
   useEffect(() => {
     const fetchBookings = async () => {

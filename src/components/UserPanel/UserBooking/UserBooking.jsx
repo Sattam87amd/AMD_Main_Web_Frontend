@@ -119,6 +119,10 @@ const UserToExpertBooking = () => {
 
       // Store the session ID for later reference
       localStorage.setItem('pendingSessionId', response.data.session._id);
+      localStorage.removeItem('expertData');
+      localStorage.removeItem('sessionData');
+      localStorage.removeItem('bookingData');
+      localStorage.removeItem('pendingSessionId');
 
       // Show info message before redirecting to payment
       toast.info("Redirecting to payment gateway...", {
