@@ -76,7 +76,7 @@ const UserToExpertBooking = () => {
     }
 
     // Calculate price based on expert's pricing or session duration
-    const price = consultingExpert?.price || 99 // Default to expert's price or 99
+    const price = sessionData?.price || 99 // Default to expert's price or 99
 
     const fullBookingData = {
       expertId: consultingExpert?._id,
@@ -195,7 +195,7 @@ const UserToExpertBooking = () => {
             <div className="mt-6 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Tag className="h-5 w-5 text-gray-600" />
-                <span className="text-2xl font-bold text-gray-800">SAR {consultingExpert.price}</span>
+                <span className="text-2xl font-bold text-gray-800">SAR {sessionData?.price}</span>
               </div>
               <span className="text-gray-600 text-sm bg-white px-3 py-1 rounded-full shadow-sm">Per Session</span>
             </div>
@@ -363,12 +363,12 @@ const UserToExpertBooking = () => {
                 <div className="bg-gray-50 p-4 rounded-lg mb-6">
                   <div className="flex justify-between items-center mb-2">
                     <span className="text-gray-600">Session Fee</span>
-                    <span className="font-medium">SAR {consultingExpert.price}</span>
+                    <span className="font-medium">SAR {sessionData?.price}</span>
                   </div>
                   <div className="border-t border-gray-200 my-2 pt-2">
                     <div className="flex justify-between items-center font-bold">
                       <span>Total</span>
-                      <span>SAR {consultingExpert.price}</span>
+                      <span>SAR {sessionData?.price}</span>
                     </div>
                   </div>
                 </div>
