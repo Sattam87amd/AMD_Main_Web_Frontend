@@ -130,49 +130,49 @@ const VideoCall = () => {
       console.error("Invalid slots format");
       return false;
     }
-  
+
     if (slots.length === 0) {
       console.error("No slots available");
       return false;
     }
-  
+
     // Get first valid slot with both date and time
-    const validSlot = slots.find(slot => 
+    const validSlot = slots.find(slot =>
       slot.selectedDate && slot.selectedTime
     );
-  
+
     if (!validSlot) {
       console.error("No valid slots found");
       return false;
     }
-  
+
     // Parse session datetime
     const sessionDateTime = new Date(
       `${validSlot.selectedDate}T${convertTo24Hour(validSlot.selectedTime)}`
     );
-  
+
     if (isNaN(sessionDateTime)) {
       console.error("Invalid date/time format");
       return false;
     }
-  
+
     const now = new Date();
     const diffMinutes = (sessionDateTime - now) / 60000;
     return diffMinutes <= 2 && diffMinutes >= -duration;
   };
-  
+
   // Helper function to convert time to 24-hour format
   const convertTo24Hour = (timeString) => {
     const [time, period] = timeString.split(' ');
     let [hours, minutes] = time.split(':');
-    
+
     hours = parseInt(hours);
     if (period.toLowerCase() === 'pm' && hours !== 12) {
       hours += 12;
     } else if (period.toLowerCase() === 'am' && hours === 12) {
       hours = 0;
     }
-    
+
     return `${hours.toString().padStart(2, '0')}:${minutes}`;
   };
 
@@ -376,21 +376,21 @@ const VideoCall = () => {
       toast.error("Please accept the terms and conditions to proceed");
       return;
     }
-    
+
     try {
       setLoadingCancel(true);
-      
+
       // Prepare cancellation data
       const selectedReasons = cancellationReasons
         .filter(reason => reason.checked)
         .map(reason => reason.reason);
-      
+
       const cancellationData = {
         sessionId: sessionToCancel._id,
         reasons: selectedReasons,
         otherReason: cancellationReasons.find(r => r.id === 6)?.checked ? otherReason : ""
       };
-      
+
       const token = localStorage.getItem("expertToken");
       await axios.post(
         "https://amd-api.code4bharat.com/api/cancelsession/cancel",
@@ -401,29 +401,29 @@ const VideoCall = () => {
           },
         }
       );
-      
+
       // Update state for both bookings and sessions
       if (activeTab === "bookings") {
-        setMyBookings(prevBookings => 
-          prevBookings.map(booking => 
-            booking._id === sessionToCancel._id 
-              ? { ...booking, status: "cancelled" } 
+        setMyBookings(prevBookings =>
+          prevBookings.map(booking =>
+            booking._id === sessionToCancel._id
+              ? { ...booking, status: "cancelled" }
               : booking
           )
         );
       } else {
-        setMySessions(prevSessions => 
-          prevSessions.map(session => 
-            session._id === sessionToCancel._id 
-              ? { ...session, status: "cancelled" } 
+        setMySessions(prevSessions =>
+          prevSessions.map(session =>
+            session._id === sessionToCancel._id
+              ? { ...session, status: "cancelled" }
               : session
           )
         );
       }
-      
+
       setShowTermsModal(false);
       toast.success("Session cancelled successfully");
-      
+
     } catch (error) {
       console.error("Error cancelling session:", error);
       toast.error("Failed to cancel session. Please try again.");
@@ -618,6 +618,18 @@ const VideoCall = () => {
                         </>
                       )}
 
+                      {/* Add cancel button for unconfirmed status */}
+                      {booking.status === "unconfirmed" && (
+                        <button
+                          className="px-3 py-2 text-xs rounded-md bg-red-100 text-red-600 hover:bg-red-200 transition-colors duration-200 flex items-center gap-1"
+                          onClick={() => handleCancelClick(booking)}
+                        >
+                          <XCircle className="w-3 h-3" />
+                          <span>Cancel</span>
+                        </button>
+                      )}
+
+
                       {booking.status === "completed" && (
                         <button
                           className="px-3 py-2 text-white bg-blue-500 rounded-md text-xs hover:bg-blue-600 transition-colors duration-200"
@@ -756,6 +768,17 @@ const VideoCall = () => {
                                 onClick={() => handleCancelClick(booking)}
                               >
                                 <span>Cancel</span>
+                              </button>
+                            </>
+                          )}
+                          {booking.status === "unconfirmed" && (
+                            <>
+                              <button
+                                className="w-full px-4 py-2 text-xs rounded-md bg-red-100 text-red-600 hover:bg-red-200 transition-colors duration-200 flex items-center justify-center gap-1"
+                                onClick={() => handleCancelClick(booking)}
+                              >
+                                <XCircle className="w-3 h-3" />
+                                <span>Cancel Booking</span>
                               </button>
                             </>
                           )}
@@ -1010,6 +1033,8 @@ const VideoCall = () => {
                               Zoom link coming soon
                             </span>
                           )}
+
+
                         </>
                       )}
                     </div>
@@ -1232,6 +1257,7 @@ const VideoCall = () => {
                               >
                                 Accept Request
                               </button>
+
                             </>
                           )}
 
