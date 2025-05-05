@@ -6,12 +6,11 @@ import { LuNotepadText } from "react-icons/lu";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { Inter } from "next/font/google";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect } from "react";
 
 const interFont = Inter({
   subsets: ["latin"],
@@ -25,8 +24,10 @@ function LoginPage() {
   const [phoneError, setPhoneError] = useState("");
   const [otpError, setOtpError] = useState("");
   const [formError, setFormError] = useState("");
-  const [useEmail, setUseEmail] = useState(true); // Step 1
+  const [useEmail, setUseEmail] = useState(true);
   const [email, setEmail] = useState("");
+  const [countdown, setCountdown] = useState(0);
+  const [isTimerActive, setIsTimerActive] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -41,7 +42,7 @@ function LoginPage() {
           (useEmail && activeElement.type === "email") ||
           (!useEmail && activeElement.tagName === "INPUT")
         ) {
-          if (isEmailValid || isPhoneValid) {
+          if ((isEmailValid || isPhoneValid) && !isTimerActive) {
             generateOtp();
           }
         }
@@ -57,8 +58,22 @@ function LoginPage() {
   
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [useEmail, email, phone, otp]);
+  }, [useEmail, email, phone, otp, isTimerActive]);
   
+  // Countdown timer effect
+  useEffect(() => {
+    let interval;
+    
+    if (isTimerActive && countdown > 0) {
+      interval = setInterval(() => {
+        setCountdown(prevCount => prevCount - 1);
+      }, 1000);
+    } else if (countdown === 0) {
+      setIsTimerActive(false);
+    }
+    
+    return () => clearInterval(interval);
+  }, [isTimerActive, countdown]);
 
   // Toggle handler
   const toggleLoginMethod = () => {
@@ -68,6 +83,7 @@ function LoginPage() {
     setPhoneError("");
     setFormError("");
   };
+  
   const handlePhoneChange = (value) => {
     if (!value) {
       setPhone(value);
@@ -93,6 +109,8 @@ function LoginPage() {
   };
 
   const generateOtp = async () => {
+    if (isTimerActive) return;
+    
     if (useEmail) {
       if (!email || !email.includes("@")) {
         setFormError("Please enter a valid email address.");
@@ -104,6 +122,9 @@ function LoginPage() {
           { email }
         );
         toast.success("OTP sent to your email!");
+        // Start countdown
+        setCountdown(30);
+        setIsTimerActive(true);
       } catch (error) {
         console.log(error);
        
@@ -111,11 +132,12 @@ function LoginPage() {
           toast.error("Email already exists as an User. Please try another email.");
         }
         
-         // Handle specific error cases
-       if (error.response?.status === 403) {
-      toast.info("Please wait for admin approval before logging in");
-    }
-    toast.error("OTP Invalid or Expired. Please try again.");
+        // Handle specific error cases
+        if (error.response?.status === 403) {
+          toast.info("Please wait for admin approval before logging in");
+        } else {
+          toast.error("OTP Invalid or Expired. Please try again.");
+        }
       }
     } else {
       if (!phone || !isValidPhoneNumber(phone)) {
@@ -128,19 +150,20 @@ function LoginPage() {
           { phone }
         );
         toast.success("OTP sent to your phone!");
+        // Start countdown
+        setCountdown(30);
+        setIsTimerActive(true);
       } catch (error) {
-        
         console.log(error);
         if (error.response && error.response.status === 400) {
           toast.error("Phone number already exists as an User. Please try another number.");
         }
-         // Handle specific error cases
+        // Handle specific error cases
         if (error.response?.status === 403) {
-        toast.info("Please wait for admin approval before logging in");
-    }
-      toast.error("OTP Invalid or Expired. Please try again.");
-
-      
+          toast.info("Please wait for admin approval before logging in");
+        } else {
+          toast.error("OTP Invalid or Expired. Please try again.");
+        }
       }
     }
   };
@@ -170,12 +193,11 @@ function LoginPage() {
     } catch (error) {
       // Handle specific error cases
       if (error.response?.status === 403) {
-      toast.info("Your account is pending admin approval");
+        toast.info("Your account is pending admin approval");
+      } else {
+        toast.error("Invalid OTP. Please try again.");
       }
-      
     }
-    
-
   };
 
   return (
@@ -252,9 +274,8 @@ function LoginPage() {
                   </p>
                 </>
               )}
-      
-                           
             </div>
+            
             {!useEmail && phoneError && (
               <p className="text-red-500 text-xs mt-1">{phoneError}</p>
             )}
@@ -264,19 +285,22 @@ function LoginPage() {
 
             <button
               className={`w-full py-3 rounded-lg transition mt-8 ${
-                (useEmail && email.includes("@")) ||
-                (!useEmail && phone && isValidPhoneNumber(phone))
+                (((useEmail && email.includes("@")) ||
+                (!useEmail && phone && isValidPhoneNumber(phone))) && !isTimerActive)
                   ? "bg-black text-white hover:bg-gray-800"
-                  : "bg-black text-white cursor-not-allowed"
+                  : "bg-gray-400 text-white cursor-not-allowed"
               }`}
               onClick={generateOtp}
               disabled={
-                useEmail
+                isTimerActive || 
+                (useEmail
                   ? !email || !email.includes("@")
-                  : !phone || !isValidPhoneNumber(phone)
+                  : !phone || !isValidPhoneNumber(phone))
               }
             >
-              Send OTP
+              {isTimerActive 
+                ? `Resend OTP in ${countdown}s` 
+                : "Send OTP"}
             </button>
 
             <div>
@@ -297,8 +321,11 @@ function LoginPage() {
             {formError && <p className="text-red-500 text-sm">{formError}</p>}
 
             <button
-              className={`w-full py-3 rounded-lg transition bg-black text-white hover:bg-gray-800"
-                                }`}
+              className={`w-full py-3 rounded-lg transition ${
+                otp.length === 4
+                  ? "bg-black text-white hover:bg-gray-800"
+                  : "bg-gray-400 text-white cursor-not-allowed"
+              }`}
               onClick={handleSubmit}
               disabled={
                 (!useEmail && (!phone || !isValidPhoneNumber(phone))) ||

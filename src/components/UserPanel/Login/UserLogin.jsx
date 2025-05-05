@@ -7,7 +7,7 @@ import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import { Inter } from "next/font/google";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -28,6 +28,55 @@ function UserLoginPage() {
   const [otpError, setOtpError] = useState("");
   const [formError, setFormError] = useState("");
   const [emailError, setEmailError] = useState(""); // State for email validation
+  const [countdown, setCountdown] = useState(0);
+  const [isTimerActive, setIsTimerActive] = useState(false);
+
+  // Countdown timer effect
+  useEffect(() => {
+    let interval;
+    
+    if (isTimerActive && countdown > 0) {
+      interval = setInterval(() => {
+        setCountdown(prevCount => prevCount - 1);
+      }, 1000);
+    } else if (countdown === 0) {
+      setIsTimerActive(false);
+    }
+    
+    return () => clearInterval(interval);
+  }, [isTimerActive, countdown]);
+
+  // Add keyboard event listener for Enter key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === "Enter") {
+        const activeElement = document.activeElement;
+  
+        const isEmailValid = useEmail && email.includes("@");
+        const isPhoneValid = !useEmail && phone && isValidPhoneNumber(phone);
+  
+        // If focused on email or phone input
+        if (
+          (useEmail && activeElement.type === "email") ||
+          (!useEmail && activeElement.tagName === "INPUT")
+        ) {
+          if ((isEmailValid || isPhoneValid) && !isTimerActive) {
+            generateOtp();
+          }
+        }
+  
+        // If focused on OTP input
+        if (activeElement.placeholder === "Enter OTP") {
+          if (otp.length === 4) {
+            handleSubmit();
+          }
+        }
+      }
+    };
+  
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [useEmail, email, phone, otp, isTimerActive]);
 
   // Toggle between phone and email login
   const toggleLoginMethod = () => {
@@ -38,6 +87,7 @@ function UserLoginPage() {
     setEmailError("");
     setFormError("");
   };
+  
   const handlePhoneChange = (value) => {
     if (!value) {
       setPhone(value);
@@ -51,6 +101,7 @@ function UserLoginPage() {
     }
     setFormError("");
   };
+  
   const handleEmailChange = (e) => {
     const value = e.target.value;
     setEmail(value);
@@ -62,6 +113,7 @@ function UserLoginPage() {
     }
     setFormError("");
   };
+  
   const handleOtpChange = (e) => {
     const value = e.target.value.replace(/\D/g, "");
     if (value.length <= 4) {
@@ -73,6 +125,8 @@ function UserLoginPage() {
   };
 
   const generateOtp = async () => {
+    if (isTimerActive) return;
+    
     if (useEmail) {
       if (!email || !email.includes("@")) {
         setFormError("Please enter a valid email address.");
@@ -83,12 +137,16 @@ function UserLoginPage() {
           email,
         });
         toast.success("OTP sent to your email!");
+        // Start countdown
+        setCountdown(15)
+        setIsTimerActive(true);
       } catch (error) {
         console.log(error);
         if (error.response && error.response.status === 400) {
           toast.error("Email already exists as an Expert. Please try another email.");
+        } else {
+          toast.error("Failed to send OTP. Please try again.");
         }
-        
       }
     } else {
       if (!phone || !isValidPhoneNumber(phone)) {
@@ -99,13 +157,17 @@ function UserLoginPage() {
         await axios.post("https://amd-api.code4bharat.com/api/userauth/request-otp", {
           phone,
         });
-        toast.success("OTP sent to your email!");
+        toast.success("OTP sent to your phone!");
+        // Start countdown
+        setCountdown(30);
+        setIsTimerActive(true);
       } catch (error) {
         console.log(error);
         if (error.response && error.response.status === 400) {
           toast.error("Phone Number already exists as an Expert. Please try another number.");
+        } else {
+          toast.error("Failed to send OTP. Please try again.");
         }
-        toast.error("Failed to send OTP. Please try again.");
       }
     }
   };
@@ -135,13 +197,14 @@ function UserLoginPage() {
       }
     } catch (error) {
       console.error("Error verifying OTP:", error);
+      toast.error("OTP verification failed.");
       setFormError("OTP verification failed.");
     }
   };
 
   return (
     <div className={`min-h-screen flex ${interFont.variable}`}>
-      <div className=" relative hidden md:block">
+      <div className="relative hidden md:block">
         <Image
           src="/AwabWomen.png"
           alt="Arab Woman"
@@ -150,7 +213,6 @@ function UserLoginPage() {
           className="object-cover"
         />
       </div>
-      {/* </div> */}
       <div className="w-full md:w-1/2 bg-white flex flex-col items-center justify-center relative">
         <div className="w-full max-w-md p-8 -mt-20 md:-mt-0">
           <h1 className="text-2xl md:text-[35px] font-bold text-center">
@@ -168,10 +230,13 @@ function UserLoginPage() {
                   <input
                     type="email"
                     value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={handleEmailChange}
                     placeholder="Enter your email"
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-8 focus:border-black"
                   />
+                  {emailError && (
+                    <p className="text-red-500 text-xs mt-1">{emailError}</p>
+                  )}
                   <p
                     className="text-sm text-blue-600 mt-2 cursor-pointer underline"
                     onClick={toggleLoginMethod}
@@ -203,6 +268,7 @@ function UserLoginPage() {
                 </>
               )}
             </div>
+            
             {!useEmail && phoneError && (
               <p className="text-red-500 text-xs mt-1">{phoneError}</p>
             )}
@@ -212,19 +278,22 @@ function UserLoginPage() {
 
             <button
               className={`w-full py-3 rounded-lg transition mt-8 ${
-                (useEmail && email.includes("@")) ||
-                (!useEmail && phone && isValidPhoneNumber(phone))
+                (((useEmail && email.includes("@")) ||
+                (!useEmail && phone && isValidPhoneNumber(phone))) && !isTimerActive)
                   ? "bg-black text-white hover:bg-gray-800"
-                  : "bg-black text-white cursor-not-allowed"
+                  : "bg-gray-400 text-white cursor-not-allowed"
               }`}
               onClick={generateOtp}
               disabled={
-                useEmail
+                isTimerActive || 
+                (useEmail
                   ? !email || !email.includes("@")
-                  : !phone || !isValidPhoneNumber(phone)
+                  : !phone || !isValidPhoneNumber(phone))
               }
             >
-              Send OTP
+              {isTimerActive 
+                ? `Resend OTP in ${countdown}s` 
+                : "Send OTP"}
             </button>
 
             <div>
@@ -246,9 +315,10 @@ function UserLoginPage() {
 
             <button
               className={`w-full py-3 rounded-lg transition ${
-                phone && otp.length === 4 && isValidPhoneNumber(phone)
+                ((!useEmail && phone && isValidPhoneNumber(phone)) || 
+                (useEmail && email.includes("@"))) && otp.length === 4
                   ? "bg-black text-white hover:bg-gray-800"
-                  : "bg-black text-white"
+                  : "bg-gray-400 text-white cursor-not-allowed"
               }`}
               onClick={handleSubmit}
               disabled={
@@ -266,7 +336,7 @@ function UserLoginPage() {
             />
           </div>
         </div>
-      </div>{" "}
+      </div>
     </div>
   );
 }
