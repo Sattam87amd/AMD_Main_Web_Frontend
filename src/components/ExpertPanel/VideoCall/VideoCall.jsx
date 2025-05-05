@@ -86,6 +86,7 @@ const VideoCall = () => {
         return;
       }
       
+      if(sessionId){
       // Always refresh the token to ensure it's valid
       try {
         const response = await axios.post(
@@ -93,21 +94,10 @@ const VideoCall = () => {
           {},
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        
-        // Handle the response format from the backend
-        // The expertauth.controller.js returns { token: newToken }
-        if (response.data && (response.data.token || response.data.newToken)) {
-          const newToken = response.data.token || response.data.newToken;
-          localStorage.setItem("expertToken", newToken);
-          console.log("Expert token refreshed successfully");
-        }
+        localStorage.setItem("expertToken", response.data.newToken);
       } catch (error) {
-        console.error("Expert token refresh failed:", error);
-        // If token refresh fails, it may be invalid, so redirect to login
-        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
-          localStorage.removeItem("expertToken");
-          router.push("/expertlogin");
-        }
+        console.error("Token refresh failed:", error);
+      }
       }
     };
 

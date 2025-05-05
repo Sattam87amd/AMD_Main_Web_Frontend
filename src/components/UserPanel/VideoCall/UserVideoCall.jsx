@@ -38,10 +38,7 @@ const UserVideoCall = () => {
   const [bookingToCancel, setBookingToCancel] = useState(null);
   const [loadingCancel, setLoadingCancel] = useState(false);
 
-  useEffect(() => {
-    setIsClient(true);
-    setSessionId(new URLSearchParams(window.location.search).get('sessionId'));
-  }, []);
+ 
 
 
   useEffect(() => {
@@ -86,7 +83,7 @@ const UserVideoCall = () => {
       if (sessionId) {
         try {
           const response = await axios.post(
-            "https://amd-api.code4bharat.com/api/auth/refresh-token",
+            "https://amd-api.code4bharat.com/api/userauth/refresh-token",
             {},
             { headers: { Authorization: `Bearer ${token}` } }
           );
