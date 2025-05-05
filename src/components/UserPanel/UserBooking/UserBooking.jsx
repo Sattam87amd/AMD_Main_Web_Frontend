@@ -119,18 +119,30 @@ const UserToExpertBooking = () => {
 
       // Store the session ID for later reference
       localStorage.setItem('pendingSessionId', response.data.session._id);
-      
+
       // Show info message before redirecting to payment
       toast.info("Redirecting to payment gateway...", {
         position: "bottom-center",
         autoClose: 2000,
       });
 
+
+      localStorage.setItem('prePaymentAuth', JSON.stringify({
+        token: localStorage.getItem('userToken'),
+        timestamp: new Date().getTime()
+      }));
+
       // Redirect to the payment URL provided by TAP
+      // Store temporary auth before redirect
+      localStorage.setItem('prePaymentAuth', JSON.stringify({
+        token: localStorage.getItem('userToken'),
+        timestamp: new Date().getTime()
+      }));
+
       setTimeout(() => {
         window.location.href = response.data.paymentUrl;
       }, 2000);
-      
+
     } catch (error) {
       console.error('Booking error:', error.response?.data || error.message);
       toast.error(`Booking failed: ${error.response?.data?.message || error.message}`);

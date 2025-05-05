@@ -8,8 +8,13 @@ import { MessagesSquare, Video, XCircle } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Rate from "@/components/Rate/Rate.jsx";
+import { useRouter } from "next/navigation";
 
 const UserVideoCall = () => {
+  const router = useRouter();
+  const [sessionId, setSessionId] = useState(null);
+  const [isClient, setIsClient] = useState(false);
+  const [sessionState, setSessionState] = useState({});
   const [activeTab, setActiveTab] = useState("bookings");
   const [myBookings, setMyBookings] = useState([]);
   const [loadingBookings, setLoadingBookings] = useState(true);
@@ -32,6 +37,73 @@ const UserVideoCall = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [bookingToCancel, setBookingToCancel] = useState(null);
   const [loadingCancel, setLoadingCancel] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    setSessionId(new URLSearchParams(window.location.search).get('sessionId'));
+  }, []);
+
+
+  useEffect(() => {
+    setIsClient(true);
+    setSessionId(new URLSearchParams(window.location.search).get('sessionId'));
+  }, []);
+
+  // Modified auth useEffect
+  useEffect(() => {
+    if (!isClient) return;
+
+    const handleMessage = (event) => {
+      if (event.origin === "https://www.shourk.com") {
+        if (event.data.type === "TOKEN_SYNC") {
+          localStorage.setItem("userToken", event.data.token);
+        }
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+
+    const prePaymentData = localStorage.getItem("prePaymentAuth");
+    if (prePaymentData) {
+      const { token, timestamp } = JSON.parse(prePaymentData);
+      if (Date.now() - timestamp < 3600000) {
+        localStorage.setItem("userToken", token);
+        localStorage.removeItem("prePaymentAuth");
+      }
+    }
+
+    const checkAuth = async () => {
+      const token = localStorage.getItem("userToken");
+      if (!token) {
+        const parentToken = window.parent?.localStorage?.getItem("userToken");
+        if (parentToken) {
+          localStorage.setItem("userToken", parentToken);
+          return;
+        }
+        router.push("/userlogin");
+      }
+      
+      if (sessionId) {
+        try {
+          const response = await axios.post(
+            "https://amd-api.code4bharat.com/api/auth/refresh-token",
+            {},
+            { headers: { Authorization: `Bearer ${token}` } }
+          );
+          localStorage.setItem("userToken", response.data.newToken);
+        } catch (error) {
+          console.error("Token refresh failed:", error);
+        }
+      }
+    };
+
+    checkAuth();
+
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, [sessionId, router, isClient]);
+
 
   useEffect(() => {
     const fetchBookingsAndSessions = async () => {
@@ -231,6 +303,8 @@ const UserVideoCall = () => {
       setLoadingCancel(false);
     }
   };
+
+  if (!isClient) return null;
 
   return (
     <div className="w-full mx-auto py-4 px-2 mt-2 md:max-w-6xl md:py-10 md:px-4">
