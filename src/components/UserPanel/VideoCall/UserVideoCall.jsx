@@ -12,8 +12,9 @@ import { useRouter } from "next/navigation";
 
 const UserVideoCall = () => {
   const router = useRouter();
+  const [sessionId, setSessionId] = useState(null);
   const searchParams = new URLSearchParams(window.location.search);
-  const sessionId = searchParams.get('sessionId');
+  
   const [activeTab, setActiveTab] = useState("bookings");
   const [myBookings, setMyBookings] = useState([]);
   const [loadingBookings, setLoadingBookings] = useState(true);
@@ -38,7 +39,16 @@ const UserVideoCall = () => {
   const [loadingCancel, setLoadingCancel] = useState(false);
 
   useEffect(() => {
-    // Cross-domain storage sync
+    // Get sessionId from URL after component mounts
+    const queryParams = new URLSearchParams(window.location.search);
+    setSessionId(queryParams.get('sessionId'));
+  }, []);
+
+
+  useEffect(() => {
+    // Only run on client side
+    if (typeof window === 'undefined') return;
+
     const handleMessage = (event) => {
       if (event.origin === "https://www.shourk.com") {
         if (event.data.type === "TOKEN_SYNC") {
@@ -46,10 +56,9 @@ const UserVideoCall = () => {
         }
       }
     };
-  
+
     window.addEventListener("message", handleMessage);
-  
-    // Restore from prePaymentAuth if exists
+
     const prePaymentData = localStorage.getItem("prePaymentAuth");
     if (prePaymentData) {
       const { token, timestamp } = JSON.parse(prePaymentData);
@@ -58,12 +67,11 @@ const UserVideoCall = () => {
         localStorage.removeItem("prePaymentAuth");
       }
     }
-  
-    // Token refresh logic
+
     const checkAuth = async () => {
       const token = localStorage.getItem("userToken");
       if (!token) {
-        const parentToken = window.parent.localStorage.getItem("userToken");
+        const parentToken = typeof window !== 'undefined' ? window.parent.localStorage.getItem("userToken") : null;
         if (parentToken) {
           localStorage.setItem("userToken", parentToken);
           return;
@@ -84,9 +92,9 @@ const UserVideoCall = () => {
         }
       }
     };
-  
+
     checkAuth();
-  
+
     return () => {
       window.removeEventListener("message", handleMessage);
     };
