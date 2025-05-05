@@ -8,7 +8,7 @@ import { MessagesSquare, Video, XCircle } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Rate from "@/components/Rate/Rate.jsx";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 const UserVideoCall = () => {
   const router = useRouter();
