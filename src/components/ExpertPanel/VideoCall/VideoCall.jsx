@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import { CiClock2 } from "react-icons/ci";
 import { MessagesSquare, Video, ChevronDown, ChevronUp, XCircle } from "lucide-react";
@@ -10,6 +11,9 @@ import "react-toastify/dist/ReactToastify.css";
 import Rate from "@/components/Rate/Rate.jsx";
 
 const VideoCall = () => {
+  const router = useRouter();
+  const [isClient, setIsClient] = useState(false);
+  const [sessionId, setSessionId] = useState(null);
   const [activeTab, setActiveTab] = useState("bookings");
   const [mySessions, setMySessions] = useState([]);
   const [myBookings, setMyBookings] = useState([]);
@@ -20,12 +24,8 @@ const VideoCall = () => {
   const [showRateComponent, setShowRateComponent] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [expandedNotes, setExpandedNotes] = useState({});
-
-  // const [selectedDate, setSelectedDate] = useState("");  // Store selected date
-  // const [selectedTime, setSelectedTime] = useState("");  // Store selected time
-
   const [sessionState, setSessionState] = useState({});
-
+  
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
   const [cancellationReasons, setCancellationReasons] = useState([
@@ -41,13 +41,83 @@ const VideoCall = () => {
   const [sessionToCancel, setSessionToCancel] = useState(null);
   const [loadingCancel, setLoadingCancel] = useState(false);
 
+  // Initialize client-side variables
   useEffect(() => {
+    setIsClient(true);
+    setSessionId(new URLSearchParams(window.location.search).get('sessionId'));
+  }, []);
+
+  // Authentication and token refresh logic
+  useEffect(() => {
+    if (!isClient) return;
+
+    const handleMessage = (event) => {
+      if (event.origin === "https://www.shourk.com") {
+        if (event.data.type === "TOKEN_SYNC") {
+          localStorage.setItem("expertToken", event.data.token);
+        }
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+
+    const prePaymentData = localStorage.getItem("prePaymentAuth");
+    if (prePaymentData) {
+      try {
+        const { token, timestamp } = JSON.parse(prePaymentData);
+        if (Date.now() - timestamp < 3600000) {
+          localStorage.setItem("expertToken", token);
+          localStorage.removeItem("prePaymentAuth");
+        }
+      } catch (error) {
+        console.error("Error parsing prePaymentAuth:", error);
+      }
+    }
+
+    const checkAuth = async () => {
+      const token = localStorage.getItem("expertToken");
+      if (!token) {
+        const parentToken = window.parent?.localStorage?.getItem("expertToken");
+        if (parentToken) {
+          localStorage.setItem("expertToken", parentToken);
+          return;
+        }
+        router.push("/expertlogin");
+        return;
+      }
+      
+      if(sessionId){
+      // Always refresh the token to ensure it's valid
+      try {
+        const response = await axios.post(
+          "https://amd-api.code4bharat.com/api/expertauth/refresh-token",
+          {},
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        localStorage.setItem("expertToken", response.data.newToken);
+      } catch (error) {
+        console.error("Token refresh failed:", error);
+      }
+      }
+    };
+
+    checkAuth();
+
+    return () => {
+      window.removeEventListener("message", handleMessage);
+    };
+  }, [sessionId, router, isClient]);
+
+  // Data fetching logic - Make sure this only runs after authentication check
+  useEffect(() => {
+    if (!isClient) return;
+    
     const fetchBookings = async () => {
       try {
         setLoadingBookings(true);
         const token = localStorage.getItem("expertToken");
         if (!token) {
-          setErrorBookings("Token is required");
+          setErrorBookings("Authentication token is required");
           return;
         }
 
@@ -62,7 +132,13 @@ const VideoCall = () => {
 
         setMyBookings(bookingsResponse?.data || []);
       } catch (err) {
+        console.error("Error fetching bookings:", err);
         setErrorBookings("No bookings found for this expert.");
+        
+        // Handle token-related errors
+        if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+          router.push("/expertlogin");
+        }
       } finally {
         setLoadingBookings(false);
       }
@@ -73,7 +149,7 @@ const VideoCall = () => {
         setLoadingSessions(true);
         const token = localStorage.getItem("expertToken");
         if (!token) {
-          setErrorSessions("Token is required");
+          setErrorSessions("Authentication token is required");
           return;
         }
 
@@ -97,23 +173,31 @@ const VideoCall = () => {
           })),
         ];
 
-        // pull the first slot’s date/time into top-level fields
+        // Normalize the data
         const normalized = combinedSessions.map((s) => ({
           ...s,
           sessionDate: s.slots?.[0]?.selectedDate,
           sessionTime: s.slots?.[0]?.selectedTime,
         }));
+        
         setMySessions(normalized);
       } catch (err) {
+        console.error("Error fetching sessions:", err);
         setErrorSessions("No sessions found.");
+        
+        // Handle token-related errors
+        if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+          router.push("/expertlogin");
+        }
       } finally {
         setLoadingSessions(false);
       }
     };
 
+    // Only fetch data if we're on the client and after auth check has run
     fetchBookings();
     fetchSessions();
-  }, []);
+  }, [isClient, router]);
 
   const handleRateClick = (booking) => {
     setShowRateComponent(true);

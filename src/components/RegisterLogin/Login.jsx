@@ -127,9 +127,10 @@ function LoginPage() {
         setIsTimerActive(true);
       } catch (error) {
         console.log(error);
+        toast.error("Error sending OTP. Please try again.");
        
         if (error.response && error.response.status === 400) {
-          toast.error("Email already exists as an User. Please try another email.");
+          toast.info("Email already exists as an User. Please try another email.");
         }
         
         // Handle specific error cases
