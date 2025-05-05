@@ -13,8 +13,8 @@ import { useRouter } from "next/navigation";
 const UserVideoCall = () => {
   const router = useRouter();
   const [sessionId, setSessionId] = useState(null);
-  const searchParams = new URLSearchParams(window.location.search);
-  
+  const [isClient, setIsClient] = useState(false);
+  const [sessionState, setSessionState] = useState({});
   const [activeTab, setActiveTab] = useState("bookings");
   const [myBookings, setMyBookings] = useState([]);
   const [loadingBookings, setLoadingBookings] = useState(true);
@@ -39,15 +39,19 @@ const UserVideoCall = () => {
   const [loadingCancel, setLoadingCancel] = useState(false);
 
   useEffect(() => {
-    // Get sessionId from URL after component mounts
-    const queryParams = new URLSearchParams(window.location.search);
-    setSessionId(queryParams.get('sessionId'));
+    setIsClient(true);
+    setSessionId(new URLSearchParams(window.location.search).get('sessionId'));
   }, []);
 
 
   useEffect(() => {
-    // Only run on client side
-    if (typeof window === 'undefined') return;
+    setIsClient(true);
+    setSessionId(new URLSearchParams(window.location.search).get('sessionId'));
+  }, []);
+
+  // Modified auth useEffect
+  useEffect(() => {
+    if (!isClient) return;
 
     const handleMessage = (event) => {
       if (event.origin === "https://www.shourk.com") {
@@ -71,7 +75,7 @@ const UserVideoCall = () => {
     const checkAuth = async () => {
       const token = localStorage.getItem("userToken");
       if (!token) {
-        const parentToken = typeof window !== 'undefined' ? window.parent.localStorage.getItem("userToken") : null;
+        const parentToken = window.parent?.localStorage?.getItem("userToken");
         if (parentToken) {
           localStorage.setItem("userToken", parentToken);
           return;
@@ -98,7 +102,8 @@ const UserVideoCall = () => {
     return () => {
       window.removeEventListener("message", handleMessage);
     };
-  }, [sessionId, router]);
+  }, [sessionId, router, isClient]);
+
 
   useEffect(() => {
     const fetchBookingsAndSessions = async () => {
@@ -298,6 +303,8 @@ const UserVideoCall = () => {
       setLoadingCancel(false);
     }
   };
+
+  if (!isClient) return null;
 
   return (
     <div className="w-full mx-auto py-4 px-2 mt-2 md:max-w-6xl md:py-10 md:px-4">
