@@ -101,7 +101,7 @@ const SimilarExpertsExpertPanel = () => {
 
       <div className="overflow-x-auto md:overflow-visible">
   <motion.div
-    className="flex md:grid md:grid-cols-5 md:gap-x-64 gap-4 px-4 md:px-0 overflow-x-scroll custom-scrollbar-hide"
+    className="flex gap-4 px-4 md:px-0 overflow-x-scroll custom-scrollbar-hide"
     initial="hidden"
     whileInView="visible"
     viewport={{ once: true }}
