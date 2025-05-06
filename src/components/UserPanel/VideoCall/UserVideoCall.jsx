@@ -335,7 +335,7 @@ const UserVideoCall = () => {
               </div>
             ) : errorBookings ? (
               <div className="text-center p-10 bg-white rounded-lg shadow-md">
-                <div className="text-red-500 text-lg mb-2">⚠️</div>
+                <div className="text-red-500 text-lg mb-2"></div>
                 <p className="text-red-500">{errorBookings}</p>
               </div>
             ) : myBookings.length === 0 ? (
