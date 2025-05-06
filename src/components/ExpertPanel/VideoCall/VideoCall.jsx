@@ -1518,7 +1518,7 @@ const VideoCall = () => {
               </button>
             </div>
 
-          //Terms & Conditions
+        
 
             <div className="mb-6">
               <div className="bg-gray-50 p-4 rounded-md mb-6 max-h-60 overflow-y-auto">
