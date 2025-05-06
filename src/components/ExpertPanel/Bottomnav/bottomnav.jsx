@@ -4,7 +4,16 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { PiCirclesFourLight } from "react-icons/pi";
-import { Video, User, Search, BadgeCheck } from "lucide-react";
+import {
+  Video,
+  User,
+  Search,
+  BadgeCheck,
+  CreditCard,
+  LogOut,
+  MessageCircle,
+} from "lucide-react";
+
 
 const BottomNav = () => {
   const pathname = usePathname(); // Get the current route
@@ -16,6 +25,8 @@ const BottomNav = () => {
     { label: "Profile", icon: <User />, id: "profile", path: "/expertpanel/expertpanelprofile" },
     { label: "Expert", icon: <BadgeCheck />, id: "expert", path: "/expertpanel/expert" },
     { label: "Dashboard", icon: <PiCirclesFourLight />, id: "dashboard", path: "/expertpanel/dashboard" },
+    
+    { label: "Logout", icon: <LogOut />, id: "logout", path: "/" },
   ];
 
   return (
@@ -24,9 +35,8 @@ const BottomNav = () => {
         <Link href={item.path} key={item.id} passHref>
           <div
             onClick={() => setActive(item.id)}
-            className={`flex flex-col items-center cursor-pointer transition-colors ${
-              active === item.id ? "text-red-500" : "text-gray-700"
-            }`}
+            className={`flex flex-col items-center cursor-pointer transition-colors ${active === item.id ? "text-red-500" : "text-gray-700"
+              }`}
           >
             <div className="text-xl sm:text-2xl">{item.icon}</div>
             <span className="text-[10px] sm:text-xs font-medium leading-none mt-1">{item.label}</span>
