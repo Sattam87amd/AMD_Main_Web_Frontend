@@ -585,7 +585,7 @@ const UserVideoCall = () => {
                                             day: "numeric",
                                             month: "short",
                                           })
-                                        : "Invalid Date"}
+                                        : null}
                                     </p>
                                     <div className="mt-2 flex flex-wrap gap-2">
                                       {times.map((time, index) => (
