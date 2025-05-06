@@ -481,7 +481,7 @@ const VideoCall = () => {
 
       const token = localStorage.getItem("expertToken");
       await axios.post(
-        "https://amd-api.code4bharat.com/api/cancelsession/cancel",
+        "https://amd-api.code4bharat.com/api/cancelsession/cancelexpert",
         cancellationData,
         {
           headers: {

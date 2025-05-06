@@ -271,7 +271,7 @@ const UserVideoCall = () => {
       // TODO: Replace with actual API endpoint when backend is ready
       const token = localStorage.getItem("userToken");
       await axios.post(
-        "https://amd-api.code4bharat.com/api/cancelsession/cancel",
+        "https://amd-api.code4bharat.com/api/cancelsession/canceluser",
         cancellationData,
         {
           headers: {
