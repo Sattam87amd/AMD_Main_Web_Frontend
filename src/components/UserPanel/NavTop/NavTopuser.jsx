@@ -84,20 +84,23 @@ const Navtop = ({ activeTab }) => {
         </div>
 
         <Link href="/userpanel/userpanelprofile">
-          <div className="flex items-center space-x-2 cursor-pointer">
-            <div className="relative w-8 h-8 rounded-full">
-              {userData.profilePic && (
-                <Image
-                  src={userData.profilePic}
-                  alt="Profile"
-                  width={32}
-                  height={32}
-                  className="rounded-full object-cover border border-gray-300"
-                />
-              )}
+        <div className="flex items-center space-x-2 cursor-pointer">
+          {/* Use Next.js Image component for profile picture */}
+          {userData.profilePic ? (
+            <div className="relative w-10 h-10 overflow-hidden">
+              <Image
+                src={userData.profilePic} // Ensure this URL is valid and points to the image
+                alt="Profile"
+                width={100} // Set width (64px size for example)
+                height={100} // Set height (64px size for example)
+                className="w-full h-full object-cover rounded-full"
+              />
             </div>
-            <p className="text-sm font-semibold">{userData.name || "Loading..."}</p>
-          </div>
+          ) : (
+            <div className="w-8 h-8 rounded-full bg-gray-300"></div> // Fallback if image is not loaded
+          )}
+          <p className="text-sm font-semibold">{userData.name || "Loading..."}</p>
+        </div>
         </Link>
       </div>
     </div>

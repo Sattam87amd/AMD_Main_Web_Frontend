@@ -108,11 +108,32 @@ const UserProfileSection = () => {
     setSuccessMessage("");
   };
 
-  const handleSaveClick = (e) => {
+  const handleSaveClick = async (e) => {
     e.preventDefault();
-    setIsEditing(false);
-    setSuccessMessage("Changes Saved!");
-    setTimeout(() => setSuccessMessage(""), 3000);
+    
+    try {
+      // Make API call to update user profile
+      const response = await axios.put(
+        `https://amd-api.code4bharat.com/api/userauth/updateuser/${userId}`,
+        {
+          firstName: profileData.firstName,
+          lastName: profileData.lastName,
+          phone: profileData.phone,
+          email: profileData.email
+        }
+      );
+      
+      if (response.data.success) {
+        setIsEditing(false);
+        setSuccessMessage("Changes Saved!");
+        setTimeout(() => setSuccessMessage(""), 3000);
+      } else {
+        toast.error(response.data.message || "Failed to update profile.");
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error("Error updating profile. Please try again.");
+    }
   };
 
   // Handle sign out: remove token and redirect to home page
