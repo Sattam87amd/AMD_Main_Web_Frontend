@@ -336,8 +336,8 @@ const VideoCall = () => {
       }
 
       const response = await axios.put(
-        `https://amd-api.code4bharat.com/api/session/decline/${sessionId}`,
-        {},
+        `https://amd-api.code4bharat.com/api/session/decline`,
+        { id: sessionId },
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -1518,7 +1518,7 @@ const VideoCall = () => {
               </button>
             </div>
 
-          //Terms & Conditions
+          Terms & Conditions
 
             <div className="mb-6">
               <div className="bg-gray-50 p-4 rounded-md mb-6 max-h-60 overflow-y-auto">
