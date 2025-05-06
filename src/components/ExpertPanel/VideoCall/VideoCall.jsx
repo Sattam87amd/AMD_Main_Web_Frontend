@@ -336,8 +336,8 @@ const VideoCall = () => {
       }
 
       const response = await axios.put(
-        `https://amd-api.code4bharat.com/api/session/decline/${sessionId}`,
-        {},
+        `https://amd-api.code4bharat.com/api/session/decline`,
+        { id: sessionId },
         {
           headers: {
             Authorization: `Bearer ${token}`,
