@@ -1352,7 +1352,7 @@ const VideoCall = () => {
                           {session.status === "confirmed" && (
                             <>
                               <button 
-                              onClick={() => handleChatClick()}
+                              onClick={() =>{ handleChatClick()}}
                               className="w-full px-4 py-2 border border-gray-300 rounded-md text-sm flex items-center justify-center gap-2 hover:bg-gray-50 transition-all duration-200">
                                 <MessagesSquare className="w-4 h-4 text-blue-500" />
                                 <span>Chat with {session.expertID ? "Expert" : "Client"}</span>
