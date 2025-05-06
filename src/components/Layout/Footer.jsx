@@ -2,9 +2,29 @@
 
 import React from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { FaInstagram, FaTwitter, FaFacebook } from "react-icons/fa";
 
 const Footer = () => {
+  const router = useRouter();
+
+  // Handle expert button click with token check
+  const handleExpertRedirect = () => {
+    try {
+      const expertToken = localStorage.getItem('expertToken');
+      if (expertToken) {
+        // If expert token exists, redirect to expert panel
+        router.push('/expertpanel/expertpanelprofile');
+      } else {
+        // If no token, redirect to expert login page
+        router.push('/expertlogin');
+      }
+    } catch (error) {
+      console.error('Error checking expert token:', error);
+      router.push('/expertlogin');
+    }
+  };
+
   return (
     <footer className="p-4 md:p-10 md:py-6 bg-[#EDECE8] w-full">
       <div className="w-full">
@@ -16,11 +36,13 @@ const Footer = () => {
               Book the most in-demand experts <br />& get advice over a video
               call.
             </p>
-            <Link href="/expertlogin">
-              <button className="mt-4 px-6 py-2 md:px-16 md:py-3 md:text-xl bg-black text-white rounded-lg">
-                Become Expert
-              </button>
-            </Link>
+            {/* Updated button with onClick handler */}
+            <button 
+              onClick={handleExpertRedirect} 
+              className="mt-4 px-6 py-2 md:px-16 md:py-3 md:text-xl bg-black text-white rounded-lg"
+            >
+              Become Expert
+            </button>
           </div>
 
           {/* Middle Section - Company and Support */}
