@@ -3,15 +3,15 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Gift, Menu, X, Search, User } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import SeacthExperts from "../SearchExperts/SearchExperts"; // Import SearchExperts component
+import SeacthExperts from "../SearchExperts/SearchExperts";
 import GoogleTranslateButton from "../GoogleTranslateButton";
 
 function Navbar() {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
-  const [showSearchPage, setShowSearchPage] = useState(false); // State for search page
+  const [showSearchPage, setShowSearchPage] = useState(false);
 
   // Toggle mobile menu
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -29,6 +29,40 @@ function Navbar() {
     setShowSearchPage(false);
   };
 
+  // Handle user sign up/login click
+  const handleUserSignUp = () => {
+    try {
+      const userToken = localStorage.getItem('userToken');
+      if (userToken) {
+        // If token exists, redirect to user panel
+        router.push('/userpanel/loginuserexpert');
+      } else {
+        // If no token, redirect to login page
+        router.push('/userlogin');
+      }
+    } catch (error) {
+      console.error('Error checking user token:', error);
+      router.push('/userlogin');
+    }
+  };
+
+  // Handle expert login from navbar
+  const handleExpertRedirect = () => {
+    try {
+      const expertToken = localStorage.getItem('expertToken');
+      if (expertToken) {
+        // If expert token exists, redirect to expert panel
+        router.push('/expertpanel/expertpanelprofile');
+      } else {
+        // If no token, go to the become expert page
+        router.push('/joinasexpert');
+      }
+    } catch (error) {
+      console.error('Error checking expert token:', error);
+      router.push('/joinasexpert');
+    }
+  };
+
   return (
     <div className="relative">
       {/* Navbar */}
@@ -44,9 +78,9 @@ function Navbar() {
 
           {/* Center Links for Desktop */}
           <div className="hidden md:flex justify-center flex-grow items-center space-x-12 text-[19px]">
-            <Link href="/joinasexpert" className="text-black">
+            <button onClick={handleExpertRedirect} className="text-black">
               Become an Expert
-            </Link>
+            </button>
 
             <Link href="/ourmission" className="text-black">
               About Us
@@ -69,11 +103,12 @@ function Navbar() {
               </button>
             </Link>
             <GoogleTranslateButton />
-            <Link href="/userlogin">
-              <button className="bg-white text-black font-medium rounded-lg text-[16px] px-4 py-2">
-                Sign Up
-              </button>
-            </Link>
+            <button 
+              onClick={handleUserSignUp}
+              className="bg-white text-black font-medium rounded-lg text-[16px] px-4 py-2"
+            >
+              Sign Up
+            </button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -102,13 +137,15 @@ function Navbar() {
             <Link href="/" className="block text-black" onClick={closeMenu}>
               Home
             </Link>
-            <Link
-              href="/joinasexpert"
-              className="block text-black"
-              onClick={closeMenu}
+            <button 
+              onClick={() => {
+                handleExpertRedirect();
+                closeMenu();
+              }}
+              className="block text-black w-full text-left"
             >
               Become an Expert
-            </Link>
+            </button>
             <Link
               href="/ourmission"
               className="block text-black"
@@ -126,7 +163,10 @@ function Navbar() {
                 <Gift className="ml-2 h-5 w-5" />
               </button>
               <button
-                onClick={() => router.push("/userlogin")}
+                onClick={() => {
+                  handleUserSignUp();
+                  closeMenu();
+                }}
                 className="flex items-center bg-white text-black font-medium rounded-lg text-[16px] px-4 py-2 w-full"
               >
                 Sign Up
