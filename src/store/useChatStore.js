@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { io } from "socket.io-client";
 
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = "http://localhost:5071";
 
 export const useChatStore = create((set, get) => ({
   messages: [],
