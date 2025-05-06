@@ -77,22 +77,20 @@ function UserRegisterPage() {
 
     try {
       const response = await axios.post(
-        " https://amd-api.code4bharat.com/api/userauth/registeruser",
-        {
-          phone, // Add phone from state
-          firstName: firstName,
-          lastName: lastName, // Send lastName separately
-          email,
-        }
-      );
 
+        "https://amd-api.code4bharat.com/api/userauth/registeruser",
+        
+        
+        { phone, firstName, lastName, email }
+        
+      );
+      console.log("Full response:", response);
+  
       if (response.status === 201) {
-        // alert('Successfully registered!');
-        router.push("/userlogin");
-      } else {
-        console.log("Unexpected status:", response.status);
+        localStorage.setItem("userToken", response.data.data.token); // Store the token
+        router.push("/userpanel/loginuserexpert"); // Redirect to the correct page
       }
-    } catch (error) {
+    }  catch (error) {
       setServerError(
         error.response?.data?.message || "Registration failed. Try again."
       );
