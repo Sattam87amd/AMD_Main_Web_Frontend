@@ -42,20 +42,11 @@ const ExpertDetail = () => {
   const router = useRouter();
 
   // Date handling
-  const generateMonthDates = () => {
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = date.getMonth();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-    return Array.from({ length: daysInMonth }, (_, i) => {
-      const dayDate = new Date(year, month, i + 1);
-      // Only include future dates (including today)
-      return dayDate >= new Date(new Date().setHours(0, 0, 0, 0)) ? dayDate : null;
-    }).filter(date => date !== null);
-  };
-
-  const [monthDates, setMonthDates] = useState(generateMonthDates());
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+  const nextDate = new Date(today);
+  nextDate.setDate(today.getDate() + 2);
 
   const getFormattedDate = (date) => {
     return date.toLocaleDateString(undefined, {
@@ -64,7 +55,6 @@ const ExpertDetail = () => {
       month: "short",
     });
   };
-
   const handleSeeMore = () => {
     setIsExpanded(!isExpanded);
   };
@@ -75,7 +65,11 @@ const ExpertDetail = () => {
     setSelectedDurationMinutes(15);
   };
 
-  
+  const dateMap = {
+    today: today,
+    tomorrow: tomorrow,
+    nextDate: nextDate,
+  };
 
   useEffect(() => {
     // Get expertId from URL path
@@ -164,12 +158,15 @@ const ExpertDetail = () => {
     setSelectedConsultation(type);
     setPrice(type === "1:4" ? 150 : 350);
   };
-  const handleTimeSelection = (dateString, time) => {
+
+  const handleTimeSelection = (dayKey, time) => {
+    const date = dateMap[dayKey].toISOString().split("T")[0];
+    const formattedTime = time.replace(" AM", "").replace(" PM", "").trim();
+
     const slot = {
-      selectedDate: dateString,
-      selectedTime: time,
+      selectedDate: date,
+      selectedTime: formattedTime + (time.includes("AM") ? " AM" : " PM"),
     };
-  
 
     setSelectedTimes((prevTimes) => {
       const exists = prevTimes.some(
@@ -195,11 +192,15 @@ const ExpertDetail = () => {
     });
   };
 
-  const isSlotBooked = (dateString, time) => {
+  const isSlotBooked = (dayKey, time) => {
+    const date = dateMap[dayKey].toISOString().split("T")[0];
+    // Ensure time format matches exactly what's coming from backend
+    const formattedTime = time; // Keep original format "07:00 AM"
+
     return bookedSlots.some(
       slot =>
-        slot.selectedDate === dateString &&
-        slot.selectedTime === time
+        slot.selectedDate === date &&
+        slot.selectedTime === formattedTime
     );
   };
 
@@ -213,7 +214,7 @@ const ExpertDetail = () => {
         slots: selectedTimes,
         duration: selectedDuration,
         areaOfExpertise: "Home",
-        price: expert.price * (selectedDurationMinutes / 15),
+        price:expert.price * (selectedDurationMinutes / 15),
       };
       localStorage.setItem("sessionData", JSON.stringify(sessionData));
 
@@ -379,8 +380,8 @@ const ExpertDetail = () => {
                           <button
                             key={label}
                             className={`py-2 px-4 ${selectedDuration === label
-                              ? "bg-black text-white"
-                              : "bg-[#F8F7F3] text-black"
+                                ? "bg-black text-white"
+                                : "bg-[#F8F7F3] text-black"
                               } rounded-md shadow`}
                             onClick={() => {
                               setSelectedDuration(label);
@@ -392,47 +393,47 @@ const ExpertDetail = () => {
                         ))}
                       </div>
 
-                       {/* Scrollable time slots */}
-  <div className="h-[450px] overflow-y-auto pb-8"> {/* Scrollable container */}
-    {monthDates.map((date) => {
-      const dateString = date.toISOString().split('T')[0];
-      return (
-        <div key={dateString} className="mb-8 bg-white/90 backdrop-blur-sm">
-          <h4 className="font-semibold py-4 text-xl sticky top-0 bg-white z-10">
-            {getFormattedDate(date)}
-          </h4>
-          <div className="grid grid-cols-3 gap-3 px-1">
-            {[
-              "07:00 AM", "08:00 AM", "09:00 AM",
-              "10:00 AM", "11:00 AM", "12:00 PM",
-              "02:00 PM", "03:00 PM", "04:00 PM"
-            ].map((time) => {
-              const isBooked = isSlotBooked(dateString, time);
-              const isSelected = selectedTimes.some(
-                s => s.selectedDate === dateString && s.selectedTime === time
-              );
+                      {/* Time Slots */}
+                      {[["Today", "today"], ["Tomorrow", "tomorrow"], ["Next Date", "nextDate"]].map(
+                        ([label, dayKey]) => {
+                          const date = dateMap[dayKey].toISOString().split("T")[0];
 
-              return (
-                <button
-                  key={time}
-                  className={`py-2 px-3 text-sm ${
-                    isSelected ? "bg-black text-white" :
-                    isBooked ? "bg-gray-200 text-gray-500 cursor-not-allowed" :
-                    "bg-white text-black hover:bg-gray-100"
-                  } rounded-xl border transition-colors shadow-sm`}
-                  onClick={() => !isBooked && handleTimeSelection(dateString, time)}
-                  disabled={isBooked}
-                >
-                  {time}
-                  {isBooked && <span className="text-xs block">Booked</span>}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      );
-    })}
-  </div>
+                          return (
+                            <div key={dayKey} className="mb-8">
+                              <h4 className="font-semibold py-4 text-xl">
+                                {`${label} (${getFormattedDate(dateMap[dayKey])})`}
+                              </h4>
+                              <div className="grid grid-cols-3 gap-3">
+                                {[
+                                  "07:00 AM", "08:00 AM", "09:00 AM",
+                                  "10:00 AM", "11:00 AM", "12:00 PM",
+                                  "02:00 PM", "03:00 PM", "04:00 PM"
+                                ].map((time) => {
+                                  const isBooked = isSlotBooked(dayKey, time);
+                                  const isSelected = selectedTimes.some(
+                                    s => s.selectedDate === date && s.selectedTime === time
+                                  );
+
+                                  return (
+                                    <button
+                                      key={time}
+                                      className={`py-2 px-3 text-sm ${isSelected ? "bg-black text-white" :
+                                          isBooked ? "bg-gray-200 text-gray-500 cursor-not-allowed" :
+                                            "bg-white text-black hover:bg-gray-100"
+                                        } rounded-xl border transition-colors`}
+                                      onClick={() => !isBooked && handleTimeSelection(dayKey, time)}
+                                      disabled={isBooked}
+                                    >
+                                      {time}
+                                      {isBooked && <span className="text-xs block">Booked</span>}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          );
+                        }
+                      )}
                       {/* Show how many slots are selected */}
                       <p className="text-sm text-gray-600 mt-4">
                         Selected slots: {selectedTimes.length} / 5
@@ -535,29 +536,6 @@ const ExpertDetail = () => {
                       </div>
                     </div>
 
-                    <div className="bg-[#F8F7F3] p-6 rounded-xl mt-12">
-                      <div className="bg-black text-white p-2 rounded-t-xl w-max">
-                        <h3 className="text-2xl font-semibold">Send a Gift Card</h3>
-                      </div>
-                      <div className="text-2xl py-4">
-                        <h2 className="font-semibold">Gift an Intro</h2>
-                      </div>
-                      <p className="text-2xl font-semibold">
-                        Gift a session or membership to friends, family, or coworkers
-                      </p>
-
-                      <div className="flex items-center justify-center mt-4 gap-8">
-                        <div className="flex items-center">
-                          <Gift className="h-8 w-8" />
-                        </div>
-                        <button
-                          onClick={() => alert("Gift Card feature coming soon!")} // placeholder for future functionality
-                          className="bg-[#0D70E5] text-white py-3 px-24 rounded-md hover:bg-[#0A58C2]"
-                        >
-                          Select
-                        </button>
-                      </div>
-                    </div>
 
                   </>
                 )}
