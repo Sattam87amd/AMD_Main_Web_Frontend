@@ -1,6 +1,3 @@
-// Frontend Zustand Store Fixes
-// Fix real-time message sync, deletion tracking and event handling
-
 import { create } from "zustand";
 import toast from "react-hot-toast";
 import axios from "axios";
@@ -14,12 +11,16 @@ export const useChatStore = create((set, get) => ({
   selectedUser: null,
   isUsersLoading: false,
   isMessagesLoading: false,
+  isFileUploading: false,
   socket: null,
   onlineUsers: [],
   logginUser: null,
   processedMessageIds: new Set(),
   // Track deleted message IDs to prevent editing/viewing deleted messages
   deletedMessages: new Set(),
+  // Track conversation files
+  conversationFiles: [],
+  isFilesLoading: false,
 
   // Add isUserOnline function to check if a user is online
   isUserOnline: (userId) => {
@@ -116,6 +117,9 @@ export const useChatStore = create((set, get) => ({
       });
 
       console.log("Message Data:", response.data);
+      
+      // Load conversation files when loading messages
+      get().getConversationFiles(userId);
     } catch (error) {
       console.error("Fetch messages error:", error);
       toast.error(error?.response?.data?.message || "Failed to load messages");
@@ -225,6 +229,14 @@ export const useChatStore = create((set, get) => ({
 
       console.log(`Deleting message: ${messageId}`);
 
+      // Get the message to check if it's a file
+      const message = get().messages.find(msg => msg._id === messageId);
+      
+      if (message && message.isFile) {
+        // If it's a file message, use the file deletion endpoint
+        return get().deleteFile(messageId, message.fileId);
+      }
+
       // Optimistic update
       set((state) => ({
         messages: state.messages.filter((msg) => msg._id !== messageId),
@@ -254,7 +266,246 @@ export const useChatStore = create((set, get) => ({
       toast.error(error.response?.data?.message || "Failed to delete message");
     }
   },
-  // FRONTEND: Update Zustand handler to work with new response format
+  
+  // File handling methods
+  uploadFile: async (file, additionalText = "") => {
+    const { selectedUser, messages, logginUser } = get();
+
+    if (!selectedUser || !selectedUser._id) {
+      console.error("No user selected or user ID is missing");
+      toast.error("Please select a user to chat with");
+      return;
+    }
+
+    if (!file) {
+      toast.error("No file selected");
+      return;
+    }
+
+    // Create form data for file upload
+    const formData = new FormData();
+    formData.append("file", file);
+    
+    // If there's additional text to include with the file
+    if (additionalText) {
+      formData.append("text", additionalText);
+    }
+
+    set({ isFileUploading: true });
+
+    try {
+      const token = get().getAuthToken();
+
+      if (!token) {
+        throw new Error("Unauthorized access or invalid path");
+      }
+
+      // Upload the file
+      const response = await axios.post(
+        `${BASE_URL}/api/message/upload/${selectedUser._id}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      console.log("File upload response:", response.data);
+
+      // Create a new message object for the file
+      const newMessage = {
+        _id: response.data._id,
+        senderId: logginUser._id,
+        receiverId: selectedUser._id,
+        text: response.data.text || `File: ${file.name}`,
+        fileId: response.data.fileId,
+        isFile: true,
+        fileType: file.type,
+        fileSize: file.size,
+        time: new Date(),
+      };
+
+      // Update local messages immediately
+      set({ messages: [...messages, newMessage] });
+
+      // Add to processed IDs to prevent duplicates
+      set((state) => ({
+        processedMessageIds: new Set([
+          ...state.processedMessageIds,
+          newMessage._id,
+        ]),
+      }));
+
+      // Refresh conversation files
+      get().getConversationFiles(selectedUser._id);
+
+      toast.success("File uploaded successfully");
+      return response.data;
+    } catch (error) {
+      console.error("File upload error:", error);
+      toast.error(
+        error?.response?.data?.message || "Failed to upload file"
+      );
+    } finally {
+      set({ isFileUploading: false });
+    }
+  },
+
+  getFileInfo: async (fileId) => {
+    try {
+      const token = get().getAuthToken();
+
+      if (!token) {
+        throw new Error("Unauthorized access or invalid path");
+      }
+
+      const response = await axios.get(
+        `${BASE_URL}/api/message/files/info/${fileId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("File info:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Get file info error:", error);
+      toast.error(
+        error?.response?.data?.message || "Failed to get file information"
+      );
+      return null;
+    }
+  },
+
+  downloadFile: async (fileId, fileName) => {
+    try {
+      const token = get().getAuthToken();
+
+      if (!token) {
+        throw new Error("Unauthorized access or invalid path");
+      }
+
+      // Use axios to download the file with responseType blob
+      const response = await axios.get(
+        `${BASE_URL}/api/message/files/download/${fileId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          responseType: 'blob', // Important for file downloads
+        }
+      );
+
+      // Create a URL for the blob
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      
+      // Create a link element and trigger download
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', fileName || 'download');
+      document.body.appendChild(link);
+      link.click();
+      
+      // Clean up
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      toast.success("File downloaded successfully");
+      return true;
+    } catch (error) {
+      console.error("File download error:", error);
+      toast.error(
+        error?.response?.data?.message || "Failed to download file"
+      );
+      return false;
+    }
+  },
+
+  deleteFile: async (messageId, fileId) => {
+    try {
+      const token = get().getAuthToken();
+
+      if (!token) {
+        throw new Error("Unauthorized access or invalid path");
+      }
+
+      console.log(`Deleting file: ${fileId} and message: ${messageId}`);
+
+      // Optimistic update
+      set((state) => ({
+        messages: state.messages.filter((msg) => msg._id !== messageId),
+        deletedMessages: new Set([...state.deletedMessages, messageId]),
+        conversationFiles: state.conversationFiles.filter(
+          (file) => file.id !== fileId
+        ),
+      }));
+
+      // Send deletion request
+      const response = await axios.delete(
+        `${BASE_URL}/api/message/files/delete`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          data: { messageId, fileId },
+        }
+      );
+
+      console.log("File delete response:", response.data);
+      toast.success("File deleted");
+      return response.data;
+    } catch (error) {
+      console.error("Delete file error:", error);
+
+      // Return early if the response indicates the file was already deleted
+      if (error.response?.data?.alreadyDeleted) {
+        console.log("File already deleted");
+        toast.info("File already deleted");
+        return;
+      }
+
+      toast.error(
+        error?.response?.data?.message || "Failed to delete file"
+      );
+    }
+  },
+
+  getConversationFiles: async (userId) => {
+    if (!userId) return;
+
+    set({ isFilesLoading: true });
+    try {
+      const token = get().getAuthToken();
+
+      if (!token) {
+        throw new Error("Unauthorized access or invalid path");
+      }
+
+      const response = await axios.get(
+        `${BASE_URL}/api/message/files/conversation/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Conversation files:", response.data);
+      set({ conversationFiles: response.data });
+      return response.data;
+    } catch (error) {
+      console.error("Get conversation files error:", error);
+      toast.error(
+        error?.response?.data?.message || "Failed to load files"
+      );
+    } finally {
+      set({ isFilesLoading: false });
+    }
+  },
+
+  // FRONTEND: Update the socket event handler to improve real-time updates
   editMessage: async (messageId, newText) => {
     // First check if the message has been deleted locally
     const { deletedMessages, messages } = get();
@@ -270,6 +521,16 @@ export const useChatStore = create((set, get) => ({
     if (!messageExists) {
       console.error("Cannot edit: Message not found in current conversation");
       toast.error("Cannot edit this message");
+      return;
+    }
+
+    // Check if the message is a file message
+    const isFileMessage = messages.find(
+      (msg) => msg._id === messageId && msg.isFile
+    );
+    if (isFileMessage) {
+      console.error("Cannot edit a file message");
+      toast.error("File messages cannot be edited");
       return;
     }
 
@@ -336,11 +597,13 @@ export const useChatStore = create((set, get) => ({
 
     // Save current messages for potential rollback
     const originalMessages = [...get().messages];
+    const originalFiles = [...get().conversationFiles];
 
-    // Optimistically clear messages
+    // Optimistically clear messages and files
     set({
       messages: [],
       deletedMessages: new Set(), // Reset deletion tracking
+      conversationFiles: [],
     });
 
     try {
@@ -376,8 +639,11 @@ export const useChatStore = create((set, get) => ({
       ) {
         toast("Conversation already deleted");
       } else {
-        // Restore messages
-        set({ messages: originalMessages });
+        // Restore messages and files
+        set({ 
+          messages: originalMessages,
+          conversationFiles: originalFiles
+        });
         toast.error(
           error?.response?.data?.message || "Failed to delete conversation"
         );
@@ -447,6 +713,11 @@ export const useChatStore = create((set, get) => ({
           };
         }
 
+        // If it's a file message, refresh conversation files
+        if (newMessage.isFile && selectedUser) {
+          get().getConversationFiles(selectedUser._id);
+        }
+
         // Add to processed set and update messages
         return {
           messages: [...state.messages, newMessage],
@@ -498,6 +769,7 @@ export const useChatStore = create((set, get) => ({
         };
       });
     });
+    
     // FIXED: Handle deleted messages with consistent property names
     // In your Zustand store socket setup
     socket.on("messageDeleted", (data) => {
@@ -531,6 +803,23 @@ export const useChatStore = create((set, get) => ({
 
         console.log(`Found message to delete:`, messageToDelete);
 
+        // If it's a file message, also update conversationFiles
+        if (messageToDelete.isFile && messageToDelete.fileId) {
+          const fileId = messageToDelete.fileId;
+          const { selectedUser } = get();
+          
+          // Refresh files list if needed
+          if (selectedUser && selectedUser._id) {
+            get().getConversationFiles(selectedUser._id);
+          }
+          
+          return {
+            messages: state.messages.filter((msg) => msg._id !== messageId),
+            deletedMessages: new Set([...state.deletedMessages, messageId]),
+            conversationFiles: state.conversationFiles.filter(file => file.id !== fileId)
+          };
+        }
+
         // Remove the message and update deleted set
         return {
           messages: state.messages.filter((msg) => msg._id !== messageId),
@@ -557,6 +846,7 @@ export const useChatStore = create((set, get) => ({
       if (isCurrentConversation) {
         set({
           messages: [],
+          conversationFiles: [],
           deletedMessages: new Set(), // Reset deletion tracking for new conversation
         });
       }
