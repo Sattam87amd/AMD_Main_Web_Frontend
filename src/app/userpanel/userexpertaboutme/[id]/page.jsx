@@ -538,7 +538,7 @@ const ExpertDetail = () => {
                         <h3 className="text-2xl font-semibold">Send a Gift Card</h3>
                       </div>
                       <div className="text-2xl py-4">
-                        <h2 className="font-semibold">Gift an Intro</h2>
+                        <h2 className="font-semibold">Share an experience</h2>
                       </div>
                       <p className="text-2xl font-semibold">
                         Gift a session or membership to friends, family, or coworkers
