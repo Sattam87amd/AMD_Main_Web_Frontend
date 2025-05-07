@@ -1,4 +1,8 @@
 'use client';
+
+
+
+
 import NavSearch from "@/components/Layout/navsearch";
 import React, { useState, useEffect } from 'react';
 import { FaStar } from 'react-icons/fa';
@@ -50,12 +54,12 @@ const ExpertDetail = () => {
   const handleSeeMore = () => {
     setIsExpanded(!isExpanded);
   };
- // Modify your handleSeeTimeClick to set default duration:
-const handleSeeTimeClick = () => {
-  setShowTimeSelection(true);
-  setSelectedDuration("Quick - 15min");
-  setSelectedDurationMinutes(15);
-};
+  // Modify your handleSeeTimeClick to set default duration:
+  const handleSeeTimeClick = () => {
+    setShowTimeSelection(true);
+    setSelectedDuration("Quick - 15min");
+    setSelectedDurationMinutes(15);
+  };
 
   const dateMap = {
     today: today,
@@ -157,7 +161,7 @@ const handleSeeTimeClick = () => {
   return (
     <>
       <div className=" min-h-screen">
-       
+
 
         <div className="w-full flex flex-col">
           <MobileNavSearch />
@@ -211,9 +215,9 @@ const handleSeeTimeClick = () => {
                         <div className="flex items-center gap-1 bg-red-50 px-3 py-1.5 rounded-full">
                           <span className="flex text-xs text-red-600 font-medium">
                             {charityInfo.percentage}% to Charity{charityInfo.name}
-                           
+
                           </span>
-                          
+
                           <HeartHandshake className="h-4 w-4 text-red-600" />
                         </div>
                       )}
@@ -281,31 +285,30 @@ const handleSeeTimeClick = () => {
                         Select duration and time slot:
                       </p>
 
-                      
-{/* Duration Selection Section */}
-<div className="grid grid-cols-2 gap-4 mb-4">
-  {[
-    { label: "Quick - 15min", duration: 15 },
-    { label: "Regular - 30min", duration: 30 },
-    { label: "Extra - 45min", duration: 45 },
-    { label: "All Access - 60min", duration: 60 },
-  ].map(({ label, duration }) => (
-    <button
-      key={label}
-      className={`py-2 px-4 ${
-        selectedDuration === label
-          ? "bg-black text-white"
-          : "bg-[#F8F7F3] text-black"
-      } rounded-md shadow`}
-      onClick={() => {
-         setSelectedDuration(label);
-        setSelectedDurationMinutes(duration);
-      }}
-    >
-      {label}
-    </button>
-  ))}
-</div>
+
+                      {/* Duration Selection Section */}
+                      <div className="grid grid-cols-2 gap-4 mb-4">
+                        {[
+                          { label: "Quick - 15min", duration: 15 },
+                          { label: "Regular - 30min", duration: 30 },
+                          { label: "Extra - 45min", duration: 45 },
+                          { label: "All Access - 60min", duration: 60 },
+                        ].map(({ label, duration }) => (
+                          <button
+                            key={label}
+                            className={`py-2 px-4 ${selectedDuration === label
+                              ? "bg-black text-white"
+                              : "bg-[#F8F7F3] text-black"
+                              } rounded-md shadow`}
+                            onClick={() => {
+                              setSelectedDuration(label);
+                              setSelectedDurationMinutes(duration);
+                            }}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
                       {/* Time Slots */}
                       {[
                         ["Today", "today"],
@@ -330,19 +333,18 @@ const handleSeeTimeClick = () => {
                             ].map((time) => (
                               <button
                                 key={time}
-                                className={`py-2 px-3 text-sm ${
-                                  selectedDate ===
-                                    dateMap[dayKey]
-                                      .toISOString()
-                                      .split("T")[0] &&
+                                className={`py-2 px-3 text-sm ${selectedDate ===
+                                  dateMap[dayKey]
+                                    .toISOString()
+                                    .split("T")[0] &&
                                   selectedTime ===
-                                    time
-                                      .replace(" AM", "")
-                                      .replace(" PM", "")
-                                      .trim()
-                                    ? "bg-black text-white"
-                                    : "bg-white text-black"
-                                } rounded-xl border`}
+                                  time
+                                    .replace(" AM", "")
+                                    .replace(" PM", "")
+                                    .trim()
+                                  ? "bg-black text-white"
+                                  : "bg-white text-black"
+                                  } rounded-xl border`}
                                 onClick={() =>
                                   handleTimeSelection(dayKey, time)
                                 }
@@ -355,13 +357,13 @@ const handleSeeTimeClick = () => {
                       ))}
 
 
-<div className="flex gap-10 py-10 items-center">
-  <div>
-    {/* Updated price display */}
-    <p className="text-xl font-semibold">
-      SAR {(expert?.price * (selectedDurationMinutes / 15)).toFixed(2)} • Session
-    </p>
-    
+                      <div className="flex gap-10 py-10 items-center">
+                        <div>
+                          {/* Updated price display */}
+                          <p className="text-xl font-semibold">
+                            SAR {(expert?.price * (selectedDurationMinutes / 15)).toFixed(2)} • Session
+                          </p>
+
                           <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
                             {[...Array(5)].map((_, i) => {
                               const rating = expert.averageRating || 0; // Use 0 as a fallback if expert.averageRating is falsy (undefined, null, etc.)
@@ -412,12 +414,12 @@ const handleSeeTimeClick = () => {
                         Book a 1:1 Video consultation & get personalized advice
                       </p>
 
-                      
-<div className="mt-4">
-  {/* Updated starting price display */}
-  <p className="text-xl font-semibold">
-    SAR {(expert.price * (selectedDurationMinutes / 15)).toFixed(2)}
-  </p>
+
+                      <div className="mt-4">
+                        {/* Updated starting price display */}
+                        <p className="text-xl font-semibold">
+                          SAR {(expert.price * (selectedDurationMinutes / 15)).toFixed(2)}
+                        </p>
                         <div className="flex items-center justify-start">
                           {/* <p className="text-[#7E7E7E] text-base font-semibold">
                             Next available - <span className="text-[#0D70E5]">4:30am on 3/25</span>
@@ -456,8 +458,30 @@ const handleSeeTimeClick = () => {
                         </button>
                       </div>
                     </div>
+                     
+                    <div className="bg-[#F8F7F3] p-6 rounded-xl mt-12">
+                      <div className="bg-black text-white p-2 rounded-t-xl w-max">
+                        <h3 className="text-2xl font-semibold">Send a Gift Card</h3>
+                      </div>
+                      <div className="text-2xl py-4">
+                        <h2 className="font-semibold">Gift an Intro</h2>
+                      </div>
+                      <p className="text-2xl font-semibold">
+                        Gift a session or membership to friends, family, or coworkers
+                      </p>
 
-
+                      <div className="flex items-center justify-center mt-4 gap-8">
+                        <div className="flex items-center">
+                          <Gift className="h-8 w-8" />
+                        </div>
+                        <button
+                          onClick={() => alert("Gift Card feature coming soon!")} // placeholder for future functionality
+                          className="bg-[#0D70E5] text-white py-3 px-24 rounded-md hover:bg-[#0A58C2]"
+                        >
+                          Select
+                        </button>
+                      </div>
+                    </div>
                   </>
                 )}
               </div>

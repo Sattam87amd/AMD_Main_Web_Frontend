@@ -167,6 +167,12 @@ const ChatComponent = () => {
           >
             Chat with Expert
           </button>
+          <button
+            className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
+            onClick={() => router.push("/userpanel/videocall")}
+          >
+            Back
+          </button>
         </div>
 
         <div className="p-4 overflow-y-auto bg-white shadow-lg rounded-lg h-[400px]">
