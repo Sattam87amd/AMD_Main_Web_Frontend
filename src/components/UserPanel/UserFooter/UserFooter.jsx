@@ -6,11 +6,7 @@ import { FaInstagram, FaTwitter, FaFacebook } from "react-icons/fa";
 
 const UserFooter = () => {
   return (
-<<<<<<< HEAD
-    <footer className="p-4 md:p-10 md:py-6 bg-[#EDECE8] w-full">
-=======
     <footer className="p-4 md:p-10 md:py-6 bg-[#EDECE8] w-full z-10">
->>>>>>> ee9e21b29f3d7a1a114ad1e8ca7698f64fd09a32
       <div className="w-full">
         <div className="md:flex md:justify-between md:items-start">
           {/* Left Section - Shourk and Tagline */}

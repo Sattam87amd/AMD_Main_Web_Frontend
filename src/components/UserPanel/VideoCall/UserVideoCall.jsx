@@ -271,7 +271,7 @@ const UserVideoCall = () => {
       // TODO: Replace with actual API endpoint when backend is ready
       const token = localStorage.getItem("userToken");
       await axios.post(
-        "https://amd-api.code4bharat.com/api/cancelsession/cancel",
+        "https://amd-api.code4bharat.com/api/cancelsession/canceluser",
         cancellationData,
         {
           headers: {
@@ -335,7 +335,7 @@ const UserVideoCall = () => {
               </div>
             ) : errorBookings ? (
               <div className="text-center p-10 bg-white rounded-lg shadow-md">
-                <div className="text-red-500 text-lg mb-2">⚠️</div>
+                <div className="text-red-500 text-lg mb-2"></div>
                 <p className="text-red-500">{errorBookings}</p>
               </div>
             ) : myBookings.length === 0 ? (
@@ -585,7 +585,7 @@ const UserVideoCall = () => {
                                             day: "numeric",
                                             month: "short",
                                           })
-                                        : "Invalid Date"}
+                                        : null}
                                     </p>
                                     <div className="mt-2 flex flex-wrap gap-2">
                                       {times.map((time, index) => (
@@ -629,7 +629,7 @@ const UserVideoCall = () => {
                               onClick={() => {handleUserChat()}}
                               className="w-full px-4 py-2 border border-gray-300 rounded-md text-sm flex items-center justify-center gap-2 hover:bg-gray-50 transition-all duration-200">
                                 <MessagesSquare className="w-4 h-4 text-blue-500" />
-                                <span>Chat with {booking.userID ? "Expert" : "Client"}</span>
+                                <span>Chat with Expert</span>
                               </button>
 
                               {booking.zoomMeetingLink ? (

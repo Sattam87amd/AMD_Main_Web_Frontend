@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
-import { Gift } from "lucide-react";
+import { Gift, HeartHandshake } from 'lucide-react';
 import Footer from "@/components/UserPanel/Layout/Footer";
 import UserWhatToExpect from "@/components/UserPanel/UserAboutMe/UserWhatToExpect";
 import UserAboutMeReviews from "@/components/UserPanel/UserAboutMe/UserAboutMeReviews";
@@ -30,23 +30,33 @@ const ExpertDetail = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedTimes, setSelectedTimes] = useState([]);
   const [bookedSlots, setBookedSlots] = useState([]);
-   const [selectedDurationMinutes, setSelectedDurationMinutes] = useState(15);
-  const [loadingSlots, setLoadingSlots] = useState(false);  
+  const [selectedDurationMinutes, setSelectedDurationMinutes] = useState(15);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+  const [charityEnabled, setCharityEnabled] = useState(false);
+  const [charityInfo, setCharityInfo] = useState({
+    name: "",
+    percentage: "",
+  });
 
   const router = useRouter();
 
-  // Date handling
-  const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(today.getDate() + 1);
-  const nextDate = new Date(today);
-  nextDate.setDate(today.getDate() + 2);
+   // Date handling
+    const generateMonthDates = () => {
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+  
+      return Array.from({ length: daysInMonth }, (_, i) => {
+        const dayDate = new Date(year, month, i + 1);
+        // Only include future dates (including today)
+        return dayDate >= new Date(new Date().setHours(0, 0, 0, 0)) ? dayDate : null;
+      }).filter(date => date !== null);
+    };
+  
+    const [monthDates, setMonthDates] = useState(generateMonthDates());
 
-  const dateMap = {
-    today: today,
-    tomorrow: tomorrow,
-    nextDate: nextDate,
-  };
+  
 
   const getFormattedDate = (date) => {
     return date.toLocaleDateString(undefined, {
@@ -64,35 +74,35 @@ const ExpertDetail = () => {
     // Get expertId from URL path
     const pathParts = window.location.pathname.split('/');
     const expertId = pathParts[pathParts.length - 1];
-  
+
     if (!expertId) {
       console.error("No expertId found in URL");
       return;
     }
-  
+
     const fetchBookedSlots = async () => {
       setLoadingSlots(true);
       try {
         // Get token from localStorage
         const userToken = localStorage.getItem('userToken');
-        
+
         if (!userToken) {
           toast.error('Please login to view availability');
           return;
         }
-  
-      // In your fetchBookedSlots function:
-      const response = await axios.get(
-     `https://amd-api.code4bharat.com/api/session/user-booked-slots/${expertId}`,
-     {
-        headers: {
-      'Authorization': `Bearer ${userToken}`
-     }
-  }
-);
-// Flatten the nested array structure
-const flattenedSlots = response.data.data.flat();
-setBookedSlots(flattenedSlots || []);
+
+        // In your fetchBookedSlots function:
+        const response = await axios.get(
+          `https://amd-api.code4bharat.com/api/session/user-booked-slots/${expertId}`,
+          {
+            headers: {
+              'Authorization': `Bearer ${userToken}`
+            }
+          }
+        );
+        // Flatten the nested array structure
+        const flattenedSlots = response.data.data.flat();
+        setBookedSlots(flattenedSlots || []);
       } catch (err) {
         console.error("Error fetching booked slots:", err);
         if (err.response?.status === 401) {
@@ -104,7 +114,7 @@ setBookedSlots(flattenedSlots || []);
         }
       }
     };
-    
+
     fetchBookedSlots();
   }, []); // Empty dependency array means this runs once on mount
 
@@ -120,6 +130,16 @@ setBookedSlots(flattenedSlots || []);
             `https://amd-api.code4bharat.com/api/expertauth/${expertId}`
           );
           setExpert(response.data.data);
+          
+          // Set charity info if available
+          if (response.data.data.charityEnabled) {
+            setCharityEnabled(response.data.data.charityEnabled);
+            setCharityInfo({
+              name: response.data.data.charityName || "",
+              percentage: response.data.data.charityPercentage || "",
+            });
+          }
+          
           setLoading(false);
           localStorage.setItem(
             "expertData",
@@ -139,12 +159,12 @@ setBookedSlots(flattenedSlots || []);
     setPrice(type === "1:4" ? 150 : 350);
   };
 
- // Modify your handleSeeTimeClick to set default duration:
- const handleSeeTimeClick = () => {
-  setShowTimeSelection(true);
-  setSelectedDuration("Quick - 15min");
-  setSelectedDurationMinutes(15);
-};
+  // Modify your handleSeeTimeClick to set default duration:
+  const handleSeeTimeClick = () => {
+    setShowTimeSelection(true);
+    setSelectedDuration("Quick - 15min");
+    setSelectedDurationMinutes(15);
+  };
 
 
   const handleBookingRequest = async () => {
@@ -167,14 +187,10 @@ setBookedSlots(flattenedSlots || []);
     }
   };
 
-  const handleTimeSelection = (dayKey, time) => {
-    const date = dateMap[dayKey].toISOString().split("T")[0];
-    const formattedTime = time.replace(" AM", "").replace(" PM", "").trim();
-
-    // Create the key-value object for the slot
+  const handleTimeSelection = (dateString, time) => {
     const slot = {
-      selectedDate: date,
-      selectedTime: formattedTime + (time.includes("AM") ? " AM" : " PM"),
+      selectedDate: dateString,
+      selectedTime: time,
     };
 
     setSelectedTimes((prevTimes) => {
@@ -205,15 +221,11 @@ setBookedSlots(flattenedSlots || []);
     });
   };
 
-  const isSlotBooked = (dayKey, time) => {
-    const date = dateMap[dayKey].toISOString().split("T")[0];
-    // Ensure time format matches exactly what's coming from backend
-    const formattedTime = time; // Keep original format "07:00 AM"
-    
+  const isSlotBooked = (dateString, time) => {
     return bookedSlots.some(
-      slot => 
-        slot.selectedDate === date && 
-        slot.selectedTime === formattedTime
+      slot =>
+        slot.selectedDate === dateString &&
+        slot.selectedTime === time
     );
   };
 
@@ -227,7 +239,7 @@ setBookedSlots(flattenedSlots || []);
   return (
     <>
       <div className="flex min-h-screen">
-         <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
+        <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
         <aside className="w-[20%] hidden md:block">
           <UserSidebar />
         </aside>
@@ -253,9 +265,9 @@ setBookedSlots(flattenedSlots || []);
                     {expert?.designation || "Tech Entrepreneur + Investor"}
                   </p>
                   <div>
-                  <p className="text-xl font-semibold">
-                            SAR {(expert.price * (selectedDurationMinutes / 15)).toFixed(2)} • Session
-                          </p>
+                    <p className="text-xl font-semibold">
+                      SAR {(expert.price * (selectedDurationMinutes / 15)).toFixed(2)} • Session
+                    </p>
                     <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
                       {[...Array(5)].map((_, i) => {
                         const rating = expert.averageRating || 0; // Use 0 as a fallback if expert.rating is falsy (undefined, null, etc.)
@@ -283,7 +295,17 @@ setBookedSlots(flattenedSlots || []);
                     <h3 className="text-lg md:text-3xl font-semibold">
                       About Me
                     </h3>
-                    <FaInstagram className="text-xl text-gray-600 cursor-pointer hover:text-gray-900" />
+                    <div className="flex items-center gap-3">
+                      {charityEnabled && (
+                        <div className="flex items-center gap-1 bg-red-50 px-3 py-1.5 rounded-full">
+                          <span className="flex text-xs text-red-600 font-medium">
+                            {charityInfo.percentage}% to Charity{charityInfo.name}
+                          </span>
+                          <HeartHandshake className="h-4 w-4 text-red-600" />
+                        </div>
+                      )}
+                      <FaInstagram className="text-xl text-gray-600 cursor-pointer hover:text-gray-900" />
+                    </div>
                   </div>
                   <div className="mt-4">
                     <p className="text-sm md:text-xl text-black">
@@ -370,48 +392,47 @@ setBookedSlots(flattenedSlots || []);
     </button>
   ))}
 </div>
-                       {/* Time Slots */}
-{[["Today", "today"], ["Tomorrow", "tomorrow"], ["Next Date", "nextDate"]].map(
-  ([label, dayKey]) => {
-    const date = dateMap[dayKey].toISOString().split("T")[0];
-    
-    return (
-      <div key={dayKey} className="mb-8">
-        <h4 className="font-semibold py-4 text-xl">
-          {`${label} (${getFormattedDate(dateMap[dayKey])})`}
-        </h4>
-        <div className="grid grid-cols-3 gap-3">
-          {[
-            "07:00 AM", "08:00 AM", "09:00 AM",
-            "10:00 AM", "11:00 AM", "12:00 PM",
-            "02:00 PM", "03:00 PM", "04:00 PM"
-          ].map((time) => {
-            const isBooked = isSlotBooked(dayKey, time);
-            const isSelected = selectedTimes.some(
-              s => s.selectedDate === date && s.selectedTime === time
-            );
+                        {/* Scrollable time slots */}
+  <div className="h-[450px] overflow-y-auto pb-8"> {/* Scrollable container */}
+    {monthDates.map((date) => {
+      const dateString = date.toISOString().split('T')[0];
+      return (
+        <div key={dateString} className="mb-8 bg-white/90 backdrop-blur-sm">
+          <h4 className="font-semibold py-4 text-xl sticky top-0 bg-white z-10">
+            {getFormattedDate(date)}
+          </h4>
+          <div className="grid grid-cols-3 gap-3 px-1">
+            {[
+              "07:00 AM", "08:00 AM", "09:00 AM",
+              "10:00 AM", "11:00 AM", "12:00 PM",
+              "02:00 PM", "03:00 PM", "04:00 PM"
+            ].map((time) => {
+              const isBooked = isSlotBooked(dateString, time);
+              const isSelected = selectedTimes.some(
+                s => s.selectedDate === dateString && s.selectedTime === time
+              );
 
-            return (
-              <button
-                key={time}
-                className={`py-2 px-3 text-sm ${
-                  isSelected ? "bg-black text-white" :
-                  isBooked ? "bg-gray-200 text-gray-500 cursor-not-allowed" :
-                  "bg-white text-black hover:bg-gray-100"
-                } rounded-xl border transition-colors`}
-                onClick={() => !isBooked && handleTimeSelection(dayKey, time)}
-                disabled={isBooked}
-              >
-                {time}
-                {isBooked && <span className="text-xs block">Booked</span>}
-              </button>
-            );
-          })}
+              return (
+                <button
+                  key={time}
+                  className={`py-2 px-3 text-sm ${
+                    isSelected ? "bg-black text-white" :
+                    isBooked ? "bg-gray-200 text-gray-500 cursor-not-allowed" :
+                    "bg-white text-black hover:bg-gray-100"
+                  } rounded-xl border transition-colors shadow-sm`}
+                  onClick={() => !isBooked && handleTimeSelection(dateString, time)}
+                  disabled={isBooked}
+                >
+                  {time}
+                  {isBooked && <span className="text-xs block">Booked</span>}
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
-    );
-  }
-)}
+      );
+    })}
+  </div>
                       {/* Show how many slots are selected */}
                       <p className="text-sm text-gray-600 mt-4">
                         Selected slots: {selectedTimes.length} / 5
@@ -419,7 +440,7 @@ setBookedSlots(flattenedSlots || []);
 
                       <div className="flex gap-10 py-10 items-center">
                         <div>
-                        <p className="text-xl font-semibold">
+                          <p className="text-xl font-semibold">
                             SAR {(expert.price * (selectedDurationMinutes / 15)).toFixed(2)} • Session
                           </p>
                           <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
@@ -455,11 +476,10 @@ setBookedSlots(flattenedSlots || []);
                   <div className="space-y-4">
                     {/* 1:1 Consultation Card */}
                     <div
-                      className={`bg-[#F8F7F3] p-6 rounded-xl cursor-pointer ${
-                        selectedConsultation === "1:1"
+                      className={`bg-[#F8F7F3] p-6 rounded-xl cursor-pointer ${selectedConsultation === "1:1"
                           ? "border-2 border-black"
                           : ""
-                      }`}
+                        }`}
                       onClick={() => handleConsultationChange("1:1")}
                     >
                       <div className="bg-black text-white p-2 rounded-t-xl w-max">
@@ -512,7 +532,32 @@ setBookedSlots(flattenedSlots || []);
                       </div>
                     </div>
 
+
+                    <div className="bg-[#F8F7F3] p-6 rounded-xl mt-12">
+                      <div className="bg-black text-white p-2 rounded-t-xl w-max">
+                        <h3 className="text-2xl font-semibold">Send a Gift Card</h3>
+                      </div>
+                      <div className="text-2xl py-4">
+                        <h2 className="font-semibold">Share an experience</h2>
+                      </div>
+                      <p className="text-2xl font-semibold">
+                        Gift a session or membership to friends, family, or coworkers
+                      </p>
+
+                      <div className="flex items-center justify-center mt-4 gap-8">
+                        <div className="flex items-center">
+                          <Gift className="h-8 w-8" />
+                        </div>
+                        <button
+                          onClick={() => alert("Gift Card feature coming soon!")} // placeholder for future functionality
+                          className="bg-[#0D70E5] text-white py-3 px-24 rounded-md hover:bg-[#0A58C2]"
+                        >
+                          Select
+                        </button>
+                      </div>
                     </div>
+
+                  </div>
                 )}
               </div>
             </div>
