@@ -33,10 +33,10 @@ function LoginPage() {
     const handleKeyDown = (e) => {
       if (e.key === "Enter") {
         const activeElement = document.activeElement;
-  
+
         const isEmailValid = useEmail && email.includes("@");
         const isPhoneValid = !useEmail && phone && isValidPhoneNumber(phone);
-  
+
         // If focused on email or phone input
         if (
           (useEmail && activeElement.type === "email") ||
@@ -46,7 +46,7 @@ function LoginPage() {
             generateOtp();
           }
         }
-  
+
         // If focused on OTP input
         if (activeElement.placeholder === "Enter OTP") {
           if (otp.length === 4) {
@@ -55,23 +55,23 @@ function LoginPage() {
         }
       }
     };
-  
+
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [useEmail, email, phone, otp, isTimerActive]);
-  
+
   // Countdown timer effect
   useEffect(() => {
     let interval;
-    
+
     if (isTimerActive && countdown > 0) {
       interval = setInterval(() => {
-        setCountdown(prevCount => prevCount - 1);
+        setCountdown((prevCount) => prevCount - 1);
       }, 1000);
     } else if (countdown === 0) {
       setIsTimerActive(false);
     }
-    
+
     return () => clearInterval(interval);
   }, [isTimerActive, countdown]);
 
@@ -83,7 +83,7 @@ function LoginPage() {
     setPhoneError("");
     setFormError("");
   };
-  
+
   const handlePhoneChange = (value) => {
     if (!value) {
       setPhone(value);
@@ -110,7 +110,7 @@ function LoginPage() {
 
   const generateOtp = async () => {
     if (isTimerActive) return;
-    
+
     if (useEmail) {
       if (!email || !email.includes("@")) {
         setFormError("Please enter a valid email address.");
@@ -119,7 +119,9 @@ function LoginPage() {
       try {
         await axios.post(
           "https://amd-api.code4bharat.com/api/expertauth/request-otp",
-          { email }
+          {
+            email,
+          }
         );
         toast.success("OTP sent to your email!");
         // Start countdown
@@ -127,17 +129,13 @@ function LoginPage() {
         setIsTimerActive(true);
       } catch (error) {
         console.log(error);
-        toast.error("Error sending OTP. Please try again.");
-       
+
         if (error.response && error.response.status === 400) {
-          toast.info("Email already exists as an User. Please try another email.");
-        }
-        
-        // Handle specific error cases
-        if (error.response?.status === 403) {
-          toast.info("Please wait for admin approval before logging in");
+          toast.info(
+            "Email already exists as an User. Please try another email."
+          );
         } else {
-          toast.error("OTP Invalid or Expired. Please try again.");
+          toast.error("Error sending OTP. Please try again.");
         }
       }
     } else {
@@ -148,7 +146,9 @@ function LoginPage() {
       try {
         await axios.post(
           "https://amd-api.code4bharat.com/api/expertauth/request-otp",
-          { phone }
+          {
+            phone,
+          }
         );
         toast.success("OTP sent to your phone!");
         // Start countdown
@@ -157,13 +157,11 @@ function LoginPage() {
       } catch (error) {
         console.log(error);
         if (error.response && error.response.status === 400) {
-          toast.error("Phone number already exists as an User. Please try another number.");
-        }
-        // Handle specific error cases
-        if (error.response?.status === 403) {
-          toast.info("Please wait for admin approval before logging in");
+          toast.error(
+            "Phone number already exists as an User. Please try another number."
+          );
         } else {
-          toast.error("OTP Invalid or Expired. Please try again.");
+          toast.error("Error sending OTP. Please try again.");
         }
       }
     }
@@ -189,15 +187,25 @@ function LoginPage() {
         router.push(`/register?${identifier}`);
       } else {
         localStorage.setItem("expertToken", response.data.data.token);
-        router.push("/expertpanel/expertpanelprofile");
+
+        // ✅ Use backend-provided redirect path
+        router.push(response.data.data.redirectTo);
+
+        // ✅ Show status message if pending
+        if (response.data.data.status === "Pending") {
+          toast.info(
+            "Your account is pending approval. You can explore our website in limited mode."
+          );
+        }
       }
     } catch (error) {
-      // Handle specific error cases
-      if (error.response?.status === 403) {
-        toast.info("Your account is pending admin approval");
-      } else {
-        toast.error("Invalid OTP. Please try again.");
-      }
+      console.error("Login error:", error);
+
+      // ✅ Simplified error handling
+      const errorMessage =
+        error.response?.data?.message ||
+        "Invalid OTP or login credentials. Please try again.";
+      toast.error(errorMessage);
     }
   };
 
@@ -276,7 +284,7 @@ function LoginPage() {
                 </>
               )}
             </div>
-            
+
             {!useEmail && phoneError && (
               <p className="text-red-500 text-xs mt-1">{phoneError}</p>
             )}
@@ -286,22 +294,21 @@ function LoginPage() {
 
             <button
               className={`w-full py-3 rounded-lg transition mt-8 ${
-                (((useEmail && email.includes("@")) ||
-                (!useEmail && phone && isValidPhoneNumber(phone))) && !isTimerActive)
+                ((useEmail && email.includes("@")) ||
+                  (!useEmail && phone && isValidPhoneNumber(phone))) &&
+                !isTimerActive
                   ? "bg-black text-white hover:bg-gray-800"
                   : "bg-gray-400 text-white cursor-not-allowed"
               }`}
               onClick={generateOtp}
               disabled={
-                isTimerActive || 
+                isTimerActive ||
                 (useEmail
                   ? !email || !email.includes("@")
                   : !phone || !isValidPhoneNumber(phone))
               }
             >
-              {isTimerActive 
-                ? `Resend OTP in ${countdown}s` 
-                : "Send OTP"}
+              {isTimerActive ? `Resend OTP in ${countdown}s` : "Send OTP"}
             </button>
 
             <div>
