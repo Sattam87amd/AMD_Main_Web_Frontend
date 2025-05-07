@@ -31,14 +31,16 @@ const Sidebar = () => {
     { 
       label: "Profile", 
       icon: <CgProfile />, 
-      route: "/reviewingexpertpanel/reviewingexpertpanelprofile",
+      route: "/reviewingexpertpanel/expertpanelprofile",
       enabled: true 
     },
     { 
       label: "Expert", 
       icon: <LucideBadgeCheck />, 
-      route: "/reviewingexpertpanel/expert",
-      enabled: true 
+      route: "",
+      enabled: false,
+      message: "Expert Tab is only available for approved experts."
+      
     },
     { 
       label: "Dashboard", 

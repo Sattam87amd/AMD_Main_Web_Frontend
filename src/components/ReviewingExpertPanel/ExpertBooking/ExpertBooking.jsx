@@ -134,9 +134,9 @@ const ExpertBooking = () => {
       }, 2000);
 
     } catch (error) {
-      console.error("Booking error:", error.response?.data || error.message);
+      console.info("Booking error:");
 
-      toast.error(`Booking failed: ${error.response?.data?.message || error.message}`, {
+      toast.info("Booking is Disabled for Unapproved Expert", {
         position: "bottom-center",
         autoClose: 5000,
       });
