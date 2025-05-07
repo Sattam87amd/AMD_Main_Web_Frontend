@@ -7,6 +7,7 @@ import { HeartHandshake } from "lucide-react";
 import { CiFilter } from "react-icons/ci";
 import axios from "axios";
 import { motion } from "framer-motion";
+import ScrollableTags from "@/components/SpecialCharacter/section";
 
 const LoginHomeexpert = () => {
   const [expertData, setExpertData] = useState([]);
@@ -89,6 +90,10 @@ const LoginHomeexpert = () => {
 
   return (
     <div className="bg-white py-10 px-4">
+      <div className="py-3">
+
+        <ScrollableTags />
+      </div>
       {/* Header Section */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
