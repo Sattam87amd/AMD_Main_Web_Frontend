@@ -1,13 +1,13 @@
 "use client";
 
 import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
-import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
-import CareerBusinessHomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/Career&BusinessLogin";
-import FashionBeautyHomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/Fashoin&BeautyLogin";
-import HomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/HomeExpertLogin";
-import ExpertsCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/TopExpertLogin";
-import WellnessHomeCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/WellnessLogin";
-import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
+import BottomNav from "@/components/reviewingexpertpanel/Bottomnav/bottomnav";
+import CareerBusinessHomeCardsLogin from "@/components/reviewingexpertpanel/ExpertAfterLogin/Career&BusinessLogin";
+import FashionBeautyHomeCardsLogin from "@/components/reviewingexpertpanel/ExpertAfterLogin/Fashoin&BeautyLogin";
+import HomeCardsLogin from "@/components/reviewingexpertpanel/ExpertAfterLogin/HomeExpertLogin";
+import ExpertsCardsLogin from "@/components/reviewingexpertpanel/ExpertAfterLogin/TopExpertLogin";
+import WellnessHomeCardsLogin from "@/components/reviewingexpertpanel/ExpertAfterLogin/WellnessLogin";
+import Sidebar from "@/components/reviewingexpertpanel/SideBar/SideBar";
 import Threepara from "@/components/Experts/Threepara/threepara";
 import Footer from "@/components/Layout/Footer";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";

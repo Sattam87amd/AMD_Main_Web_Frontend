@@ -7,27 +7,85 @@ import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
 import { PiCirclesFour } from "react-icons/pi";
 import { LucideDollarSign, LucideBadgeCheck } from "lucide-react";
 import Image from "next/image";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Sidebar = () => {
   const router = useRouter();
   const pathname = usePathname(); // Can be undefined briefly
 
   const menuItems = [
-    { label: "Find Experts", icon: <FiSearch />, route: "/expertpanel/experts" },
-    { label: "Video Call", icon: <FiVideo />, route: "/expertpanel/videocall" },
-    { label: "Profile", icon: <CgProfile />, route: "/expertpanel/expertpanelprofile" },
-    { label: "Expert", icon: <LucideBadgeCheck />, route: "/expertpanel/expert" },
-    { label: "Dashboard", icon: <PiCirclesFour />, route: "/expertpanel/dashboard" },
-    { label: "Payments/Reviews", icon: <LucideDollarSign />, route: "/expertpanel/payments" },
-    { label: "Chat with Users", icon: <IoChatbubbleEllipsesOutline />, route: "/expertpanel/chat" },
-    { label: "Logout", icon: <FiLogOut />, route: "/" }, // logout action
+    { 
+      label: "Find Experts", 
+      icon: <FiSearch />, 
+      route: "/reviewingexpertpanel/experts",
+      enabled: true 
+    },
+    { 
+      label: "Video Call", 
+      icon: <FiVideo />, 
+      route: "",
+      enabled: false,
+      message: "Video Call is only available for approved experts." 
+    },
+    { 
+      label: "Profile", 
+      icon: <CgProfile />, 
+      route: "/reviewingexpertpanel/reviewingexpertpanelprofile",
+      enabled: true 
+    },
+    { 
+      label: "Expert", 
+      icon: <LucideBadgeCheck />, 
+      route: "/reviewingexpertpanel/expert",
+      enabled: true 
+    },
+    { 
+      label: "Dashboard", 
+      icon: <PiCirclesFour />, 
+      route: "",
+      enabled: false,
+      message: "Dashboard is only available for approved experts." 
+    },
+    { 
+      label: "Payments/Reviews", 
+      icon: <LucideDollarSign />, 
+      route: "",
+      enabled: false,
+      message: "Payments and Reviews are only available for approved experts." 
+    },
+    { 
+      label: "Chat with Users", 
+      icon: <IoChatbubbleEllipsesOutline />, 
+      route: "",
+      enabled: false,
+      message: "Chat with Users is only available for approved experts." 
+    },
+    { 
+      label: "Logout", 
+      icon: <FiLogOut />, 
+      route: "/",
+      enabled: true 
+    },
   ];
 
   const handleClick = (item) => {
+    if (!item.enabled && item.label !== "Logout") {
+      toast.info(item.message, {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+      return;
+    }
+
     if (item.label === "Logout") {
       localStorage.clear();
       router.push(item.route);
-    } else {
+    } else if (item.route) {
       router.push(item.route);
     }
   };
@@ -77,6 +135,19 @@ const Sidebar = () => {
           Get Help
         </button>
       </div>
+
+      {/* Toast Container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };

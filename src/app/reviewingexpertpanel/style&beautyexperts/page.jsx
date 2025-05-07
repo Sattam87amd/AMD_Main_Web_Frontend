@@ -1,9 +1,9 @@
 "use client";
 
 import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
-import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
-import FashionBeautyLogin from "@/components/ExpertPanel/ExpertsList/Style&BeautyExpert";
-import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
+import BottomNav from "@/components/reviewingexpertpanel/Bottomnav/bottomnav";
+import FashionBeautyLogin from "@/components/reviewingexpertpanel/ExpertsList/Style&BeautyExpert";
+import Sidebar from "@/components/reviewingexpertpanel/SideBar/SideBar";
 import LoginStyleBeautyExperts from "@/components/Experts/Style&BeautyExpert/Style&BeautyExpert";
 import Footer from "@/components/Layout/Footer";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";

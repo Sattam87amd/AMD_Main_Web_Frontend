@@ -1,10 +1,10 @@
 "use client";
 
 import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
-import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
-import ExpertsCardsLogin from "@/components/ExpertPanel/ExpertAfterLogin/TopExpertLogin";
-import LoginTopExpert from "@/components/ExpertPanel/ExpertsList/topexpert";
-import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
+import BottomNav from "@/components/reviewingexpertpanel/Bottomnav/bottomnav";
+import ExpertsCardsLogin from "@/components/reviewingexpertpanel/ExpertAfterLogin/TopExpertLogin";
+import LoginTopExpert from "@/components/reviewingexpertpanel/ExpertsList/topexpert";
+import Sidebar from "@/components/reviewingexpertpanel/SideBar/SideBar";
 import Footer from "@/components/Layout/Footer";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";

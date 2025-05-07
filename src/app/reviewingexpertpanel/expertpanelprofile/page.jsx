@@ -2,11 +2,12 @@
 
 import React from 'react';
 import { usePathname } from 'next/navigation';
-import ProfileSection from '@/components/ExpertPanel/ExpertPanelProfile/ProfileSection';
-import Sidebar from '@/components/ExpertPanel/SideBar/SideBar';
+// import ProfileSection from '@/components/reviewingexpertpanel/expertpanelProfile/ProfileSection';
+import ProfileSection from '@/components/ReviewingExpertPanel/ExpertPanelProfile/ProfileSection';
+import Sidebar from '@/components/reviewingexpertpanel/SideBar/SideBar';
 import Footer from '@/components/Layout/Footer';
-import Navtop from '@/components/ExpertPanel/Navtop/navtop';
-import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
+import Navtop from '@/components/reviewingexpertpanel/Navtop/navtop';
+import BottomNav from '@/components/reviewingexpertpanel/Bottomnav/bottomnav';
 import MobileNavSearch from '@/components/Layout/mobilenavsearch';
 
 const Page = () => {
@@ -15,13 +16,13 @@ const Page = () => {
   // Map the routes to their labels (should match the Sidebar menu items)
   const menuItems = [
     { label: "Find Experts", route: "/experts" },
-    { label: "Video Call", route: "/expertpanel/videocall" },
-    { label: "Profile", route: "/expertpanel/expertpanelprofile" },
-    { label: "Expert", route: "/expertpanel/expert" },
-    { label: "Dashboard", route: "/expertpanel/dashboard" },
-    { label: "Payments/Reviews", route: "/expertpanel/payments" },
+    { label: "Video Call", route: "/reviewingexpertpanel/videocall" },
+    { label: "Profile", route: "/reviewingexpertpanel/reviewingexpertpanelprofile" },
+    { label: "Expert", route: "/reviewingexpertpanel/expert" },
+    { label: "Dashboard", route: "/reviewingexpertpanel/dashboard" },
+    { label: "Payments/Reviews", route: "/reviewingexpertpanel/payments" },
     { label: "Logout", route: "/" },
-    { label: "Chat with Users", route: "/expertpanel/chat" },
+    { label: "Chat with Users", route: "/reviewingexpertpanel/chat" },
   ];
 
   const activeItem = menuItems.find(item => item.route === pathname);

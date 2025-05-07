@@ -4,13 +4,13 @@ import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { Gift, HeartHandshake } from "lucide-react"; // Added Hand icon for charity
-import WhatToExpectExpertPanel from "@/components/ExpertPanel/ExpertPanelAboutMe/WhatToExpectExpertPanel";
+import WhatToExpectExpertPanel from "@/components/reviewingexpertpanel/reviewingexpertpanelAboutMe/WhatToExpectExpertPanel";
 import AboutMeReviews from "@/components/ExpertAboutMe/AboutMeReviews";
-import ExpertFeatureHighightsExpertPanel from "@/components/ExpertPanel/ExpertPanelAboutMe/ExpertFeatureHighightsExpertPanel";
-import SimilarExpertsExpertPanel from "@/components/ExpertPanel/ExpertPanelAboutMe/SimilarExpertsExpertPanel";
-import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
+import ExpertFeatureHighightsExpertPanel from "@/components/reviewingexpertpanel/reviewingexpertpanelAboutMe/ExpertFeatureHighightsExpertPanel";
+import SimilarExpertsExpertPanel from "@/components/reviewingexpertpanel/reviewingexpertpanelAboutMe/SimilarExpertsExpertPanel";
+import Sidebar from "@/components/reviewingexpertpanel/SideBar/SideBar";
 import Footer from "@/components/Layout/Footer";
-import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
+import BottomNav from "@/components/reviewingexpertpanel/Bottomnav/bottomnav";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
@@ -220,7 +220,7 @@ const ExpertDetail = () => {
 
 
       // Redirect to the next page
-      router.push("/expertpanel/expertbooking"); // Assuming the second page is 'expertbookingdetails'
+      router.push("/reviewingexpertpanel/expertbooking"); // Assuming the second page is 'expertbookingdetails'
 
       setShowTimeSelection(false);
     } catch (error) {

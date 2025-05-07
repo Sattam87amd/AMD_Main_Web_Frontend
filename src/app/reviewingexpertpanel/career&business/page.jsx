@@ -1,9 +1,9 @@
     "use client";
 
     import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
-import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
-import CareerBusinesslogin from "@/components/ExpertPanel/ExpertsList/Career&Buisness";
-    import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
+import BottomNav from "@/components/reviewingexpertpanel/Bottomnav/bottomnav";
+import CareerBusinesslogin from "@/components/reviewingexpertpanel/ExpertsList/Career&Buisness";
+    import Sidebar from "@/components/reviewingexpertpanel/SideBar/SideBar";
     import CareerBusinessExperts from "@/components/Experts/Career&Buisness/Career&Buisness";
     import LoginCareerBusinessExperts from "@/components/Experts/Career&Buisness/Career&Buisness";
     import MobileNavSearch from "@/components/Layout/mobilenavsearch";

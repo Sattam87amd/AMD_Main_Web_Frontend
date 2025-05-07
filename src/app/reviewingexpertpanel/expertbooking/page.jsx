@@ -1,17 +1,17 @@
 "use client";
 
-import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
-import Navtop from "@/components/ExpertPanel/Navtop/navtop";
+import Sidebar from "@/components/reviewingexpertpanel/SideBar/SideBar";
+import Navtop from "@/components/reviewingexpertpanel/Navtop/navtop";
 import { usePathname } from "next/navigation";
-import ExpertBooking from "@/components/ExpertPanel/ExpertBooking/ExpertBooking";
-import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
+import ExpertBooking from "@/components/reviewingexpertpanel/ExpertBooking/ExpertBooking";
+import BottomNav from "@/components/reviewingexpertpanel/Bottomnav/bottomnav";
 
 const Page = () => {
   const pathname = usePathname();
 
   // Map sidebar routes to labels (must match Sidebar)
   const menuItems = [
-    { label: "Expert", route: "/expertpanel/expert" },
+    { label: "Expert", route: "/reviewingexpertpanel/expert" },
    
   ];
 
