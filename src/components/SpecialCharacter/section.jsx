@@ -50,7 +50,7 @@ const ScrollableTags = () => {
               {topic}
               <button
                 onClick={() => handleRemove(topic)}
-                className="ml-2 flex items-center justify-center w-10 h-10 bg-gray-800 rounded-full"
+                className="ml-2 flex items-center justify-center w-5 h-5 bg-gray-800 rounded-full"
               >
                 <X size={12} className="text-white" />
               </button>

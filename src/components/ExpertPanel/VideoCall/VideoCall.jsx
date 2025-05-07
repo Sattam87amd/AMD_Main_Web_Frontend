@@ -233,42 +233,26 @@ const VideoCall = () => {
     setShowRateComponent(false);
     setSelectedBooking(null);
   };
-  const isJoinEnabled = (slots, duration) => {
-    // Check for valid slots array with at least one slot
-    if (!Array.isArray(slots)) {
-      console.error("Invalid slots format");
-      return false;
-    }
+  const isJoinEnabled = (sessionDate, sessionTime, duration) => {
+  if (!sessionDate || !sessionTime) {
+    console.error("Session date or time is missing");
+    return false;
+  }
 
-    if (slots.length === 0) {
-      console.error("No slots available");
-      return false;
-    }
+  // Parse session datetime
+  const sessionDateTime = new Date(
+    `${sessionDate}T${convertTo24Hour(sessionTime)}`
+  );
 
-    // Get first valid slot with both date and time
-    const validSlot = slots.find(
-      (slot) => slot.selectedDate && slot.selectedTime
-    );
+  if (isNaN(sessionDateTime)) {
+    console.error("Invalid date/time format");
+    return false;
+  }
 
-    if (!validSlot) {
-      console.error("No valid slots found");
-      return false;
-    }
-
-    // Parse session datetime
-    const sessionDateTime = new Date(
-      `${validSlot.selectedDate}T${convertTo24Hour(validSlot.selectedTime)}`
-    );
-
-    if (isNaN(sessionDateTime)) {
-      console.error("Invalid date/time format");
-      return false;
-    }
-
-    const now = new Date();
-    const diffMinutes = (sessionDateTime - now) / 60000;
-    return diffMinutes <= 2 && diffMinutes >= -duration;
-  };
+  const now = new Date();
+  const diffMinutes = (sessionDateTime - now) / 60000;
+  return diffMinutes <= 2 && diffMinutes >= -duration;
+};
 
   // Helper function to convert time to 24-hour format
   const convertTo24Hour = (timeString) => {
@@ -992,13 +976,13 @@ const VideoCall = () => {
                           )}
                           {booking.status === "unconfirmed" && (
                             <>
-                              <button
+                              {/* <button
                                 className="w-full px-4 py-2 text-xs rounded-md bg-red-100 text-red-600 hover:bg-red-200 transition-colors duration-200 flex items-center justify-center gap-1"
                                 onClick={() => handleCancelClick(booking)}
                               >
                                 <XCircle className="w-3 h-3" />
                                 <span>Cancel Booking</span>
-                              </button>
+                              </button> */}
                             </>
                           )}
 
@@ -1267,16 +1251,10 @@ const VideoCall = () => {
                               rel="noopener noreferrer"
                               className="px-3 py-2 text-xs rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-200 flex items-center gap-1"
                               style={{
-                                opacity: isJoinEnabled(
-                                  session.slots,
-                                  parseInt(session.duration)
-                                )
+                                opacity: isJoinEnabled(session.sessionDate, session.sessionTime, parseInt(session.duration))
                                   ? 1
                                   : 0.5,
-                                pointerEvents: isJoinEnabled(
-                                  session.slots,
-                                  parseInt(session.duration)
-                                )
+                                  pointerEvents: isJoinEnabled(session.sessionDate, session.sessionTime, parseInt(session.duration))
                                   ? "auto"
                                   : "none",
                               }}
@@ -1626,16 +1604,11 @@ const VideoCall = () => {
                                   <button
                                     className="w-full px-4 py-2 text-sm rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-all duration-200 flex items-center justify-center gap-2 transform hover:scale-105"
                                     style={{
-                                      opacity: isJoinEnabled(
-                                        session.slots,
-                                        parseInt(session.duration)
-                                      )
+                                      opacity: isJoinEnabled(session.sessionDate, session.sessionTime, parseInt(session.duration))
                                         ? 1
                                         : 0.5,
                                       pointerEvents: isJoinEnabled(
-                                        session.slots,
-                                        parseInt(session.duration)
-                                      )
+                                        session.sessionDate, session.sessionTime, parseInt(session.duration))
                                         ? "auto"
                                         : "none",
                                     }}

@@ -508,7 +508,7 @@ const UserVideoCall = () => {
                   <div className="hidden md:block">
                     <div className="border-b pb-4 mb-4">
                       <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                        Consultation with {booking?.firstName || ""} {booking?.lastName || ""}
+                        Consultation with {booking?.expertId?.firstName || ""} {booking?.expertId?.lastName || ""}
                       </h2>
 
                       <div className="flex items-center gap-3 text-sm text-gray-600">
@@ -613,13 +613,13 @@ const UserVideoCall = () => {
                             <>
                               <p className="text-gray-400">Waiting for Confirmation</p>
                               {/* Add the cancel button for unconfirmed status */}
-                              <button
+                              {/* <button
                                 className="w-full px-4 py-2 text-sm rounded-md bg-red-100 text-red-600 hover:bg-red-200 transition-all duration-200 flex items-center justify-center gap-2"
                                 onClick={() => handleCancelClick(booking)}
                               >
                                 <XCircle className="w-4 h-4" />
                                 <span>Cancel Request</span>
-                              </button>
+                              </button> */}
                             </>
                           )}
 
@@ -651,13 +651,13 @@ const UserVideoCall = () => {
                               )}
                               
                               {/* Cancel Button */}
-                              <button
+                              {/* <button
                                 className="w-full px-4 py-2 text-sm rounded-md bg-red-100 text-red-600 hover:bg-red-200 transition-all duration-200 flex items-center justify-center gap-2"
                                 onClick={() => handleCancelClick(booking)}
                               >
                                 <XCircle className="w-4 h-4" />
                                 <span>Cancel Session</span>
-                              </button>
+                              </button> */}
                             </>
                           )}
 
