@@ -90,7 +90,7 @@ const VideoCall = () => {
       // Always refresh the token to ensure it's valid
       try {
         const response = await axios.post(
-          "http://localhost:5070/api/expertauth/refresh-token",
+          "https://amd-api.code4bharat.com/api/expertauth/refresh-token",
           {},
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -122,7 +122,7 @@ const VideoCall = () => {
         }
 
         const bookingsResponse = await axios.get(
-          "http://localhost:5070/api/session/mybookings",
+          "https://amd-api.code4bharat.com/api/session/mybookings",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -155,7 +155,7 @@ const fetchSessions = async () => {
     }
 
     const sessionsResponse = await axios.get(
-      "http://localhost:5070/api/session/getexpertsession",
+      "https://amd-api.code4bharat.com/api/session/getexpertsession",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -327,7 +327,7 @@ const fetchSessions = async () => {
       console.log("Sending accept request with payload:", payload);
   
       const response = await axios.put(
-        `http://localhost:5070/api/session/accept`,
+        `https://amd-api.code4bharat.com/api/session/accept`,
         payload,
         {
           headers: {
@@ -361,7 +361,7 @@ const fetchSessions = async () => {
       }
 
       const response = await axios.put(
-        `http://localhost:5070/api/session/decline`,
+        `https://amd-api.code4bharat.com/api/session/decline`,
         { id: sessionId },
         {
           headers: {
@@ -513,7 +513,7 @@ const fetchSessions = async () => {
   
       const token = localStorage.getItem("expertToken");
       await axios.post(
-        "http://localhost:5070/api/cancelsession/cancelexpert",
+        "https://amd-api.code4bharat.com/api/cancelsession/cancelexpert",
         cancellationData,
         {
           headers: {
