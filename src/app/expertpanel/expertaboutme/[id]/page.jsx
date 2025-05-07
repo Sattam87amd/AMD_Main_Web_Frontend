@@ -214,7 +214,7 @@ const ExpertDetail = () => {
         slots: selectedTimes,
         duration: selectedDuration,
         areaOfExpertise: "Home",
-        price:expert.price * (selectedDurationMinutes / 15),
+        price: expert.price * (selectedDurationMinutes / 15),
       };
       localStorage.setItem("sessionData", JSON.stringify(sessionData));
 
@@ -380,8 +380,8 @@ const ExpertDetail = () => {
                           <button
                             key={label}
                             className={`py-2 px-4 ${selectedDuration === label
-                                ? "bg-black text-white"
-                                : "bg-[#F8F7F3] text-black"
+                              ? "bg-black text-white"
+                              : "bg-[#F8F7F3] text-black"
                               } rounded-md shadow`}
                             onClick={() => {
                               setSelectedDuration(label);
@@ -418,8 +418,8 @@ const ExpertDetail = () => {
                                     <button
                                       key={time}
                                       className={`py-2 px-3 text-sm ${isSelected ? "bg-black text-white" :
-                                          isBooked ? "bg-gray-200 text-gray-500 cursor-not-allowed" :
-                                            "bg-white text-black hover:bg-gray-100"
+                                        isBooked ? "bg-gray-200 text-gray-500 cursor-not-allowed" :
+                                          "bg-white text-black hover:bg-gray-100"
                                         } rounded-xl border transition-colors`}
                                       onClick={() => !isBooked && handleTimeSelection(dayKey, time)}
                                       disabled={isBooked}
@@ -536,6 +536,29 @@ const ExpertDetail = () => {
                       </div>
                     </div>
 
+                    <div className="bg-[#F8F7F3] p-6 rounded-xl mt-12">
+                      <div className="bg-black text-white p-2 rounded-t-xl w-max">
+                        <h3 className="text-2xl font-semibold">Send a Gift Card</h3>
+                      </div>
+                      <div className="text-2xl py-4">
+                        <h2 className="font-semibold">Gift an Intro</h2>
+                      </div>
+                      <p className="text-2xl font-semibold">
+                        Gift a session or membership to friends, family, or coworkers
+                      </p>
+
+                      <div className="flex items-center justify-center mt-4 gap-8">
+                        <div className="flex items-center">
+                          <Gift className="h-8 w-8" />
+                        </div>
+                        <button
+                          onClick={() => alert("Gift Card feature coming soon!")} // placeholder for future functionality
+                          className="bg-[#0D70E5] text-white py-3 px-24 rounded-md hover:bg-[#0A58C2]"
+                        >
+                          Select
+                        </button>
+                      </div>
+                    </div>
 
                   </>
                 )}
