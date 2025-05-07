@@ -696,18 +696,18 @@ const VideoCall = () => {
                           )}
 
                           {/* Cancel Button */}
-                          <button
+                          {/* <button
                             className="px-3 py-2 text-xs rounded-md bg-red-100 text-red-600 hover:bg-red-200 transition-colors duration-200 flex items-center gap-1"
                             onClick={() => handleCancelClick(booking)}
                           >
                             <XCircle className="w-3 h-3" />
                             <span>Cancel</span>
-                          </button>
+                          </button> */}
                         </>
                       )}
 
                       {/* Add cancel button for unconfirmed status */}
-                      {booking.status === "unconfirmed" && (
+                      {/* {booking.status === "unconfirmed" && (
                         <button
                           className="px-3 py-2 text-xs rounded-md bg-red-100 text-red-600 hover:bg-red-200 transition-colors duration-200 flex items-center gap-1"
                           onClick={() => handleCancelClick(booking)}
@@ -715,7 +715,7 @@ const VideoCall = () => {
                           <XCircle className="w-3 h-3" />
                           <span>Cancel</span>
                         </button>
-                      )}
+                      )} */}
 
 
                       {booking.status === "completed" && (

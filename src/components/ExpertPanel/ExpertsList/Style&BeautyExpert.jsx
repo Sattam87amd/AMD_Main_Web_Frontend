@@ -7,6 +7,7 @@ import { HeartHandshake } from "lucide-react";
 import { CiFilter } from "react-icons/ci";
 import axios from "axios";
 import { motion } from "framer-motion";
+import ScrollableTags from "@/components/SpecialCharacter/section";
 
 const FashionBeautyLogin = () => {
   const [expertData, setExpertData] = useState([]);
@@ -44,10 +45,10 @@ const FashionBeautyLogin = () => {
 
   const truncateExperience = (text) => {
     if (!text) return '';
-    
+
     const words = text.split(/\s+/).filter(word => word.length > 0);
     const first25Words = words.slice(0, 25);
-    
+
     let firstSentence = [];
     for (const word of first25Words) {
       firstSentence.push(word);
@@ -55,11 +56,11 @@ const FashionBeautyLogin = () => {
         break;
       }
     }
-    
+
     if (firstSentence.length === 25 && words.length > 25) {
       return firstSentence.join(' ') + '...';
     }
-    
+
     return firstSentence.join(' ');
   };
 
@@ -87,6 +88,10 @@ const FashionBeautyLogin = () => {
 
   return (
     <div className="bg-white py-10 px-4">
+      <div className="py-3">
+
+        <ScrollableTags />
+      </div>
       {/* Header Section with Filter Button */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}

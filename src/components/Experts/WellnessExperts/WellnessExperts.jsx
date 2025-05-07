@@ -6,6 +6,7 @@ import { HiBadgeCheck } from "react-icons/hi";
 import { HiChevronRight } from "react-icons/hi";
 import axios from "axios";
 import { motion } from "framer-motion";
+import ScrollableTags from "@/components/SpecialCharacter/section";
 
 const WellnessHomeCardsLogin = () => {
   const [expertData, setExpertData] = useState([]);
@@ -56,6 +57,10 @@ const WellnessHomeCardsLogin = () => {
 
   return (
     <div className="bg-white py-10 px-4">
+      <div className="py-3">
+
+        <ScrollableTags />
+      </div>
       {/* Header Section with Animation */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -106,7 +111,7 @@ const WellnessHomeCardsLogin = () => {
                   hidden: { opacity: 0, y: 30 },
                   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
                 }}
-                // whileHover={{ scale: 1.05 }}
+              // whileHover={{ scale: 1.05 }}
               >
                 {/* Expert Image */}
                 <img
@@ -117,7 +122,7 @@ const WellnessHomeCardsLogin = () => {
 
                 {/* Price Badge */}
                 <div className="absolute top-4 right-4 bg-[#F8F7F3] text-black px-4 py-2 rounded-2xl shadow-xl font-semibold">
-                 SAR {expert.price || "$ 0"}
+                  SAR {expert.price || "$ 0"}
                 </div>
 
                 {/* Info Box with Blur Effect */}

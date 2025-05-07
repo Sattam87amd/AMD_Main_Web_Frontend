@@ -7,6 +7,7 @@ import { HeartHandshake } from "lucide-react";
 import { CiFilter } from "react-icons/ci";
 import axios from "axios";
 import { motion } from "framer-motion";
+import ScrollableTags from "@/components/SpecialCharacter/section";
 
 const HomeexpertLogin = () => {
   const [expertData, setExpertData] = useState([]);
@@ -90,13 +91,17 @@ const HomeexpertLogin = () => {
   return (
     <div className="bg-white py-10 px-4">
       {/* Heading Section with Filter Button */}
+      <div className="py-3">
+
+      <ScrollableTags/>
+      </div> 
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
         className="flex justify-between items-center mb-6"
-      >
+        >
         <div className="flex flex-col md:flex-row md:items-center">
           <h1 className="text-3xl md:text-[60px] font-bold text-black">
             HOME

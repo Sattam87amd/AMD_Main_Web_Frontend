@@ -6,6 +6,7 @@ import { HiBadgeCheck } from "react-icons/hi";
 import { HiChevronRight } from "react-icons/hi";
 import axios from "axios";
 import { motion } from "framer-motion";
+import ScrollableTags from "@/components/SpecialCharacter/section";
 
 const Homeexpert = () => {
   const [expertData, setExpertData] = useState([]);
@@ -30,10 +31,10 @@ const Homeexpert = () => {
 
   const truncateExperience = (text) => {
     if (!text) return '';
-    
+
     const words = text.split(/\s+/).filter(word => word.length > 0);
     const first25Words = words.slice(0, 25);
-    
+
     let firstSentence = [];
     for (const word of first25Words) {
       firstSentence.push(word);
@@ -41,11 +42,11 @@ const Homeexpert = () => {
         break;
       }
     }
-    
+
     if (firstSentence.length === 25 && words.length > 25) {
       return firstSentence.join(' ') + '...';
     }
-    
+
     return firstSentence.join(' ');
   };
 
@@ -54,6 +55,10 @@ const Homeexpert = () => {
 
   return (
     <div className="bg-white py-10 px-4">
+      <div className="py-3">
+
+        <ScrollableTags />
+      </div>
       {/* Heading Section with Animation */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -76,7 +81,7 @@ const Homeexpert = () => {
         transition={{ delay: 0.2 }}
         className="flex justify-start mb-6"
       >
-          {/* <Link href="/expertpanel/homeexperts" passHref>
+        {/* <Link href="/expertpanel/homeexperts" passHref>
             <button className="flex items-center text-xl font-semibold text-black hover:text-gray-700 transition-colors">
               See All
               <HiChevronRight className="ml-2 w-5 h-5" />
@@ -108,7 +113,7 @@ const Homeexpert = () => {
                   hidden: { opacity: 0, y: 30 },
                   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
                 }}
-                // whileHover={{ scale: 1.01 }}
+              // whileHover={{ scale: 1.01 }}
               >
                 {/* Background Image */}
                 <img
@@ -119,7 +124,7 @@ const Homeexpert = () => {
 
                 {/* Price Tag */}
                 <div className="absolute top-4 right-4 bg-[#F8F7F3] text-black px-4 py-2 rounded-2xl shadow-xl font-semibold">
-                 SAR {expert.price || "0"}
+                  SAR {expert.price || "0"}
                 </div>
 
                 {/* Info Box with Blur Effect */}
