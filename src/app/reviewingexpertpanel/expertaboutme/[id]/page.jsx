@@ -4,18 +4,18 @@ import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { Gift, HeartHandshake } from "lucide-react"; // Added Hand icon for charity
-import WhatToExpectExpertPanel from "@/components/reviewingexpertpanel/reviewingexpertpanelAboutMe/WhatToExpectExpertPanel";
+import WhatToExpectExpertPanel from "@/components/reviewingexpertpanel/expertpanelAboutMe/WhatToExpectExpertPanel";
 import AboutMeReviews from "@/components/ExpertAboutMe/AboutMeReviews";
-import ExpertFeatureHighightsExpertPanel from "@/components/reviewingexpertpanel/reviewingexpertpanelAboutMe/ExpertFeatureHighightsExpertPanel";
-import SimilarExpertsExpertPanel from "@/components/reviewingexpertpanel/reviewingexpertpanelAboutMe/SimilarExpertsExpertPanel";
+import ExpertFeatureHighightsExpertPanel from "@/components/reviewingexpertpanel/expertpanelAboutMe/ExpertFeatureHighightsExpertPanel";
+import SimilarExpertsExpertPanel from "@/components/reviewingexpertpanel/expertpanelAboutMe/SimilarExpertsExpertPanel";
 import Sidebar from "@/components/reviewingexpertpanel/SideBar/SideBar";
 import Footer from "@/components/Layout/Footer";
 import BottomNav from "@/components/reviewingexpertpanel/Bottomnav/bottomnav";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ExpertDetail = () => {
   const [expert, setExpert] = useState(null);
@@ -73,7 +73,7 @@ const ExpertDetail = () => {
 
   useEffect(() => {
     // Get expertId from URL path
-    const pathParts = window.location.pathname.split('/');
+    const pathParts = window.location.pathname.split("/");
     const expertId = pathParts[pathParts.length - 1];
 
     if (!expertId) {
@@ -85,10 +85,10 @@ const ExpertDetail = () => {
       setLoadingSlots(true);
       try {
         // Get token from localStorage
-        const expertToken = localStorage.getItem('expertToken');
+        const expertToken = localStorage.getItem("expertToken");
 
         if (!expertToken) {
-          toast.error('Please login to view availability');
+          toast.error("Please login to view availability");
           return;
         }
 
@@ -97,8 +97,8 @@ const ExpertDetail = () => {
           `https://amd-api.code4bharat.com/api/session/booked-slots/${expertId}`,
           {
             headers: {
-              'Authorization': `Bearer ${expertToken}`
-            }
+              Authorization: `Bearer ${expertToken}`,
+            },
           }
         );
         // Flatten the nested array structure
@@ -107,7 +107,7 @@ const ExpertDetail = () => {
       } catch (err) {
         console.error("Error fetching booked slots:", err);
         if (err.response?.status === 401) {
-          toast.error('Session expired. Please login again');
+          toast.error("Session expired. Please login again");
           // Optionally redirect to login
           // router.push('/login');
         } else {
@@ -198,9 +198,8 @@ const ExpertDetail = () => {
     const formattedTime = time; // Keep original format "07:00 AM"
 
     return bookedSlots.some(
-      slot =>
-        slot.selectedDate === date &&
-        slot.selectedTime === formattedTime
+      (slot) =>
+        slot.selectedDate === date && slot.selectedTime === formattedTime
     );
   };
 
@@ -214,10 +213,9 @@ const ExpertDetail = () => {
         slots: selectedTimes,
         duration: selectedDuration,
         areaOfExpertise: "Home",
-        price:expert.price * (selectedDurationMinutes / 15),
+        price: expert.price * (selectedDurationMinutes / 15),
       };
       localStorage.setItem("sessionData", JSON.stringify(sessionData));
-
 
       // Redirect to the next page
       router.push("/reviewingexpertpanel/expertbooking"); // Assuming the second page is 'expertbookingdetails'
@@ -242,7 +240,18 @@ const ExpertDetail = () => {
   return (
     <>
       <div className="flex min-h-screen">
-        <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover theme="light" />
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+        />
         <aside className="w-[20%] hidden md:block">
           <Sidebar />
         </aside>
@@ -298,8 +307,8 @@ const ExpertDetail = () => {
                       {charityEnabled && (
                         <div className="flex items-center gap-1 bg-red-50 px-3 py-1.5 rounded-full">
                           <span className="flex text-xs text-red-600 font-medium">
-                            {charityInfo.percentage}% to Charity{charityInfo.name}
-
+                            {charityInfo.percentage}% to Charity
+                            {charityInfo.name}
                           </span>
 
                           <HeartHandshake className="h-4 w-4 text-red-600" />
@@ -343,8 +352,7 @@ const ExpertDetail = () => {
                         key={index}
                         className="text-gray-700 flex items-center text-sm"
                       >
-                        <span className="text-yellow-500 mr-2">✔</span>{" "}
-                        {advice}
+                        <span className="text-yellow-500 mr-2">✔</span> {advice}
                       </li>
                     ))}
                   </ul>
@@ -379,10 +387,11 @@ const ExpertDetail = () => {
                         ].map(({ label, duration }) => (
                           <button
                             key={label}
-                            className={`py-2 px-4 ${selectedDuration === label
+                            className={`py-2 px-4 ${
+                              selectedDuration === label
                                 ? "bg-black text-white"
                                 : "bg-[#F8F7F3] text-black"
-                              } rounded-md shadow`}
+                            } rounded-md shadow`}
                             onClick={() => {
                               setSelectedDuration(label);
                               setSelectedDurationMinutes(duration);
@@ -394,46 +403,70 @@ const ExpertDetail = () => {
                       </div>
 
                       {/* Time Slots */}
-                      {[["Today", "today"], ["Tomorrow", "tomorrow"], ["Next Date", "nextDate"]].map(
-                        ([label, dayKey]) => {
-                          const date = dateMap[dayKey].toISOString().split("T")[0];
+                      {[
+                        ["Today", "today"],
+                        ["Tomorrow", "tomorrow"],
+                        ["Next Date", "nextDate"],
+                      ].map(([label, dayKey]) => {
+                        const date = dateMap[dayKey]
+                          .toISOString()
+                          .split("T")[0];
 
-                          return (
-                            <div key={dayKey} className="mb-8">
-                              <h4 className="font-semibold py-4 text-xl">
-                                {`${label} (${getFormattedDate(dateMap[dayKey])})`}
-                              </h4>
-                              <div className="grid grid-cols-3 gap-3">
-                                {[
-                                  "07:00 AM", "08:00 AM", "09:00 AM",
-                                  "10:00 AM", "11:00 AM", "12:00 PM",
-                                  "02:00 PM", "03:00 PM", "04:00 PM"
-                                ].map((time) => {
-                                  const isBooked = isSlotBooked(dayKey, time);
-                                  const isSelected = selectedTimes.some(
-                                    s => s.selectedDate === date && s.selectedTime === time
-                                  );
+                        return (
+                          <div key={dayKey} className="mb-8">
+                            <h4 className="font-semibold py-4 text-xl">
+                              {`${label} (${getFormattedDate(
+                                dateMap[dayKey]
+                              )})`}
+                            </h4>
+                            <div className="grid grid-cols-3 gap-3">
+                              {[
+                                "07:00 AM",
+                                "08:00 AM",
+                                "09:00 AM",
+                                "10:00 AM",
+                                "11:00 AM",
+                                "12:00 PM",
+                                "02:00 PM",
+                                "03:00 PM",
+                                "04:00 PM",
+                              ].map((time) => {
+                                const isBooked = isSlotBooked(dayKey, time);
+                                const isSelected = selectedTimes.some(
+                                  (s) =>
+                                    s.selectedDate === date &&
+                                    s.selectedTime === time
+                                );
 
-                                  return (
-                                    <button
-                                      key={time}
-                                      className={`py-2 px-3 text-sm ${isSelected ? "bg-black text-white" :
-                                          isBooked ? "bg-gray-200 text-gray-500 cursor-not-allowed" :
-                                            "bg-white text-black hover:bg-gray-100"
-                                        } rounded-xl border transition-colors`}
-                                      onClick={() => !isBooked && handleTimeSelection(dayKey, time)}
-                                      disabled={isBooked}
-                                    >
-                                      {time}
-                                      {isBooked && <span className="text-xs block">Booked</span>}
-                                    </button>
-                                  );
-                                })}
-                              </div>
+                                return (
+                                  <button
+                                    key={time}
+                                    className={`py-2 px-3 text-sm ${
+                                      isSelected
+                                        ? "bg-black text-white"
+                                        : isBooked
+                                        ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                                        : "bg-white text-black hover:bg-gray-100"
+                                    } rounded-xl border transition-colors`}
+                                    onClick={() =>
+                                      !isBooked &&
+                                      handleTimeSelection(dayKey, time)
+                                    }
+                                    disabled={isBooked}
+                                  >
+                                    {time}
+                                    {isBooked && (
+                                      <span className="text-xs block">
+                                        Booked
+                                      </span>
+                                    )}
+                                  </button>
+                                );
+                              })}
                             </div>
-                          );
-                        }
-                      )}
+                          </div>
+                        );
+                      })}
                       {/* Show how many slots are selected */}
                       <p className="text-sm text-gray-600 mt-4">
                         Selected slots: {selectedTimes.length} / 5
@@ -441,9 +474,13 @@ const ExpertDetail = () => {
 
                       <div className="flex gap-10 py-10 items-center">
                         <div>
-
                           <p className="text-xl font-semibold">
-                            SAR {(expert.price * (selectedDurationMinutes / 15)).toFixed(2)} • Session
+                            SAR{" "}
+                            {(
+                              expert.price *
+                              (selectedDurationMinutes / 15)
+                            ).toFixed(2)}{" "}
+                            • Session
                           </p>
                           <div className="flex items-center mt-2 gap-2 text-[#FFA629]">
                             {[...Array(5)].map((_, i) => {
@@ -468,7 +505,9 @@ const ExpertDetail = () => {
                         <button
                           className="py-3 px-12 bg-black text-white rounded-md hover:bg-gray-900 transition"
                           onClick={handleBookingRequest}
-                          disabled={!selectedDuration || selectedTimes.length === 0}
+                          disabled={
+                            !selectedDuration || selectedTimes.length === 0
+                          }
                         >
                           Request
                         </button>
@@ -535,8 +574,6 @@ const ExpertDetail = () => {
                         </button>
                       </div>
                     </div>
-
-
                   </>
                 )}
               </div>

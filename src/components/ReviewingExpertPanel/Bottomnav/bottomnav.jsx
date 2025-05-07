@@ -22,7 +22,7 @@ const BottomNav = () => {
   const navItems = [
     { label: "Search", icon: <Search />, id: "search", path: "/experts" },
     { label: "Video", icon: <Video />, id: "video", path: "/reviewingexpertpanel/videocall" },
-    { label: "Profile", icon: <User />, id: "profile", path: "/reviewingexpertpanel/reviewingexpertpanelprofile" },
+    { label: "Profile", icon: <User />, id: "profile", path: "/reviewingexpertpanel/expertpanelprofile" },
     { label: "Expert", icon: <BadgeCheck />, id: "expert", path: "/reviewingexpertpanel/expert" },
     { label: "Dashboard", icon: <PiCirclesFourLight />, id: "dashboard", path: "/reviewingexpertpanel/dashboard" },
     

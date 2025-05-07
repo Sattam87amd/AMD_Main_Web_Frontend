@@ -28,7 +28,7 @@ const Page = () => {
   const menuItems = [
     { label: "Find Experts", route: "/experts" },
     { label: "Video Call", route: "/reviewingexpertpanel/videocall" },
-    { label: "Profile", route: "/reviewingexpertpanel/reviewingexpertpanelprofile" },
+    { label: "Profile", route: "/reviewingexpertpanel/expertpanelprofile" },
     { label: "Expert", route: "/reviewingexpertpanel/expert" },
     { label: "Dashboard", route: "/reviewingexpertpanel/dashboard" },
     { label: "Payments/Reviews", route: "/reviewingexpertpanel/payments" },
