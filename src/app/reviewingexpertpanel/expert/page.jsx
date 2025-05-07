@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import Sidebar from "@/components/ExpertPanel/SideBar/SideBar";
-import ExpertProfile from "@/components/ExpertPanel/Expert/ExpertProfile";
-import EditExpertProfile from "@/components/ExpertPanel/Expert/EditExpertProfile";
+import Sidebar from "@/components/reviewingexpertpanel/SideBar/SideBar";
+import ExpertProfile from "@/components/reviewingexpertpanel/Expert/ExpertProfile";
+import EditExpertProfile from "@/components/reviewingexpertpanel/Expert/EditExpertProfile";
 import Footer from "@/components/Layout/Footer";
-import Navtop from "@/components/ExpertPanel/Navtop/navtop";
-import BottomNav from "@/components/ExpertPanel/Bottomnav/bottomnav";
+import Navtop from "@/components/reviewingexpertpanel/Navtop/navtop";
+import BottomNav from "@/components/reviewingexpertpanel/Bottomnav/bottomnav";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 
 const Page = () => {
@@ -27,13 +27,13 @@ const Page = () => {
   // Map sidebar routes to labels (must match Sidebar)
   const menuItems = [
     { label: "Find Experts", route: "/experts" },
-    { label: "Video Call", route: "/expertpanel/videocall" },
-    { label: "Profile", route: "/expertpanel/expertpanelprofile" },
-    { label: "Expert", route: "/expertpanel/expert" },
-    { label: "Dashboard", route: "/expertpanel/dashboard" },
-    { label: "Payments/Reviews", route: "/expertpanel/payments" },
+    { label: "Video Call", route: "/reviewingexpertpanel/videocall" },
+    { label: "Profile", route: "/reviewingexpertpanel/reviewingexpertpanelprofile" },
+    { label: "Expert", route: "/reviewingexpertpanel/expert" },
+    { label: "Dashboard", route: "/reviewingexpertpanel/dashboard" },
+    { label: "Payments/Reviews", route: "/reviewingexpertpanel/payments" },
     { label: "Logout", route: "/" },
-    { label: "Chat with Users", route: "/expertpanel/chat" },
+    { label: "Chat with Users", route: "/reviewingexpertpanel/chat" },
   ];
 
   const activeMenu = menuItems.find((item) => item.route === pathname);

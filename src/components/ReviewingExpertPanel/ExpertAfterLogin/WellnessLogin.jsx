@@ -73,7 +73,7 @@ const WellnessHomeCardsLogin = () => {
 
       {/* "See All" Button */}
       <div className="flex justify-start mb-6">
-        <Link href="/expertpanel/wellnessexperts" passHref>
+        <Link href="/reviewingexpertpanel/wellnessexperts" passHref>
           <button className="flex items-center text-xl font-semibold text-black">
             See All
             <HiChevronRight className="ml-2 w-5 h-5" />
@@ -87,7 +87,7 @@ const WellnessHomeCardsLogin = () => {
           {expertData.map((expert, index) => (
             <Link
               key={index}
-              href={`/expertpanel/expertaboutme/${expert._id}`} // Dynamic URL with expert ID
+              href={`/reviewingexpertpanel/expertaboutme/${expert._id}`} // Dynamic URL with expert ID
               passHref
             >
               <div className="relative w-[280px] h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">

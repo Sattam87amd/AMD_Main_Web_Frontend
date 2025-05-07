@@ -90,7 +90,7 @@ const VideoCall = () => {
       // Always refresh the token to ensure it's valid
       try {
         const response = await axios.post(
-          "https://amd-api.code4bharat.com/api/expertauth/refresh-token",
+          "http://localhost:5070/api/expertauth/refresh-token",
           {},
           { headers: { Authorization: `Bearer ${token}` } }
         );
@@ -122,7 +122,7 @@ const VideoCall = () => {
         }
 
         const bookingsResponse = await axios.get(
-          "https://amd-api.code4bharat.com/api/session/mybookings",
+          "http://localhost:5070/api/session/mybookings",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -144,55 +144,68 @@ const VideoCall = () => {
       }
     };
 
-    const fetchSessions = async () => {
-      try {
-        setLoadingSessions(true);
-        const token = localStorage.getItem("expertToken");
-        if (!token) {
-          setErrorSessions("Authentication token is required");
-          return;
-        }
+    // In the Data Fetching useEffect
+const fetchSessions = async () => {
+  try {
+    setLoadingSessions(true);
+    const token = localStorage.getItem("expertToken");
+    if (!token) {
+      setErrorSessions("Authentication token is required");
+      return;
+    }
 
-        const sessionsResponse = await axios.get(
-          "https://amd-api.code4bharat.com/api/session/getexpertsession",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        const combinedSessions = [
-          ...(sessionsResponse?.data.expertSessions || []).map((session) => ({
-            ...session,
-            sessionType: "Expert To Expert",
-          })),
-          ...(sessionsResponse?.data.userSessions || []).map((session) => ({
-            ...session,
-            sessionType: "User To Expert",
-          })),
-        ];
-
-        // Normalize the data
-        const normalized = combinedSessions.map((s) => ({
-          ...s,
-          sessionDate: s.slots?.[0]?.selectedDate,
-          sessionTime: s.slots?.[0]?.selectedTime,
-        }));
-        
-        setMySessions(normalized);
-      } catch (err) {
-        console.error("Error fetching sessions:", err);
-        setErrorSessions("No sessions found.");
-        
-        // Handle token-related errors
-        if (err.response && (err.response.status === 401 || err.response.status === 403)) {
-          router.push("/expertlogin");
-        }
-      } finally {
-        setLoadingSessions(false);
+    const sessionsResponse = await axios.get(
+      "http://localhost:5070/api/session/getexpertsession",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
-    };
+    );
+
+    const combinedSessions = [
+      ...(sessionsResponse?.data.expertSessions || []).map((session) => ({
+        ...session,
+        sessionType: "Expert To Expert",
+        // Add normalized fields for consistent access
+        clientName: session.firstName || "",
+        clientLastName: session.lastName || "",
+        expertName: session.consultingExpertID?.firstName || "",
+        expertLastName: session.consultingExpertID?.lastName || "",
+        contactNumber: session.mobile || session.phone || "",
+      })),
+      ...(sessionsResponse?.data.userSessions || []).map((session) => ({
+        ...session,
+        sessionType: "User To Expert",
+        // Add normalized fields for consistent access
+        clientName: session.firstName || "",
+        clientLastName: session.lastName || "",
+        expertName: session.expertID?.firstName || "",
+        expertLastName: session.expertID?.lastName || "",
+        contactNumber: session.phone || session.mobile || "",
+      })),
+    ];
+
+    // Normalize the data
+    const normalized = combinedSessions.map((s) => ({
+      ...s,
+      sessionDate: s.slots?.[0]?.selectedDate,
+      sessionTime: s.slots?.[0]?.selectedTime,
+    }));
+    
+    setMySessions(normalized);
+  } catch (err) {
+    console.error("Error fetching sessions:", err);
+    setErrorSessions("No sessions found.");
+    
+    // Handle token-related errors
+    if (err.response && (err.response.status === 401 || err.response.status === 403)) {
+      router.push("/expertlogin");
+    }
+  } finally {
+    setLoadingSessions(false);
+  }
+};
 
     // Only fetch data if we're on the client and after auth check has run
     fetchBookings();
@@ -285,32 +298,45 @@ const VideoCall = () => {
   const handleAccept = async (sessionId) => {
     // Get the selected date and time from sessionState for the given sessionId
     const { selectedDate, selectedTime } = sessionState[sessionId] || {};
-
+  
     if (!selectedDate || !selectedTime) {
       toast.error("Please select both a date and a time before accepting.");
       return;
     }
-
+  
     try {
       const token = localStorage.getItem("expertToken");
       if (!token) {
         toast.error("Token is required");
         return;
       }
-
-      // Log the selectedDate and selectedTime for debugging
-      console.log(selectedDate, selectedTime);
-
+  
+      // Find the session to determine its type
+      const session = mySessions.find(s => s._id === sessionId);
+      const sessionModel = session?.sessionType;
+      
+      // Prepare different payloads based on session type
+      const payload = { 
+        id: sessionId, 
+        selectedDate, 
+        selectedTime,
+        // Add session type to help backend determine the correct model
+        sessionModel: sessionModel === "Expert To Expert" ? "ExpertToExpertSession" : "UserToExpertSession"
+      };
+  
+      console.log("Sending accept request with payload:", payload);
+  
       const response = await axios.put(
-        `https://amd-api.code4bharat.com/api/session/accept`,
-        { id: sessionId, selectedDate, selectedTime },
+        `http://localhost:5070/api/session/accept`,
+        payload,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
           },
         }
       );
-
+  
       // Update the session status to "confirmed"
       const updatedSessions = mySessions.map((session) =>
         session._id === sessionId
@@ -318,14 +344,13 @@ const VideoCall = () => {
           : session
       );
       setMySessions(updatedSessions);
-
-      toast.success(response.data.message);
+  
+      toast.success(response.data.message || "Session accepted successfully");
     } catch (err) {
-      toast.error("Failed to accept the session");
-      console.log(err);
+      console.error("Failed to accept the session:", err);
+      toast.error(err.response?.data?.message || "Failed to accept the session. Please try again.");
     }
   };
-
 
   const handleDecline = async (sessionId) => {
     try {
@@ -336,7 +361,7 @@ const VideoCall = () => {
       }
 
       const response = await axios.put(
-        `https://amd-api.code4bharat.com/api/session/decline`,
+        `http://localhost:5070/api/session/decline`,
         { id: sessionId },
         {
           headers: {
@@ -464,32 +489,40 @@ const VideoCall = () => {
       toast.error("Please accept the terms and conditions to proceed");
       return;
     }
-
+  
     try {
       setLoadingCancel(true);
-
+  
       // Prepare cancellation data
       const selectedReasons = cancellationReasons
         .filter(reason => reason.checked)
         .map(reason => reason.reason);
-
+  
+      // Find the session to determine its type
+      const sessionModel = sessionToCancel?.sessionType;
+  
       const cancellationData = {
         sessionId: sessionToCancel._id,
         reasons: selectedReasons,
-        otherReason: cancellationReasons.find(r => r.id === 6)?.checked ? otherReason : ""
+        otherReason: cancellationReasons.find(r => r.id === 6)?.checked ? otherReason : "",
+        // Add session type to help backend determine the correct model
+        sessionModel: sessionModel === "Expert To Expert" ? "ExpertToExpertSession" : "UserToExpertSession"
       };
-
+  
+      console.log("Sending cancellation request with data:", cancellationData);
+  
       const token = localStorage.getItem("expertToken");
       await axios.post(
-        "https://amd-api.code4bharat.com/api/cancelsession/cancelexpert",
+        "http://localhost:5070/api/cancelsession/cancelexpert",
         cancellationData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
           },
         }
       );
-
+  
       // Update state for both bookings and sessions
       if (activeTab === "bookings") {
         setMyBookings(prevBookings =>
@@ -508,18 +541,19 @@ const VideoCall = () => {
           )
         );
       }
-
+  
       setShowTermsModal(false);
       toast.success("Session cancelled successfully");
-
+  
     } catch (error) {
       console.error("Error cancelling session:", error);
-      toast.error("Failed to cancel session. Please try again.");
+      const errorMessage = error.response?.data?.message || "Failed to cancel session. Please try again.";
+      toast.error(errorMessage);
     } finally {
       setLoadingCancel(false);
     }
   };
-
+  
   return (
     <div className="w-full mx-auto py-6 px-4 mt-2 md:max-w-6xl md:py-10 md:px-8 bg-gray-50 min-h-screen">
       <ToastContainer position="top-right" autoClose={3000} />
@@ -1134,7 +1168,7 @@ const VideoCall = () => {
                       <div className="flex justify-between">
                         <h2 className="text-xl font-semibold text-gray-800 mb-2">
                           {session.sessionType === "Expert To Expert"
-                            ? `Consultation with Expert ${session.expertID?.firstName || "N/A"} ${session.expertID?.lastName || ""}`
+                            ? `Consultation with Expert ${session.consultingExpertID?.firstName || "N/A"} ${session.consultingExpertID?.lastName || ""}`
                             : `Consultation with ${session?.firstName || "N/A"} ${session?.lastName || ""}`}
                         </h2>
                         <span className={`${getStatusStyle(session.status)} px-3 py-1 h-fit rounded-full text-sm ${session.status === "confirmed" ? "bg-green-50" : session.status === "completed" ? "bg-green-50" : "bg-gray-100"}`}>
@@ -1173,50 +1207,45 @@ const VideoCall = () => {
                       {/* Left Side - Details */}
                       <div className="col-span-8">
                         <div className="flex items-start gap-8 mb-6">
-                          {/* People Details */}
-                          <div className="flex-1">
-                            <h3 className="text-sm font-semibold text-gray-700 mb-3">People</h3>
-                            <div className="bg-gray-50 p-3 rounded-lg">
-                              <p className="text-sm font-medium text-gray-700 mb-2 flex items-center">
-                                <FaUser className="mr-2 text-blue-500" />
-                                <span className="text-gray-500 w-16">Client:</span>
-                                <span>{session?.firstName || "N/A"} {session?.lastName || ""}</span>
-                              </p>
-                              <p className="text-sm font-medium text-gray-700 flex items-center">
-                                <FaMobile className="mr-2 text-blue-500" />
-                                <span className="text-gray-500 w-16">Mobile:</span>
-                                <span>{session?.phone} </span>
-                              </p>
-
-                            </div>
-                            <div>
-                              <p className="text-sm font-medium text-gray-700 border-2 rounded-[5px] mt-4 justify-between p-2 flex">
-                                <div className="flex flex-col">
-                                  <span className="text-gray-500 w-16">Note:</span>
-                                  <ul className="w-full list-disc pl-5">
-                                    {session?.note &&
-                                      session?.note
-                                        .split(".")  // Split the note by periods
-                                        .map((sentence, index) => {
-                                          const trimmedSentence = sentence.trim();
-                                          if (trimmedSentence) {
-                                            return (
-                                              <li key={index} className="text-gray-700">
-                                                {trimmedSentence}.
-                                              </li>
-                                            );
-                                          }
-                                          return null;
-                                        })}
-                                  </ul>
-                                </div>
-
-                              </p>
-
-
-                            </div>
-                          </div>
-
+                        {/* People Details */}
+<div className="flex-1">
+  <h3 className="text-sm font-semibold text-gray-700 mb-3">People</h3>
+  <div className="bg-gray-50 p-3 rounded-lg">
+    <p className="text-sm font-medium text-gray-700 mb-2 flex items-center">
+      <FaUser className="mr-2 text-blue-500" />
+      <span className="text-gray-500 w-16">Client:</span>
+      <span>{session?.clientName || "N/A"} {session?.clientLastName || ""}</span>
+    </p>
+    <p className="text-sm font-medium text-gray-700 flex items-center">
+      <FaMobile className="mr-2 text-blue-500" />
+      <span className="text-gray-500 w-16">Mobile:</span>
+      <span>{session?.contactNumber || "N/A"}</span>
+    </p>
+  </div>
+  <div>
+    <p className="text-sm font-medium text-gray-700 border-2 rounded-[5px] mt-4 justify-between p-2 flex">
+      <div className="flex flex-col">
+        <span className="text-gray-500 w-16">Note:</span>
+        <ul className="w-full list-disc pl-5">
+          {session?.note &&
+            session?.note
+              .split(".")
+              .map((sentence, index) => {
+                const trimmedSentence = sentence.trim();
+                if (trimmedSentence) {
+                  return (
+                    <li key={index} className="text-gray-700">
+                      {trimmedSentence}.
+                    </li>
+                  );
+                }
+                return null;
+              })}
+        </ul>
+      </div>
+    </p>
+  </div>
+</div>
 
                           {/* Select Date and Time - Desktop */}
                           {session.status === "unconfirmed" ? (

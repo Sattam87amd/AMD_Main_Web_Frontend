@@ -3,29 +3,44 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { FaRegPaperPlane, FaEllipsisV, FaEdit, FaTrash } from "react-icons/fa";
+import { 
+  FaRegPaperPlane, 
+  FaEllipsisV, 
+  FaEdit, 
+  FaTrash, 
+  FaDownload, 
+  FaPaperclip
+} from "react-icons/fa";
 import { MdDeleteSweep } from "react-icons/md";
+import { BsFileEarmark, BsFileEarmarkImage, BsFileEarmarkText, BsFileEarmarkPdf } from "react-icons/bs";
 import { useChatStore } from "@/store/useChatStore.js";
 
-const ChatComponent = () => {
+const UserChatComponent = () => {
   const [text, setText] = useState("");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [editingMessage, setEditingMessage] = useState(null);
   const [showMenu, setShowMenu] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [showFilePreview, setShowFilePreview] = useState(false);
+  const [fileUploadProgress, setFileUploadProgress] = useState(0);
+  const [isFileModalOpen, setIsFileModalOpen] = useState(false);
+  const [selectedFileToView, setSelectedFileToView] = useState(null);
+  
   const router = useRouter();
   const messagesContainerRef = useRef(null);
   const menuRef = useRef(null);
+  const fileInputRef = useRef(null);
 
-  // Updated to use the correct function name 'selectUser' instead of 'setSelectedUser'
+  // Zustand store hooks
   const {
     getUsers,
     users,
     selectedUser,
-    selectUser, // Changed from setSelectedUser to selectUser
+    selectUser,
     isUsersLoading,
     logginUser,
     onlineUsers,
-    isUserOnline, // Using the utility function from the store
+    isUserOnline,
   } = useChatStore();
 
   const {
@@ -37,7 +52,17 @@ const ChatComponent = () => {
     editMessage,
     deleteAllMessages,
     subscribeToMessages,
+    // File-related functions
+    uploadFile,
+    downloadFile,
+    deleteFile,
+    getFileInfo,
+    conversationFiles,
+    getConversationFiles,
+    isFileUploading,
+    isFilesLoading,
   } = useChatStore();
+
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -68,22 +93,38 @@ const ChatComponent = () => {
   // Get users on component mount
   useEffect(() => {
     getUsers();
-
-    // No need for cleanup as there's no unsubscribeFromMessages function
-    // The cleanup is now handled by the socket disconnect
   }, []);
 
   // Handle user selection and message subscription
   useEffect(() => {
     if (selectedUser?._id) {
       getMessages(selectedUser._id);
+      getConversationFiles(selectedUser._id);
       subscribeToMessages();
       setEditingMessage(null); // Clear editing state when changing users
+      setSelectedFile(null); // Clear any selected file
+      setShowFilePreview(false);
     }
   }, [selectedUser?._id]);
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
+    
+    // Handle file upload first if a file is selected
+    if (selectedFile) {
+      try {
+        await uploadFile(selectedFile, text.trim());
+        setSelectedFile(null);
+        setShowFilePreview(false);
+        setText("");
+        return;
+      } catch (error) {
+        console.error("Failed to upload file:", error);
+        return;
+      }
+    }
+    
+    // Handle text message
     if (!text.trim()) return;
 
     if (editingMessage) {
@@ -106,9 +147,13 @@ const ChatComponent = () => {
     }
   };
 
-  const handleDeleteMessage = async (messageId) => {
+  const handleDeleteMessage = async (messageId, fileId) => {
     try {
-      await deleteMessage(messageId);
+      if (fileId) {
+        await deleteFile(messageId, fileId);
+      } else {
+        await deleteMessage(messageId);
+      }
       setShowMenu(null);
     } catch (error) {
       console.error("Failed to delete message:", error);
@@ -116,6 +161,10 @@ const ChatComponent = () => {
   };
 
   const handleEditClick = (message) => {
+    if (message.isFile) {
+      // Can't edit file messages
+      return;
+    }
     setEditingMessage(message);
     setText(message.text);
     setShowMenu(null);
@@ -127,8 +176,9 @@ const ChatComponent = () => {
   };
 
   const handleDeleteAllMessages = async () => {
-    setShowDeleteConfirm(true); // open modal instead of using confirm()
+    setShowDeleteConfirm(true);
   };
+  
   const confirmDeleteAllMessages = async () => {
     try {
       await deleteAllMessages();
@@ -138,8 +188,89 @@ const ChatComponent = () => {
     }
   };
 
-  // We can use the isUserOnline function from the store directly
-  // Or keep this implementation if you prefer
+  const handleFileInput = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedFile(file);
+      setShowFilePreview(true);
+    }
+  };
+
+  const handleFileUpload = async () => {
+    if (!selectedFile) return;
+    
+    try {
+      await uploadFile(selectedFile, text.trim());
+      setSelectedFile(null);
+      setShowFilePreview(false);
+      setText("");
+    } catch (error) {
+      console.error("Failed to upload file:", error);
+    }
+  };
+
+  const cancelFileUpload = () => {
+    setSelectedFile(null);
+    setShowFilePreview(false);
+    // Clear file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
+
+  const handleFileDownload = async (fileId, fileName) => {
+    try {
+      await downloadFile(fileId, fileName);
+    } catch (error) {
+      console.error("Failed to download file:", error);
+    }
+  };
+
+  const openFileModal = async (fileId, fileName) => {
+    try {
+      const fileInfo = await getFileInfo(fileId);
+      setSelectedFileToView({
+        ...fileInfo,
+        id: fileId,
+        name: fileName || fileInfo.originalName
+      });
+      setIsFileModalOpen(true);
+    } catch (error) {
+      console.error("Failed to get file info:", error);
+    }
+  };
+
+  const closeFileModal = () => {
+    setIsFileModalOpen(false);
+    setSelectedFileToView(null);
+  };
+
+  const getFileIcon = (fileType) => {
+    if (!fileType) return <BsFileEarmark size={22} />;
+    
+    if (fileType.startsWith('image/')) {
+      return <BsFileEarmarkImage size={22} />;
+    } else if (fileType === 'application/pdf') {
+      return <BsFileEarmarkPdf size={22} />;
+    } else if (fileType.startsWith('text/')) {
+      return <BsFileEarmarkText size={22} />;
+    } else {
+      return <BsFileEarmark size={22} />;
+    }
+  };
+
+  const formatFileSize = (bytes) => {
+    if (!bytes) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
+  // Check if the message was sent by the current user
+  const isCurrentUserMessage = (senderId) => {
+    return senderId === logginUser?._id;
+  };
 
   if (isUsersLoading)
     return (
@@ -165,7 +296,7 @@ const ChatComponent = () => {
             className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
             onClick={getUsers}
           >
-            Chat with Expert
+            Chat with Users
           </button>
           <button
             className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
@@ -262,7 +393,7 @@ const ChatComponent = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3 }}
                     className={`flex mb-5 ${
-                      msg.senderId === logginUser?._id
+                      isCurrentUserMessage(msg.senderId)
                         ? "justify-end"
                         : "justify-start"
                     }`}
@@ -270,16 +401,54 @@ const ChatComponent = () => {
                     <div className="relative group">
                       <div
                         className={`p-4 max-w-xs md:max-w-sm rounded-2xl ${
-                          msg.senderId === logginUser?._id
+                          isCurrentUserMessage(msg.senderId)
                             ? "bg-blue-500 text-white rounded-tr-none"
                             : "bg-white rounded-tl-none shadow-md"
                         }`}
                       >
-                        <p className="text-sm mb-1">{msg.text}</p>
-                        <div className="flex items-center justify-between">
+                        {/* Render file message */}
+                        {msg.isFile ? (
+                          <div className="flex flex-col">
+                            <div 
+                              onClick={() => openFileModal(msg.fileId, msg.text.replace('File: ', ''))}
+                              className="flex items-center gap-2 mb-2 cursor-pointer hover:underline"
+                            >
+                              {getFileIcon(msg.fileType)}
+                              <span className="text-sm font-medium truncate">
+                                {msg.text.replace('File: ', '')}
+                              </span>
+                            </div>
+                            {msg.fileSize && (
+                              <span className={`text-xs ${
+                                isCurrentUserMessage(msg.senderId)
+                                  ? "text-blue-100"
+                                  : "text-gray-500"
+                              }`}>
+                                {formatFileSize(msg.fileSize)}
+                              </span>
+                            )}
+                            <div className="flex gap-2 mt-2">
+                              <button
+                                onClick={() => handleFileDownload(msg.fileId, msg.text.replace('File: ', ''))}
+                                className={`p-1 rounded text-xs flex items-center gap-1 ${
+                                  isCurrentUserMessage(msg.senderId)
+                                    ? "bg-blue-600 hover:bg-blue-700"
+                                    : "bg-gray-200 hover:bg-gray-300 text-gray-700"
+                                }`}
+                              >
+                                <FaDownload size={10} /> Download
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          // Regular text message
+                          <p className="text-sm mb-1">{msg.text}</p>
+                        )}
+                        
+                        <div className="flex items-center justify-between mt-1">
                           <span
                             className={`text-xs ${
-                              msg.senderId === logginUser?._id
+                              isCurrentUserMessage(msg.senderId)
                                 ? "text-blue-100"
                                 : "text-gray-400"
                             }`}
@@ -296,7 +465,7 @@ const ChatComponent = () => {
                       </div>
 
                       {/* Message Options - Only show for user's messages */}
-                      {msg.senderId === logginUser?._id && (
+                      {isCurrentUserMessage(msg.senderId) && (
                         <div className="absolute top-0 right-0 -mr-2 -mt-2">
                           <button
                             onClick={() => setShowMenu(msg._id)}
@@ -311,14 +480,24 @@ const ChatComponent = () => {
                               ref={menuRef}
                               className="absolute right-0 mt-1 bg-white rounded-md shadow-lg z-10 py-1 min-w-[120px]"
                             >
+                              {!msg.isFile && (
+                                <button
+                                  onClick={() => handleEditClick(msg)}
+                                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                                >
+                                  <FaEdit className="mr-2" /> Edit
+                                </button>
+                              )}
+                              {msg.isFile && (
+                                <button
+                                  onClick={() => handleFileDownload(msg.fileId, msg.text.replace('File: ', ''))}
+                                  className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
+                                >
+                                  <FaDownload className="mr-2" /> Download
+                                </button>
+                              )}
                               <button
-                                onClick={() => handleEditClick(msg)}
-                                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center"
-                              >
-                                <FaEdit className="mr-2" /> Edit
-                              </button>
-                              <button
-                                onClick={() => handleDeleteMessage(msg._id)}
+                                onClick={() => handleDeleteMessage(msg._id, msg.fileId)}
                                 className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 flex items-center"
                               >
                                 <FaTrash className="mr-2" /> Delete
@@ -332,6 +511,30 @@ const ChatComponent = () => {
                 ))
               )}
             </div>
+
+            {/* File Preview Area */}
+            {showFilePreview && selectedFile && (
+              <div className="bg-gray-50 p-3 mt-2 rounded-lg border border-gray-300 flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  {getFileIcon(selectedFile.type)}
+                  <div className="flex flex-col">
+                    <span className="text-sm font-medium truncate max-w-[200px]">
+                      {selectedFile.name}
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      {formatFileSize(selectedFile.size)}
+                    </span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={cancelFileUpload}
+                  className="text-red-500 hover:text-red-700"
+                >
+                  <FaTrash size={14} />
+                </button>
+              </div>
+            )}
 
             {/* Message Input */}
             <form
@@ -357,18 +560,42 @@ const ChatComponent = () => {
                   placeholder={
                     editingMessage
                       ? "Edit your message..."
+                      : selectedFile
+                      ? "Add a message with this file (optional)..."
                       : "Type Something..."
                   }
                   value={text}
                   onChange={(e) => setText(e.target.value)}
                   className="flex-1 bg-transparent outline-none p-3 text-sm md:text-base"
+                  disabled={isFileUploading}
                 />
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  onChange={handleFileInput}
+                  className="hidden"
+                  disabled={isFileUploading || editingMessage}
+                />
+                <button
+                  type="button"
+                  onClick={() => !editingMessage && fileInputRef.current?.click()}
+                  disabled={isFileUploading || editingMessage}
+                  className={`p-3 rounded-lg text-gray-500 hover:bg-gray-100 ${
+                    editingMessage ? 'opacity-30 cursor-not-allowed' : ''
+                  }`}
+                >
+                  <FaPaperclip size={18} />
+                </button>
                 <button
                   type="submit"
                   className="p-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 transition-colors"
-                  disabled={!text.trim() || !selectedUser}
+                  disabled={(!text.trim() && !selectedFile) || !selectedUser || isFileUploading}
                 >
-                  <FaRegPaperPlane size={18} />
+                  {isFileUploading ? (
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <FaRegPaperPlane size={18} />
+                  )}
                 </button>
               </div>
             </form>
@@ -379,6 +606,8 @@ const ChatComponent = () => {
           </div>
         )}
       </div>
+
+      {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full">
@@ -406,8 +635,59 @@ const ChatComponent = () => {
           </div>
         </div>
       )}
+
+      {/* File View Modal */}
+      {isFileModalOpen && selectedFileToView && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl max-w-3xl w-full max-h-[80vh] overflow-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-lg font-semibold text-gray-800 truncate">
+                {selectedFileToView.name}
+              </h2>
+              <button
+                onClick={closeFileModal}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                &times;
+              </button>
+            </div>
+            
+            <div className="flex flex-col items-center mb-4">
+              {selectedFileToView.contentType?.startsWith('image/') ? (
+                <img 
+                  src={`http://localhost:8080/api/message/files/download/${selectedFileToView.id}`}
+                  alt={selectedFileToView.name}
+                  className="max-w-full max-h-[50vh] object-contain"
+                />
+              ) : (
+                <div className="p-10 bg-gray-100 rounded-lg flex flex-col items-center">
+                  {getFileIcon(selectedFileToView.contentType)}
+                  <p className="mt-2 text-gray-500">Preview not available</p>
+                </div>
+              )}
+            </div>
+            
+            <div className="flex justify-between items-center border-t pt-4">
+              <div>
+                <p className="text-sm text-gray-500">
+                  {selectedFileToView.contentType || 'Unknown type'} • {formatFileSize(selectedFileToView.size)}
+                </p>
+                <p className="text-xs text-gray-400">
+                  Uploaded {new Date(selectedFileToView.uploadDate).toLocaleString()}
+                </p>
+              </div>
+              <button
+                onClick={() => handleFileDownload(selectedFileToView.id, selectedFileToView.name)}
+                className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center gap-2"
+              >
+                <FaDownload size={14} /> Download
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default ChatComponent;
+export default UserChatComponent;

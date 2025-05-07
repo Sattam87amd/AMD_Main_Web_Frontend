@@ -2,10 +2,10 @@
 
 import React from 'react';
 import { usePathname } from "next/navigation"; // Import usePathname
-import Sidebar from '@/components/ExpertPanel/SideBar/SideBar';
-import Navtop from '@/components/ExpertPanel/Navtop/navtop';
-import ExpertReview from '@/components/ExpertPanel/Expertreview/expertreview';
-import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
+import Sidebar from '@/components/reviewingexpertpanel/SideBar/SideBar';
+import Navtop from '@/components/reviewingexpertpanel/Navtop/navtop';
+import ExpertReview from '@/components/reviewingexpertpanel/Expertreview/expertreview';
+import BottomNav from '@/components/reviewingexpertpanel/Bottomnav/bottomnav';
 import MobileNavSearch from '@/components/Layout/mobilenavsearch';
 
 const Page = () => {

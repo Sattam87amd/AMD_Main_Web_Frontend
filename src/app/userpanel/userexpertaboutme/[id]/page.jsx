@@ -40,18 +40,23 @@ const ExpertDetail = () => {
 
   const router = useRouter();
 
-  // Date handling
-  const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(today.getDate() + 1);
-  const nextDate = new Date(today);
-  nextDate.setDate(today.getDate() + 2);
+   // Date handling
+    const generateMonthDates = () => {
+      const date = new Date();
+      const year = date.getFullYear();
+      const month = date.getMonth();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+  
+      return Array.from({ length: daysInMonth }, (_, i) => {
+        const dayDate = new Date(year, month, i + 1);
+        // Only include future dates (including today)
+        return dayDate >= new Date(new Date().setHours(0, 0, 0, 0)) ? dayDate : null;
+      }).filter(date => date !== null);
+    };
+  
+    const [monthDates, setMonthDates] = useState(generateMonthDates());
 
-  const dateMap = {
-    today: today,
-    tomorrow: tomorrow,
-    nextDate: nextDate,
-  };
+  
 
   const getFormattedDate = (date) => {
     return date.toLocaleDateString(undefined, {
@@ -182,14 +187,10 @@ const ExpertDetail = () => {
     }
   };
 
-  const handleTimeSelection = (dayKey, time) => {
-    const date = dateMap[dayKey].toISOString().split("T")[0];
-    const formattedTime = time.replace(" AM", "").replace(" PM", "").trim();
-
-    // Create the key-value object for the slot
+  const handleTimeSelection = (dateString, time) => {
     const slot = {
-      selectedDate: date,
-      selectedTime: formattedTime + (time.includes("AM") ? " AM" : " PM"),
+      selectedDate: dateString,
+      selectedTime: time,
     };
 
     setSelectedTimes((prevTimes) => {
@@ -220,15 +221,11 @@ const ExpertDetail = () => {
     });
   };
 
-  const isSlotBooked = (dayKey, time) => {
-    const date = dateMap[dayKey].toISOString().split("T")[0];
-    // Ensure time format matches exactly what's coming from backend
-    const formattedTime = time; // Keep original format "07:00 AM"
-
+  const isSlotBooked = (dateString, time) => {
     return bookedSlots.some(
       slot =>
-        slot.selectedDate === date &&
-        slot.selectedTime === formattedTime
+        slot.selectedDate === dateString &&
+        slot.selectedTime === time
     );
   };
 
@@ -371,70 +368,71 @@ const ExpertDetail = () => {
                         Select duration and time slot:
                       </p>
 
-                      {/* Duration Selection Section */}
-                      <div className="grid grid-cols-2 gap-4 mb-4">
-                        {[
-                          { label: "Quick - 15min", duration: 15 },
-                          { label: "Regular - 30min", duration: 30 },
-                          { label: "Extra - 45min", duration: 45 },
-                          { label: "All Access - 60min", duration: 60 },
-                        ].map(({ label, duration }) => (
-                          <button
-                            key={label}
-                            className={`py-2 px-4 ${selectedDuration === label
-                                ? "bg-black text-white"
-                                : "bg-[#F8F7F3] text-black"
-                              } rounded-md shadow`}
-                            onClick={() => {
-                              setSelectedDuration(label);
-                              setSelectedDurationMinutes(duration);
-                            }}
-                          >
-                            {label}
-                          </button>
-                        ))}
-                      </div>
-                      {/* Time Slots */}
-                      {[["Today", "today"], ["Tomorrow", "tomorrow"], ["Next Date", "nextDate"]].map(
-                        ([label, dayKey]) => {
-                          const date = dateMap[dayKey].toISOString().split("T")[0];
+                    {/* Duration Selection Section */}
+<div className="grid grid-cols-2 gap-4 mb-4">
+  {[
+    { label: "Quick - 15min", duration: 15 },
+    { label: "Regular - 30min", duration: 30 },
+    { label: "Extra - 45min", duration: 45 },
+    { label: "All Access - 60min", duration: 60 },
+  ].map(({ label, duration }) => (
+    <button
+      key={label}
+      className={`py-2 px-4 ${
+        selectedDuration === label
+          ? "bg-black text-white"
+          : "bg-[#F8F7F3] text-black"
+      } rounded-md shadow`}
+      onClick={() => {
+         setSelectedDuration(label);
+        setSelectedDurationMinutes(duration);
+      }}
+    >
+      {label}
+    </button>
+  ))}
+</div>
+                        {/* Scrollable time slots */}
+  <div className="h-[450px] overflow-y-auto pb-8"> {/* Scrollable container */}
+    {monthDates.map((date) => {
+      const dateString = date.toISOString().split('T')[0];
+      return (
+        <div key={dateString} className="mb-8 bg-white/90 backdrop-blur-sm">
+          <h4 className="font-semibold py-4 text-xl sticky top-0 bg-white z-10">
+            {getFormattedDate(date)}
+          </h4>
+          <div className="grid grid-cols-3 gap-3 px-1">
+            {[
+              "07:00 AM", "08:00 AM", "09:00 AM",
+              "10:00 AM", "11:00 AM", "12:00 PM",
+              "02:00 PM", "03:00 PM", "04:00 PM"
+            ].map((time) => {
+              const isBooked = isSlotBooked(dateString, time);
+              const isSelected = selectedTimes.some(
+                s => s.selectedDate === dateString && s.selectedTime === time
+              );
 
-                          return (
-                            <div key={dayKey} className="mb-8">
-                              <h4 className="font-semibold py-4 text-xl">
-                                {`${label} (${getFormattedDate(dateMap[dayKey])})`}
-                              </h4>
-                              <div className="grid grid-cols-3 gap-3">
-                                {[
-                                  "07:00 AM", "08:00 AM", "09:00 AM",
-                                  "10:00 AM", "11:00 AM", "12:00 PM",
-                                  "02:00 PM", "03:00 PM", "04:00 PM"
-                                ].map((time) => {
-                                  const isBooked = isSlotBooked(dayKey, time);
-                                  const isSelected = selectedTimes.some(
-                                    s => s.selectedDate === date && s.selectedTime === time
-                                  );
-
-                                  return (
-                                    <button
-                                      key={time}
-                                      className={`py-2 px-3 text-sm ${isSelected ? "bg-black text-white" :
-                                          isBooked ? "bg-gray-200 text-gray-500 cursor-not-allowed" :
-                                            "bg-white text-black hover:bg-gray-100"
-                                        } rounded-xl border transition-colors`}
-                                      onClick={() => !isBooked && handleTimeSelection(dayKey, time)}
-                                      disabled={isBooked}
-                                    >
-                                      {time}
-                                      {isBooked && <span className="text-xs block">Booked</span>}
-                                    </button>
-                                  );
-                                })}
-                              </div>
-                            </div>
-                          );
-                        }
-                      )}
+              return (
+                <button
+                  key={time}
+                  className={`py-2 px-3 text-sm ${
+                    isSelected ? "bg-black text-white" :
+                    isBooked ? "bg-gray-200 text-gray-500 cursor-not-allowed" :
+                    "bg-white text-black hover:bg-gray-100"
+                  } rounded-xl border transition-colors shadow-sm`}
+                  onClick={() => !isBooked && handleTimeSelection(dateString, time)}
+                  disabled={isBooked}
+                >
+                  {time}
+                  {isBooked && <span className="text-xs block">Booked</span>}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      );
+    })}
+  </div>
                       {/* Show how many slots are selected */}
                       <p className="text-sm text-gray-600 mt-4">
                         Selected slots: {selectedTimes.length} / 5
@@ -540,7 +538,7 @@ const ExpertDetail = () => {
                         <h3 className="text-2xl font-semibold">Send a Gift Card</h3>
                       </div>
                       <div className="text-2xl py-4">
-                        <h2 className="font-semibold">Gift an Intro</h2>
+                        <h2 className="font-semibold">Share an experience</h2>
                       </div>
                       <p className="text-2xl font-semibold">
                         Gift a session or membership to friends, family, or coworkers
