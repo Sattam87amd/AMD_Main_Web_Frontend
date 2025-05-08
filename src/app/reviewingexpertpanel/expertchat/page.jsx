@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import Sidebar from '@/components/reviewingexpertpanel/SideBar/SideBar';
-import Navtop from '@/components/reviewingexpertpanel/Navtop/navtop';
-import BottomNav from '@/components/reviewingexpertpanel/Bottomnav/bottomnav';
-import ExpertChat from '@/components/reviewingexpertpanel/ExpertChat/Expertchat';
+import Sidebar from '@/components/ReviewingExpertPanel/SideBar/SideBar';
+import Navtop from '@/components/ReviewingExpertPanel/Navtop/navtop';
+import BottomNav from '@/components/ReviewingExpertPanel/Bottomnav/bottomnav';
+//import ExpertChat from '@/components/ReviewingExpertPanel/ExpertChat/Expertchat';
 
 const Page = () => {
   return (
@@ -17,7 +17,9 @@ const Page = () => {
       {/* Right Side Content with 2/3 width */}
       <div className="w-full md:w-[80%] p-4">
         <Navtop />
+        {/*
         <ExpertChat />
+        */}
 
         {/* Bottom Navigation - Visible only on mobile */}
         <div className="fixed bottom-0 left-0 right-0 md:hidden">

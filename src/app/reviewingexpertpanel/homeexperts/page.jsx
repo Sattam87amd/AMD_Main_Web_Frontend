@@ -1,9 +1,9 @@
 "use client";
 
 import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
-import BottomNav from "@/components/reviewingexpertpanel/Bottomnav/bottomnav";
-import HomeexpertLogin from "@/components/reviewingexpertpanel/ExpertsList/homeexpert";
-import Sidebar from "@/components/reviewingexpertpanel/SideBar/SideBar";
+import BottomNav from "@/components/ReviewingExpertPanel/Bottomnav/bottomnav";
+import HomeexpertLogin from "@/components/ReviewingExpertPanel/ExpertsList/homeexpert";
+import Sidebar from "@/components/ReviewingExpertPanel/SideBar/SideBar";
 import Homeexpert from "@/components/Experts/Homeexpert/homeexpert";
 import Footer from "@/components/Layout/Footer";
 // import Homeexpert from "@/components/Experts/Homeexpert/LoginHomeExpert";

@@ -4,13 +4,13 @@ import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
 import { FaInstagram } from "react-icons/fa";
 import { Gift, HeartHandshake } from "lucide-react"; // Added Hand icon for charity
-import WhatToExpectExpertPanel from "@/components/reviewingexpertpanel/expertpanelAboutMe/WhatToExpectExpertPanel";
+import WhatToExpectExpertPanel from '@/components/ReviewingExpertPanel/ExpertPanelAboutMe/WhatToExpectExpertPanel'
 import AboutMeReviews from "@/components/ExpertAboutMe/AboutMeReviews";
-import ExpertFeatureHighightsExpertPanel from "@/components/reviewingexpertpanel/expertpanelAboutMe/ExpertFeatureHighightsExpertPanel";
-import SimilarExpertsExpertPanel from "@/components/reviewingexpertpanel/expertpanelAboutMe/SimilarExpertsExpertPanel";
-import Sidebar from "@/components/reviewingexpertpanel/SideBar/SideBar";
+import ExpertFeatureHighightsExpertPanel from '@/components/ReviewingExpertPanel/ExpertPanelAboutMe/ExpertFeatureHighightsExpertPanel'
+import SimilarExpertsExpertPanel from '@/components/ReviewingExpertPanel/ExpertPanelAboutMe/SimilarExpertsExpertPanel'
+import SideBar from '@/components/ReviewingExpertPanel/SideBar/SideBar'
 import Footer from "@/components/Layout/Footer";
-import BottomNav from "@/components/reviewingexpertpanel/Bottomnav/bottomnav";
+import Bottomnav from '@/components/ReviewingExpertPanel/Bottomnav/bottomnav'
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";

@@ -1,10 +1,10 @@
 "use client";
 
-import Sidebar from "@/components/reviewingexpertpanel/SideBar/SideBar";
-import Navtop from "@/components/reviewingexpertpanel/Navtop/navtop";
+import Sidebar from "@/components/ReviewingExpertPanel/SideBar/SideBar";
+import Navtop from "@/components/ReviewingExpertPanel/Navtop/navtop";
 import { usePathname } from "next/navigation";
-import ExpertBooking from "@/components/reviewingexpertpanel/ExpertBooking/ExpertBooking";
-import BottomNav from "@/components/reviewingexpertpanel/Bottomnav/bottomnav";
+import ExpertBooking from "@/components/ReviewingExpertPanel/ExpertBooking/ExpertBooking";
+import BottomNav from "@/components/ReviewingExpertPanel/Bottomnav/bottomnav";
 
 const Page = () => {
   const pathname = usePathname();
