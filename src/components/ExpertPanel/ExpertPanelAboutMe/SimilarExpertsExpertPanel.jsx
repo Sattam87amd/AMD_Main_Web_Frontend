@@ -16,7 +16,7 @@ const SimilarExpertsExpertPanel = () => {
   useEffect(() => {
     const fetchSimilarExpertsExpertPanel = async () => {
       try {
-        const storedExpertData = localStorage.getItem("expertData");
+        const storedExpertData = localStorage.getItem("consultingExpertData");
         const comingFromTopExpert = localStorage.getItem("comingFromTopExpert") === "true";
   
         if (!storedExpertData) {
