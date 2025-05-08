@@ -13,15 +13,33 @@ const Footer = () => {
     try {
       const expertToken = localStorage.getItem('expertToken');
       if (expertToken) {
-        // If expert token exists, redirect to expert panel
-        router.push('/expertpanel/expertpanelprofile');
+        try {
+          // Split the token into parts and decode the payload
+          const payload = expertToken.split('.')[1];
+          // Convert Base64Url to Base64 and decode
+          const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+          const decodedPayload = atob(base64);
+          const payloadObj = JSON.parse(decodedPayload);
+          const status = payloadObj.status;
+  
+          // Redirect based on expert's approval status
+          if (status === 'Pending') {
+            router.push('/reviewingexpertpanel/expertpanelprofile');
+          } else {
+            router.push('/expertpanel/expertpanelprofile');
+          }
+        } catch (error) {
+          console.error('Error decoding expert token:', error);
+          // Handle invalid tokens by redirecting to join as expert
+          router.push('/joinasexpert');
+        }
       } else {
-        // If no token, redirect to expert login page
-        router.push('/expertlogin');
+        // No token found, redirect to expert signup
+        router.push('/joinasexpert');
       }
     } catch (error) {
       console.error('Error checking expert token:', error);
-      router.push('/expertlogin');
+      router.push('/joinasexpert');
     }
   };
 

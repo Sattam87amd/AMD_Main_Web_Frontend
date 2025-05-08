@@ -86,6 +86,7 @@ const HomeCardsLogin = () => {
               key={index}
               href={`/expertpanel/expertaboutme/${expert._id}`} // Dynamic URL with expert ID
               passHref
+              onClick={() => localStorage.setItem("comingFromTopExpert", false)}
             >
               <div className="relative w-[280px] h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
               {/* Background Image */}

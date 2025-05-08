@@ -172,11 +172,13 @@ const ExpertDetail = () => {
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left Column: Expert Info (Unchanged) */}
               <div className="bg-[#F8F7F3] rounded-3xl p-12 shadow">
-                <img
-                  src={expert?.photoFile || "/guyhawkins.png"}
-                  alt={expert?.firstName}
-                  className="w-[520px] h-[530px] object-cover rounded-xl"
-                />
+              <div className="relative w-full pb-[125%] max-w-[520px] mx-auto"> {/* 4:5 aspect ratio */}
+  <img
+    src={expert?.photoFile || "/guyhawkins.png"}
+    alt={expert?.firstName}
+    className="absolute inset-0 w-full h-full object-cover object-[center_top] rounded-xl"
+  />
+</div>
                 <div className="mt-6">
                   <h2 className="text-2xl font-bold text-gray-900">
                     {expert?.firstName} {expert?.lastName}

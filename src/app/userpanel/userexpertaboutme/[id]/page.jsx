@@ -40,23 +40,23 @@ const ExpertDetail = () => {
 
   const router = useRouter();
 
-   // Date handling
-    const generateMonthDates = () => {
-      const date = new Date();
-      const year = date.getFullYear();
-      const month = date.getMonth();
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-  
-      return Array.from({ length: daysInMonth }, (_, i) => {
-        const dayDate = new Date(year, month, i + 1);
-        // Only include future dates (including today)
-        return dayDate >= new Date(new Date().setHours(0, 0, 0, 0)) ? dayDate : null;
-      }).filter(date => date !== null);
-    };
-  
-    const [monthDates, setMonthDates] = useState(generateMonthDates());
+  // Date handling
+  const generateMonthDates = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  
+    return Array.from({ length: daysInMonth }, (_, i) => {
+      const dayDate = new Date(year, month, i + 1);
+      // Only include future dates (including today)
+      return dayDate >= new Date(new Date().setHours(0, 0, 0, 0)) ? dayDate : null;
+    }).filter(date => date !== null);
+  };
+
+  const [monthDates, setMonthDates] = useState(generateMonthDates());
+
+
 
   const getFormattedDate = (date) => {
     return date.toLocaleDateString(undefined, {
@@ -130,7 +130,7 @@ const ExpertDetail = () => {
             `https://amd-api.code4bharat.com/api/expertauth/${expertId}`
           );
           setExpert(response.data.data);
-          
+
           // Set charity info if available
           if (response.data.data.charityEnabled) {
             setCharityEnabled(response.data.data.charityEnabled);
@@ -139,7 +139,7 @@ const ExpertDetail = () => {
               percentage: response.data.data.charityPercentage || "",
             });
           }
-          
+
           setLoading(false);
           localStorage.setItem(
             "expertData",
@@ -252,11 +252,13 @@ const ExpertDetail = () => {
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left Column: Expert Info */}
               <div className="bg-[#F8F7F3] rounded-3xl p-12 shadow">
-                <img
-                  src={expert?.photoFile || "/guyhawkins.png"}
-                  alt={expert?.firstName}
-                  className="w-[520px] h-[530px] object-cover rounded-xl"
-                />
+                <div className="relative w-full pb-[125%] max-w-[520px] mx-auto"> {/* 4:5 aspect ratio */}
+                  <img
+                    src={expert?.photoFile || "/guyhawkins.png"}
+                    alt={expert?.firstName}
+                    className="absolute inset-0 w-full h-full object-cover object-[center_top] rounded-xl"
+                  />
+                </div>
                 <div className="mt-6">
                   <h2 className="text-2xl font-bold text-gray-900">
                     {expert?.firstName} {expert?.lastName}
@@ -368,71 +370,69 @@ const ExpertDetail = () => {
                         Select duration and time slot:
                       </p>
 
-                    {/* Duration Selection Section */}
-<div className="grid grid-cols-2 gap-4 mb-4">
-  {[
-    { label: "Quick - 15min", duration: 15 },
-    { label: "Regular - 30min", duration: 30 },
-    { label: "Extra - 45min", duration: 45 },
-    { label: "All Access - 60min", duration: 60 },
-  ].map(({ label, duration }) => (
-    <button
-      key={label}
-      className={`py-2 px-4 ${
-        selectedDuration === label
-          ? "bg-black text-white"
-          : "bg-[#F8F7F3] text-black"
-      } rounded-md shadow`}
-      onClick={() => {
-         setSelectedDuration(label);
-        setSelectedDurationMinutes(duration);
-      }}
-    >
-      {label}
-    </button>
-  ))}
-</div>
-                        {/* Scrollable time slots */}
-  <div className="h-[450px] overflow-y-auto pb-8"> {/* Scrollable container */}
-    {monthDates.map((date) => {
-      const dateString = date.toISOString().split('T')[0];
-      return (
-        <div key={dateString} className="mb-8 bg-white/90 backdrop-blur-sm">
-          <h4 className="font-semibold py-4 text-xl sticky top-0 bg-white z-10">
-            {getFormattedDate(date)}
-          </h4>
-          <div className="grid grid-cols-3 gap-3 px-1">
-            {[
-              "07:00 AM", "08:00 AM", "09:00 AM",
-              "10:00 AM", "11:00 AM", "12:00 PM",
-              "02:00 PM", "03:00 PM", "04:00 PM"
-            ].map((time) => {
-              const isBooked = isSlotBooked(dateString, time);
-              const isSelected = selectedTimes.some(
-                s => s.selectedDate === dateString && s.selectedTime === time
-              );
+                      {/* Duration Selection Section */}
+                      <div className="grid grid-cols-2 gap-4 mb-4">
+                        {[
+                          { label: "Quick - 15min", duration: 15 },
+                          { label: "Regular - 30min", duration: 30 },
+                          { label: "Extra - 45min", duration: 45 },
+                          { label: "All Access - 60min", duration: 60 },
+                        ].map(({ label, duration }) => (
+                          <button
+                            key={label}
+                            className={`py-2 px-4 ${selectedDuration === label
+                                ? "bg-black text-white"
+                                : "bg-[#F8F7F3] text-black"
+                              } rounded-md shadow`}
+                            onClick={() => {
+                              setSelectedDuration(label);
+                              setSelectedDurationMinutes(duration);
+                            }}
+                          >
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                      {/* Scrollable time slots */}
+                      <div className="h-[450px] overflow-y-auto pb-8"> {/* Scrollable container */}
+                        {monthDates.map((date) => {
+                          const dateString = date.toISOString().split('T')[0];
+                          return (
+                            <div key={dateString} className="mb-8 bg-white/90 backdrop-blur-sm">
+                              <h4 className="font-semibold py-4 text-xl sticky top-0 bg-white z-10">
+                                {getFormattedDate(date)}
+                              </h4>
+                              <div className="grid grid-cols-3 gap-3 px-1">
+                                {[
+                                  "07:00 AM", "08:00 AM", "09:00 AM",
+                                  "10:00 AM", "11:00 AM", "12:00 PM",
+                                  "02:00 PM", "03:00 PM", "04:00 PM"
+                                ].map((time) => {
+                                  const isBooked = isSlotBooked(dateString, time);
+                                  const isSelected = selectedTimes.some(
+                                    s => s.selectedDate === dateString && s.selectedTime === time
+                                  );
 
-              return (
-                <button
-                  key={time}
-                  className={`py-2 px-3 text-sm ${
-                    isSelected ? "bg-black text-white" :
-                    isBooked ? "bg-gray-200 text-gray-500 cursor-not-allowed" :
-                    "bg-white text-black hover:bg-gray-100"
-                  } rounded-xl border transition-colors shadow-sm`}
-                  onClick={() => !isBooked && handleTimeSelection(dateString, time)}
-                  disabled={isBooked}
-                >
-                  {time}
-                  {isBooked && <span className="text-xs block">Booked</span>}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      );
-    })}
-  </div>
+                                  return (
+                                    <button
+                                      key={time}
+                                      className={`py-2 px-3 text-sm ${isSelected ? "bg-black text-white" :
+                                          isBooked ? "bg-gray-200 text-gray-500 cursor-not-allowed" :
+                                            "bg-white text-black hover:bg-gray-100"
+                                        } rounded-xl border transition-colors shadow-sm`}
+                                      onClick={() => !isBooked && handleTimeSelection(dateString, time)}
+                                      disabled={isBooked}
+                                    >
+                                      {time}
+                                      {isBooked && <span className="text-xs block">Booked</span>}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
                       {/* Show how many slots are selected */}
                       <p className="text-sm text-gray-600 mt-4">
                         Selected slots: {selectedTimes.length} / 5
@@ -477,8 +477,8 @@ const ExpertDetail = () => {
                     {/* 1:1 Consultation Card */}
                     <div
                       className={`bg-[#F8F7F3] p-6 rounded-xl cursor-pointer ${selectedConsultation === "1:1"
-                          ? "border-2 border-black"
-                          : ""
+                        ? "border-2 border-black"
+                        : ""
                         }`}
                       onClick={() => handleConsultationChange("1:1")}
                     >

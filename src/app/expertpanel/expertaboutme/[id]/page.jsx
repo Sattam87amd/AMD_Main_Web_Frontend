@@ -75,7 +75,7 @@ const ExpertDetail = () => {
     setSelectedDurationMinutes(15);
   };
 
-  
+
 
   useEffect(() => {
     // Get expertId from URL path
@@ -169,7 +169,7 @@ const ExpertDetail = () => {
       selectedDate: dateString,
       selectedTime: time,
     };
-  
+
 
     setSelectedTimes((prevTimes) => {
       const exists = prevTimes.some(
@@ -254,12 +254,14 @@ const ExpertDetail = () => {
           <div className="min-h-screen bg-white py-10 px-4 md:px-10">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Left Column: Expert Info (Unchanged) */}
-              <div className="bg-[#F8F7F3] rounded-3xl p-12 shadow">
-                <img
-                  src={expert?.photoFile || "/guyhawkins.png"}
-                  alt={expert?.firstName}
-                  className="w-[520px] h-[530px] object-cover rounded-xl"
-                />
+              <div className="bg-[#F8F7F3] rounded-3xl p-6 md:p-12 shadow">
+                <div className="relative w-full pb-[125%] max-w-[520px] mx-auto"> {/* 4:5 aspect ratio */}
+                  <img
+                    src={expert?.photoFile || "/guyhawkins.png"}
+                    alt={expert?.firstName}
+                    className="absolute inset-0 w-full h-full object-cover object-[center_top] rounded-xl"
+                  />
+                </div>
                 <div className="mt-6">
                   <h2 className="text-2xl font-bold text-gray-900">
                     {expert?.firstName} {expert?.lastName}
@@ -392,47 +394,46 @@ const ExpertDetail = () => {
                         ))}
                       </div>
 
-                       {/* Scrollable time slots */}
-  <div className="h-[450px] overflow-y-auto pb-8"> {/* Scrollable container */}
-    {monthDates.map((date) => {
-      const dateString = date.toISOString().split('T')[0];
-      return (
-        <div key={dateString} className="mb-8 bg-white/90 backdrop-blur-sm">
-          <h4 className="font-semibold py-4 text-xl sticky top-0 bg-white z-10">
-            {getFormattedDate(date)}
-          </h4>
-          <div className="grid grid-cols-3 gap-3 px-1">
-            {[
-              "07:00 AM", "08:00 AM", "09:00 AM",
-              "10:00 AM", "11:00 AM", "12:00 PM",
-              "02:00 PM", "03:00 PM", "04:00 PM"
-            ].map((time) => {
-              const isBooked = isSlotBooked(dateString, time);
-              const isSelected = selectedTimes.some(
-                s => s.selectedDate === dateString && s.selectedTime === time
-              );
+                      {/* Scrollable time slots */}
+                      <div className="h-[450px] overflow-y-auto pb-8"> {/* Scrollable container */}
+                        {monthDates.map((date) => {
+                          const dateString = date.toISOString().split('T')[0];
+                          return (
+                            <div key={dateString} className="mb-8 bg-white/90 backdrop-blur-sm">
+                              <h4 className="font-semibold py-4 text-xl sticky top-0 bg-white z-10">
+                                {getFormattedDate(date)}
+                              </h4>
+                              <div className="grid grid-cols-3 gap-3 px-1">
+                                {[
+                                  "07:00 AM", "08:00 AM", "09:00 AM",
+                                  "10:00 AM", "11:00 AM", "12:00 PM",
+                                  "02:00 PM", "03:00 PM", "04:00 PM"
+                                ].map((time) => {
+                                  const isBooked = isSlotBooked(dateString, time);
+                                  const isSelected = selectedTimes.some(
+                                    s => s.selectedDate === dateString && s.selectedTime === time
+                                  );
 
-              return (
-                <button
-                  key={time}
-                  className={`py-2 px-3 text-sm ${
-                    isSelected ? "bg-black text-white" :
-                    isBooked ? "bg-gray-200 text-gray-500 cursor-not-allowed" :
-                    "bg-white text-black hover:bg-gray-100"
-                  } rounded-xl border transition-colors shadow-sm`}
-                  onClick={() => !isBooked && handleTimeSelection(dateString, time)}
-                  disabled={isBooked}
-                >
-                  {time}
-                  {isBooked && <span className="text-xs block">Booked</span>}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      );
-    })}
-  </div>
+                                  return (
+                                    <button
+                                      key={time}
+                                      className={`py-2 px-3 text-sm ${isSelected ? "bg-black text-white" :
+                                          isBooked ? "bg-gray-200 text-gray-500 cursor-not-allowed" :
+                                            "bg-white text-black hover:bg-gray-100"
+                                        } rounded-xl border transition-colors shadow-sm`}
+                                      onClick={() => !isBooked && handleTimeSelection(dateString, time)}
+                                      disabled={isBooked}
+                                    >
+                                      {time}
+                                      {isBooked && <span className="text-xs block">Booked</span>}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
                       {/* Show how many slots are selected */}
                       <p className="text-sm text-gray-600 mt-4">
                         Selected slots: {selectedTimes.length} / 5
