@@ -253,7 +253,7 @@ const ExpertDetail = () => {
           theme="light"
         />
         <aside className="w-[20%] hidden md:block">
-          <Sidebar />
+          <SideBar />
         </aside>
 
         <div className="w-full md:w-[80%] flex flex-col">
