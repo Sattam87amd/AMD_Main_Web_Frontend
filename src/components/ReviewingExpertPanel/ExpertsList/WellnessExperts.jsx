@@ -177,7 +177,7 @@ const WellnessLogin = () => {
           {sortedExperts.map((expert, index) => (
             <Link
               key={index}
-              href={`/reviewingexpertpanel/expertaboutme/${expert._id}`}
+              href={`/ReviewingExpertPanel/expertaboutme/${expert._id}`}
               passHref
             >
               <motion.div

@@ -2,9 +2,9 @@
 
 import WellnessBefore from "@/components/ExpertBeforeLogin/WellnessBefore";
 import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
-import BottomNav from "@/components/reviewingexpertpanel/Bottomnav/bottomnav";
-import WellnessLogin from "@/components/reviewingexpertpanel/ExpertsList/WellnessExperts";
-import Sidebar from "@/components/reviewingexpertpanel/SideBar/SideBar";
+import BottomNav from "@/components/ReviewingExpertPanel/Bottomnav/bottomnav";
+import WellnessLogin from "@/components/ReviewingExpertPanel/ExpertsList/WellnessExperts";
+import Sidebar from "@/components/ReviewingExpertPanel/SideBar/SideBar";
 import LoginWellnessExperts from "@/components/Experts/WellnessExperts/WellnessExperts";
 import Footer from "@/components/Layout/Footer";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";

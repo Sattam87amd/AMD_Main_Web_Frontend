@@ -21,10 +21,10 @@ const BottomNav = () => {
 
   const navItems = [
     { label: "Search", icon: <Search />, id: "search", path: "/experts" },
-    { label: "Video", icon: <Video />, id: "video", path: "/reviewingexpertpanel/videocall" },
-    { label: "Profile", icon: <User />, id: "profile", path: "/reviewingexpertpanel/expertpanelprofile" },
-    { label: "Expert", icon: <BadgeCheck />, id: "expert", path: "/reviewingexpertpanel/expert" },
-    { label: "Dashboard", icon: <PiCirclesFourLight />, id: "dashboard", path: "/reviewingexpertpanel/dashboard" },
+    { label: "Video", icon: <Video />, id: "video", path: "/ReviewingExpertPanel/videocall" },
+    { label: "Profile", icon: <User />, id: "profile", path: "/ReviewingExpertPanel/expertpanelprofile" },
+    { label: "Expert", icon: <BadgeCheck />, id: "expert", path: "/ReviewingExpertPanel/expert" },
+    { label: "Dashboard", icon: <PiCirclesFourLight />, id: "dashboard", path: "/ReviewingExpertPanel/dashboard" },
     
     { label: "Logout", icon: <LogOut />, id: "logout", path: "/" },
   ];

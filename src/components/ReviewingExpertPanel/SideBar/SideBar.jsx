@@ -18,7 +18,7 @@ const Sidebar = () => {
     { 
       label: "Find Experts", 
       icon: <FiSearch />, 
-      route: "/reviewingexpertpanel/experts",
+      route: "/ReviewingExpertPanel/experts",
       enabled: true 
     },
     { 
@@ -31,7 +31,7 @@ const Sidebar = () => {
     { 
       label: "Profile", 
       icon: <CgProfile />, 
-      route: "/reviewingexpertpanel/expertpanelprofile",
+      route: "/ReviewingExpertPanel/expertpanelprofile",
       enabled: true 
     },
     { 

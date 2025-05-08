@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import Sidebar from '@/components/reviewingexpertpanel/SideBar/SideBar';
-import Navtop from '@/components/reviewingexpertpanel/Navtop/navtop';
-import BottomNav from '@/components/reviewingexpertpanel/Bottomnav/bottomnav';
-import ExpertChat from '@/components/reviewingexpertpanel/ExpertChat/Expertchat';
+import Sidebar from '@/components/ReviewingExpertPanel/SideBar/SideBar';
+import Navtop from '@/components/ReviewingExpertPanel/Navtop/navtop';
+import BottomNav from '@/components/ReviewingExpertPanel/Bottomnav/bottomnav';
+import ExpertChat from '@/components/ReviewingExpertPanel/ExpertChat/Expertchat';
 
 const Page = () => {
   return (

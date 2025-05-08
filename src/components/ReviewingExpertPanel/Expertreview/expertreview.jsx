@@ -30,7 +30,7 @@ const ExpertReview = () => {
       {/* Tabs */}
       <div className="flex space-x-4 mb-6">
         <button
-          onClick={() => router.push("/reviewingexpertpanel/payments")}
+          onClick={() => router.push("/ReviewingExpertPanel/payments")}
           className="px-4 py-2 rounded-lg text-lg bg-gray-200 text-black hover:bg-gray-300 transition"
         >
           Payments

@@ -172,7 +172,7 @@ const FashionBeautyLogin = () => {
           }}
         >
           {sortedExperts.map((expert, index) => (
-            <Link key={index} href={`/reviewingexpertpanel/expertaboutme/${expert._id}`} passHref>
+            <Link key={index} href={`/ReviewingExpertPanel/expertaboutme/${expert._id}`} passHref>
               <motion.div
                 className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer"
                 variants={{

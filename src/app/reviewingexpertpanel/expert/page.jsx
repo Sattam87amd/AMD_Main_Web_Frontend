@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import Sidebar from "@/components/reviewingexpertpanel/SideBar/SideBar";
-import ExpertProfile from "@/components/reviewingexpertpanel/Expert/ExpertProfile";
-import EditExpertProfile from "@/components/reviewingexpertpanel/Expert/EditExpertProfile";
+import Sidebar from "@/components/ReviewingExpertPanel/SideBar/SideBar";
+import ExpertProfile from "@/components/ReviewingExpertPanel/Expert/ExpertProfile";
+import EditExpertProfile from "@/components/ReviewingExpertPanel/Expert/EditExpertProfile";
 import Footer from "@/components/Layout/Footer";
-import Navtop from "@/components/reviewingexpertpanel/Navtop/navtop";
-import BottomNav from "@/components/reviewingexpertpanel/Bottomnav/bottomnav";
+import Navtop from "@/components/ReviewingExpertPanel/Navtop/navtop";
+import BottomNav from "@/components/ReviewingExpertPanel/Bottomnav/bottomnav";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 
 const Page = () => {
@@ -27,13 +27,13 @@ const Page = () => {
   // Map sidebar routes to labels (must match Sidebar)
   const menuItems = [
     { label: "Find Experts", route: "/experts" },
-    { label: "Video Call", route: "/reviewingexpertpanel/videocall" },
-    { label: "Profile", route: "/reviewingexpertpanel/expertpanelprofile" },
-    { label: "Expert", route: "/reviewingexpertpanel/expert" },
-    { label: "Dashboard", route: "/reviewingexpertpanel/dashboard" },
-    { label: "Payments/Reviews", route: "/reviewingexpertpanel/payments" },
+    { label: "Video Call", route: "/ReviewingExpertPanel/videocall" },
+    { label: "Profile", route: "/ReviewingExpertPanel/expertpanelprofile" },
+    { label: "Expert", route: "/ReviewingExpertPanel/expert" },
+    { label: "Dashboard", route: "/ReviewingExpertPanel/dashboard" },
+    { label: "Payments/Reviews", route: "/ReviewingExpertPanel/payments" },
     { label: "Logout", route: "/" },
-    { label: "Chat with Users", route: "/reviewingexpertpanel/chat" },
+    { label: "Chat with Users", route: "/ReviewingExpertPanel/chat" },
   ];
 
   const activeMenu = menuItems.find((item) => item.route === pathname);

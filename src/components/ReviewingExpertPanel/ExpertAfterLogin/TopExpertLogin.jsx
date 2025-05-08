@@ -74,7 +74,7 @@ const ExpertsCardsLogin = () => {
 
       {/* "See All" Button */}
       <div className="flex justify-start mb-6">
-        <Link href="/reviewingexpertpanel/topexperts" passHref>
+        <Link href="/ReviewingExpertPanel/topexperts" passHref>
           <button className="flex items-center text-xl font-semibold text-black">
             See All
             <HiChevronRight className="ml-2 w-5 h-5" />
@@ -88,7 +88,7 @@ const ExpertsCardsLogin = () => {
           {expertData.map((expert, index) => (
             <Link
               key={index}
-              href={`/reviewingexpertpanel/expertaboutme/${expert._id}`}
+              href={`/ReviewingExpertPanel/expertaboutme/${expert._id}`}
               passHref
               onClick={() => localStorage.setItem("comingFromTopExpert", true)}
             >
