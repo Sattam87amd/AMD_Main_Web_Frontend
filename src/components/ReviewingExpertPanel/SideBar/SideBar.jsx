@@ -73,6 +73,7 @@ const Sidebar = () => {
 
   const handleClick = (item) => {
     if (!item.enabled && item.label !== "Logout") {
+      console.log("Toast triggered:", item.message);
       toast.info(item.message, {
         position: "top-right",
         autoClose: 3000,

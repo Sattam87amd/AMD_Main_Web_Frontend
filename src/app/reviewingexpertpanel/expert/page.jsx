@@ -2,12 +2,12 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import SideBar from '@/components/ReviewingExpertPanel/SideBar/SideBar'
+import SideBar from '@/components/ReviewingExpertPanel/SideBar/sideBar'
 import ExpertProfile from '@/components/ReviewingExpertPanel/Expert/ExpertProfile'
 import EditExpertProfile from '@/components/ReviewingExpertPanel/Expert/EditExpertProfile'
 import Footer from "@/components/Layout/Footer";
 import Navtop from '@/components/ReviewingExpertPanel/Navtop/navtop'
-import BottomNav from '@/components/ReviewingExpertPanel/Bottomnav/bottomnav'
+import BottomNav from '@/components/ReviewingExpertPanel/Bottomnav/bottomNav'
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 
 const Page = () => {

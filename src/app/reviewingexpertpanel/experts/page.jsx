@@ -1,13 +1,13 @@
 "use client";
 
 import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
-import BottomNav from "@/components/ReviewingExpertPanel/Bottomnav/bottomnav";
+import BottomNav from "@/components/ReviewingExpertPanel/Bottomnav/bottomNav";
 import CareerBusinessHomeCardsLogin from "@/components/ReviewingExpertPanel/ExpertAfterLogin/Career&BusinessLogin";
 import FashionBeautyHomeCardsLogin from "@/components/ReviewingExpertPanel/ExpertAfterLogin/Fashoin&BeautyLogin";
 import HomeCardsLogin from "@/components/ReviewingExpertPanel/ExpertAfterLogin/HomeExpertLogin";
 import ExpertsCardsLogin from "@/components/ReviewingExpertPanel/ExpertAfterLogin/TopExpertLogin";
 import WellnessHomeCardsLogin from "@/components/ReviewingExpertPanel/ExpertAfterLogin/WellnessLogin";
-import Sidebar from "@/components/ReviewingExpertPanel/SideBar/SideBar";
+import Sidebar from "@/components/ReviewingExpertPanel/SideBar/sideBar";
 import Threepara from "@/components/Experts/Threepara/threepara";
 import Footer from "@/components/Layout/Footer";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";

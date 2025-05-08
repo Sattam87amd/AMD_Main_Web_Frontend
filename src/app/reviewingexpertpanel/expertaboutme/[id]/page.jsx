@@ -8,9 +8,9 @@ import WhatToExpectExpertPanel from '@/components/ReviewingExpertPanel/ExpertPan
 import AboutMeReviews from "@/components/ExpertAboutMe/AboutMeReviews";
 import ExpertFeatureHighightsExpertPanel from '@/components/ReviewingExpertPanel/ExpertPanelAboutMe/ExpertFeatureHighightsExpertPanel'
 import SimilarExpertsExpertPanel from '@/components/ReviewingExpertPanel/ExpertPanelAboutMe/SimilarExpertsExpertPanel'
-import SideBar from '@/components/ReviewingExpertPanel/SideBar/SideBar'
+import SideBar from '@/components/ReviewingExpertPanel/SideBar/sideBar'
 import Footer from "@/components/Layout/Footer";
-import BottomNav from '@/components/ReviewingExpertPanel/Bottomnav/bottomnav'
+import BottomNav from '@/components/ReviewingExpertPanel/Bottomnav/bottomNav'
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";

@@ -2,9 +2,9 @@
 
     import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
 
-import BottomNav from "@/components/ReviewingExpertPanel/Bottomnav/bottomnav";
+import BottomNav from "@/components/ReviewingExpertPanel/Bottomnav/bottomNav";
 import CareerBusinesslogin from "@/components/ReviewingExpertPanel/ExpertsList/Career&Buisness";
-   import Sidebar from "@/components/ReviewingExpertPanel/SideBar/SideBar";
+   import Sidebar from "@/components/ReviewingExpertPanel/SideBar/sideBar";
     import CareerBusinessExperts from "@/components/Experts/Career&Buisness/Career&Buisness";
     import LoginCareerBusinessExperts from "@/components/Experts/Career&Buisness/Career&Buisness";
     import MobileNavSearch from "@/components/Layout/mobilenavsearch";
