@@ -10,7 +10,7 @@ import ExpertFeatureHighightsExpertPanel from '@/components/ReviewingExpertPanel
 import SimilarExpertsExpertPanel from '@/components/ReviewingExpertPanel/ExpertPanelAboutMe/SimilarExpertsExpertPanel'
 import SideBar from '@/components/ReviewingExpertPanel/SideBar/SideBar'
 import Footer from "@/components/Layout/Footer";
-import Bottomnav from '@/components/ReviewingExpertPanel/Bottomnav/bottomnav'
+import BottomNav from '@/components/ReviewingExpertPanel/Bottomnav/bottomnav'
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
