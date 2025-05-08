@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import SideBar from '@/components/ReviewingExpertPanel/SideBar/sideBar'
+
 import ExpertProfile from '@/components/ReviewingExpertPanel/Expert/ExpertProfile'
 import EditExpertProfile from '@/components/ReviewingExpertPanel/Expert/EditExpertProfile'
 import Footer from "@/components/Layout/Footer";
 import Navtop from '@/components/ReviewingExpertPanel/Navtop/navtop'
-import BottomNav from '@/components/ReviewingExpertPanel/Bottomnav/bottomNav'
+import BottomNav from '@/components/ReviewingExpertPanel/Bottomnav/bottomnav'
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
+import Sidebar from "@/components/ReviewingExpertPanel/SideBar/SideBar";
 
 const Page = () => {
   const [expertData, setExpertData] = useState({
@@ -51,7 +52,7 @@ const Page = () => {
       <div className="flex min-h-screen">
         {/* Sidebar with 20% width */}
         <div className="md:w-[20%]">
-          <SideBar />
+          <Sidebar />
         </div>
 
         {/* Right Side Content with 80% width */}
