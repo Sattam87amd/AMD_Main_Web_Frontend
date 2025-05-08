@@ -1,10 +1,10 @@
 "use client";
 
-import Sidebar from "@/components/ReviewingExpertPanel/SideBar/sideBar";
 import Navtop from "@/components/ReviewingExpertPanel/Navtop/navtop";
 import { usePathname } from "next/navigation";
 import ExpertBooking from "@/components/ReviewingExpertPanel/ExpertBooking/ExpertBooking";
-import BottomNav from "@/components/ReviewingExpertPanel/Bottomnav/bottomNav";
+import Sidebar from "@/components/ReviewingExpertPanel/SideBar/SideBar";
+import BottomNav from "@/components/ReviewingExpertPanel/Bottomnav/bottomnav";
 
 const Page = () => {
   const pathname = usePathname();

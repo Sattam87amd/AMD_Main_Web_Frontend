@@ -1,13 +1,13 @@
 "use client";
 
 import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
-import BottomNav from "@/components/ReviewingExpertPanel/Bottomnav/bottomNav";
 import FashionBeautyLogin from "@/components/ReviewingExpertPanel/ExpertsList/Style&BeautyExpert";
-import Sidebar from "@/components/ReviewingExpertPanel/SideBar/sideBar";
 import LoginStyleBeautyExperts from "@/components/Experts/Style&BeautyExpert/Style&BeautyExpert";
 import Footer from "@/components/Layout/Footer";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";
+import Sidebar from "@/components/ReviewingExpertPanel/SideBar/SideBar";
+import BottomNav from "@/components/ReviewingExpertPanel/Bottomnav/bottomnav";
 
 
 const Page = () => {

@@ -2,13 +2,13 @@
 
 import WellnessBefore from "@/components/ExpertBeforeLogin/WellnessBefore";
 import LoginExpertCategory from "@/components/ExpertCategory/LoginExpertCategory";
-import BottomNav from "@/components/ReviewingExpertPanel/Bottomnav/bottomNav";
 import WellnessLogin from "@/components/ReviewingExpertPanel/ExpertsList/WellnessExperts";
-import Sidebar from "@/components/ReviewingExpertPanel/SideBar/sideBar";
 import LoginWellnessExperts from "@/components/Experts/WellnessExperts/WellnessExperts";
 import Footer from "@/components/Layout/Footer";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";
+import Sidebar from "@/components/ReviewingExpertPanel/SideBar/SideBar";
+import BottomNav from "@/components/ReviewingExpertPanel/Bottomnav/bottomnav";
 
 
 const Page = () => {

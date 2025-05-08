@@ -8,14 +8,14 @@ import WhatToExpectExpertPanel from '@/components/ReviewingExpertPanel/ExpertPan
 import AboutMeReviews from "@/components/ExpertAboutMe/AboutMeReviews";
 import ExpertFeatureHighightsExpertPanel from '@/components/ReviewingExpertPanel/ExpertPanelAboutMe/ExpertFeatureHighightsExpertPanel'
 import SimilarExpertsExpertPanel from '@/components/ReviewingExpertPanel/ExpertPanelAboutMe/SimilarExpertsExpertPanel'
-import SideBar from '@/components/ReviewingExpertPanel/SideBar/sideBar'
 import Footer from "@/components/Layout/Footer";
-import BottomNav from '@/components/ReviewingExpertPanel/Bottomnav/bottomNav'
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Sidebar from "@/components/ReviewingExpertPanel/SideBar/SideBar";
+import BottomNav from "@/components/ReviewingExpertPanel/Bottomnav/bottomnav";
 
 const ExpertDetail = () => {
   const [expert, setExpert] = useState(null);
@@ -253,7 +253,7 @@ const ExpertDetail = () => {
           theme="light"
         />
         <aside className="w-[20%] hidden md:block">
-          <SideBar />
+          <Sidebar />
         </aside>
 
         <div className="w-full md:w-[80%] flex flex-col">

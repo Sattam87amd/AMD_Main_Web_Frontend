@@ -4,11 +4,11 @@ import React from 'react';
 import { usePathname } from 'next/navigation';
 // import ProfileSection from '@/components/ReviewingExpertPanel/expertpanelProfile/ProfileSection';
 import ProfileSection from '@/components/ReviewingExpertPanel/ExpertPanelProfile/ProfileSection';
-import Sidebar from '@/components/ReviewingExpertPanel/SideBar/sideBar';
 import Footer from '@/components/Layout/Footer';
 import Navtop from '@/components/ReviewingExpertPanel/Navtop/navtop';
-import BottomNav from '@/components/ReviewingExpertPanel/Bottomnav/bottomNav';
 import MobileNavSearch from '@/components/Layout/mobilenavsearch';
+import Sidebar from '@/components/ReviewingExpertPanel/SideBar/SideBar';
+import BottomNav from '@/components/ReviewingExpertPanel/Bottomnav/bottomnav';
 
 const Page = () => {
   const pathname = usePathname();
