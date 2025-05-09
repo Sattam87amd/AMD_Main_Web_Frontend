@@ -70,7 +70,19 @@ const ExpertBooking = () => {
   const storeTokenBeforePayment = () => {
     const expertToken = localStorage.getItem("expertToken");
     if (expertToken) {
+      // Store in sessionStorage as primary method
       sessionStorage.setItem("tempExpertToken", expertToken);
+      
+      // Store in localStorage with timestamp as backup
+      const prePaymentAuth = {
+        token: expertToken,
+        timestamp: Date.now()
+      };
+      localStorage.setItem("prePaymentAuth", JSON.stringify(prePaymentAuth));
+      
+      console.log("Expert token stored for payment process");
+    } else {
+      console.error("No expert token found to store before payment");
     }
   };
 
