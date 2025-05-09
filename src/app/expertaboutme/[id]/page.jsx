@@ -16,6 +16,7 @@ import Footer from "@/components/Layout/Footer";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
+import { toast } from "react-toastify";
 
 const ExpertDetail = () => {
   const [expert, setExpert] = useState(null);
@@ -477,7 +478,7 @@ const ExpertDetail = () => {
                           <Gift className="h-8 w-8" />
                         </div>
                         <button
-                          onClick={() => alert("Gift Card feature coming soon!")} // placeholder for future functionality
+                          onClick={() => toast.info("Gift Card feature coming soon!")} // placeholder for future functionality
                           className="bg-[#0D70E5] text-white py-3 px-24 rounded-md hover:bg-[#0A58C2]"
                         >
                           Select
