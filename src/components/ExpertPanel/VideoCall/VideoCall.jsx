@@ -1036,7 +1036,7 @@ const VideoCall = () => {
                     {/* Header with Session Type and Status */}
                     <div className="flex justify-between items-center mb-3">
                       <div className="flex items-center gap-2">
-                        <div className="bg-blue-50 px-3 py-2 rounded-md text-center">
+                        {/* <div className="bg-blue-50 px-3 py-2 rounded-md text-center">
                           <p className="text-xs text-gray-500">
                             {new Date(session.sessionDate).toLocaleDateString(
                               "en-US",
@@ -1046,7 +1046,7 @@ const VideoCall = () => {
                               }
                             )}
                           </p>
-                        </div>
+                        </div> */}
                         <span className="text-xs bg-gray-100 px-3 py-1 rounded-full text-gray-700 font-medium">
                           {session.sessionType}
                         </span>
@@ -1250,14 +1250,14 @@ const VideoCall = () => {
                               target="_blank"
                               rel="noopener noreferrer"
                               className="px-3 py-2 text-xs rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-colors duration-200 flex items-center gap-1"
-                              style={{
-                                opacity: isJoinEnabled(session.sessionDate, session.sessionTime, parseInt(session.duration))
-                                  ? 1
-                                  : 0.5,
-                                  pointerEvents: isJoinEnabled(session.sessionDate, session.sessionTime, parseInt(session.duration))
-                                  ? "auto"
-                                  : "none",
-                              }}
+                              // style={{
+                              //   opacity: isJoinEnabled(session.sessionDate, session.sessionTime, parseInt(session.duration))
+                              //     ? 1
+                              //     : 0.5,
+                              //     pointerEvents: isJoinEnabled(session.sessionDate, session.sessionTime, parseInt(session.duration))
+                              //     ? "auto"
+                              //     : "none",
+                              // }}
                             >
                               <Video className="w-3 h-3" />
                               <span>Join Meeting</span>
@@ -1317,7 +1317,7 @@ const VideoCall = () => {
                         <span className="bg-blue-50 px-3 py-1 rounded-full text-blue-600">
                           {session.sessionType}
                         </span>
-                        <span className="bg-gray-50 px-3 py-1 rounded-full text-gray-600">
+                        {/* <span className="bg-gray-50 px-3 py-1 rounded-full text-gray-600">
                           {new Date(session.sessionDate).toLocaleDateString(
                             "en-US",
                             {
@@ -1327,7 +1327,7 @@ const VideoCall = () => {
                               day: "numeric",
                             }
                           )}
-                        </span>
+                        </span> */}
                       </div>
                     </div>
 
@@ -1603,15 +1603,15 @@ const VideoCall = () => {
                                 >
                                   <button
                                     className="w-full px-4 py-2 text-sm rounded-md bg-blue-500 text-white hover:bg-blue-600 transition-all duration-200 flex items-center justify-center gap-2 transform hover:scale-105"
-                                    style={{
-                                      opacity: isJoinEnabled(session.sessionDate, session.sessionTime, parseInt(session.duration))
-                                        ? 1
-                                        : 0.5,
-                                      pointerEvents: isJoinEnabled(
-                                        session.sessionDate, session.sessionTime, parseInt(session.duration))
-                                        ? "auto"
-                                        : "none",
-                                    }}
+                                    // style={{
+                                    //   opacity: isJoinEnabled(session.sessionDate, session.sessionTime, parseInt(session.duration))
+                                    //     ? 1
+                                    //     : 0.5,
+                                    //   pointerEvents: isJoinEnabled(
+                                    //     session.sessionDate, session.sessionTime, parseInt(session.duration))
+                                    //     ? "auto"
+                                    //     : "none",
+                                    // }}
                                   >
                                     <Video className="w-4 h-4" />
                                     <span>Join Zoom Meeting</span>
