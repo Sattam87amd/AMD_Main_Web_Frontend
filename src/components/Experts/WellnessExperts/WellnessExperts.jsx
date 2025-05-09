@@ -20,7 +20,11 @@ const WellnessHomeCardsLogin = () => {
         const response = await axios.get(
           `https://amd-api.code4bharat.com/api/expertauth/area/${area}`
         );
-        setExpertData(response.data.data);
+        // Filter approved experts on client side
+        const approvedExperts = response.data.data.filter(
+          (expert) => expert.status === "Approved"
+        );
+        setExpertData(approvedExperts);
         setLoading(false);
       } catch (err) {
         setError("Error fetching expert data");
@@ -58,7 +62,6 @@ const WellnessHomeCardsLogin = () => {
   return (
     <div className="bg-white py-10 px-4">
       <div className="py-3">
-
         <ScrollableTags />
       </div>
       {/* Header Section with Animation */}
@@ -100,18 +103,14 @@ const WellnessHomeCardsLogin = () => {
           }}
         >
           {expertData.map((expert, index) => (
-            <Link
-              key={index}
-              href={`/expertaboutme/${expert._id}`}
-              passHref
-            >
+            <Link key={index} href={`/expertaboutme/${expert._id}`} passHref>
               <motion.div
                 className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg  cursor-pointer"
                 variants={{
                   hidden: { opacity: 0, y: 30 },
                   visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
                 }}
-              // whileHover={{ scale: 1.05 }}
+                // whileHover={{ scale: 1.05 }}
               >
                 {/* Expert Image */}
                 <img

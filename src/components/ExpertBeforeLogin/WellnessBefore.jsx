@@ -20,16 +20,22 @@ const WellnessBefore = () => {
         const response = await axios.get(
           `https://amd-api.code4bharat.com/api/expertauth/area/${area}`
         );
-        setExpertData(response.data.data);
+       // Filter approved experts on client side
+        const approvedExperts = response.data.data.filter(
+          expert => expert.status === "Approved"
+        );
+        setExpertData(approvedExperts);
         setLoading(false);
       } catch (err) {
         setError("Error fetching expert data");
         setLoading(false);
       }
     };
-
+  
     fetchExperts();
   }, []);
+
+   
 
   const truncateExperience = (text) => {
     if (!text) return "";

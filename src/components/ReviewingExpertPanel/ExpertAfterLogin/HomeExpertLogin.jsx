@@ -20,7 +20,11 @@ const HomeCardsLogin = () => {
         const response = await axios.get(
           `https://amd-api.code4bharat.com/api/expertauth/area/${area}`
         );
-        setExpertData(response.data.data);
+        // Filter approved experts on client side
+        const approvedExperts = response.data.data.filter(
+          (expert) => expert.status === "Approved"
+        );
+        setExpertData(approvedExperts);
         setLoading(false);
       } catch (err) {
         setError("Error fetching expert data");
@@ -88,7 +92,7 @@ const HomeCardsLogin = () => {
               passHref
             >
               <div className="relative w-[280px] h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer">
-              {/* Background Image */}
+                {/* Background Image */}
                 <img
                   src={expert.photoFile || "/aaliyaabadi.png"} // Ensure there's a fallback image
                   alt={expert.firstName}

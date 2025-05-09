@@ -29,8 +29,14 @@ const HomeexpertLogin = () => {
     const fetchExperts = async () => {
       try {
         const area = "Home";
-        const response = await axios.get(`https://amd-api.code4bharat.com/api/expertauth/area/${area}`);
-        setExpertData(response.data.data);
+        const response = await axios.get(
+          `https://amd-api.code4bharat.com/api/expertauth/area/${area}`
+        );
+        // Filter approved experts on client side
+        const approvedExperts = response.data.data.filter(
+          (expert) => expert.status === "Approved"
+        );
+        setExpertData(approvedExperts);
         setLoading(false);
       } catch (err) {
         setError("Error fetching expert data");
@@ -42,24 +48,24 @@ const HomeexpertLogin = () => {
   }, []);
 
   const truncateExperience = (text) => {
-    if (!text) return '';
-    
-    const words = text.split(/\s+/).filter(word => word.length > 0);
+    if (!text) return "";
+
+    const words = text.split(/\s+/).filter((word) => word.length > 0);
     const first25Words = words.slice(0, 25);
-    
+
     let firstSentence = [];
     for (const word of first25Words) {
       firstSentence.push(word);
-      if (word.includes('.')) {
+      if (word.includes(".")) {
         break;
       }
     }
-    
+
     if (firstSentence.length === 25 && words.length > 25) {
-      return firstSentence.join(' ') + '...';
+      return firstSentence.join(" ") + "...";
     }
-    
-    return firstSentence.join(' ');
+
+    return firstSentence.join(" ");
   };
 
   const toggleFilterBox = () => setShowFilterBox(!showFilterBox);
@@ -79,7 +85,9 @@ const HomeexpertLogin = () => {
     } else if (selectedFilter === "highest_rating") {
       sorted.sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0));
     } else if (selectedFilter === "most_reviewed") {
-      sorted.sort((a, b) => (b.numberOfRatings || 0) - (a.numberOfRatings || 0));
+      sorted.sort(
+        (a, b) => (b.numberOfRatings || 0) - (a.numberOfRatings || 0)
+      );
     }
     return sorted;
   }, [expertData, selectedFilter]);
@@ -98,9 +106,7 @@ const HomeexpertLogin = () => {
         className="flex justify-between items-center mb-6"
       >
         <div className="flex flex-col md:flex-row md:items-center">
-          <h1 className="text-3xl md:text-[60px] font-bold text-black">
-            HOME
-          </h1>
+          <h1 className="text-3xl md:text-[60px] font-bold text-black">HOME</h1>
           <p className="text-[#9C9C9C] md:pt-5 pl-5 md:text-2xl">
             Transform Your Space with Expert Interior Design Insights
           </p>
