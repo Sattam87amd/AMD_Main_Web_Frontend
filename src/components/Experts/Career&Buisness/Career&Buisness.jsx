@@ -18,7 +18,7 @@ const LoginCareerBusinessExperts = () => {
       try {
         const area = "Career and Business";
         const response = await axios.get(
-          `https://amd-api.code4bharat.com/api/expertauth/area/${area}`
+          `https://amd-api.code4bharat.com/api/expertauth/area/${area}?status=Approved`
         );
         setExpertData(response.data.data);
         setLoading(false);
@@ -27,7 +27,7 @@ const LoginCareerBusinessExperts = () => {
         setLoading(false);
       }
     };
-
+  
     fetchExperts();
   }, []);
 

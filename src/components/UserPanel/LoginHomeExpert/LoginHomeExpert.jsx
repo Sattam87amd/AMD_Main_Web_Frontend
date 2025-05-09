@@ -30,8 +30,14 @@ const LoginHomeexpert = () => {
     const fetchExperts = async () => {
       try {
         const area = "Home";
-        const response = await axios.get(`https://amd-api.code4bharat.com/api/expertauth/area/${area}`);
-        setExpertData(response.data.data);
+        const response = await axios.get(
+          `https://amd-api.code4bharat.com/api/expertauth/area/${area}`
+        );
+        // Filter approved experts on client side
+        const approvedExperts = response.data.data.filter(
+          (expert) => expert.status === "Approved"
+        );
+        setExpertData(approvedExperts);
         setLoading(false);
       } catch (err) {
         setError("Error fetching expert data");
@@ -80,7 +86,9 @@ const LoginHomeexpert = () => {
     } else if (selectedFilter === "highest_rating") {
       sorted.sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0));
     } else if (selectedFilter === "most_reviewed") {
-      sorted.sort((a, b) => (b.numberOfRatings || 0) - (a.numberOfRatings || 0));
+      sorted.sort(
+        (a, b) => (b.numberOfRatings || 0) - (a.numberOfRatings || 0)
+      );
     }
     return sorted;
   }, [expertData, selectedFilter]);
@@ -91,7 +99,6 @@ const LoginHomeexpert = () => {
   return (
     <div className="bg-white py-10 px-4">
       <div className="py-3">
-
         <ScrollableTags />
       </div>
       {/* Header Section */}

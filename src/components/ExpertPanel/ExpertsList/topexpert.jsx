@@ -30,8 +30,14 @@ const LoginTopExpert = () => {
     const fetchExperts = async () => {
       try {
         const area = "Home";
-        const response = await axios.get(`https://amd-api.code4bharat.com/api/expertauth/area/${area}`);
-        setExpertData(response.data.data);
+        const response = await axios.get(
+          `https://amd-api.code4bharat.com/api/expertauth/area/${area}`
+        );
+        // Filter approved experts on client side
+        const approvedExperts = response.data.data.filter(
+          (expert) => expert.status === "Approved"
+        );
+        setExpertData(approvedExperts);
         setLoading(false);
       } catch (err) {
         setError("Error fetching expert data");
@@ -43,20 +49,20 @@ const LoginTopExpert = () => {
   }, []);
 
   const truncateExperience = (text) => {
-    if (!text) return '';
-    const words = text.split(/\s+/).filter(word => word.length > 0);
+    if (!text) return "";
+    const words = text.split(/\s+/).filter((word) => word.length > 0);
     const first25Words = words.slice(0, 25);
     let firstSentence = [];
     for (const word of first25Words) {
       firstSentence.push(word);
-      if (word.includes('.')) {
+      if (word.includes(".")) {
         break;
       }
     }
     if (firstSentence.length === 25 && words.length > 25) {
-      return firstSentence.join(' ') + '...';
+      return firstSentence.join(" ") + "...";
     }
-    return firstSentence.join(' ');
+    return firstSentence.join(" ");
   };
 
   const toggleFilterBox = () => setShowFilterBox(!showFilterBox);
@@ -86,7 +92,6 @@ const LoginTopExpert = () => {
   return (
     <div className="bg-white py-20 px-4">
       <div className="py-3">
-
         <ScrollableTags />
       </div>
       {/* Header Section */}
@@ -174,7 +179,11 @@ const LoginTopExpert = () => {
           }}
         >
           {sortedExperts.map((expert, index) => (
-            <Link key={index} href={`/expertpanel/expertaboutme/${expert._id}`} passHref>
+            <Link
+              key={index}
+              href={`/expertpanel/expertaboutme/${expert._id}`}
+              passHref
+            >
               <motion.div
                 className="relative min-w-[280px] md:w-full h-[400px] flex-shrink-0 overflow-hidden shadow-lg cursor-pointer"
                 variants={{

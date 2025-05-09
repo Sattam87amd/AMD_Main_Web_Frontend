@@ -34,7 +34,11 @@ const CareerBusinesslogin = () => {
         const response = await axios.get(
           `https://amd-api.code4bharat.com/api/expertauth/area/${area}`
         );
-        setExpertData(response.data.data);
+        // Filter approved experts on client side
+        const approvedExperts = response.data.data.filter(
+          (expert) => expert.status === "Approved"
+        );
+        setExpertData(approvedExperts);
         setLoading(false);
       } catch (err) {
         setError("Error fetching expert data");
@@ -92,7 +96,6 @@ const CareerBusinesslogin = () => {
   return (
     <div className="bg-white py-10 px-4">
       <div className="py-3">
-
         <ScrollableTags />
       </div>
       {/* Header Section with Filter Button */}
@@ -103,7 +106,6 @@ const CareerBusinesslogin = () => {
         transition={{ duration: 0.6 }}
         className="flex justify-between items-center mb-6"
       >
-      
         <div className="flex flex-col md:flex-row md:items-center">
           <h1 className="text-5xl md:text-[60px] font-bold text-black">
             CAREER AND BUSINESS.
