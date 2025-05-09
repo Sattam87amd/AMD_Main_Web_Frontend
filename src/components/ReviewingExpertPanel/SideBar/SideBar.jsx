@@ -8,7 +8,7 @@ import { PiCirclesFour } from "react-icons/pi";
 import { LucideDollarSign, LucideBadgeCheck } from "lucide-react";
 import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+// import "react-toastify/dist/ReactToastify.css";
 
 const Sidebar = () => {
   const router = useRouter();
@@ -139,18 +139,7 @@ const Sidebar = () => {
         </button>
       </div>
 
-      {/* Toast Container */}
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-      />
+     
     </div>
   );
 };
