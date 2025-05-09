@@ -12,6 +12,8 @@ import MobileNavSearch from "@/components/Layout/mobilenavsearch";
 import NavSearch from "@/components/Layout/navsearch";
 import Sidebar from "@/components/ReviewingExpertPanel/SideBar/SideBar";
 import BottomNav from "@/components/ReviewingExpertPanel/Bottomnav/bottomnav";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Page = () => {
  
@@ -52,7 +54,18 @@ const Page = () => {
       <div>
         <BottomNav/>
         </div>
-
+        <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+    
     </div>
   );
 };
