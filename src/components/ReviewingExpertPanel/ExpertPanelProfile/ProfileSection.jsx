@@ -13,19 +13,21 @@ import {
 import { LuPencilLine } from "react-icons/lu";
 import { FiDollarSign } from "react-icons/fi";
 import { MdOutlineFeedback } from "react-icons/md";
-import { CiSettings } from "react-icons/ci"; // <-- NEW IMPORT
+import { CiSettings } from "react-icons/ci";
 import PaymentMethods from "./PaymentMethod";
 import DiscountCode from "./DiscountCode";
 import GiftCard from "./GiftCard";
 import BuyGiftCard from "./BuyGiftCard";
 import ExpertContactUs from "./ExpertContactUs";
 import PaymentHistory from "./PaymentHistory";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProfileSection = () => {
   const [selectedSection, setSelectedSection] = useState("Profile");
   const [isEditing, setIsEditing] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [expertStatus, setExpertStatus] = useState("pending"); // Assuming default status is pending
 
   const [profileData, setProfileData] = useState({
     photoFile: "",
@@ -49,9 +51,8 @@ const ProfileSection = () => {
         setExpertId(expertId); // Set the expertId to state
       } catch (error) {
         console.error("Error parsing expertToken:", error);
+        toast.error("Expert token not found in localStorage");
       }
-    } else {
-      toast.error("Expert token not found in localStorage");
     }
   }, []);
 
@@ -69,7 +70,9 @@ const ProfileSection = () => {
             lastName,
             phone = "",
             email,
+            status
           } = response.data.data; // Default empty string for phone
+          
           setProfileData({
             firstName,
             lastName,
@@ -77,6 +80,11 @@ const ProfileSection = () => {
             email,
             photoFile, // Ensure the photoFile is added to profileData
           });
+          
+          // Set expert status if available
+          if (status) {
+            setExpertStatus(status);
+          }
         } catch (error) {
           console.error("Error fetching expert details:", error);
           toast.error("Error fetching expert details");
@@ -124,6 +132,36 @@ const ProfileSection = () => {
     }
   };
 
+  // Function to handle nav item clicks
+  const handleNavClick = (itemName) => {
+    // Only allow Profile and Deactivate account to be clickable
+    if (itemName === "Profile" || itemName === "Deactivate account") {
+      setSelectedSection(itemName);
+    } else {
+      // Show toast for other items
+      toast.info("This feature is only available for approved experts.", {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+      });
+    }
+  };
+
+  // Array of navigation items
+  const navItems = [
+    { name: "Profile", icon: FaUser, enabled: true },
+    { name: "Payment Methods", icon: FiDollarSign, enabled: false },
+    { name: "Do you have code?", icon: FaGift, enabled: false },
+    { name: "Gift Card", icon: FaGift, enabled: false },
+    { name: "Contact Us", icon: FaComments, enabled: false },
+    { name: "Payment History", icon: FiDollarSign, enabled: false },
+    { name: "Give us Feedback", icon: MdOutlineFeedback, enabled: false },
+    { name: "Deactivate account", icon: FaTrashAlt, enabled: true },
+  ];
+
   return (
     <div className="flex flex-col md:flex-row border rounded-xl overflow-hidden bg-white m-4 md:m-8">
       {/* Sidebar - Hidden on Small Screens, Visible on Medium+ */}
@@ -135,22 +173,16 @@ const ProfileSection = () => {
         </h2>
 
         <nav className="space-y-6">
-          {[
-            { name: "Profile", icon: FaUser },
-            { name: "Payment Methods", icon: FiDollarSign },
-            { name: "Do you have code?", icon: FaGift },
-            { name: "Gift Card", icon: FaGift },
-            { name: "Contact Us", icon: FaComments },
-            { name: "Payment History", icon: FiDollarSign }, // New Entry
-            { name: "Give us Feedback", icon: MdOutlineFeedback },
-            { name: "Deactivate account", icon: FaTrashAlt },
-          ].map((item) => (
+          {navItems.map((item) => (
             <button
               key={item.name}
-              onClick={() => setSelectedSection(item.name)}
-              className={`flex items-center gap-3 w-full text-left p-2 rounded-lg transition ${selectedSection === item.name
+              onClick={() => handleNavClick(item.name)}
+              className={`flex items-center gap-3 w-full text-left p-2 rounded-lg transition ${
+                selectedSection === item.name
                   ? "bg-black text-white"
-                  : "hover:bg-gray-200 text-[#7E7E7E]"
+                  : item.enabled 
+                    ? "hover:bg-gray-200 text-[#7E7E7E]" 
+                    : "text-[#7E7E7E] cursor-pointer" // Keep cursor pointer for toast feedback
                 }`}
             >
               <item.icon
@@ -192,6 +224,9 @@ const ProfileSection = () => {
                     {profileData.firstName} {profileData.lastName}
                   </h3>
                   <p className="text-gray-500">India</p>
+                  <p className="text-sm text-amber-600">
+                    Status: {expertStatus === "pending" ? "Pending Approval" : expertStatus}
+                  </p>
                 </div>
               </div>
               <button
@@ -250,7 +285,7 @@ const ProfileSection = () => {
                 </label>
                 <input
                   type="text"
-                  name="mobileNumber"
+                  name="phone" // Fixed to match your state variable name
                   value={profileData.phone}
                   onChange={handleInputChange}
                   disabled={!isEditing}
@@ -291,42 +326,34 @@ const ProfileSection = () => {
           </div>
         )}
 
-        {/* Payment Methods */}
-        {selectedSection === "Payment Methods" && <PaymentMethods />}
-
-        {/* Discount Code */}
-        {selectedSection === "Do you have code?" && <DiscountCode />}
-
-        {/* Gift Card */}
-        {selectedSection === "Gift Card" && (
-          <GiftCard onContinue={() => setSelectedSection("BuyGiftCard")} />
-        )}
-
-        {/* Buy Gift Card */}
-        {selectedSection === "BuyGiftCard" && <BuyGiftCard />}
-
-        {/* Contact Us */}
-        {selectedSection === "Contact Us" && <ExpertContactUs />}
-
-        {/* Payment History */}
-        {selectedSection === "Payment History" && <PaymentHistory />}
-
-        {/* Give us Feedback */}
-        {selectedSection === "Give us Feedback" && (
-          <div className="mt-6">
-            <h2 className="text-xl font-semibold">Give us Feedback</h2>
-            <p>Your feedback matters to us.</p>
-          </div>
-        )}
-
         {/* Deactivate account */}
         {selectedSection === "Deactivate account" && (
           <div className="mt-6">
             <h2 className="text-xl font-semibold">Deactivate Account</h2>
             <p>Are you sure you want to deactivate your account?</p>
+            {/* Add deactivation functionality here */}
+            <div className="mt-6">
+              <button className="bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg px-6 py-2.5">
+                Deactivate Account
+              </button>
+            </div>
           </div>
         )}
       </div>
+
+      {/* Toast Container */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        style={{ zIndex: 9999 }}
+      />
     </div>
   );
 };
