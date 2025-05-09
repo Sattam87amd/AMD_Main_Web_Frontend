@@ -70,7 +70,18 @@ const ExpertBooking = () => {
   const storeTokenBeforePayment = () => {
     const expertToken = localStorage.getItem("expertToken");
     if (expertToken) {
+      // Primary storage - sessionStorage is less likely to be cleared by payment gateways
       sessionStorage.setItem("tempExpertToken", expertToken);
+      
+      // Backup storage with timestamp
+      const prePaymentAuth = {
+        token: expertToken,
+        timestamp: Date.now()
+      };
+      localStorage.setItem("prePaymentAuth", JSON.stringify(prePaymentAuth));
+      console.log("Stored token for payment process");
+    } else {
+      console.error("No token found to store before payment");
     }
   };
 
@@ -89,6 +100,8 @@ const ExpertBooking = () => {
 
     setNoteError("");
 
+    storeTokenBeforePayment();
+
     const fullBookingData = {
       ...sessionData,
       firstName: expertData.firstName,
@@ -101,7 +114,7 @@ const ExpertBooking = () => {
       promoCode: expertData.promoCode,
     };
 
-    storeTokenBeforePayment();
+
    
     try {
       setIsSubmitting(true);

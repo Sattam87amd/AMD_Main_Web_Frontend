@@ -53,66 +53,104 @@ const VideoCall = () => {
     setSessionId(new URLSearchParams(window.location.search).get("sessionId"));
   }, []);
 
-  // Authentication and token refresh logic
-  useEffect(() => {
-    if (!isClient) return;
+// =============== MODIFICATION 1 ===============
+// Find this useEffect in VideoCall.jsx (around line 72-117) that handles authentication 
+// and REPLACE it with this updated version:
 
-    const handleMessage = (event) => {
-      if (event.origin === "https://www.shourk.com") {
-        if (event.data.type === "TOKEN_SYNC") {
-          localStorage.setItem("expertToken", event.data.token);
-        }
+useEffect(() => {
+  if (!isClient) return;
+
+  const handleMessage = (event) => {
+    if (event.origin === "https://www.shourk.com") {
+      if (event.data.type === "TOKEN_SYNC") {
+        localStorage.setItem("expertToken", event.data.token);
       }
-    };
+    }
+  };
 
-    window.addEventListener("message", handleMessage);
+  window.addEventListener("message", handleMessage);
 
-    const prePaymentData = localStorage.getItem("prePaymentAuth");
-    if (prePaymentData) {
-      try {
-        const { token, timestamp } = JSON.parse(prePaymentData);
-        if (Date.now() - timestamp < 3600000) {
-          localStorage.setItem("expertToken", token);
-          localStorage.removeItem("prePaymentAuth");
+  const checkAuth = async () => {
+    // STEP 1: Check for temporary token in sessionStorage first (most reliable)
+    const tempToken = sessionStorage.getItem("tempExpertToken");
+    if (tempToken) {
+      console.log("Found token in sessionStorage, restoring it");
+      localStorage.setItem("expertToken", tempToken);
+      sessionStorage.removeItem("tempExpertToken"); // Clean up
+    }
+
+    // STEP 2: Fallback to prePaymentAuth in localStorage if no tempToken
+    if (!tempToken) {
+      const prePaymentData = localStorage.getItem("prePaymentAuth");
+      if (prePaymentData) {
+        try {
+          const { token, timestamp } = JSON.parse(prePaymentData);
+          // Only use token if it's less than 1 hour old
+          if (Date.now() - timestamp < 3600000) {
+            console.log("Restoring token from prePaymentAuth");
+            localStorage.setItem("expertToken", token);
+            localStorage.removeItem("prePaymentAuth"); // Clean up
+          }
+        } catch (error) {
+          console.error("Error parsing prePaymentAuth:", error);
         }
-      } catch (error) {
-        console.error("Error parsing prePaymentAuth:", error);
       }
     }
 
-    const checkAuth = async () => {
-      const token = localStorage.getItem("expertToken");
-      if (!token) {
-        const parentToken = window.parent?.localStorage?.getItem("expertToken");
-        if (parentToken) {
-          localStorage.setItem("expertToken", parentToken);
-          return;
-        }
+    // STEP 3: Check if we have a token in localStorage after recovery attempts
+    const token = localStorage.getItem("expertToken");
+    if (!token) {
+      // Try to get token from parent frame if in an iframe
+      const parentToken = window.parent?.localStorage?.getItem("expertToken");
+      if (parentToken) {
+        localStorage.setItem("expertToken", parentToken);
+        return;
+      }
+      
+      // STEP 4: Try to get token from URL (final attempt)
+      const urlParams = new URLSearchParams(window.location.search);
+      const tokenFromUrl = urlParams.get("token");
+      if (tokenFromUrl) {
+        console.log("Restoring token from URL parameter");
+        localStorage.setItem("expertToken", tokenFromUrl);
+        // Remove token from URL for security
+        const newUrl = window.location.pathname + 
+          window.location.search.replace(/(\&|\?)token=[^&]*/, '');
+        window.history.replaceState({}, document.title, newUrl);
+      } else {
+        // All token recovery methods failed, redirect to login
         router.push("/expertlogin");
         return;
       }
+    }
 
-      if (sessionId) {
-        // Always refresh the token to ensure it's valid
-        try {
-          const response = await axios.post(
-            "https://amd-api.code4bharat.com/api/expertauth/refresh-token",
-            {},
-            { headers: { Authorization: `Bearer ${token}` } }
-          );
-          localStorage.setItem("expertToken", response.data.newToken);
-        } catch (error) {
-          console.error("Token refresh failed:", error);
+    // At this point we should have a token in localStorage, continue with refresh
+    const currentToken = localStorage.getItem("expertToken");
+    if (sessionId && currentToken) {
+      // Always refresh the token to ensure it's valid
+      try {
+        const response = await axios.post(
+          "https://amd-api.code4bharat.com/api/expertauth/refresh-token",
+          {},
+          { headers: { Authorization: `Bearer ${currentToken}` } }
+        );
+        localStorage.setItem("expertToken", response.data.newToken);
+      } catch (error) {
+        console.error("Token refresh failed:", error);
+        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+          router.push("/expertlogin");
         }
       }
-    };
+    }
+  };
 
-    checkAuth();
+  checkAuth();
 
-    return () => {
-      window.removeEventListener("message", handleMessage);
-    };
-  }, [sessionId, router, isClient]);
+  return () => {
+    window.removeEventListener("message", handleMessage);
+  };
+}, [sessionId, router, isClient]);
+
 
   // Data fetching logic - Make sure this only runs after authentication check
   useEffect(() => {
