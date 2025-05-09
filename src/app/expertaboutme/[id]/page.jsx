@@ -16,7 +16,7 @@ import Footer from "@/components/Layout/Footer";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import MobileNavSearch from "@/components/Layout/mobilenavsearch";
-import { toast } from "react-toastify";
+import { ToastContainer,toast } from "react-toastify";
 
 const ExpertDetail = () => {
   const [expert, setExpert] = useState(null);
@@ -129,6 +129,7 @@ const ExpertDetail = () => {
     try {
       const token = localStorage.getItem("expertToken");
       if (!token) throw new Error("No authentication token found");
+      
 
       const sessionData = {
         consultingExpertId: expert._id,
@@ -146,10 +147,7 @@ const ExpertDetail = () => {
 
       setShowTimeSelection(false);
     } catch (error) {
-      console.error("Booking error:", error.response?.data || error.message);
-      toast.error(
-        `Booking failed: ${error.response?.data?.message || error.message}`
-      );
+      toast.info("Please Log in as a User or Expert to request a session");
     }
   };
 
@@ -163,13 +161,14 @@ const ExpertDetail = () => {
 
   return (
     <>
-      <div className=" min-h-screen">
 
+      <div className=" min-h-screen">
+    <ToastContainer />
 
         <div className="w-full flex flex-col">
           <MobileNavSearch />
           <div className="hidden md:block">
-            <NavSearch />
+            <NavSearch /> 
           </div>
           <div className="min-h-screen bg-white py-10 px-4 md:px-10">
             <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
