@@ -37,14 +37,21 @@ const ExpertDetail = () => {
   });
 
   const router = useRouter();
+  const generateMonthDates = () => {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  // Date handling
-  const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(today.getDate() + 1);
-  const nextDate = new Date(today);
-  nextDate.setDate(today.getDate() + 2);
+    return Array.from({ length: daysInMonth }, (_, i) => {
+      const dayDate = new Date(year, month, i + 1);
+      // Only include future dates (including today)
+      return dayDate >= new Date(new Date().setHours(0, 0, 0, 0)) ? dayDate : null;
+    }).filter(date => date !== null);
+  };
 
+  const [monthDates, setMonthDates] = useState(generateMonthDates());
+  
   const getFormattedDate = (date) => {
     return date.toLocaleDateString(undefined, {
       weekday: "long",
@@ -62,11 +69,6 @@ const ExpertDetail = () => {
     setSelectedDurationMinutes(15);
   };
 
-  const dateMap = {
-    today: today,
-    tomorrow: tomorrow,
-    nextDate: nextDate,
-  };
 
 
   useEffect(() => {
@@ -115,13 +117,13 @@ const ExpertDetail = () => {
     setPrice(type === "1:4" ? 150 : 350);
   };
 
-  const handleTimeSelection = (dayKey, time) => {
-    const date = dateMap[dayKey].toISOString().split("T")[0];
-    const formattedTime = time.replace(" AM", "").replace(" PM", "").trim();
-
-    setSelectedDate(date);
-    setSelectedTime(formattedTime);
-  };
+  const handleTimeSelection = (dateString, time) => {
+    const slot = {
+      
+      selectedDate: dateString,
+      selectedTime: time,
+    };
+  }
 
   const handleBookingRequest = async () => {
     try {
@@ -312,53 +314,46 @@ const ExpertDetail = () => {
                           </button>
                         ))}
                       </div>
-                      {/* Time Slots */}
-                      {[
-                        ["Today", "today"],
-                        ["Tomorrow", "tomorrow"],
-                        ["Next Date", "nextDate"],
-                      ].map(([label, dayKey]) => (
-                        <div key={dayKey} className="mb-8">
-                          <h4 className="font-semibold py-4 text-xl">
-                            {`${label} (${getFormattedDate(dateMap[dayKey])})`}
-                          </h4>
-                          <div className="grid grid-cols-3 gap-3">
-                            {[
-                              "07:00 AM",
-                              "08:00 AM",
-                              "09:00 AM",
-                              "10:00 AM",
-                              "11:00 AM",
-                              "12:00 PM",
-                              "02:00 PM",
-                              "03:00 PM",
-                              "04:00 PM",
-                            ].map((time) => (
-                              <button
-                                key={time}
-                                className={`py-2 px-3 text-sm ${selectedDate ===
-                                  dateMap[dayKey]
-                                    .toISOString()
-                                    .split("T")[0] &&
-                                  selectedTime ===
-                                  time
-                                    .replace(" AM", "")
-                                    .replace(" PM", "")
-                                    .trim()
-                                  ? "bg-black text-white"
-                                  : "bg-white text-black"
-                                  } rounded-xl border`}
-                                onClick={() =>
-                                  handleTimeSelection(dayKey, time)
-                                }
-                              >
-                                {time}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
+        {/* Scrollable Time Slots */}
+<div className="h-[450px] overflow-y-auto pb-8">
+  {monthDates.map((date) => {
+    const dateString = date.toISOString().split("T")[0];
+    const isToday = date.toDateString() === new Date().toDateString();
+    const isTomorrow = date.toDateString() === new Date(new Date().setDate(new Date().getDate() + 1)).toDateString();
 
+    return (
+      <div key={dateString} className="mb-8">
+        <h4 className="font-semibold py-4 text-xl">
+          {isToday ? "Today" : isTomorrow ? "Tomorrow" : getFormattedDate(date)}
+        </h4>
+        <div className="grid grid-cols-3 gap-3">
+          {[
+            "07:00 AM", "08:00 AM", "09:00 AM",
+            "10:00 AM", "11:00 AM", "12:00 PM",
+            "02:00 PM", "03:00 PM", "04:00 PM",
+          ].map((time) => {
+            const isSelected = selectedDate === dateString && selectedTime === time;
+
+            return (
+              <button
+                key={`${dateString}-${time}`}
+                className={`py-2 px-3 text-sm ${
+                  isSelected ? "bg-black text-white" : "bg-white text-black"
+                } rounded-xl border`}
+                onClick={() => {
+                  setSelectedDate(dateString);
+                  setSelectedTime(time);
+                }}
+              >
+                {time}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    );
+  })}
+</div>
 
                       <div className="flex gap-10 py-10 items-center">
                         <div>
