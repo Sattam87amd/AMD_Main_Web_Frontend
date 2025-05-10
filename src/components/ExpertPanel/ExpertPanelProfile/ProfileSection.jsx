@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Image from "next/image";
 import {
@@ -13,7 +13,8 @@ import {
 import { LuPencilLine } from "react-icons/lu";
 import { FiDollarSign } from "react-icons/fi";
 import { MdOutlineFeedback } from "react-icons/md";
-import { CiSettings } from "react-icons/ci"; // <-- NEW IMPORT
+import { CiSettings } from "react-icons/ci";
+import { AiOutlineCamera } from "react-icons/ai"; // Add camera icon for upload
 import PaymentMethods from "./PaymentMethod";
 import DiscountCode from "./DiscountCode";
 import GiftCard from "./GiftCard";
@@ -26,16 +27,18 @@ const ProfileSection = () => {
   const [selectedSection, setSelectedSection] = useState("Profile");
   const [isEditing, setIsEditing] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   const [profileData, setProfileData] = useState({
     photoFile: "",
     firstName: "",
     lastName: "",
-    phone: "", // Set default value to an empty string
+    phone: "",
     email: "thakur@.com",
   });
 
-  const [expertId, setExpertId] = useState(""); // Will be set from expertToken
+  const [expertId, setExpertId] = useState("");
+  const fileInputRef = useRef(null); // Reference for file input
 
   // Fetch expertId from localStorage
   useEffect(() => {
@@ -43,10 +46,9 @@ const ProfileSection = () => {
 
     if (expertToken) {
       try {
-        // Assuming the expertToken contains the _id directly (if it's JWT)
-        const decodedToken = JSON.parse(atob(expertToken.split(".")[1])); // Decode JWT token
+        const decodedToken = JSON.parse(atob(expertToken.split(".")[1]));
         const expertId = decodedToken._id;
-        setExpertId(expertId); // Set the expertId to state
+        setExpertId(expertId);
       } catch (error) {
         console.error("Error parsing expertToken:", error);
       }
@@ -69,13 +71,13 @@ const ProfileSection = () => {
             lastName,
             phone = "",
             email,
-          } = response.data.data; // Default empty string for phone
+          } = response.data.data;
           setProfileData({
             firstName,
             lastName,
-            phone, // Assign phone with a default value if missing
+            phone,
             email,
-            photoFile, // Ensure the photoFile is added to profileData
+            photoFile,
           });
         } catch (error) {
           console.error("Error fetching expert details:", error);
@@ -85,7 +87,7 @@ const ProfileSection = () => {
 
       fetchExpertDetails();
     }
-  }, [expertId]); // The effect runs when the expert ID changes
+  }, [expertId]);
 
   const handleInputChange = (e) => {
     setProfileData({ ...profileData, [e.target.name]: e.target.value });
@@ -96,11 +98,67 @@ const ProfileSection = () => {
     setSuccessMessage("");
   };
 
+  // Handle profile picture upload
+  const handleProfilePictureClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    // Check file size (limit to 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("File size should be less than 5MB");
+      return;
+    }
+
+    // Check file type
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please upload an image file");
+      return;
+    }
+
+    setIsUploading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("photoFile", file);
+
+      const response = await axios.put(
+        `https://amd-api.code4bharat.com/api/expertauth/updateexpert/${expertId}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.data.success) {
+        // Update the profile data with the new image URL
+        setProfileData({
+          ...profileData,
+          photoFile: response.data.data.photoFile,
+        });
+        toast.success("Profile picture updated successfully!");
+      } else {
+        toast.error(response.data.message || "Failed to update profile picture.");
+      }
+    } catch (error) {
+      console.error("Error uploading profile picture:", error);
+      toast.error("Error uploading profile picture. Please try again.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   const handleSaveClick = async (e) => {
     e.preventDefault();
-    
+
     try {
-      // Make API call to update user profile
       const response = await axios.put(
         `https://amd-api.code4bharat.com/api/expertauth/updateexpert/${expertId}`,
         {
@@ -110,7 +168,7 @@ const ProfileSection = () => {
           email: profileData.email
         }
       );
-      
+
       if (response.data.success) {
         setIsEditing(false);
         setSuccessMessage("Changes Saved!");
@@ -128,7 +186,6 @@ const ProfileSection = () => {
     <div className="flex flex-col md:flex-row border rounded-xl overflow-hidden bg-white m-4 md:m-8">
       {/* Sidebar - Hidden on Small Screens, Visible on Medium+ */}
       <aside className="hidden md:block w-64 bg-white p-6 border-r h-[800px]">
-        {/* Updated Settings Heading with Icon */}
         <h2 className="flex items-center justify-between text-lg font-semibold pb-4 border-b mb-3">
           <span>Settings</span>
           <CiSettings className="text-3xl text-[#7E7E7E]" />
@@ -141,7 +198,7 @@ const ProfileSection = () => {
             { name: "Do you have code?", icon: FaGift },
             { name: "Gift Card", icon: FaGift },
             { name: "Contact Us", icon: FaComments },
-            { name: "Payment History", icon: FiDollarSign }, // New Entry
+            { name: "Payment History", icon: FiDollarSign },
             { name: "Give us Feedback", icon: MdOutlineFeedback },
             { name: "Deactivate account", icon: FaTrashAlt },
           ].map((item) => (
@@ -149,8 +206,8 @@ const ProfileSection = () => {
               key={item.name}
               onClick={() => setSelectedSection(item.name)}
               className={`flex items-center gap-3 w-full text-left p-2 rounded-lg transition ${selectedSection === item.name
-                  ? "bg-black text-white"
-                  : "hover:bg-gray-200 text-[#7E7E7E]"
+                ? "bg-black text-white"
+                : "hover:bg-gray-200 text-[#7E7E7E]"
                 }`}
             >
               <item.icon
@@ -171,22 +228,48 @@ const ProfileSection = () => {
           <div className="mt-6">
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div className="flex items-center space-x-4 md:space-x-6">
-                {/* Only render the image if the photoFile is a valid URL */}
-                {profileData.photoFile ? (
-                  <div className="rounded-full border-2 border-white ">
-                    <div className="w-[100px] h-[100px] rounded-full overflow-hidden">
-                      <Image
-                        src={profileData.photoFile}
-                        alt="profile"
-                        width={100}
-                        height={100}
-                        className="w-full h-full object-cover"
-                      />
+                {/* Profile Picture with Upload Functionality */}
+                <div className="relative">
+                  <div className="rounded-full border-2 border-white">
+                    <div className="w-[100px] h-[100px] rounded-full overflow-hidden cursor-pointer relative group" onClick={handleProfilePictureClick}>
+                      {profileData.photoFile ? (
+                        <Image
+                          src={profileData.photoFile}
+                          alt="profile"
+                          width={100}
+                          height={100}
+                          className="w-full h-full object-cover object-center"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gray-300 flex items-center justify-center">
+                          <FaUser className="text-white text-3xl" />
+                        </div>
+                      )}
+                      
+                      {/* Upload overlay on hover */}
+                      <div className="absolute inset-0 bg-black bg-opacity-30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <AiOutlineCamera className="text-white text-2xl" />
+                      </div>
+                      
+                      {/* Loading indicator */}
+                      {isUploading && (
+                        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                        </div>
+                      )}
                     </div>
                   </div>
-                ) : (
-                  <div className="w-[100px] h-[100px] rounded-full bg-gray-300" />
-                )}
+                  
+                  {/* Hidden file input */}
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                </div>
+                
                 <div className="text-center md:text-left">
                   <h3 className="text-lg font-semibold text-[#434966]">
                     {profileData.firstName} {profileData.lastName}
@@ -250,7 +333,7 @@ const ProfileSection = () => {
                 </label>
                 <input
                   type="text"
-                  name="mobileNumber"
+                  name="phone"
                   value={profileData.phone}
                   onChange={handleInputChange}
                   disabled={!isEditing}
@@ -275,13 +358,13 @@ const ProfileSection = () => {
               </div>
 
               {/* Save Button */}
-              <div className="col-span-1 md:col-span-2 flex justify-center mt-6">
+              <div className="col-span-1 md:col-span-2 flex justify-center mt-6 pb-12">
                 <button
                   type="submit"
                   disabled={!isEditing}
-                  className={`text-white font-medium rounded-2xl text-sm px-6 md:px-16 py-2.5 text-center ${isEditing
-                      ? "bg-black hover:bg-gray-900 focus:ring-gray-300"
-                      : "bg-gray-400 cursor-not-allowed"
+                  className={`text-white font-medium rounded-2xl text-sm px-6 md:px-16 py-2.5  text-center ${isEditing
+                    ? "bg-black hover:bg-gray-900 focus:ring-gray-300"
+                    : "bg-gray-400 cursor-not-allowed"
                     }`}
                 >
                   Save
