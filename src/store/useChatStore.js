@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { io } from "socket.io-client";
 
-const BASE_URL = "https://amd-chat.code4bharat.com";
+const BASE_URL = "http://localhost:8080";
 
 export const useChatStore = create((set, get) => ({
   messages: [],
@@ -12,6 +12,8 @@ export const useChatStore = create((set, get) => ({
   isUsersLoading: false,
   isMessagesLoading: false,
   isFileUploading: false,
+  isVoiceRecording: false,
+  isVoiceSending: false, // New state for voice upload status
   socket: null,
   onlineUsers: [],
   logginUser: null,
@@ -20,7 +22,10 @@ export const useChatStore = create((set, get) => ({
   deletedMessages: new Set(),
   // Track conversation files
   conversationFiles: [],
+  // Track conversation voice messages
+  conversationVoiceMessages: [],
   isFilesLoading: false,
+  isVoiceMessagesLoading: false, // New state for voice messages loading
 
   // Add isUserOnline function to check if a user is online
   isUserOnline: (userId) => {
@@ -81,6 +86,83 @@ export const useChatStore = create((set, get) => ({
       set({ isUsersLoading: false });
     }
   },
+  // Send text message function for Zustand store
+  sendMessage: async (text) => {
+    const { selectedUser, messages, logginUser } = get();
+
+    if (!selectedUser || !selectedUser._id) {
+      console.error("No user selected or user ID is missing");
+      toast.error("Please select a user to chat with");
+      return;
+    }
+
+    if (!text || !text.trim()) {
+      toast.error("Message cannot be empty");
+      return;
+    }
+
+    // Create temporary message with local ID for optimistic update
+    const tempId = `temp-${Date.now()}`;
+    const newMessage = {
+      _id: tempId,
+      senderId: logginUser._id,
+      receiverId: selectedUser._id,
+      text: text.trim(),
+      time: new Date(),
+      // Flag to indicate this is a pending message
+      isPending: true,
+    };
+
+    // Optimistically add message to the UI
+    set((state) => ({
+      messages: [...state.messages, newMessage],
+    }));
+
+    try {
+      const token = get().getAuthToken();
+
+      if (!token) {
+        throw new Error("Unauthorized access or invalid path");
+      }
+
+      // Send the message to the server
+      const response = await axios.post(
+        `${BASE_URL}/api/message/send/${selectedUser._id}`,
+        { text: text.trim() },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("Message sent successfully:", response.data);
+
+      // Replace the temporary message with the real one from server
+      set((state) => ({
+        messages: state.messages.map((msg) =>
+          msg._id === tempId ? { ...response.data, isPending: false } : msg
+        ),
+        // Add to processed IDs to prevent duplicate from socket
+        processedMessageIds: new Set([
+          ...state.processedMessageIds,
+          response.data._id,
+        ]),
+      }));
+
+      return response.data;
+    } catch (error) {
+      console.error("Send message error:", error);
+
+      // Remove the temporary message on failure
+      set((state) => ({
+        messages: state.messages.filter((msg) => msg._id !== tempId),
+      }));
+
+      toast.error(error?.response?.data?.error || "Failed to send message");
+    }
+  },
 
   getMessages: async (userId) => {
     if (!userId) return;
@@ -93,11 +175,14 @@ export const useChatStore = create((set, get) => ({
         throw new Error("Unauthorized access or invalid path");
       }
 
-      const response = await axios.get(`${BASE_URL}/api/message/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.get(
+        `${BASE_URL}/api/message/get/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const messages = response.data?.messages || [];
 
@@ -117,9 +202,12 @@ export const useChatStore = create((set, get) => ({
       });
 
       console.log("Message Data:", response.data);
-      
+
       // Load conversation files when loading messages
       get().getConversationFiles(userId);
+
+      // Load conversation voice messages when loading messages
+      get().getConversationVoiceMessages(userId);
     } catch (error) {
       console.error("Fetch messages error:", error);
       toast.error(error?.response?.data?.message || "Failed to load messages");
@@ -155,8 +243,11 @@ export const useChatStore = create((set, get) => ({
     }
   },
 
-  sendMessage: async (messageData) => {
-    const { selectedUser, messages, socket, logginUser } = get();
+  // Complete replacement for the sendVoiceMessage function
+  // This version includes detailed logging and handles both API formats
+
+  sendVoiceMessage: async (voiceBlob, duration) => {
+    const { selectedUser, messages, logginUser } = get();
 
     if (!selectedUser || !selectedUser._id) {
       console.error("No user selected or user ID is missing");
@@ -164,10 +255,137 @@ export const useChatStore = create((set, get) => ({
       return;
     }
 
-    if (!messageData.text.trim()) {
+    if (!voiceBlob) {
+      toast.error("No voice recording to send");
       return;
     }
 
+    set({ isVoiceSending: true });
+
+    try {
+      const formData = new FormData();
+      const token = get().getAuthToken();
+
+      // IMPORTANT: The backend expects the field to be named 'voice'
+      formData.append("voice", voiceBlob, "voice_message.webm");
+
+      if (duration) {
+        formData.append("duration", duration.toString());
+      }
+
+      // DEBUG: Log detailed information about the request
+      console.group("Voice Message Request Debug");
+      console.log("User ID:", selectedUser._id);
+      console.log("Voice blob type:", voiceBlob.type);
+      console.log("Voice blob size:", voiceBlob.size);
+      console.log("FormData keys:", [...formData.keys()]);
+      console.groupEnd();
+
+      // TRY BOTH ENDPOINTS: First try the singular version (which should be correct)
+      let response;
+      let endpointUsed;
+
+      try {
+        console.log("Trying first endpoint: /api/message/voice/");
+        endpointUsed = `${BASE_URL}/api/message/voice/${selectedUser._id}`;
+        response = await axios.post(endpointUsed, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      } catch (firstError) {
+        console.error("First endpoint failed:", firstError.message);
+
+        // If first attempt fails, try the plural version as fallback
+        console.log("Trying fallback endpoint: /api/messages/voice/");
+        endpointUsed = `${BASE_URL}/api/messages/voice/${selectedUser._id}`;
+        response = await axios.post(endpointUsed, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        });
+      }
+
+      console.log(`Voice message successfully sent to: ${endpointUsed}`);
+      console.log("Voice message upload response:", response.data);
+
+      // Create message object
+      const newMessage = {
+        _id: response.data._id,
+        senderId: logginUser._id,
+        receiverId: selectedUser._id,
+        text: "Voice message",
+        voiceId: response.data.voiceId || response.data.voice?.id, // Handle different response formats
+        isVoice: true,
+        voiceDuration: duration,
+        voiceSize: response.data.voiceSize || response.data.voice?.size,
+        time: new Date(),
+      };
+
+      // Update state
+      set((state) => ({
+        messages: [...state.messages, newMessage],
+        processedMessageIds: new Set([
+          ...state.processedMessageIds,
+          newMessage._id,
+        ]),
+      }));
+
+      // Refresh voice messages list
+      get().getConversationVoiceMessages(selectedUser._id);
+
+      toast.success("Voice message sent");
+      return response.data;
+    } catch (error) {
+      console.group("Voice Message Error");
+      console.error("Voice message upload error:", error.message);
+
+      if (error.response) {
+        // Server responded with error status
+        console.error("Status:", error.response.status);
+        console.error("Server response:", error.response.data);
+        // If HTML error, show the relevant part
+        if (
+          typeof error.response.data === "string" &&
+          error.response.data.includes("<!DOCTYPE html>")
+        ) {
+          const match = error.response.data.match(/<pre>(.*?)<\/pre>/);
+          if (match && match[1]) {
+            console.error("Error details:", match[1]);
+            toast.error(`Server error: ${match[1]}`);
+          } else {
+            toast.error("Failed to send voice message");
+          }
+        } else {
+          toast.error(
+            error.response.data.message || "Failed to send voice message"
+          );
+        }
+      } else if (error.request) {
+        // Request was made but no response
+        console.error("No response received:", error.request);
+        toast.error("No response from server. Please try again.");
+      } else {
+        // Something else happened
+        console.error("Error:", error.message);
+        toast.error("An error occurred while sending voice message");
+      }
+      console.groupEnd();
+
+      throw error; // Re-throw the error for component to handle
+    } finally {
+      set({ isVoiceSending: false });
+    }
+  },
+  // Set recording state
+  setVoiceRecording: (isRecording) => {
+    set({ isVoiceRecording: isRecording });
+  },
+
+  // Get voice message info
+  getVoiceInfo: async (voiceId) => {
     try {
       const token = get().getAuthToken();
 
@@ -175,9 +393,8 @@ export const useChatStore = create((set, get) => ({
         throw new Error("Unauthorized access or invalid path");
       }
 
-      const res = await axios.post(
-        `${BASE_URL}/api/message/send/${selectedUser._id}`,
-        messageData,
+      const response = await axios.get(
+        `${BASE_URL}/api/message/voice/info/${voiceId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -185,37 +402,252 @@ export const useChatStore = create((set, get) => ({
         }
       );
 
-      // Create a new message object with the server response data
-      const newMessage = {
-        ...res.data,
-        _id: res.data._id || `temp-${Date.now()}`, // Ensure there's an ID to track this message
-        senderId: logginUser._id,
-        receiverId: selectedUser._id, // FIXED: Use receiverId consistently
-        time: res.data.time || new Date(),
+      console.log("Voice info:", response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Get voice info error:", error);
+      toast.error(
+        error?.response?.data?.message || "Failed to get voice information"
+      );
+      return null;
+    }
+  },
+  getVoiceStreamUrl: (voiceId) => {
+    if (!voiceId) {
+      console.warn("Voice ID is missing");
+      return null;
+    }
+
+    // Make sure BASE_URL is defined and has the correct value
+    const baseUrl =
+      typeof BASE_URL !== "undefined" && BASE_URL
+        ? BASE_URL
+        : window.location.origin; // Fallback to current origin if BASE_URL is undefined
+
+    // Add a cache-busting parameter to prevent caching issues
+    const cacheBuster = `?cb=${Date.now()}`;
+
+    console.log(`Generating voice stream URL for ID: ${voiceId}`);
+
+    // Ensure the API endpoint matches the server route exactly
+    // Update this path to match your server-side route configuration
+    return `${baseUrl}/api/message/voice/stream/${voiceId}${cacheBuster}`;
+  },
+
+  // Enhanced function to play audio with proper error handling
+  playVoiceMessage: (voiceId) => {
+    const audioUrl = get().getVoiceStreamUrl(voiceId);
+    if (!audioUrl) {
+      console.warn("Cannot play: Voice URL is null");
+      return Promise.reject(new Error("Invalid voice ID"));
+    }
+
+    // Create audio element
+    const audio = new Audio();
+
+    // Add detailed logging
+    console.log(`Attempting to play voice message: ${voiceId}`);
+    console.log(`Using URL: ${audioUrl}`);
+
+    // Try multiple formats if necessary
+    const tryFormats = async () => {
+      // List of formats to try in order of preference
+      const formats = [
+        { extension: "", type: "audio/mpeg" }, // Default - no extension
+        { extension: "?format=mp3", type: "audio/mpeg" },
+        { extension: "?format=aac", type: "audio/aac" },
+        { extension: "?format=wav", type: "audio/wav" },
+      ];
+
+      // Try each format until one works
+      for (const format of formats) {
+        try {
+          const formatUrl = `${audioUrl}${format.extension}`;
+          console.log(`Trying format: ${format.type} with URL: ${formatUrl}`);
+
+          // Set the source and type
+          audio.src =
+            "http://localhost:8080/api/message/voice/stream/681d9629e340e7ad55cf3697?cb=1746771905696&t=1746771905696";
+          // Wait for metadata to load to confirm format compatibility
+          await new Promise((resolve, reject) => {
+            const metadataTimeout = setTimeout(() => {
+              reject(new Error("Metadata load timeout"));
+            }, 5000); // 5 second timeout
+
+            audio.onloadedmetadata = () => {
+              clearTimeout(metadataTimeout);
+              console.log(`Successfully loaded metadata for ${format.type}`);
+              resolve();
+            };
+
+            audio.onerror = (e) => {
+              clearTimeout(metadataTimeout);
+              console.error(`Failed to load ${format.type}:`, e);
+              console.error(
+                `Error code: ${audio.error?.code}, message: ${audio.error?.message}`
+              );
+              reject(new Error(`Format ${format.type} failed to load`));
+            };
+          });
+
+          // If we get here, metadata loaded successfully
+          console.log(`Starting playback of ${format.type}`);
+          await audio.play();
+          return; // Success - exit the loop
+        } catch (error) {
+          console.warn(`Format attempt failed: ${error.message}`);
+          // Continue to next format
+        }
+      }
+
+      // If we get here, all formats failed
+      throw new Error("All audio formats failed to play");
+    };
+
+    // Return a promise that resolves when audio plays or rejects on error
+    return new Promise((resolve, reject) => {
+      audio.onended = () => {
+        console.log("Playback completed successfully");
+        resolve();
       };
 
-      // Update local messages immediately
-      set({ messages: [...messages, newMessage] });
+      // Start trying formats and handle the result
+      tryFormats().catch((error) => {
+        console.error("All playback attempts failed:", error);
+        reject(error);
+      });
+    });
+  },
 
-      // Add to processed IDs to prevent duplicates
+  // Download voice message
+  downloadVoice: async (voiceId, fileName = "voice-message") => {
+    try {
+      const token = get().getAuthToken();
+
+      if (!token) {
+        throw new Error("Unauthorized access or invalid path");
+      }
+
+      // Use axios to download the file with responseType blob
+      const response = await axios.get(
+        `${BASE_URL}/api/message/voice/download/${voiceId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          responseType: "blob", // Important for file downloads
+        }
+      );
+
+      // Create a URL for the blob
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      // Create a link element and trigger download
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `${fileName}.mp3`);
+      document.body.appendChild(link);
+      link.click();
+
+      // Clean up
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      toast.success("Voice message downloaded successfully");
+      return true;
+    } catch (error) {
+      console.error("Voice download error:", error);
+      toast.error(
+        error?.response?.data?.message || "Failed to download voice message"
+      );
+      return false;
+    }
+  },
+
+  // Delete voice message
+  deleteVoiceMessage: async (messageId, voiceId) => {
+    try {
+      const token = get().getAuthToken();
+
+      if (!token) {
+        throw new Error("Unauthorized access or invalid path");
+      }
+
+      console.log(
+        `Deleting voice message: ${voiceId} and message: ${messageId}`
+      );
+
+      // Optimistic update
       set((state) => ({
-        processedMessageIds: new Set([
-          ...state.processedMessageIds,
-          newMessage._id,
-        ]),
+        messages: state.messages.filter((msg) => msg._id !== messageId),
+        deletedMessages: new Set([...state.deletedMessages, messageId]),
+        conversationVoiceMessages: state.conversationVoiceMessages.filter(
+          (voice) => voice.id !== voiceId
+        ),
       }));
 
-      console.log("Message sent:", newMessage);
+      // Send deletion request
+      const response = await axios.delete(
+        `${BASE_URL}/api/message/voice/delete`,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+          data: { messageId, voiceId },
+        }
+      );
+
+      console.log("Voice delete response:", response.data);
+      toast.success("Voice message deleted");
+      return response.data;
     } catch (error) {
-      if (error.response) {
-        console.error("API Response Error:", error.response.data);
-        toast.error(
-          `Error: ${error.response.data.message || "Failed to send message"}`
-        );
-      } else {
-        console.error("Unexpected error:", error);
-        toast.error("Something went wrong while sending message");
+      console.error("Delete voice message error:", error);
+
+      // Return early if the response indicates the voice was already deleted
+      if (error.response?.data?.alreadyDeleted) {
+        console.log("Voice message already deleted");
+        toast.info("Voice message already deleted");
+        return;
       }
+
+      toast.error(
+        error?.response?.data?.message || "Failed to delete voice message"
+      );
+    }
+  },
+
+  getConversationVoiceMessages: async (userId) => {
+    if (!userId) return;
+
+    set({ isVoiceMessagesLoading: true });
+    try {
+      const token = get().getAuthToken();
+      if (!token) throw new Error("Unauthorized access or invalid path");
+
+      const response = await axios.get(
+        `${BASE_URL}/api/message/voice/conversation/${userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Conversation voice messages:", response.data);
+
+      // Validate the response safely
+      if (Array.isArray(response.data)) {
+        set({ conversationVoiceMessages: response.data });
+      } else {
+        set({ conversationVoiceMessages: [] }); // fallback to empty array
+      }
+
+      return response.data;
+    } catch (error) {
+      console.error("Get conversation voice messages error:", error);
+      toast.error(
+        error?.response?.data?.message || "Failed to load voice messages"
+      );
+    } finally {
+      set({ isVoiceMessagesLoading: false });
     }
   },
 
@@ -229,12 +661,15 @@ export const useChatStore = create((set, get) => ({
 
       console.log(`Deleting message: ${messageId}`);
 
-      // Get the message to check if it's a file
-      const message = get().messages.find(msg => msg._id === messageId);
-      
+      // Get the message to check if it's a file or voice message
+      const message = get().messages.find((msg) => msg._id === messageId);
+
       if (message && message.isFile) {
         // If it's a file message, use the file deletion endpoint
         return get().deleteFile(messageId, message.fileId);
+      } else if (message && message.isVoice) {
+        // If it's a voice message, use the voice deletion endpoint
+        return get().deleteVoiceMessage(messageId, message.voiceId);
       }
 
       // Optimistic update
@@ -266,7 +701,7 @@ export const useChatStore = create((set, get) => ({
       toast.error(error.response?.data?.message || "Failed to delete message");
     }
   },
-  
+
   // File handling methods
   uploadFile: async (file, additionalText = "") => {
     const { selectedUser, messages, logginUser } = get();
@@ -285,7 +720,7 @@ export const useChatStore = create((set, get) => ({
     // Create form data for file upload
     const formData = new FormData();
     formData.append("file", file);
-    
+
     // If there's additional text to include with the file
     if (additionalText) {
       formData.append("text", additionalText);
@@ -345,9 +780,7 @@ export const useChatStore = create((set, get) => ({
       return response.data;
     } catch (error) {
       console.error("File upload error:", error);
-      toast.error(
-        error?.response?.data?.message || "Failed to upload file"
-      );
+      toast.error(error?.response?.data?.message || "Failed to upload file");
     } finally {
       set({ isFileUploading: false });
     }
@@ -396,31 +829,29 @@ export const useChatStore = create((set, get) => ({
           headers: {
             Authorization: `Bearer ${token}`,
           },
-          responseType: 'blob', // Important for file downloads
+          responseType: "blob", // Important for file downloads
         }
       );
 
       // Create a URL for the blob
       const url = window.URL.createObjectURL(new Blob([response.data]));
-      
+
       // Create a link element and trigger download
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.setAttribute('download', fileName || 'download');
+      link.setAttribute("download", fileName || "download");
       document.body.appendChild(link);
       link.click();
-      
+
       // Clean up
       link.parentNode.removeChild(link);
       window.URL.revokeObjectURL(url);
-      
+
       toast.success("File downloaded successfully");
       return true;
     } catch (error) {
       console.error("File download error:", error);
-      toast.error(
-        error?.response?.data?.message || "Failed to download file"
-      );
+      toast.error(error?.response?.data?.message || "Failed to download file");
       return false;
     }
   },
@@ -466,9 +897,7 @@ export const useChatStore = create((set, get) => ({
         return;
       }
 
-      toast.error(
-        error?.response?.data?.message || "Failed to delete file"
-      );
+      toast.error(error?.response?.data?.message || "Failed to delete file");
     }
   },
 
@@ -497,15 +926,12 @@ export const useChatStore = create((set, get) => ({
       return response.data;
     } catch (error) {
       console.error("Get conversation files error:", error);
-      toast.error(
-        error?.response?.data?.message || "Failed to load files"
-      );
+      toast.error(error?.response?.data?.message || "Failed to load files");
     } finally {
       set({ isFilesLoading: false });
     }
   },
 
-  // FRONTEND: Update the socket event handler to improve real-time updates
   editMessage: async (messageId, newText) => {
     // First check if the message has been deleted locally
     const { deletedMessages, messages } = get();
@@ -524,13 +950,11 @@ export const useChatStore = create((set, get) => ({
       return;
     }
 
-    // Check if the message is a file message
-    const isFileMessage = messages.find(
-      (msg) => msg._id === messageId && msg.isFile
-    );
-    if (isFileMessage) {
-      console.error("Cannot edit a file message");
-      toast.error("File messages cannot be edited");
+    // Check if the message is a file message or voice message
+    const message = messages.find((msg) => msg._id === messageId);
+    if (message && (message.isFile || message.isVoice)) {
+      console.error("Cannot edit a file or voice message");
+      toast.error("File and voice messages cannot be edited");
       return;
     }
 
@@ -574,6 +998,10 @@ export const useChatStore = create((set, get) => ({
       }
 
       console.log("Edit message response:", response.data);
+
+      // IMPORTANT FIX: Don't update messages again here,
+      // as the "messageEdited" socket event will handle it
+
       toast.success("Message updated");
       return response.data;
     } catch (error) {
@@ -598,12 +1026,14 @@ export const useChatStore = create((set, get) => ({
     // Save current messages for potential rollback
     const originalMessages = [...get().messages];
     const originalFiles = [...get().conversationFiles];
+    const originalVoiceMessages = [...get().conversationVoiceMessages];
 
     // Optimistically clear messages and files
     set({
       messages: [],
       deletedMessages: new Set(), // Reset deletion tracking
       conversationFiles: [],
+      conversationVoiceMessages: [],
     });
 
     try {
@@ -639,10 +1069,11 @@ export const useChatStore = create((set, get) => ({
       ) {
         toast("Conversation already deleted");
       } else {
-        // Restore messages and files
-        set({ 
+        // Restore messages, files, and voice messages
+        set({
           messages: originalMessages,
-          conversationFiles: originalFiles
+          conversationFiles: originalFiles,
+          conversationVoiceMessages: originalVoiceMessages,
         });
         toast.error(
           error?.response?.data?.message || "Failed to delete conversation"
@@ -718,6 +1149,11 @@ export const useChatStore = create((set, get) => ({
           get().getConversationFiles(selectedUser._id);
         }
 
+        // If it's a voice message, refresh conversation voice messages
+        if (newMessage.isVoice && selectedUser) {
+          get().getConversationVoiceMessages(selectedUser._id);
+        }
+
         // Add to processed set and update messages
         return {
           messages: [...state.messages, newMessage],
@@ -726,50 +1162,17 @@ export const useChatStore = create((set, get) => ({
       });
     });
 
-    // FRONTEND: Update the socket event handler to improve real-time updates
-    socket.on("messageEdited", (editedMessage) => {
-      console.log("Message edited received via socket:", editedMessage);
-
-      set((state) => {
-        // Check if this message exists in our current messages
-        const messageExists = state.messages.some(
-          (msg) => msg._id === editedMessage._id
-        );
-
-        if (!messageExists) {
-          console.log(
-            "Message not in current conversation - ignoring socket update:",
-            editedMessage._id
-          );
-          return state;
-        }
-
-        // Check if this message has been deleted locally
-        if (state.deletedMessages.has(editedMessage._id)) {
-          console.log(
-            "Ignoring edit for locally deleted message:",
-            editedMessage._id
-          );
-          return state;
-        }
-
-        console.log("Updating message in state via socket event");
-
-        return {
-          messages: state.messages.map((msg) =>
-            msg._id === editedMessage._id
-              ? {
-                  ...msg,
-                  text: editedMessage.text,
-                  isEdited: true,
-                  editedAt: editedMessage.editedAt || new Date(),
-                }
-              : msg
-          ),
-        };
-      });
+    socket.on("messageEdited", (updatedMessage) => {
+      console.log("Received messageEdited event:", updatedMessage);
+      set((state) => ({
+        messages: state.messages.map((msg) =>
+          msg._id === updatedMessage._id
+            ? { ...updatedMessage, isEdited: true }
+            : msg
+        ),
+      }));
     });
-    
+
     // FIXED: Handle deleted messages with consistent property names
     // In your Zustand store socket setup
     socket.on("messageDeleted", (data) => {
@@ -807,16 +1210,18 @@ export const useChatStore = create((set, get) => ({
         if (messageToDelete.isFile && messageToDelete.fileId) {
           const fileId = messageToDelete.fileId;
           const { selectedUser } = get();
-          
+
           // Refresh files list if needed
           if (selectedUser && selectedUser._id) {
             get().getConversationFiles(selectedUser._id);
           }
-          
+
           return {
             messages: state.messages.filter((msg) => msg._id !== messageId),
             deletedMessages: new Set([...state.deletedMessages, messageId]),
-            conversationFiles: state.conversationFiles.filter(file => file.id !== fileId)
+            conversationFiles: state.conversationFiles.filter(
+              (file) => file.id !== fileId
+            ),
           };
         }
 
@@ -903,13 +1308,14 @@ export const useChatStore = create((set, get) => ({
   },
 
   // For cleaning up the socket when component unmounts
-  disconnectSocket: () => {
+  disconnectExpertSocket: () => {
     const { socket } = get();
     if (socket) {
       socket.disconnect();
+      console.log("🔌 Expert socket disconnected");
       set({ socket: null });
     }
-  },
+  },  
 
   selectUser: (user) => {
     set({ selectedUser: user });

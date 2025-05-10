@@ -19,7 +19,8 @@ const Sidebar = () => {
     { label: "Expert", icon: <LucideBadgeCheck />, route: "/expertpanel/expert" },
     { label: "Dashboard", icon: <PiCirclesFour />, route: "/expertpanel/dashboard" },
     { label: "Payments/Reviews", icon: <LucideDollarSign />, route: "/expertpanel/payments" },
-    { label: "Chat with Users", icon: <IoChatbubbleEllipsesOutline />, route: "/expertpanel/chat" },
+    { label: "Chat with Users", icon: <IoChatbubbleEllipsesOutline />, route: "/expertpanel/userchat" },
+    { label: "Chat with Expert", icon: <IoChatbubbleEllipsesOutline />, route: "/expertpanel/expertchat" },
     { label: "Logout", icon: <FiLogOut />, route: "/" }, // logout action
   ];
 
