@@ -3,7 +3,7 @@
 import React from 'react';
 import Sidebar from '@/components/ExpertPanel/SideBar/SideBar';
 import Navtop from '@/components/ExpertPanel/Navtop/navtop';
-import ChatComponent from '@/components/ExpertPanel/ChatComponent/chatcomponent';
+import UserChatComponent from '@/components/ExpertPanel/UserChatComponent/UserChatComponent';
 import BottomNav from '@/components/ExpertPanel/Bottomnav/bottomnav';
 import { usePathname } from 'next/navigation';
 import MobileNavSearch from '@/components/Layout/mobilenavsearch';
@@ -31,7 +31,7 @@ const activeTab = activeMenu ? activeMenu.label : "Chats with Users";
       <div className="w-full md:w-[80%] p-4">
         <MobileNavSearch/>
         <Navtop activeTab = {activeTab}/>
-        <ChatComponent activeTab = {activeTab}/>
+        <UserChatComponent activeTab = {activeTab}/>
 
         {/* Bottom Navigation - Visible only on mobile */}
         <div className="fixed bottom-0 left-0 right-0 md:hidden">
