@@ -456,7 +456,7 @@ const ProfileSection = () => {
               </div>
 
               {/* Save Button */}
-              <div className="col-span-1 md:col-span-2 flex justify-center mt-6 pb-12">
+              <div className="col-span-1 md:col-span-2 flex justify-center mt-6">
                 <button
                   type="submit"
                   disabled={!isEditing}

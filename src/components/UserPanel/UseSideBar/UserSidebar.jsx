@@ -31,7 +31,13 @@ const UserSidebar = () => {
     <div className="hidden md:block w-full bg-white h-full overflow-hidden shadow-lg ">
       {/* Logo Section */}
       <div className="p-4 mt-5 flex justify-center">
-        <Image src="/Shourk_logo.png" alt="Nexcore Logo" width={120} height={60} className=" contrast-200 mt-3"/>
+        {/* <Image
+          src="/Frame.png.png"
+          alt="Nexcore Logo"
+          width={100}
+          height={30}
+        /> */}
+        <Image src="/Shourk_logo.png" alt="Nexcore Logo" width={120} height={60} className="constrant-125 mt-2" />
       </div>
 
       {/* Sidebar Menu */}
