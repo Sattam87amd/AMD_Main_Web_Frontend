@@ -9,6 +9,8 @@ import {
   FaComments,
   FaTrashAlt,
   FaCheckCircle,
+  FaBars, // Hamburger icon
+  FaTimes, // Close icon
 } from "react-icons/fa";
 import { LuPencilLine } from "react-icons/lu";
 import { FiDollarSign } from "react-icons/fi";
@@ -28,6 +30,7 @@ const ProfileSection = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
   const [profileData, setProfileData] = useState({
     photoFile: "",
@@ -39,6 +42,7 @@ const ProfileSection = () => {
 
   const [expertId, setExpertId] = useState("");
   const fileInputRef = useRef(null); // Reference for file input
+  const mobileNavRef = useRef(null); // Reference for mobile nav (for click outside)
 
   // Fetch expertId from localStorage
   useEffect(() => {
@@ -89,6 +93,20 @@ const ProfileSection = () => {
     }
   }, [expertId]);
 
+  // Handle clicks outside mobile nav to close it
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (mobileNavRef.current && !mobileNavRef.current.contains(event.target) && isMobileNavOpen) {
+        setIsMobileNavOpen(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isMobileNavOpen]);
+
   const handleInputChange = (e) => {
     setProfileData({ ...profileData, [e.target.name]: e.target.value });
   };
@@ -96,6 +114,11 @@ const ProfileSection = () => {
   const handleEditClick = () => {
     setIsEditing(true);
     setSuccessMessage("");
+  };
+
+  const handleSectionSelect = (section) => {
+    setSelectedSection(section);
+    setIsMobileNavOpen(false); // Close mobile nav after selection
   };
 
   // Handle profile picture upload
@@ -182,9 +205,88 @@ const ProfileSection = () => {
     }
   };
 
+  // Navigation Items Array
+  const navItems = [
+    { name: "Profile", icon: FaUser },
+    { name: "Payment Methods", icon: FiDollarSign },
+    { name: "Do you have code?", icon: FaGift },
+    { name: "Gift Card", icon: FaGift },
+    { name: "Contact Us", icon: FaComments },
+    { name: "Payment History", icon: FiDollarSign },
+    { name: "Give us Feedback", icon: MdOutlineFeedback },
+    { name: "Deactivate account", icon: FaTrashAlt },
+  ];
+
   return (
-    <div className="flex flex-col md:flex-row border rounded-xl overflow-hidden bg-white m-4 md:m-8">
-      {/* Sidebar - Hidden on Small Screens, Visible on Medium+ */}
+    <div className="flex flex-col md:flex-row border rounded-xl overflow-hidden bg-white m-4 md:m-8 relative">
+      {/* Mobile Header with Hamburger Icon - Only visible on small screens */}
+      <div className="md:hidden flex items-center justify-between p-4 border-b w-full bg-white">
+        <h2 className="text-lg font-semibold flex items-center">
+          <CiSettings className="mr-2 text-2xl text-[#7E7E7E]" /> Settings
+        </h2>
+        <button
+          onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
+          className="text-gray-700 focus:outline-none"
+          aria-label="Toggle navigation menu"
+        >
+          {isMobileNavOpen ? (
+            <FaTimes className="h-6 w-6" />
+          ) : (
+            <FaBars className="h-6 w-6" />
+          )}
+        </button>
+      </div>
+
+      {/* Mobile Navigation Drawer - Slides in from right */}
+      <div
+        ref={mobileNavRef}
+        className={`fixed top-0 right-0 z-40 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out ${
+          isMobileNavOpen ? "translate-x-0" : "translate-x-full"
+        } md:hidden`}
+      >
+        <div className="flex items-center justify-between p-4 border-b">
+          <h2 className="text-lg font-semibold flex items-center">
+            <span>{selectedSection}</span>
+          </h2>
+          <button
+            onClick={() => setIsMobileNavOpen(false)}
+            className="text-gray-700 focus:outline-none"
+          >
+            <FaTimes className="h-5 w-5" />
+          </button>
+        </div>
+        
+        <nav className="space-y-1 p-2">
+          {navItems.map((item) => (
+            <button
+              key={item.name}
+              onClick={() => handleSectionSelect(item.name)}
+              className={`flex items-center gap-3 w-full text-left p-3 rounded-lg transition ${
+                selectedSection === item.name
+                  ? "bg-black text-white"
+                  : "hover:bg-gray-200 text-[#7E7E7E]"
+              }`}
+            >
+              <item.icon
+                className={
+                  selectedSection === item.name ? "text-white" : "text-[#7E7E7E]"
+                }
+              />
+              {item.name}
+            </button>
+          ))}
+        </nav>
+      </div>
+
+      {/* Backdrop for mobile nav - only visible when nav is open */}
+      {isMobileNavOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-30 md:hidden"
+          onClick={() => setIsMobileNavOpen(false)}
+        />
+      )}
+
+      {/* Desktop Sidebar - Hidden on Small Screens, Visible on Medium+ */}
       <aside className="hidden md:block w-64 bg-white p-6 border-r h-[800px]">
         <h2 className="flex items-center justify-between text-lg font-semibold pb-4 border-b mb-3">
           <span>Settings</span>
@@ -192,23 +294,15 @@ const ProfileSection = () => {
         </h2>
 
         <nav className="space-y-6">
-          {[
-            { name: "Profile", icon: FaUser },
-            { name: "Payment Methods", icon: FiDollarSign },
-            { name: "Do you have code?", icon: FaGift },
-            { name: "Gift Card", icon: FaGift },
-            { name: "Contact Us", icon: FaComments },
-            { name: "Payment History", icon: FiDollarSign },
-            { name: "Give us Feedback", icon: MdOutlineFeedback },
-            { name: "Deactivate account", icon: FaTrashAlt },
-          ].map((item) => (
+          {navItems.map((item) => (
             <button
               key={item.name}
               onClick={() => setSelectedSection(item.name)}
-              className={`flex items-center gap-3 w-full text-left p-2 rounded-lg transition ${selectedSection === item.name
-                ? "bg-black text-white"
-                : "hover:bg-gray-200 text-[#7E7E7E]"
-                }`}
+              className={`flex items-center gap-3 w-full text-left p-2 rounded-lg transition ${
+                selectedSection === item.name
+                  ? "bg-black text-white"
+                  : "hover:bg-gray-200 text-[#7E7E7E]"
+              }`}
             >
               <item.icon
                 className={
@@ -307,8 +401,9 @@ const ProfileSection = () => {
                   value={profileData.firstName}
                   onChange={handleInputChange}
                   disabled={!isEditing}
-                  className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${!isEditing ? "bg-gray-100 cursor-not-allowed" : ""
-                    }`}
+                  className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${
+                    !isEditing ? "bg-gray-100 cursor-not-allowed" : ""
+                  }`}
                 />
               </div>
 
@@ -322,8 +417,9 @@ const ProfileSection = () => {
                   value={profileData.lastName}
                   onChange={handleInputChange}
                   disabled={!isEditing}
-                  className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${!isEditing ? "bg-gray-100 cursor-not-allowed" : ""
-                    }`}
+                  className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${
+                    !isEditing ? "bg-gray-100 cursor-not-allowed" : ""
+                  }`}
                 />
               </div>
 
@@ -337,8 +433,9 @@ const ProfileSection = () => {
                   value={profileData.phone}
                   onChange={handleInputChange}
                   disabled={!isEditing}
-                  className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${!isEditing ? "bg-gray-100 cursor-not-allowed" : ""
-                    }`}
+                  className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${
+                    !isEditing ? "bg-gray-100 cursor-not-allowed" : ""
+                  }`}
                 />
               </div>
 
@@ -352,8 +449,9 @@ const ProfileSection = () => {
                   value={profileData.email}
                   onChange={handleInputChange}
                   disabled={!isEditing}
-                  className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${!isEditing ? "bg-gray-100 cursor-not-allowed" : ""
-                    }`}
+                  className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5 w-full ${
+                    !isEditing ? "bg-gray-100 cursor-not-allowed" : ""
+                  }`}
                 />
               </div>
 
@@ -362,10 +460,11 @@ const ProfileSection = () => {
                 <button
                   type="submit"
                   disabled={!isEditing}
-                  className={`text-white font-medium rounded-2xl text-sm px-6 md:px-16 py-2.5  text-center ${isEditing
-                    ? "bg-black hover:bg-gray-900 focus:ring-gray-300"
-                    : "bg-gray-400 cursor-not-allowed"
-                    }`}
+                  className={`text-white font-medium rounded-2xl text-sm px-6 md:px-16 py-2.5 text-center ${
+                    isEditing
+                      ? "bg-black hover:bg-gray-900 focus:ring-gray-300"
+                      : "bg-gray-400 cursor-not-allowed"
+                  }`}
                 >
                   Save
                 </button>
