@@ -358,11 +358,11 @@ const ProfileSection = () => {
               </div>
 
               {/* Save Button */}
-              <div className="col-span-1 md:col-span-2 flex justify-center mt-6 pb-12">
+              <div className="col-span-1 md:col-span-2 flex justify-center mt-6">
                 <button
                   type="submit"
                   disabled={!isEditing}
-                  className={`text-white font-medium rounded-2xl text-sm px-6 md:px-16 py-2.5  text-center ${isEditing
+                  className={`text-white font-medium rounded-2xl text-sm px-6 md:px-16 py-2.5 text-center ${isEditing
                     ? "bg-black hover:bg-gray-900 focus:ring-gray-300"
                     : "bg-gray-400 cursor-not-allowed"
                     }`}

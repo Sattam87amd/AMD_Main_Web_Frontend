@@ -37,8 +37,7 @@ const Sidebar = () => {
     <div className="hidden md:block w-full bg-white shadow-md h-[99.5%]">
       {/* Logo Section */}
       <div className="p-4 mt-5 flex justify-center">
-        {/* <Image src="/Frame.png.png" alt="Nexcore Logo" width={100} height={30} /> */}
-        <Image src="/Shourk_logo.png" alt="Nexcore Logo" width={120} height={60} className=" contrast-200"/>
+        <Image src="/Frame.png.png" alt="Nexcore Logo" width={100} height={30} />
       </div>
 
       {/* Sidebar Menu */}
